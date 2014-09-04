@@ -1,0 +1,31 @@
+#
+# Disable the emailing of the cron output to the root user
+#
+MAILTO=""
+
+#
+# Compile the number of clicks and conversions by offer and campaign
+# 
+0,15,30,45 * * * * root /home/gun/api/webapp/meta/crons/compile_daily_clicks.sh
+
+#
+# Process export queues that should run daily
+# 
+#0 17 * * * root /home/gun/api/webapp/meta/crons/export_queue.sh daily
+
+#
+# Process export queues that should run weekly
+# 
+#0 5 * * 1 root /home/gun/api/webapp/meta/crons/export_queue.sh weekly
+
+#
+# Process export queues that should run monthly on the first
+# 
+#0 5 1 * * root /home/gun/api/webapp/meta/crons/export_queue.sh monthly_first
+
+#
+# Process export queues that should run monthly on the 14th and 28th
+# 
+#0 5 14,28 * * root /home/gun/api/webapp/meta/crons/export_queue.sh monthly
+
+# End crontab

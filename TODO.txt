@@ -1,0 +1,4 @@
+list of stuff to do
+1) make pagination and other default types of parameters (like "&page=1") use underscores like _page=1
+2) make sure a fresh checkout doesn't expose anything over http. perhaps this can be done by having a default index.php page that has install instructions, and when the installer runs it swaps this all out. right now, on a fresh checkout, you get a "MO_" whatever constant undefined error
+

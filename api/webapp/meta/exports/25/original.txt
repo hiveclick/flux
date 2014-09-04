@@ -1,0 +1,31 @@
+Email	First Name	Last Name	Address 1	City	State	Zip	Country	Phone	Gender	Source URL	IP	When was the procedure performed?	Was a mesh patch or bladder sling used?	What was the brand/manufacturer?	Has the doctor confirmed/performed a revision/etc?
+Chubbs1031@gmail.com	Erin	Papciak	2943 Denny rd.	Ravenna		44266					24.93.235.79		PATCH	I dont know	YES
+captkirk11@hotmail.com	craig	kirk	2716 melrose st  #114	walla walla		99362					66.87.70.107		PATCH	I dont know	YES
+crestlin1972@gmail.com											208.81.216.8		PATCH	other	YES
+Joycebridgers@yahoo.com	Joyce	Bridgers	4200 Brinkley Road	Temple Hills	MD	20748					71.178.20.112		PATCH	Avaulta Plus	NO
+vgrande1967@gmail.com	Vincent	Grande	11 Orchard Drive	old bridge	NJ	08857					70.192.71.111		PATCH	I dont know	YES
+patestcd@aol.com	pat	watkins	po box 295	newport		97365					96.41.137.89		PATCH	I dont know	NO
+svhafervs@aol.com											71.68.213.8		SLING	I dont know	NO
+Sue1@att.net	Susan	Ayala	1080 Princeton dr	Romeoville		60446					107.211.172.173		PATCH	other	YES
+cmoorer48@yahoo.com	Cynthia	Moorer	7171n. 9th ave. apt B1	Pensacola		32504					66.87.19.112		SLING	I dont know	YES
+farahannah.roper@facebook.com											172.56.20.187		PATCH	I dont know	NO
+Rotorious1@yahoo.com	Jason	Roe	4307 Reynolds Oak Place	Plant City	FL	33563					72.184.9.0		PATCH	I dont know	NO
+wekanuahd@gmail.com	wekanuah	doe	2130 E Johnson St #2	MADISON		53704					71.90.42.144		PATCH	other	NO
+m.johnson37@aol.com											162.239.41.59		PATCH	I dont know	NO
+Angelluarca8280@Hotmail.com											75.171.145.253		PATCH	I dont know	YES
+durenl@sbcglobal.net	Lynette	Duren-Parker	1806 W Stockwell St	Compton	CA	90222					184.231.190.255		PATCH	I dont know	YES
+Chubbs1031@gmail.com	Erin	Papciak	2943 Denny rd.	Ravenna		44266					24.93.235.79		PATCH	I dont know	YES
+captkirk11@hotmail.com	craig	kirk	2716 melrose st  #114	walla walla		99362					66.87.70.107		PATCH	I dont know	YES
+crestlin1972@gmail.com											208.81.216.8		PATCH	other	YES
+svhafervs@aol.com											71.68.213.8		SLING	I dont know	NO
+Joycebridgers@yahoo.com	Joyce	Bridgers	4200 Brinkley Road	Temple Hills	MD	20748					71.178.20.112		PATCH	Avaulta Plus	NO
+vgrande1967@gmail.com	Vincent	Grande	11 Orchard Drive	old bridge	NJ	08857					70.192.71.111		PATCH	I dont know	YES
+patestcd@aol.com	pat	watkins	po box 295	newport		97365					96.41.137.89		PATCH	I dont know	NO
+Sue1@att.net	Susan	Ayala	1080 Princeton dr	Romeoville		60446					107.211.172.173		PATCH	other	YES
+cmoorer48@yahoo.com	Cynthia	Moorer	7171n. 9th ave. apt B1	Pensacola		32504					66.87.19.112		SLING	I dont know	YES
+farahannah.roper@facebook.com											172.56.20.187		PATCH	I dont know	NO
+Rotorious1@yahoo.com	Jason	Roe	4307 Reynolds Oak Place	Plant City	FL	33563					72.184.9.0		PATCH	I dont know	NO
+wekanuahd@gmail.com	wekanuah	doe	2130 E Johnson St #2	MADISON		53704					71.90.42.144		PATCH	other	NO
+m.johnson37@aol.com											162.239.41.59		PATCH	I dont know	NO
+Angelluarca8280@Hotmail.com											75.171.145.253		PATCH	I dont know	YES
+durenl@sbcglobal.net	Lynette	Duren-Parker	1806 W Stockwell St	Compton	CA	90222					184.231.190.255		PATCH	I dont know	YES
