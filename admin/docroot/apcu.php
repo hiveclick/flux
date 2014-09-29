@@ -1,28 +1,11 @@
 <?php
-/*
-  +----------------------------------------------------------------------+
-  | APC                                                                  |
-  +----------------------------------------------------------------------+
-  | Copyright (c) 2006-2011 The PHP Group                                |
-  +----------------------------------------------------------------------+
-  | This source file is subject to version 3.01 of the PHP license,      |
-  | that is bundled with this package in the file LICENSE, and is        |
-  | available through the world-wide-web at the following url:           |
-  | http://www.php.net/license/3_01.txt                                  |
-  | If you did not receive a copy of the PHP license and are unable to   |
-  | obtain it through the world-wide-web, please send a note to          |
-  | license@php.net so we can mail you a copy immediately.               |
-  +----------------------------------------------------------------------+
-  | Authors: Ralf Becker <beckerr@php.net>                               |
-  |          Rasmus Lerdorf <rasmus@php.net>                             |
-  |          Ilia Alshanetsky <ilia@prohost.org>                         |
-  +----------------------------------------------------------------------+
+error_reporting(E_ERROR);
+ini_set('display_errors',1);
 
-   All other licensing and usage conditions are those of the PHP Group.
+// include "init.php";
 
- */
 
-$VERSION='$Id: apc.php 325483 2012-05-01 00:34:04Z rasmus $';
+$VERSION='$Id$';
 
 ////////// READ OPTIONAL CONFIGURATION FILE ////////////
 if (file_exists("apc.conf.php")) include("apc.conf.php");
@@ -30,18 +13,18 @@ if (file_exists("apc.conf.php")) include("apc.conf.php");
 
 ////////// BEGIN OF DEFAULT CONFIG AREA ///////////////////////////////////////////////////////////
 
-defaults('USE_AUTHENTICATION',0);			// Use (internal) authentication - best choice if
+defaults('USE_AUTHENTICATION',1);			// Use (internal) authentication - best choice if 
 											// no other authentication is available
 											// If set to 0:
-											//  There will be no further authentication. You
+											//  There will be no further authentication. You 
 											//  will have to handle this by yourself!
 											// If set to 1:
 											//  You need to change ADMIN_PASSWORD to make
 											//  this work!
-defaults('ADMIN_USERNAME','apc'); 			// Admin Username
-defaults('ADMIN_PASSWORD','password');  	// Admin Password - CHANGE THIS TO ENABLE!!!
+defaults('ADMIN_USERNAME','flock'); 			// Admin Username
+defaults('ADMIN_PASSWORD','flock6454');  	// Admin Password - CHANGE THIS TO ENABLE!!!
 
-// (beckerr) I'm using a clear text password here, because I've no good idea how to let
+// (beckerr) I'm using a clear text password here, because I've no good idea how to let 
 //           users generate a md5 or crypt password in a easy way to fill it in above
 
 //defaults('DATE_FORMAT', "d.m.Y H:i:s");	// German
@@ -169,13 +152,13 @@ if (!USE_AUTHENTICATION) {
 				</body></html>
 EOB;
 			exit;
-
+			
 		} else {
 			$AUTHENTICATED=1;
 		}
 	}
 }
-
+	
 // select cache mode
 if ($AUTHENTICATED && $MYREQUEST['OB'] == OB_USER_CACHE) {
 	$cache_mode='user';
@@ -194,9 +177,45 @@ if(!function_exists('apc_cache_info') || !($cache=@apc_cache_info($cache_mode)))
   exit;
 }
 
-$cache_user = apc_cache_info('user', 1);
+
+if(isset($cache['nmisses'])){
+	$cache['num_misses'] = $cache['nmisses'];
+}
+
+
+$cache_user = apc_cache_info('user');
+
+// INFO FORMAT UPGRADE, IF NEEDED //
+
+if(!isset($cache_user['num_hits'])){
+	$cache_user['num_hits'] = $cache_user['nhits'];
+}
+
+if(!isset($cache_user['num_misses'])){
+	$cache_user['num_misses'] = $cache_user['nmisses'];
+}
+if(!isset($cache['start_time'])){
+	$cache['start_time'] = $cache['stime'];
+}
+
+foreach($cache_user['cache_list'] as $key=>$row){
+	if(!isset($row['type'])) $row['type'] = 'user';
+	if(!isset($row['info'])) $row['info'] = $row['key'];
+	if(!isset($row['num_hits'])) $row['num_hits'] = $row['nhits'];
+	if(!isset($row['creation_time'])) $row['creation_time'] = $row['ctime'];
+	if(!isset($row['access_time'])) $row['access_time'] = $row['atime'];
+	if(!isset($row['num_hits'])) $row['num_hits'] = $row['nhits'];
+	if(!isset($row['num_hits'])) $row['num_hits'] = $row['nhits'];
+	
+	$cache_user['cache_list'][$key] = $row;
+}
+
+// INFO FORMAT UPGRADE,COMPLETE //
+
+
+
 $mem=apc_sma_info();
-if(!$cache['nhits']) { $cache['nhits']=1; $time++; }  // Avoid division by 0 errors on a cache clear
+if(!$cache['num_hits']) { $cache['num_hits']=1; $time++; }  // Avoid division by 0 errors on a cache clear
 
 // don't cache this page
 //
@@ -241,7 +260,7 @@ if (isset($MYREQUEST['IMG']))
 		$r=$diameter/2;
 		$w=deg2rad((360+$start+($end-$start)/2)%360);
 
-
+		
 		if (function_exists("imagefilledarc")) {
 			// exists only if GD 2.0.1 is avaliable
 			imagefilledarc($im, $centerX+1, $centerY+1, $diameter, $diameter, $start, $end, $color1, IMG_ARC_PIE);
@@ -258,13 +277,13 @@ if (isset($MYREQUEST['IMG']))
 		if ($text) {
 			if ($placeindex>0) {
 				imageline($im,$centerX + $r*cos($w)/2, $centerY + $r*sin($w)/2,$diameter, $placeindex*12,$color1);
-				imagestring($im,4,$diameter, $placeindex*12,$text,$color1);
-
+				imagestring($im,4,$diameter, $placeindex*12,$text,$color1);	
+				
 			} else {
 				imagestring($im,4,$centerX + $r*cos($w)/2, $centerY + $r*sin($w)/2,$text,$color1);
 			}
 		}
-	}
+	} 
 
 	function text_arc($im, $centerX, $centerY, $diameter, $start, $end, $color1,$text,$placeindex=0) {
 		$r=$diameter/2;
@@ -272,13 +291,13 @@ if (isset($MYREQUEST['IMG']))
 
 		if ($placeindex>0) {
 			imageline($im,$centerX + $r*cos($w)/2, $centerY + $r*sin($w)/2,$diameter, $placeindex*12,$color1);
-			imagestring($im,4,$diameter, $placeindex*12,$text,$color1);
-
+			imagestring($im,4,$diameter, $placeindex*12,$text,$color1);	
+				
 		} else {
 			imagestring($im,4,$centerX + $r*cos($w)/2, $centerY + $r*sin($w)/2,$text,$color1);
 		}
-	}
-
+	} 
+	
 	function fill_box($im, $x, $y, $w, $h, $color1, $color2,$text='',$placeindex='') {
 		global $col_black;
 		$x1=$x+$w-1;
@@ -290,15 +309,15 @@ if (isset($MYREQUEST['IMG']))
 		imagerectangle($im, $x, $y1, $x1, $y, $color1);
 		if ($text) {
 			if ($placeindex>0) {
-
+			
 				if ($placeindex<16)
 				{
 					$px=5;
 					$py=$placeindex*12+6;
 					imagefilledrectangle($im, $px+90, $py+3, $px+90-4, $py-3, $color2);
 					imageline($im,$x,$y+$h/2,$px+90,$py,$color2);
-					imagestring($im,2,$px,$py-6,$text,$color1);
-
+					imagestring($im,2,$px,$py-6,$text,$color1);	
+					
 				} else {
 					if ($placeindex<31) {
 						$px=$x+40*2;
@@ -309,7 +328,7 @@ if (isset($MYREQUEST['IMG']))
 					}
 					imagefilledrectangle($im, $px, $py+3, $px-4, $py-3, $color2);
 					imageline($im,$x+$w,$y+$h/2,$px,$py,$color2);
-					imagestring($im,2,$px+2,$py-6,$text,$color1);
+					imagestring($im,2,$px+2,$py-6,$text,$color1);	
 				}
 			} else {
 				imagestring($im,4,$x+5,$y1-16,$text,$color1);
@@ -331,7 +350,7 @@ if (isset($MYREQUEST['IMG']))
 	imagecolortransparent($image,$col_white);
 
 	switch ($MYREQUEST['IMG']) {
-
+	
 	case 1:
 		$s=$mem['num_seg']*$mem['seg_size'];
 		$a=$mem['avail_mem'];
@@ -342,7 +361,7 @@ if (isset($MYREQUEST['IMG']))
 		// would expect because we try to visualize any memory fragmentation as well.
 		$angle_from = 0;
 		$string_placement=array();
-		for($i=0; $i<$mem['num_seg']; $i++) {
+		for($i=0; $i<$mem['num_seg']; $i++) {	
 			$ptr = 0;
 			$free = $mem['block_lists'][$i];
 			uasort($free, 'block_sort');
@@ -369,7 +388,7 @@ if (isset($MYREQUEST['IMG']))
 				$angle_from = $angle_to;
 				$ptr = $block['offset']+$block['size'];
 			}
-			if ($ptr < $mem['seg_size']) { // memory at the end
+			if ($ptr < $mem['seg_size']) { // memory at the end 
 				$angle_to = $angle_from + ($mem['seg_size'] - $ptr)/$s;
 				if(($angle_to+$fuzz)>1) $angle_to = 1;
 				fill_arc($image,$x,$y,$size,$angle_from*360,$angle_to*360,$col_black,$col_red);
@@ -382,15 +401,15 @@ if (isset($MYREQUEST['IMG']))
 			text_arc($image,$x,$y,$size,$angle[0]*360,$angle[1]*360,$col_black,bsize($s*($angle[1]-$angle[0])));
 		}
 		break;
-
-	case 2:
-		$s=$cache['nhits']+$cache['nmisses'];
-		$a=$cache['nhits'];
-
-		fill_box($image, 30,$size,50,-$a*($size-21)/$s,$col_black,$col_green,sprintf("%.1f%%",$cache['nhits']*100/$s));
-		fill_box($image,130,$size,50,-max(4,($s-$a)*($size-21)/$s),$col_black,$col_red,sprintf("%.1f%%",$cache['nmisses']*100/$s));
+		
+	case 2: 
+		$s=$cache['num_hits']+$cache['num_misses'];
+		$a=$cache['num_hits'];
+		
+		fill_box($image, 30,$size,50,-$a*($size-21)/$s,$col_black,$col_green,sprintf("%.1f%%",$cache['num_hits']*100/$s));
+		fill_box($image,130,$size,50,-max(4,($s-$a)*($size-21)/$s),$col_black,$col_red,sprintf("%.1f%%",$cache['num_misses']*100/$s));
 		break;
-
+		
 	case 3:
 		$s=$mem['num_seg']*$mem['seg_size'];
 		$a=$mem['avail_mem'];
@@ -400,7 +419,7 @@ if (isset($MYREQUEST['IMG']))
 
 		// This block of code creates the bar chart.  It is a lot more complex than you
 		// would expect because we try to visualize any memory fragmentation as well.
-		for($i=0; $i<$mem['num_seg']; $i++) {
+		for($i=0; $i<$mem['num_seg']; $i++) {	
 			$ptr = 0;
 			$free = $mem['block_lists'][$i];
 			uasort($free, 'block_sort');
@@ -423,7 +442,7 @@ if (isset($MYREQUEST['IMG']))
 				$y+=$h;
 				$ptr = $block['offset']+$block['size'];
 			}
-			if ($ptr < $mem['seg_size']) { // memory at the end
+			if ($ptr < $mem['seg_size']) { // memory at the end 
 				$h = (GRAPH_SIZE-5) * ($mem['seg_size'] - $ptr) / $s;
 				if ($h > 0) {
 					fill_box($image,$x,$y,50,$h,$col_black,$col_red,bsize($mem['seg_size']-$ptr),$j++);
@@ -431,14 +450,14 @@ if (isset($MYREQUEST['IMG']))
 			}
 		}
 		break;
-	case 4:
-		$s=$cache['nhits']+$cache['nmisses'];
-		$a=$cache['nhits'];
-
-		fill_box($image, 30,$size,50,-$a*($size-21)/$s,$col_black,$col_green,sprintf("%.1f%%",$cache['nhits']*100/$s));
-		fill_box($image,130,$size,50,-max(4,($s-$a)*($size-21)/$s),$col_black,$col_red,sprintf("%.1f%%",$cache['nmisses']*100/$s));
+	case 4: 
+		$s=$cache['num_hits']+$cache['num_misses'];
+		$a=$cache['num_hits'];
+	        	
+		fill_box($image, 30,$size,50,-$a*($size-21)/$s,$col_black,$col_green,sprintf("%.1f%%",$cache['num_hits']*100/$s));
+		fill_box($image,130,$size,50,-max(4,($s-$a)*($size-21)/$s),$col_black,$col_red,sprintf("%.1f%%",$cache['num_misses']*100/$s));
 		break;
-
+	
 	}
 	header("Content-type: image/png");
 	imagepng($image);
@@ -458,7 +477,7 @@ function bsize($s) {
 // sortable table header in "scripts for this host" view
 function sortheader($key,$name,$extra='') {
 	global $MYREQUEST, $MY_SELF_WO_SORT;
-
+	
 	if ($MYREQUEST['SORT1']==$key) {
 		$MYREQUEST['SORT2'] = $MYREQUEST['SORT2']=='A' ? 'D' : 'A';
 	}
@@ -466,7 +485,7 @@ function sortheader($key,$name,$extra='') {
 
 }
 
-// create menu entry
+// create menu entry 
 function menu_entry($ob,$title) {
 	global $MYREQUEST,$MY_SELF;
 	if ($MYREQUEST['OB']!=$ob) {
@@ -474,7 +493,7 @@ function menu_entry($ob,$title) {
 	} else if (empty($MYREQUEST['SH'])) {
 		return "<li><span class=active>$title</span></li>";
 	} else {
-		return "<li><a class=\"child_active\" href=\"$MY_SELF&OB=$ob\">$title</a></li>";
+		return "<li><a class=\"child_active\" href=\"$MY_SELF&OB=$ob\">$title</a></li>";	
 	}
 }
 
@@ -511,852 +530,1321 @@ function block_sort($array1, $array2)
 }
 
 
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head><title>APC INFO <?php echo $host ?></title>
-<style><!--
-body { background:white; font-size:100.01%; margin:0; padding:0; }
-body,p,td,th,input,submit { font-size:0.8em;font-family:arial,helvetica,sans-serif; }
-* html body   {font-size:0.8em}
-* html p      {font-size:0.8em}
-* html td     {font-size:0.8em}
-* html th     {font-size:0.8em}
-* html input  {font-size:0.8em}
-* html submit {font-size:0.8em}
-td { vertical-align:top }
-a { color:black; font-weight:none; text-decoration:none; }
-a:hover { text-decoration:underline; }
-div.content { padding:1em 1em 1em 1em; position:absolute; width:97%; z-index:100; }
+$mem_size = $mem['num_seg']*$mem['seg_size'];
+$mem_avail= $mem['avail_mem'];
+$mem_used = $mem_size-$mem_avail;
+$seg_size = bsize($mem['seg_size']);
+$req_rate = sprintf("%.2f",($cache['num_hits']+$cache['num_misses'])/($time-$cache['start_time']));
+$hit_rate = sprintf("%.2f",($cache['num_hits'])/($time-$cache['start_time']));
+$miss_rate = sprintf("%.2f",($cache['num_misses'])/($time-$cache['start_time']));
+$insert_rate = sprintf("%.2f",($cache['num_inserts'])/($time-$cache['start_time']));
+$req_rate_user = sprintf("%.2f",($cache_user['num_hits']+$cache_user['num_misses'])/($time-$cache_user['start_time']));
+$hit_rate_user = sprintf("%.2f",($cache_user['num_hits'])/($time-$cache_user['start_time']));
+$miss_rate_user = sprintf("%.2f",($cache_user['num_misses'])/($time-$cache_user['start_time']));
+$insert_rate_user = sprintf("%.2f",($cache_user['num_inserts'])/($time-$cache_user['start_time']));
+$apcversion = phpversion('apc');
+$phpversion = phpversion();
+$number_files = $cache['num_entries']; 
+$size_files = bsize($cache['mem_size']);
+$number_vars = $cache_user['num_entries'];
+$size_vars = bsize($cache_user['mem_size']);
 
+// include "api.php";
 
-div.head div.login {
-	position:absolute;
-	right: 1em;
-	top: 1.2em;
-	color:white;
-	width:6em;
-	}
-div.head div.login a {
-	position:absolute;
-	right: 0em;
-	background:rgb(119,123,180);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
-	font-weight:bold;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	}
-div.head div.login a:hover {
-	background:rgb(193,193,244);
-	}
-
-h1.apc { background:rgb(153,153,204); margin:0; padding:0.5em 1em 0.5em 1em; }
-* html h1.apc { margin-bottom:-7px; }
-h1.apc a:hover { text-decoration:none; color:rgb(90,90,90); }
-h1.apc div.logo span.logo {
-	background:rgb(119,123,180);
-	color:black;
-	border-right: solid black 1px;
-	border-bottom: solid black 1px;
-	font-style:italic;
-	font-size:1em;
-	padding-left:1.2em;
-	padding-right:1.2em;
-	text-align:right;
-	}
-h1.apc div.logo span.name { color:white; font-size:0.7em; padding:0 0.8em 0 2em; }
-h1.apc div.nameinfo { color:white; display:inline; font-size:0.4em; margin-left: 3em; }
-h1.apc div.copy { color:black; font-size:0.4em; position:absolute; right:1em; }
-hr.apc {
-	background:white;
-	border-bottom:solid rgb(102,102,153) 1px;
-	border-style:none;
-	border-top:solid rgb(102,102,153) 10px;
-	height:12px;
-	margin:0;
-	margin-top:1px;
-	padding:0;
+if(isset($_REQUEST['status'])){
+    header('Content-Type: application/json');
+    
+    $cache['user'] = $cache_user;
+    echo json_encode($cache);
+    die();
 }
 
-ol,menu { margin:1em 0 0 0; padding:0.2em; margin-left:1em;}
-ol.menu li { display:inline; margin-right:0.7em; list-style:none; font-size:85%}
-ol.menu a {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
-	font-weight:bold;
-	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	margin-left: 5px;
-	}
-ol.menu a.child_active {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
-	font-weight:bold;
-	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	border-left: solid black 5px;
-	margin-left: 0px;
-	}
-ol.menu span.active {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:black;
-	font-weight:bold;
-	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	border-left: solid black 5px;
-	}
-ol.menu span.inactive {
-	background:rgb(193,193,244);
-	border:solid rgb(182,182,233) 2px;
-	color:white;
-	font-weight:bold;
-	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	margin-left: 5px;
-	}
-ol.menu a:hover {
-	background:rgb(193,193,244);
-	text-decoration:none;
-	}
-
-
-div.info {
-	background:rgb(204,204,204);
-	border:solid rgb(204,204,204) 1px;
-	margin-bottom:1em;
-	}
-div.info h2 {
-	background:rgb(204,204,204);
-	color:black;
-	font-size:1em;
-	margin:0;
-	padding:0.1em 1em 0.1em 1em;
-	}
-div.info table {
-	border:solid rgb(204,204,204) 1px;
-	border-spacing:0;
-	width:100%;
-	}
-div.info table th {
-	background:rgb(204,204,204);
-	color:white;
-	margin:0;
-	padding:0.1em 1em 0.1em 1em;
-	}
-div.info table th a.sortable { color:black; }
-div.info table tr.tr-0 { background:rgb(238,238,238); }
-div.info table tr.tr-1 { background:rgb(221,221,221); }
-div.info table td { padding:0.3em 1em 0.3em 1em; }
-div.info table td.td-0 { border-right:solid rgb(102,102,153) 1px; white-space:nowrap; }
-div.info table td.td-n { border-right:solid rgb(102,102,153) 1px; }
-div.info table td h3 {
-	color:black;
-	font-size:1.1em;
-	margin-left:-0.3em;
-	}
-
-div.graph { margin-bottom:1em }
-div.graph h2 { background:rgb(204,204,204);; color:black; font-size:1em; margin:0; padding:0.1em 1em 0.1em 1em; }
-div.graph table { border:solid rgb(204,204,204) 1px; color:black; font-weight:normal; width:100%; }
-div.graph table td.td-0 { background:rgb(238,238,238); }
-div.graph table td.td-1 { background:rgb(221,221,221); }
-div.graph table td { padding:0.2em 1em 0.4em 1em; }
-
-div.div1,div.div2 { margin-bottom:1em; width:35em; }
-div.div3 { position:absolute; left:40em; top:1em; width:580px; }
-//div.div3 { position:absolute; left:37em; top:1em; right:1em; }
-
-div.sorting { margin:1.5em 0em 1.5em 2em }
-.center { text-align:center }
-.aright { position:absolute;right:1em }
-.right { text-align:right }
-.ok { color:rgb(0,200,0); font-weight:bold}
-.failed { color:rgb(200,0,0); font-weight:bold}
-
-span.box {
-	border: black solid 1px;
-	border-right:solid black 2px;
-	border-bottom:solid black 2px;
-	padding:0 0.5em 0 0.5em;
-	margin-right:1em;
+if(isset($_REQUEST['clear'])){
+    header('Content-Type: application/json');
+    
+    if($_REQUEST['clear']=='user'){
+        apc_clear_cache('user');
+    }else{
+        apc_clear_cache('opcode');
+    }
+    
+    
+    echo json_encode(array('status'=>1,'text'=>'<span class="glyphicon glyphicon-ok-circle"></span> Cache Cleared'));
+    die();
 }
-span.green { background:#60F060; padding:0 0.5em 0 0.5em}
-span.red { background:#D06030; padding:0 0.5em 0 0.5em }
 
-div.authneeded {
-	background:rgb(238,238,238);
-	border:solid rgb(204,204,204) 1px;
-	color:rgb(200,0,0);
-	font-size:1.2em;
-	font-weight:bold;
-	padding:2em;
-	text-align:center;
-	}
-
-input {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
-	font-weight:bold;
-	margin-right:1em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	}
-//-->
-</style>
-</head>
-<body>
-<div class="head">
-	<h1 class="apc">
-		<div class="logo"><span class="logo"><a href="http://pecl.php.net/package/APC">APC</a></span></div>
-		<div class="nameinfo">Opcode Cache</div>
-	</h1>
-	<div class="login">
-	<?php put_login_link(); ?>
-	</div>
-	<hr class="apc">
-</div>
-<?php
-
-
-// Display main Menu
-echo <<<EOB
-	<ol class=menu>
-	<li><a href="$MY_SELF&OB={$MYREQUEST['OB']}&SH={$MYREQUEST['SH']}">Refresh Data</a></li>
-EOB;
-echo
-	menu_entry(1,'View Host Stats'),
-	menu_entry(2,'System Cache Entries');
-if ($AUTHENTICATED) {
-	echo menu_entry(4,'Per-Directory Entries');
+if(isset($_REQUEST['refresh_cache_file'])){
+    header('Content-Type: application/json');
+    apc_delete_file($_REQUEST['refresh_cache_file']);
+    apc_compile_file($_REQUEST['refresh_cache_file']);
+    
+    echo json_encode(array('status'=>1,'text'=>date('c')));
+    die();
 }
-echo
-	menu_entry(3,'User Cache Entries'),
-	menu_entry(9,'Version Check');
 
-if ($AUTHENTICATED) {
-	echo <<<EOB
-		<li><a class="aright" href="$MY_SELF&CC=1&OB={$MYREQUEST['OB']}" onClick="javascript:return confirm('Are you sure?');">Clear $cache_mode Cache</a></li>
-EOB;
+if(isset($_REQUEST['remove_cache_file'])){
+    header('Content-Type: application/json');
+    if(apc_delete_file($_REQUEST['remove_cache_file'])){
+        $status = 1;
+    }else{
+        $status = 0;
+    }
+    
+    echo json_encode(array('status'=>$status,'text'=>date('c')));
+    die();
 }
-echo <<<EOB
-	</ol>
-EOB;
 
 
-// CONTENT
-echo <<<EOB
-	<div class=content>
-EOB;
+if(isset($_REQUEST['refresh_cache_folder'])){
+    header('Content-Type: application/json');
+    apc_delete_directory($_REQUEST['refresh_cache_folder']);
+    apc_add_directory($_REQUEST['refresh_cache_folder']);
+    
+    echo json_encode(array('status'=>1,'text'=>date('c')));
+    die();
+}
 
-// MAIN SWITCH STATEMENT
-
-switch ($MYREQUEST['OB']) {
-
-
-
-
-
-// -----------------------------------------------
-// Host Stats
-// -----------------------------------------------
-case OB_HOST_STATS:
-	$mem_size = $mem['num_seg']*$mem['seg_size'];
-	$mem_avail= $mem['avail_mem'];
-	$mem_used = $mem_size-$mem_avail;
-	$seg_size = bsize($mem['seg_size']);
-	$req_rate = sprintf("%.2f",($cache['nhits']+$cache['nmisses'])/($time-$cache['stime']));
-	$hit_rate = sprintf("%.2f",($cache['nhits'])/($time-$cache['stime']));
-	$miss_rate = sprintf("%.2f",($cache['nmisses'])/($time-$cache['stime']));
-	$insert_rate = sprintf("%.2f",($cache['ninserts'])/($time-$cache['stime']));
-	$req_rate_user = sprintf("%.2f",($cache_user['nhits']+$cache_user['nmisses'])/($time-$cache_user['stime']));
-	$hit_rate_user = sprintf("%.2f",($cache_user['nhits'])/($time-$cache_user['stime']));
-	$miss_rate_user = sprintf("%.2f",($cache_user['nmisses'])/($time-$cache_user['stime']));
-	$insert_rate_user = sprintf("%.2f",($cache_user['ninserts'])/($time-$cache_user['stime']));
-	$apcversion = phpversion('apc');
-	$phpversion = phpversion();
-	$number_files = $cache['nentries'];
-    $size_files = bsize($cache['mem_size']);
-	$number_vars = $cache_user['nentries'];
-    $size_vars = bsize($cache_user['mem_size']);
-	$i=0;
-	echo <<< EOB
-		<div class="info div1"><h2>General Cache Information</h2>
-		<table cellspacing=0><tbody>
-		<tr class=tr-0><td class=td-0>APC Version</td><td>$apcversion</td></tr>
-		<tr class=tr-1><td class=td-0>PHP Version</td><td>$phpversion</td></tr>
-EOB;
-
-	if(!empty($_SERVER['SERVER_NAME']))
-		echo "<tr class=tr-0><td class=td-0>APC Host</td><td>{$_SERVER['SERVER_NAME']} $host</td></tr>\n";
-	if(!empty($_SERVER['SERVER_SOFTWARE']))
-		echo "<tr class=tr-1><td class=td-0>Server Software</td><td>{$_SERVER['SERVER_SOFTWARE']}</td></tr>\n";
-
-	echo <<<EOB
-		<tr class=tr-0><td class=td-0>Shared Memory</td><td>{$mem['num_seg']} Segment(s) with $seg_size
-    <br/> ({$cache['memory_type']} memory)
-    </td></tr>
-EOB;
-	echo   '<tr class=tr-1><td class=td-0>Start Time</td><td>',date(DATE_FORMAT,$cache['stime']),'</td></tr>';
-	echo   '<tr class=tr-0><td class=td-0>Uptime</td><td>',duration($cache['stime']),'</td></tr>';
-	echo   '<tr class=tr-1><td class=td-0>File Upload Support</td><td>',$cache['file_upload_progress'],'</td></tr>';
-	echo <<<EOB
-		</tbody></table>
-		</div>
-
-		<div class="info div1"><h2>File Cache Information</h2>
-		<table cellspacing=0><tbody>
-		<tr class=tr-0><td class=td-0>Cached Files</td><td>$number_files ($size_files)</td></tr>
-		<tr class=tr-1><td class=td-0>Hits</td><td>{$cache['nhits']}</td></tr>
-		<tr class=tr-0><td class=td-0>Misses</td><td>{$cache['nmisses']}</td></tr>
-		<tr class=tr-1><td class=td-0>Request Rate (hits, misses)</td><td>$req_rate cache requests/second</td></tr>
-		<tr class=tr-0><td class=td-0>Hit Rate</td><td>$hit_rate cache requests/second</td></tr>
-		<tr class=tr-1><td class=td-0>Miss Rate</td><td>$miss_rate cache requests/second</td></tr>
-		<tr class=tr-0><td class=td-0>Insert Rate</td><td>$insert_rate cache requests/second</td></tr>
-		<tr class=tr-1><td class=td-0>Cache full count</td><td>{$cache['nexpunges']}</td></tr>
-		</tbody></table>
-		</div>
-
-		<div class="info div1"><h2>User Cache Information</h2>
-		<table cellspacing=0><tbody>
-    <tr class=tr-0><td class=td-0>Cached Variables</td><td>$number_vars ($size_vars)</td></tr>
-		<tr class=tr-1><td class=td-0>Hits</td><td>{$cache_user['nhits']}</td></tr>
-		<tr class=tr-0><td class=td-0>Misses</td><td>{$cache_user['nmisses']}</td></tr>
-		<tr class=tr-1><td class=td-0>Request Rate (hits, misses)</td><td>$req_rate_user cache requests/second</td></tr>
-		<tr class=tr-0><td class=td-0>Hit Rate</td><td>$hit_rate_user cache requests/second</td></tr>
-		<tr class=tr-1><td class=td-0>Miss Rate</td><td>$miss_rate_user cache requests/second</td></tr>
-		<tr class=tr-0><td class=td-0>Insert Rate</td><td>$insert_rate_user cache requests/second</td></tr>
-		<tr class=tr-1><td class=td-0>Cache full count</td><td>{$cache_user['nexpunges']}</td></tr>
-
-		</tbody></table>
-		</div>
-
-		<div class="info div2"><h2>Runtime Settings</h2><table cellspacing=0><tbody>
-EOB;
-
-	$j = 0;
-	foreach (ini_get_all('apc') as $k => $v) {
-		echo "<tr class=tr-$j><td class=td-0>",$k,"</td><td>",str_replace(',',',<br />',$v['local_value']),"</td></tr>\n";
-		$j = 1 - $j;
-	}
-
-	if($mem['num_seg']>1 || $mem['num_seg']==1 && count($mem['block_lists'][0])>1)
-		$mem_note = "Memory Usage<br /><font size=-2>(multiple slices indicate fragments)</font>";
-	else
-		$mem_note = "Memory Usage";
-
-	echo <<< EOB
-		</tbody></table>
-		</div>
-
-		<div class="graph div3"><h2>Host Status Diagrams</h2>
-		<table cellspacing=0><tbody>
-EOB;
-	$size='width='.(GRAPH_SIZE+50).' height='.(GRAPH_SIZE+10);
-	echo <<<EOB
-		<tr>
-		<td class=td-0>$mem_note</td>
-		<td class=td-1>Hits &amp; Misses</td>
-		</tr>
-EOB;
-
-	echo
-		graphics_avail() ?
-			  '<tr>'.
-			  "<td class=td-0><img alt=\"\" $size src=\"$PHP_SELF?IMG=1&$time\"></td>".
-			  "<td class=td-1><img alt=\"\" $size src=\"$PHP_SELF?IMG=2&$time\"></td></tr>\n"
-			: "",
-		'<tr>',
-		'<td class=td-0><span class="green box">&nbsp;</span>Free: ',bsize($mem_avail).sprintf(" (%.1f%%)",$mem_avail*100/$mem_size),"</td>\n",
-		'<td class=td-1><span class="green box">&nbsp;</span>Hits: ',$cache['nhits'].sprintf(" (%.1f%%)",$cache['nhits']*100/($cache['nhits']+$cache['nmisses'])),"</td>\n",
-		'</tr>',
-		'<tr>',
-		'<td class=td-0><span class="red box">&nbsp;</span>Used: ',bsize($mem_used ).sprintf(" (%.1f%%)",$mem_used *100/$mem_size),"</td>\n",
-		'<td class=td-1><span class="red box">&nbsp;</span>Misses: ',$cache['nmisses'].sprintf(" (%.1f%%)",$cache['nmisses']*100/($cache['nhits']+$cache['nmisses'])),"</td>\n";
-	echo <<< EOB
-		</tr>
-		</tbody></table>
-
-		<br/>
-		<h2>Detailed Memory Usage and Fragmentation</h2>
-		<table cellspacing=0><tbody>
-		<tr>
-		<td class=td-0 colspan=2><br/>
-EOB;
-
-	// Fragementation: (freeseg - 1) / total_seg
-	$nseg = $freeseg = $fragsize = $freetotal = 0;
-	for($i=0; $i<$mem['num_seg']; $i++) {
-		$ptr = 0;
-		foreach($mem['block_lists'][$i] as $block) {
-			if ($block['offset'] != $ptr) {
-				++$nseg;
-			}
-			$ptr = $block['offset'] + $block['size'];
-                        /* Only consider blocks <5M for the fragmentation % */
-                        if($block['size']<(5*1024*1024)) $fragsize+=$block['size'];
-                        $freetotal+=$block['size'];
-		}
-		$freeseg += count($mem['block_lists'][$i]);
-	}
-
-	if ($freeseg > 1) {
-		$frag = sprintf("%.2f%% (%s out of %s in %d fragments)", ($fragsize/$freetotal)*100,bsize($fragsize),bsize($freetotal),$freeseg);
-	} else {
-		$frag = "0%";
-	}
-
-	if (graphics_avail()) {
-		$size='width='.(2*GRAPH_SIZE+150).' height='.(GRAPH_SIZE+10);
-		echo <<<EOB
-			<img alt="" $size src="$PHP_SELF?IMG=3&$time">
-EOB;
-	}
-	echo <<<EOB
-		</br>Fragmentation: $frag
-		</td>
-		</tr>
-EOB;
-        if(isset($mem['adist'])) {
-          foreach($mem['adist'] as $i=>$v) {
-            $cur = pow(2,$i); $nxt = pow(2,$i+1)-1;
-            if($i==0) $range = "1";
-            else $range = "$cur - $nxt";
-            echo "<tr><th align=right>$range</th><td align=right>$v</td></tr>\n";
-          }
-        }
-        echo <<<EOB
-		</tbody></table>
-		</div>
-EOB;
-
-	break;
+if(isset($_REQUEST['remove_cache_folder'])){
+    header('Content-Type: application/json');
+    if(apc_delete_directory($_REQUEST['remove_cache_folder'])){
+        $status = 1;
+    }else{
+        $status = 0;
+    }
+    
+    echo json_encode(array('status'=>$status,'text'=>date('c')));
+    die();
+}
 
 
-// -----------------------------------------------
-// User Cache Entries
-// -----------------------------------------------
-case OB_USER_CACHE:
-	if (!$AUTHENTICATED) {
-    echo '<div class="error">You need to login to see the user values here!<br/>&nbsp;<br/>';
-		put_login_link("Login now!");
-		echo '</div>';
-		break;
-	}
-	$fieldname='key';
-	$fieldheading='User Entry Label';
-	$fieldkey='key';
+if(isset($_REQUEST['add_cache_folder'])){
+    header('Content-Type: application/json');
+    
+    $status = 0;
+    
+    if(is_dir($_REQUEST['add_cache_folder']) && apc_add_directory($_REQUEST['add_cache_folder'])){
+        $status = 1;
+    }
+    
+    echo json_encode(array('status'=>$status,'text'=>date('c')));
+    die();
+}
 
-// -----------------------------------------------
-// System Cache Entries
-// -----------------------------------------------
-case OB_SYS_CACHE:
-	if (!isset($fieldname))
-	{
-		$fieldname='key';
-		$fieldheading='Script Filename';
-		if(ini_get("apc.stat")) $fieldkey='inode';
-		else $fieldkey='key';
-	}
-	if (!empty($MYREQUEST['SH']))
-	{
-		echo <<< EOB
-			<div class="info"><table cellspacing=0><tbody>
-			<tr><th>Attribute</th><th>Value</th></tr>
-EOB;
+if(isset($_REQUEST['remove_cache_user'])){
+    header('Content-Type: application/json');
+    apc_delete($_REQUEST['remove_cache_user']);
+    
+    echo json_encode(array('status'=>1,'text'=>date('c')));
+    die();
+}
 
-		$m=0;
-		foreach($scope_list as $j => $list) {
-			foreach($cache[$list] as $i => $entry) {
-				if (md5($entry[$fieldkey])!=$MYREQUEST['SH']) continue;
-				foreach($entry as $k => $value) {
-					if (!$AUTHENTICATED) {
-						// hide all path entries if not logged in
-						$value=preg_replace('/^.*(\\/|\\\\)/','<i>&lt;hidden&gt;</i>/',$value);
-					}
+if(isset($_REQUEST['setvariable'])){
+    
+    if(isset($_REQUEST['value'])){
+        apc_store($_REQUEST['setvariable'],$_REQUEST['value'],intval($_REQUEST['ttl']));
+    }else{
+        apc_store($_REQUEST['setvariable'],apc_fetch($_REQUEST['setvariable']),intval($_REQUEST['ttl']));
+    }
 
-					if ($k == "nhits") {
-						$value=sprintf("%s (%.2f%%)",$value,$value*100/$cache['nhits']);
-					}
-					if ($k == 'dtime') {
-						if(!$entry['dtime']) $value = "None";
-					}
-					echo
-						"<tr class=tr-$m>",
-						"<td class=td-0>",ucwords(preg_replace("/_/"," ",$k)),"</td>",
-						"<td class=td-last>",(preg_match("/time/",$k) && $value!='None') ? date(DATE_FORMAT,$value) : htmlspecialchars($value, ENT_QUOTES, 'UTF-8'),"</td>",
-						"</tr>";
-					$m=1-$m;
-				}
-				if($fieldkey=='info') {
-					echo "<tr class=tr-$m><td class=td-0>Stored Value</td><td class=td-last><pre>";
-					$output = var_export(apc_fetch($entry[$fieldkey]),true);
-					echo htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
-					echo "</pre></td></tr>\n";
-				}
-				break;
-			}
-		}
+    echo json_encode(array('status'=>1,'text'=>date('c')));
+    die();
+}
 
-		echo <<<EOB
-			</tbody></table>
-			</div>
-EOB;
-		break;
-	}
 
-	$cols=6;
-	echo <<<EOB
-		<div class=sorting><form>Scope:
-		<input type=hidden name=OB value={$MYREQUEST['OB']}>
-		<select name=SCOPE>
-EOB;
-	echo
-		"<option value=A",$MYREQUEST['SCOPE']=='A' ? " selected":"",">Active</option>",
-		"<option value=D",$MYREQUEST['SCOPE']=='D' ? " selected":"",">Deleted</option>",
-		"</select>",
-		", Sorting:<select name=SORT1>",
-		"<option value=H",$MYREQUEST['SORT1']=='H' ? " selected":"",">Hits</option>",
-		"<option value=Z",$MYREQUEST['SORT1']=='Z' ? " selected":"",">Size</option>",
-		"<option value=S",$MYREQUEST['SORT1']=='S' ? " selected":"",">$fieldheading</option>",
-		"<option value=A",$MYREQUEST['SORT1']=='A' ? " selected":"",">Last accessed</option>",
-		"<option value=M",$MYREQUEST['SORT1']=='M' ? " selected":"",">Last modified</option>",
-		"<option value=C",$MYREQUEST['SORT1']=='C' ? " selected":"",">Created at</option>",
-		"<option value=D",$MYREQUEST['SORT1']=='D' ? " selected":"",">Deleted at</option>";
-	if($fieldname=='info') echo
-		"<option value=D",$MYREQUEST['SORT1']=='T' ? " selected":"",">Timeout</option>";
-	echo
-		'</select>',
-		'<select name=SORT2>',
-		'<option value=D',$MYREQUEST['SORT2']=='D' ? ' selected':'','>DESC</option>',
-		'<option value=A',$MYREQUEST['SORT2']=='A' ? ' selected':'','>ASC</option>',
-		'</select>',
-		'<select name=COUNT onChange="form.submit()">',
-		'<option value=10 ',$MYREQUEST['COUNT']=='10' ? ' selected':'','>Top 10</option>',
-		'<option value=20 ',$MYREQUEST['COUNT']=='20' ? ' selected':'','>Top 20</option>',
-		'<option value=50 ',$MYREQUEST['COUNT']=='50' ? ' selected':'','>Top 50</option>',
-		'<option value=100',$MYREQUEST['COUNT']=='100'? ' selected':'','>Top 100</option>',
-		'<option value=150',$MYREQUEST['COUNT']=='150'? ' selected':'','>Top 150</option>',
-		'<option value=200',$MYREQUEST['COUNT']=='200'? ' selected':'','>Top 200</option>',
-		'<option value=500',$MYREQUEST['COUNT']=='500'? ' selected':'','>Top 500</option>',
-		'<option value=0  ',$MYREQUEST['COUNT']=='0'  ? ' selected':'','>All</option>',
-		'</select>',
-    '&nbsp; Search: <input name=SEARCH value="',$MYREQUEST['SEARCH'],'" type=text size=25/>',
-		'&nbsp;<input type=submit value="GO!">',
-		'</form></div>';
+if(isset($_REQUEST['about_info'])){
+    echo '<table><tbody>';
+    if (defined('PROXY')) {
+      $ctxt = stream_context_create( array( 'http' => array( 'proxy' => PROXY, 'request_fulluri' => True ) ) );
+      $rss = @file_get_contents("http://pecl.php.net/feeds/pkg_apc.rss", False, $ctxt);
+    } else {
+      $rss = @file_get_contents("http://pecl.php.net/feeds/pkg_apc.rss");
+    }
+    if (!$rss) {
+        echo '<tr class="td-last center"><td>Unable to fetch version information.</td></tr>';
+    } else {
+        $apcversion = phpversion('apc');
 
-  if (isset($MYREQUEST['SEARCH'])) {
-   // Don't use preg_quote because we want the user to be able to specify a
-   // regular expression subpattern.
-   $MYREQUEST['SEARCH'] = '/'.str_replace('/', '\\/', $MYREQUEST['SEARCH']).'/i';
-   if (preg_match($MYREQUEST['SEARCH'], 'test') === false) {
-     echo '<div class="error">Error: enter a valid regular expression as a search query.</div>';
-     break;
-   }
-  }
-
-  echo
-		'<div class="info"><table cellspacing=0><tbody>',
-		'<tr>',
-		'<th>',sortheader('S',$fieldheading,  "&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('H','Hits',         "&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('Z','Size',         "&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('A','Last accessed',"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('M','Last modified',"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('C','Created at',   "&OB=".$MYREQUEST['OB']),'</th>';
-
-	if($fieldname=='info') {
-		$cols+=2;
-		 echo '<th>',sortheader('T','Timeout',"&OB=".$MYREQUEST['OB']),'</th>';
-	}
-	echo '<th>',sortheader('D','Deleted at',"&OB=".$MYREQUEST['OB']),'</th></tr>';
-
-	// builds list with alpha numeric sortable keys
-	//
-	$list = array();
-	foreach($cache[$scope_list[$MYREQUEST['SCOPE']]] as $i => $entry) {
-		switch($MYREQUEST['SORT1']) {
-			case 'A': $k=sprintf('%015d-',$entry['atime']); 	break;
-			case 'H': $k=sprintf('%015d-',$entry['nhits']); 		break;
-			case 'Z': $k=sprintf('%015d-',$entry['mem_size']); 		break;
-			case 'M': $k=sprintf('%015d-',$entry['mtime']);			break;
-			case 'C': $k=sprintf('%015d-',$entry['ctime']);	break;
-			case 'T': $k=sprintf('%015d-',$entry['ttl']);			break;
-			case 'D': $k=sprintf('%015d-',$entry['dtime']);	break;
-			case 'S': $k='';										break;
-		}
-		if (!$AUTHENTICATED) {
-			// hide all path entries if not logged in
-			$list[$k.$entry[$fieldname]]=preg_replace('/^.*(\\/|\\\\)/','*hidden*/',$entry);
-		} else {
-			$list[$k.$entry[$fieldname]]=$entry;
-		}
-	}
-
-	if ($list) {
-
-		// sort list
-		//
-		switch ($MYREQUEST['SORT2']) {
-			case "A":	krsort($list);	break;
-			case "D":	ksort($list);	break;
-		}
-
-		// output list
-		$i=0;
-		foreach($list as $k => $entry) {
-      if(!$MYREQUEST['SEARCH'] || preg_match($MYREQUEST['SEARCH'], $entry[$fieldname]) != 0) {
-        $field_value = htmlentities(strip_tags($entry[$fieldname],''), ENT_QUOTES, 'UTF-8');
-        echo
-          '<tr class=tr-',$i%2,'>',
-          "<td class=td-0><a href=\"$MY_SELF&OB=",$MYREQUEST['OB'],"&SH=",md5($entry[$fieldkey]),"\">",$field_value,'</a></td>',
-          '<td class="td-n center">',$entry['nhits'],'</td>',
-          '<td class="td-n right">',$entry['mem_size'],'</td>',
-          '<td class="td-n center">',date(DATE_FORMAT,$entry['atime']),'</td>',
-          '<td class="td-n center">',date(DATE_FORMAT,$entry['mtime']),'</td>',
-          '<td class="td-n center">',date(DATE_FORMAT,$entry['ctime']),'</td>';
-
-        if($fieldname=='info') {
-          if($entry['ttl'])
-            echo '<td class="td-n center">'.$entry['ttl'].' seconds</td>';
-          else
-            echo '<td class="td-n center">None</td>';
-        }
-        if ($entry['dtime']) {
-
-          echo '<td class="td-last center">', date(DATE_FORMAT,$entry['dtime']), '</td>';
-        } else if ($MYREQUEST['OB'] == OB_USER_CACHE) {
-
-          echo '<td class="td-last center">';
-          echo '[<a href="', $MY_SELF, '&OB=', $MYREQUEST['OB'], '&DU=', urlencode($entry[$fieldkey]), '">Delete Now</a>]';
-          echo '</td>';
+        preg_match('!<title>APC ([0-9.]+)</title>!', $rss, $match);
+        echo '<tr class="tr-0 center"><td>';
+        if (version_compare($apcversion, $match[1], '>=')) {
+            echo '<div class="ok">You are running the latest version of APC ('.$apcversion.')</div>';
+            $i = 3;
         } else {
-          echo '<td class="td-last center"> &nbsp; </td>';
+            echo '<div class="failed">You are running an older version of APC ('.$apcversion.'), 
+                newer version '.$match[1].' is available at <a href="http://pecl.php.net/package/APC/'.$match[1].'">
+                http://pecl.php.net/package/APC/'.$match[1].'</a>
+                </div>';
+            $i = -1;
         }
-        echo '</tr>';
-        $i++;
-        if ($i == $MYREQUEST['COUNT'])
-          break;
-      }
-		}
+        echo '</td></tr>';
+        echo '<tr class="tr-0"><td><h3>Change Log:</h3><br/>';
 
-	} else {
-		echo '<tr class=tr-0><td class="center" colspan=',$cols,'><i>No data</i></td></tr>';
-	}
-	echo <<< EOB
-		</tbody></table>
-EOB;
+        preg_match_all('!<(title|description)>([^<]+)</\\1>!', $rss, $match);
+        next($match[2]); next($match[2]);
 
-	if ($list && $i < count($list)) {
-		echo "<a href=\"$MY_SELF&OB=",$MYREQUEST['OB'],"&COUNT=0\"><i>",count($list)-$i,' more available...</i></a>';
-	}
-
-	echo <<< EOB
-		</div>
-EOB;
-	break;
-
-
-// -----------------------------------------------
-// Per-Directory System Cache Entries
-// -----------------------------------------------
-case OB_SYS_CACHE_DIR:
-	if (!$AUTHENTICATED) {
-		break;
-	}
-
-	echo <<<EOB
-		<div class=sorting><form>Scope:
-		<input type=hidden name=OB value={$MYREQUEST['OB']}>
-		<select name=SCOPE>
-EOB;
-	echo
-		"<option value=A",$MYREQUEST['SCOPE']=='A' ? " selected":"",">Active</option>",
-		"<option value=D",$MYREQUEST['SCOPE']=='D' ? " selected":"",">Deleted</option>",
-		"</select>",
-		", Sorting:<select name=SORT1>",
-		"<option value=H",$MYREQUEST['SORT1']=='H' ? " selected":"",">Total Hits</option>",
-		"<option value=Z",$MYREQUEST['SORT1']=='Z' ? " selected":"",">Total Size</option>",
-		"<option value=T",$MYREQUEST['SORT1']=='T' ? " selected":"",">Number of Files</option>",
-		"<option value=S",$MYREQUEST['SORT1']=='S' ? " selected":"",">Directory Name</option>",
-		"<option value=A",$MYREQUEST['SORT1']=='A' ? " selected":"",">Avg. Size</option>",
-		"<option value=C",$MYREQUEST['SORT1']=='C' ? " selected":"",">Avg. Hits</option>",
-		'</select>',
-		'<select name=SORT2>',
-		'<option value=D',$MYREQUEST['SORT2']=='D' ? ' selected':'','>DESC</option>',
-		'<option value=A',$MYREQUEST['SORT2']=='A' ? ' selected':'','>ASC</option>',
-		'</select>',
-		'<select name=COUNT onChange="form.submit()">',
-		'<option value=10 ',$MYREQUEST['COUNT']=='10' ? ' selected':'','>Top 10</option>',
-		'<option value=20 ',$MYREQUEST['COUNT']=='20' ? ' selected':'','>Top 20</option>',
-		'<option value=50 ',$MYREQUEST['COUNT']=='50' ? ' selected':'','>Top 50</option>',
-		'<option value=100',$MYREQUEST['COUNT']=='100'? ' selected':'','>Top 100</option>',
-		'<option value=150',$MYREQUEST['COUNT']=='150'? ' selected':'','>Top 150</option>',
-		'<option value=200',$MYREQUEST['COUNT']=='200'? ' selected':'','>Top 200</option>',
-		'<option value=500',$MYREQUEST['COUNT']=='500'? ' selected':'','>Top 500</option>',
-		'<option value=0  ',$MYREQUEST['COUNT']=='0'  ? ' selected':'','>All</option>',
-		'</select>',
-		", Group By Dir Level:<select name=AGGR>",
-		"<option value='' selected>None</option>";
-		for ($i = 1; $i < 10; $i++)
-			echo "<option value=$i",$MYREQUEST['AGGR']==$i ? " selected":"",">$i</option>";
-		echo '</select>',
-		'&nbsp;<input type=submit value="GO!">',
-		'</form></div>',
-
-		'<div class="info"><table cellspacing=0><tbody>',
-		'<tr>',
-		'<th>',sortheader('S','Directory Name',	"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('T','Number of Files',"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('H','Total Hits',	"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('Z','Total Size',	"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('C','Avg. Hits',	"&OB=".$MYREQUEST['OB']),'</th>',
-		'<th>',sortheader('A','Avg. Size',	"&OB=".$MYREQUEST['OB']),'</th>',
-		'</tr>';
-
-	// builds list with alpha numeric sortable keys
-	//
-	$tmp = $list = array();
-	foreach($cache[$scope_list[$MYREQUEST['SCOPE']]] as $entry) {
-		$n = dirname($entry['key']);
-		if ($MYREQUEST['AGGR'] > 0) {
-			$n = preg_replace("!^(/?(?:[^/\\\\]+[/\\\\]){".($MYREQUEST['AGGR']-1)."}[^/\\\\]*).*!", "$1", $n);
-		}
-		if (!isset($tmp[$n])) {
-			$tmp[$n] = array('hits'=>0,'size'=>0,'ents'=>0);
-		}
-		$tmp[$n]['hits'] += $entry['nhits'];
-		$tmp[$n]['size'] += $entry['mem_size'];
-		++$tmp[$n]['ents'];
-	}
-
-	foreach ($tmp as $k => $v) {
-		switch($MYREQUEST['SORT1']) {
-			case 'A': $kn=sprintf('%015d-',$v['size'] / $v['ents']);break;
-			case 'T': $kn=sprintf('%015d-',$v['ents']);		break;
-			case 'H': $kn=sprintf('%015d-',$v['hits']);		break;
-			case 'Z': $kn=sprintf('%015d-',$v['size']);		break;
-			case 'C': $kn=sprintf('%015d-',$v['hits'] / $v['ents']);break;
-			case 'S': $kn = $k;					break;
-		}
-		$list[$kn.$k] = array($k, $v['ents'], $v['hits'], $v['size']);
-	}
-
-	if ($list) {
-
-		// sort list
-		//
-		switch ($MYREQUEST['SORT2']) {
-			case "A":	krsort($list);	break;
-			case "D":	ksort($list);	break;
-		}
-
-		// output list
-		$i = 0;
-		foreach($list as $entry) {
-			echo
-				'<tr class=tr-',$i%2,'>',
-				"<td class=td-0>",$entry[0],'</a></td>',
-				'<td class="td-n center">',$entry[1],'</td>',
-				'<td class="td-n center">',$entry[2],'</td>',
-				'<td class="td-n center">',$entry[3],'</td>',
-				'<td class="td-n center">',round($entry[2] / $entry[1]),'</td>',
-				'<td class="td-n center">',round($entry[3] / $entry[1]),'</td>',
-				'</tr>';
-
-			if (++$i == $MYREQUEST['COUNT']) break;
-		}
-
-	} else {
-		echo '<tr class=tr-0><td class="center" colspan=6><i>No data</i></td></tr>';
-	}
-	echo <<< EOB
-		</tbody></table>
-EOB;
-
-	if ($list && $i < count($list)) {
-		echo "<a href=\"$MY_SELF&OB=",$MYREQUEST['OB'],"&COUNT=0\"><i>",count($list)-$i,' more available...</i></a>';
-	}
-
-	echo <<< EOB
-		</div>
-EOB;
-	break;
-
-// -----------------------------------------------
-// Version check
-// -----------------------------------------------
-case OB_VERSION_CHECK:
-	echo <<<EOB
-		<div class="info"><h2>APC Version Information</h2>
-		<table cellspacing=0><tbody>
-		<tr>
-		<th></th>
-		</tr>
-EOB;
-  if (defined('PROXY')) {
-    $ctxt = stream_context_create( array( 'http' => array( 'proxy' => PROXY, 'request_fulluri' => True ) ) );
-    $rss = @file_get_contents("http://pecl.php.net/feeds/pkg_apc.rss", False, $ctxt);
-  } else {
-    $rss = @file_get_contents("http://pecl.php.net/feeds/pkg_apc.rss");
-  }
-	if (!$rss) {
-		echo '<tr class="td-last center"><td>Unable to fetch version information.</td></tr>';
-	} else {
-		$apcversion = phpversion('apc');
-
-		preg_match('!<title>APC ([0-9.]+)</title>!', $rss, $match);
-		echo '<tr class="tr-0 center"><td>';
-		if (version_compare($apcversion, $match[1], '>=')) {
-			echo '<div class="ok">You are running the latest version of APC ('.$apcversion.')</div>';
-			$i = 3;
-		} else {
-			echo '<div class="failed">You are running an older version of APC ('.$apcversion.'),
-				newer version '.$match[1].' is available at <a href="http://pecl.php.net/package/APC/'.$match[1].'">
-				http://pecl.php.net/package/APC/'.$match[1].'</a>
-				</div>';
-			$i = -1;
-		}
-		echo '</td></tr>';
-		echo '<tr class="tr-0"><td><h3>Change Log:</h3><br/>';
-
-		preg_match_all('!<(title|description)>([^<]+)</\\1>!', $rss, $match);
-		next($match[2]); next($match[2]);
-
-		while (list(,$v) = each($match[2])) {
-			list(,$ver) = explode(' ', $v, 2);
-			if ($i < 0 && version_compare($apcversion, $ver, '>=')) {
-				break;
-			} else if (!$i--) {
-				break;
-			}
-			echo "<b><a href=\"http://pecl.php.net/package/APC/$ver\">".htmlspecialchars($v, ENT_QUOTES, 'UTF-8')."</a></b><br><blockquote>";
-			echo nl2br(htmlspecialchars(current($match[2]), ENT_QUOTES, 'UTF-8'))."</blockquote>";
-			next($match[2]);
-		}
-		echo '</td></tr>';
-	}
-	echo <<< EOB
-		</tbody></table>
-		</div>
-EOB;
-	break;
-
+        while (list(,$v) = each($match[2])) {
+            list(,$ver) = explode(' ', $v, 2);
+            if ($i < 0 && version_compare($apcversion, $ver, '>=')) {
+                break;
+            } else if (!$i--) {
+                break;
+            }
+            echo "<b><a href=\"http://pecl.php.net/package/APC/$ver\">".htmlspecialchars($v, ENT_QUOTES, 'UTF-8')."</a></b><br><blockquote>";
+            echo nl2br(htmlspecialchars(current($match[2]), ENT_QUOTES, 'UTF-8'))."</blockquote>";
+            next($match[2]);
+        }
+        echo '</td></tr>';
+    }
+    echo '</tbody></table>';
+    die();
 }
 
-echo <<< EOB
-	</div>
-EOB;
+
+
+
+
+
+
+
+// Required lib functions
+
+//  Add  files in a directory  to APC Cache
+function apc_add_directory($dir) { 
+	$result = array(); 
+	$cdir 	= scandir($dir); 
+	foreach ($cdir as $key => $value) { 
+		if (!in_array($value,array(".",".."))) { 
+			if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) { 
+			   $result[$value] = apc_add_directory($dir . DIRECTORY_SEPARATOR . $value); 
+			} else {
+				if(strtolower(substr($value,-4))=='.php'){
+					$result[] = $dir. DIRECTORY_SEPARATOR .$value;
+					apc_compile_file($dir. DIRECTORY_SEPARATOR .$value);
+				}
+			} 
+		} 
+	} 
+	return $result; 
+}
+
+function apc_delete_directory($dir,$cache=false){
+    if($cache==false){
+        $cache = $GLOBALS['cache'];
+    }
+    foreach($cache['cache_list'] as $list){
+        if($list['type']=='file'){
+            if(strcmp($dir,$list['filename'])>=0){
+                apc_delete_file($list['filename']);
+            }
+        }
+    }
+    return true;
+}
+
+
+function displayVar($var){
+	switch(gettype($var)){
+		case 'array':
+			print_r($var);
+			break;
+		case 'string':
+			json_decode($var);
+			if(json_last_error() == JSON_ERROR_NONE){
+				print_r(json_decode($var));
+			}elseif($arr = @unserialize($var)){
+				print_r($arr);
+			} else {
+				echo $var;
+			}
+			break;
+		default:
+			echo $var;
+			break;
+	}
+}
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- <?php echo "\nBased on APCGUI By R.Becker\n$VERSION\n"?> -->
-</body>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//www.techzonemind.com/labz/apc-admin/css/todc-bootstrap.min.css" rel="stylesheet">
+		
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/4.0.1/highcharts.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/4.0.1/highcharts-more.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/4.0.1/modules/exporting.js"></script>
+		<script src="//www.techzonemind.com/labz/apc-admin/js/jquery.timeago.js"></script>
+		<script src="//www.techzonemind.com/labz/apc-admin/js/jquery.tablesorter.min.js"></script>
+
+		<script>
+			var req_time = (new Date()).getTime();
+			var opcode_progress = Array();
+			var ctime = (new Date()).getTime();
+			var opcode_chart;
+			var cache;
+			
+			function refreshData(){
+				req_time = (new Date()).getTime();
+				$.getJSON("apc.php?status",function(data){
+					
+					cache  = data;
+					
+					var curr_time = (new Date()).getTime();
+					var delay = curr_time-req_time;
+					
+					if (delay > 1000) {
+						refreshData();
+					}else{
+						setTimeout(refreshData,(1000-(curr_time-req_time)));
+					}
+					
+				});
+			};
+			
+			function applyData(){
+				if(typeof cache != 'undefined'){
+					var curr_time = (new Date()).getTime();
+					
+					
+					console.log(cache);
+					
+					opcode_progress[0].addPoint([curr_time, cache.num_hits],false,true);
+					opcode_progress[1].addPoint([curr_time, cache.num_misses],false,true);
+					
+					opcode_chart.redraw();
+					
+					user_progress[0].addPoint([curr_time, cache.user.num_hits],false,true);
+					user_progress[1].addPoint([curr_time, cache.user.num_misses],false,true);
+					
+					user_chart.redraw();
+					
+				}
+				setTimeout(applyData,1000);
+			};
+			
+			$(document).ready(function(){
+				$(".timeago").timeago();
+				$(".sorter").tablesorter();
+				refreshData();
+				applyData();
+			});
+		</script>
+    </head>
+    <body>
+        
+		<div  class="container">
+			
+			<ul class="nav nav-tabs nav-tabs-google">
+				<li class="active"><a href="#status" data-toggle="tab"><b>APC Admin</b></a></li>
+				<li class="dropdown">
+					<a href="#" id="opcode-drop" class="dropdown-toggle" data-toggle="dropdown">Opcode Cache <b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="opcode-drop">
+						<li><a href="#opcode" tabindex="-1" data-toggle="tab">Cache Info</a></li>
+						<li><a href="#per-file" tabindex="-1" data-toggle="tab">Cached Files</a></li>
+						<li><a href="#per-directory" tabindex="-1" data-toggle="tab">Per Directory Entrys</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" id="user-drop" class="dropdown-toggle" data-toggle="dropdown">User Cache <b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="user-drop">
+						<li><a href="#user" tabindex="-1" data-toggle="tab">Cache Info</a></li>
+						<li><a href="#per-user" tabindex="-1" data-toggle="tab">Cached User Variables</a></li>
+					</ul>
+				</li>
+				<li><a href="#fragmentation" data-toggle="tab">Memory Fragmentation</a></li>
+				<li><a href="#config" data-toggle="tab">Configuration</a></li>
+				<li><a href="#about" data-toggle="tab" id="about_link">About</a></li>
+				
+			</ul>
+			
+			<div class="tab-content" style="padding-top: 20px">
+		
+				<div class="tab-pane active" id="status">
+					
+					<?php if(count(ini_get_all('apc'))==0 && count(ini_get_all('apcu'))>0){ ?>
+						<div class="alert alert-warning" role="alert">
+							You are running APCu instead of APC, some options will not work properly
+						</div>
+					<?php } ?>
+					
+					
+					<div class="col-md-6" style="padding-left: 0px">
+    
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title">General Cache Information</h3>
+							</div>
+							<div class="panel-body" style="padding: 0px">
+								<table class="table table-striped table-bordered">
+									<tbody>
+										<tr><td>APC Version</td><td><?php echo $apcversion ?></td></tr>
+										<tr><td>PHP Version</td><td><?php echo $phpversion ?></td></tr>
+										<?php if(!empty($_SERVER['SERVER_NAME'])) { ?>
+											<tr><td>APC Host</td><td><?php echo $_SERVER['SERVER_NAME']." ".$host?></td></tr>
+											
+										<?php } if(!empty($_SERVER['SERVER_SOFTWARE'])) { ?>
+											<tr><td>Server Software</td><td><?php echo $_SERVER['SERVER_SOFTWARE']?></td></tr>
+										<?php } ?>
+										
+										<tr><td>Shared Memory</td><td><?php echo $mem['num_seg']?> Segment(s) with <?php echo $seg_size?> 
+											<br/> (<?php echo $cache['memory_type']?> memory, <?php echo $cache['locking_type']?> locking)
+											</td>
+										</tr>
+										<tr><td>Start Time</td><td><?php echo date(DATE_FORMAT,$cache['start_time'])?></td></tr>
+										<tr><td>Uptime</td><td><?php echo duration($cache['start_time'])?></td></tr>
+										<tr><td>File Upload Support</td><td><?php echo $cache['file_upload_progress']?></td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="col-md-6" style="padding-left: 0px">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title">Memory allocation and usage</h3>
+							</div>
+							<div class="panel-body">
+							
+								<div id="chat_container_status"></div>
+								<script>
+									$(function () {
+										$('#chat_container_status').highcharts({
+											chart: {
+												plotBackgroundColor: null,
+												plotBorderWidth: null,
+												plotShadow: false
+											},
+											tooltip: {
+												pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+											},
+											plotOptions: {
+												pie: {
+													allowPointSelect: true,
+													cursor: 'pointer',
+													dataLabels: {
+														enabled: false
+													},
+													showInLegend: true
+												}
+											},
+											credits: {
+												enabled: false
+											},
+											series: [{
+												type: 'pie',
+												name: 'Host Status Diagrams - Memory Usage',
+												data: [
+													['Cached Files - ' + '<?php echo $size_files?>',   <?php echo $cache['mem_size'];?> ],
+													['Cached Variables - ' + '<?php echo $size_vars?>',  <?php echo $cache_user['mem_size'];?>],
+													['Free Space - ' + '<?php echo bsize($mem_avail)?>',    <?php echo $mem_avail?>]
+												]
+											}]
+										});
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<?php
+
+$hits       = array();
+$missess    =  array();
+for($i=20; $i>=0; $i--){
+   $hits[] = "{x:ctime-".($i*1000).",y:".intval($cache['num_hits'])."}";
+   $missess[] = "{x:ctime-".($i*1000).",y:".intval($cache['num_misses'])."}";
+}
+
+?>
+<script>
+    
+    
+    $(document).ready(function(){
+        
+        
+        
+        var chart_options = {
+            chart: {
+                type: 'line',
+                renderTo: 'opcode_progress',
+                animation: {
+                    duration : 980,
+                    easing : 'linear'
+                },
+                events: {
+                    load: function() {
+                        opcode_progress[0] = this.series[0];
+                        opcode_progress[1] = this.series[1];
+                    }
+                }
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: 'Cached files Hits & Missess'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                min : 0,
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                shared: true
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
+            series: [{
+                name: 'Hits',
+                data: [<?php echo implode(',',$hits)?>]
+            }, {
+                name: 'Miss',
+                data: [<?php echo implode(',',$missess)?>]
+            }],
+            credits: {
+                enabled: false
+            }
+        };
+        opcode_chart = new Highcharts.Chart(chart_options);
+        
+        $("[ajax]").click(function(){
+            $(this).attr('disabled','disabled');
+            var value  = $(this).attr("ajax");
+            var clicked_btn = $(this);
+            var btn_text = $(this).html();
+            $.getJSON('apc.php?'+value,function(response){
+                console.log(response);
+                if(response.status==1){
+                    clicked_btn.html(response.text);
+                    setInterval(function(){clicked_btn.html(btn_text);clicked_btn.removeAttr('disabled');},5000);
+                }else{
+                    clicked_btn.html(response.text);
+                    clicked_btn.removeAttr('disabled');
+                }
+            });
+        });
+        
+        $(".refresh_cache_file,.refresh_cache_folder").click(function(){
+            $(this).attr('disabled','disabled');
+            var value  = $(this).attr("ajaxr");
+            var clicked_btn = $(this);
+            var btn_text = $(this).html();
+            $(this).html('<img src="./img/489.GIF"/>');
+            $.getJSON('apc.php?'+value,function(response){
+                if(response.status==1){
+                    clicked_btn.html('<span class="glyphicon glyphicon-ok-circle"></span>');
+                    setInterval(function(){clicked_btn.html(btn_text);clicked_btn.removeAttr('disabled');},5000);
+                }else{
+                    clicked_btn.html('<span class="glyphicon glyphicon-remove-circle"></span>');
+                    setInterval(function(){clicked_btn.html(btn_text);clicked_btn.removeAttr('disabled');},5000);
+                }
+            });
+        });
+        
+        
+        $(".remove_cache_file,.remove_cache_folder,.remove_cache_user").click(function(){
+            $(this).attr('disabled','disabled');
+            var value  = $(this).attr("ajaxr");
+            var clicked_btn = $(this);
+            var btn_text = $(this).html();
+            $(this).html('<img src="./img/489.GIF"/>');
+            $.getJSON('apc.php?'+value,function(response){
+                if(response.status==1){
+                    clicked_btn.html('<span class="glyphicon glyphicon-ok-circle"></span>');
+                    setInterval(function(){
+                        clicked_btn.html(btn_text);
+                        clicked_btn.removeAttr('disabled');
+                        clicked_btn.parents('tr').remove();
+                    },3000);
+                }else{
+                    clicked_btn.html('<span class="glyphicon glyphicon-remove-circle"></span>');
+                    setInterval(function(){clicked_btn.html(btn_text);clicked_btn.removeAttr('disabled');},5000);
+                }
+            });
+        });
+        
+        
+        $("#add_directory").click(function(){
+            var dir = $("[name='add_directory']").val();
+            $(this).attr('disabled','disabled');
+        })
+        
+        
+        
+    })
+    
+    
+</script>
+<style>
+    .sorter th:hover{
+        text-decoration: underline;
+    }
+    .sorter th{
+        cursor: pointer;
+    }
+    td.options .btn{
+        padding: 4px 6px;
+    }
+    td.options{
+        padding: 3px !important;
+    }
+    .bs-callout-info {
+        background-color: #F0F7FD;
+        border-color: #D0E3F0;
+    }
+    .bs-callout {
+        margin: 0px;
+        padding: 10px;
+        border-left: 6px solid #ADDBFF;
+    }
+</style>
+
+<div class="tab-pane" id="opcode">
+    <div class="col-md-12" style="padding-left: 0px">
+        
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    File Cache Information
+                    <button type="button" class="btn btn-primary" ajax="clear=opcode" style="float: right;width: 160px;top: -8px;position: relative">Clear Opcode Cache</button>
+                </h3>
+            </div>
+            <div class="panel-body" style="padding: 0px">
+                
+                <div class="col-md-6">
+                    <div id="opcode_progress" style="width:550px;overflow: hidden"></div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4>Opcode Cache Information</h4>
+                    <table cellspacing=0 class="table table-striped">
+                        <tbody>
+                            <tr class=tr-0><td class=td-0>Cached Files</td><td><?php echo $number_files;?> (<?php echo $size_files?>)</td></tr>
+                            <tr class=tr-1><td class=td-0>Hits</td><td><?php echo $cache['num_hits']?></td></tr>
+                            <tr class=tr-0><td class=td-0>Misses</td><td><?php echo $cache['num_misses']?></td></tr>
+                            <tr class=tr-1><td class=td-0>Request Rate (hits, misses)</td><td><?php echo $req_rate?> cache requests/second</td></tr>
+                            <tr class=tr-0><td class=td-0>Hit Rate</td><td><?php echo $hit_rate?> cache requests/second</td></tr>
+                            <tr class=tr-1><td class=td-0>Miss Rate</td><td><?php echo $miss_rate?> cache requests/second</td></tr>
+                            <tr class=tr-0><td class=td-0>Insert Rate</td><td><?php echo $insert_rate?> cache requests/second</td></tr>
+                            <tr class=tr-1><td class=td-0>Cache full count</td><td><?php echo $cache['expunges']?></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="tab-pane" id="per-directory">
+    <div class="col-md-12" style="padding-left: 0px">
+        
+        <div class="panel panel-info" style="clear: both">
+            <div class="panel-heading">
+                <h3 class="panel-title">File Cache For Each Directories</h3>
+            </div>
+            <div class="panel-body" style="padding: 0px">
+                
+                <div class="bs-callout bs-callout-info" style="overflow: hidden">
+                    <div class="col-md-4" style="padding-left: 0px">
+                        <h5>Add A Directory To Cache</h5>
+                    </div>
+                    <div class="col-md-8" style="padding-left: 0px">
+                        <div class="input-group">
+                          <input type="text" class="form-control"  name="add_directory">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="add_directory">Add Directory</button>
+                          </span>
+                        </div><!-- /input-group -->
+                    </div>
+                </div>
+                
+                
+                <table cellspacing=0 class="table table-striped sorter">
+                    <thead>
+                        <tr>
+                            <th>Directory</th>
+                            <th>Number of Files</th>
+                            <th>Total Hits</th>
+                            <th>Total Size</th>
+                            <th>Avg. Hits</th>
+                            <th>Avg. Size</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $tmp = $list = array();
+                        foreach($cache[$scope_list[$MYREQUEST['SCOPE']]] as $entry) {
+                            $n = dirname($entry['filename']);
+                            if ($MYREQUEST['AGGR'] > 0) {
+                                $n = preg_replace("!^(/?(?:[^/\\\\]+[/\\\\]){".($MYREQUEST['AGGR']-1)."}[^/\\\\]*).*!", "$1", $n);
+                            }
+                            if (!isset($tmp[$n])) {
+                                $tmp[$n] = array('hits'=>0,'size'=>0,'ents'=>0);
+                            }
+                            $tmp[$n]['hits'] += $entry['num_hits'];
+                            $tmp[$n]['size'] += $entry['mem_size'];
+                            ++$tmp[$n]['ents'];
+                        }
+                    
+                        foreach ($tmp as $k => $v) {
+                            switch($MYREQUEST['SORT1']) {
+                                case 'A': $kn=sprintf('%015d-',$v['size'] / $v['ents']);break;
+                                case 'T': $kn=sprintf('%015d-',$v['ents']);		break;
+                                case 'H': $kn=sprintf('%015d-',$v['hits']);		break;
+                                case 'Z': $kn=sprintf('%015d-',$v['size']);		break;
+                                case 'C': $kn=sprintf('%015d-',$v['hits'] / $v['ents']);break;
+                                case 'S': $kn = $k;					break;
+                            }
+                            $list[$kn.$k] = array($k, $v['ents'], $v['hits'], $v['size']);
+                        }
+                        
+                        if ($list) {
+                            $i = 0;
+                            foreach($list as $entry) {
+                                echo
+                                    '<tr>',
+                                    "<td>",$entry[0],'</a></td>',
+                                    '<td>',$entry[1],'</td>',
+                                    '<td>',$entry[2],'</td>',
+                                    '<td>',$entry[3],'</td>',
+                                    '<td>',round($entry[2] / $entry[1]),'</td>',
+                                    '<td>',round($entry[3] / $entry[1]),'</td>'
+                                    ;?>
+                                    <td class="options">
+                                        <button type="button" class="btn btn-info refresh_cache_folder" ajaxr="refresh_cache_folder=<?php echo $entry[0] ?>"><span class="glyphicon glyphicon-refresh"></span></button>
+                                        <button type="button" class="btn btn-danger remove_cache_folder" ajaxr="remove_cache_folder=<?php echo $entry[0] ?>"><span class="glyphicon glyphicon-trash"></span></button>
+                                    </td>
+                                    <?php
+                                    echo '</tr>';
+                    
+                                if (++$i == $MYREQUEST['COUNT']) break;
+                            }
+                            
+                        } else {
+                            echo '<tr class=tr-0><td class="center" colspan=6><i>No data</i></td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="tab-pane" id="per-file">
+    <div class="col-md-12" style="padding-left: 0px">
+        
+        <div class="panel panel-info" style="clear: both">
+            <div class="panel-heading">
+                <h3 class="panel-title">File Cache For Each Files</h3>
+            </div>
+            <div class="panel-body" style="padding: 0px">
+                <table cellspacing=0 class="table table-striped sorter">
+                    <thead>
+                        <tr>
+                            <th>File</td>
+                            <th>Hits</td>
+                            <th>Size</td>
+                            <th>Created</td>
+                            <th>Modified</td>
+                            <th>Last Accessed</td>
+                            <th>Options</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach($cache['cache_list'] as $row){
+                            if($row['type']=='file'){
+                                ?>
+                                <tr>
+                                    <td><?php echo $row['filename'] ?> </td>
+                                    <td><?php echo $row['num_hits']?> </td>
+                                    <td><?php echo $row['mem_size']?> </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['creation_time'])?>">
+                                            <?php echo date('r ',$row['creation_time'])?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['mtime'])?>">
+                                            <?php echo date('r ',$row['mtime'])?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['access_time'])?>">
+                                            <?php echo date('r ',$row['access_time'])?>
+                                        </span>
+                                    </td>
+                                    <td class="options">
+                                        <button type="button" class="btn btn-info refresh_cache_file" ajaxr="refresh_cache_file=<?php echo $row['filename'] ?>"><span class="glyphicon glyphicon-refresh"></span></button>
+                                        <button type="button" class="btn btn-danger remove_cache_file" ajaxr="remove_cache_file=<?php echo $row['filename'] ?>"><span class="glyphicon glyphicon-trash"></span></button>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+				<?php
+
+$hits       = array();
+$missess    = array();
+
+for($i=20; $i>=0; $i--){
+   $hits[] = "{x:ctime-".($i*1000).",y:".intval($cache_user['num_hits'])."}";
+   $missess[] = "{x:ctime-".($i*1000).",y:".intval($cache_user['num_misses'])."}";
+}
+
+?>
+<style>
+    div{
+        border-radius:0px !important;
+    }
+</style>
+<script>
+    
+    
+    $(document).ready(function(){
+                
+        var user_chart_options = {
+            chart: {
+                type: 'line',
+                renderTo: 'user_progress',
+                animation: {
+                    duration : 1000,
+                    easing : 'linear'
+                },
+                events: {
+                    load: function() {
+                        user_progress[0] = this.series[0];
+                        user_progress[1] = this.series[1];
+                    }
+                }
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: 'Cached files Hits & Missess'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                min : 0,
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                shared: true
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
+            series: [{
+                name: 'Hits',
+                data: [<?php echo implode(',',$hits)?>]
+            }, {
+                name: 'Miss',
+                data: [<?php echo implode(',',$missess)?>]
+            }],
+            credits: {
+                enabled: false
+            }
+        };
+        user_chart = new Highcharts.Chart(user_chart_options);
+        
+        
+        $(".var_details").click(function(){
+            var title = $(this).parent().find('.var_details_body').attr('title');
+            var body  = $(this).parent().find('.var_details_body').html();
+            var ajaxr = $(this).parent().find()
+            
+            $("#myModal .modal-title").html(title);
+            $("#myModal .modal-body").html(body);
+            
+            $("#myModal").modal('show');
+            
+        })
+        
+        
+        $("#save_variable").click(function(){
+            var name,value,ttl;
+            name  = $("#myModal [name='name']").val();
+            ttl   = $("#myModal [name='ttl']").val();
+            value = '';
+            if($("#myModal [name='value']").length>0){
+                value  = '&value='+encodeURI($("#myModal [name='value']").val());
+            }
+            
+            $(this).attr('disabled','disabled');
+            $(this).html('<img src="./img/489.GIF"/> Please wait');
+            $.getJSON('apc.php?setvariable=' + encodeURI(name) + '&ttl=' + encodeURI(ttl) + value,function(data){
+                $("#myModal").modal('hide');
+                $("#save_variable").removeAttr('disabled');
+                $("#save_variable").html('Save changes');
+            })
+            
+        });
+        
+    });
+</script>
+
+<div class="tab-pane" id="user">
+    <div class="col-md-12" style="padding-left: 0px">
+        
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    User Variables Cache Information
+                    <button type="button" class="btn btn-primary" ajax="clear=user" style="float: right;width: 160px;top: -8px;position: relative">Clear User Cache</button>
+                </h3>
+            </div>
+            <div class="panel-body" style="padding: 0px">
+                
+                <div class="col-md-6">
+                    <div id="user_progress" style="width:550px;overflow: hidden"></div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4>User Variable Cache Information</h4>
+                    <table cellspacing=0 class="table table-striped">
+                        <tbody>
+                            <tr class=tr-0><td class=td-0>Cached Variables</td><td><?php echo $number_vars?> (<?php echo $size_vars?>)</td></tr>
+                            <tr class=tr-1><td class=td-0>Hits</td><td><?php echo $cache_user['num_hits']?></td></tr>
+                            <tr class=tr-0><td class=td-0>Misses</td><td><?php echo $cache_user['num_misses']?></td></tr>
+                            <tr class=tr-1><td class=td-0>Request Rate (hits, misses)</td><td><?php echo $req_rate_user?> cache requests/second</td></tr>
+                            <tr class=tr-0><td class=td-0>Hit Rate</td><td><?php echo $hit_rate_user?> cache requests/second</td></tr>
+                            <tr class=tr-1><td class=td-0>Miss Rate</td><td><?php echo $miss_rate_user?> cache requests/second</td></tr>
+                            <tr class=tr-0><td class=td-0>Insert Rate</td><td><?php echo $insert_rate_user?> cache requests/second</td></tr>
+                            <tr class=tr-1><td class=td-0>Cache full count</td><td><?php echo $cache_user['expunges']?></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="tab-pane" id="per-user">
+    <div class="col-md-12" style="padding-left: 0px">
+        
+        <div class="panel panel-info" style="clear: both">
+            <div class="panel-heading">
+                <h3 class="panel-title">User Variabled in Cache</h3>
+            </div>
+            <div class="panel-body" style="padding: 0px">
+                <?php
+                if(count($cache_user['cache_list'])==0){
+                    ?>
+                    <div class="alert alert-warning fade in">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        Sorry, no user varibles found in opcode cache
+                    </div>
+                    <?php
+                } else {
+                ?>
+                <table cellspacing=0 class="table table-striped sorter">
+                    <thead>
+                        <tr>
+                            <th>Variable</td>
+                            <th>Hits</td>
+                            <th>Size</td>
+                            <th>Created</td>
+                            <th>Modified</td>
+                            <th>Last Accessed</td>
+                            <th>Options</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach($cache_user['cache_list'] as $row){
+                            if((isset($row['type']) && $row['type']=='user') || !isset($row['type'])){
+                                ?>
+                                <tr>
+                                    <td>
+                                        <span class="var_details" style="cursor: pointer">
+                                            <?php echo $row['info'] ?>
+                                        </span>
+                                        <div style="display: none" class="var_details_body" title="<?php echo $row['info'] ?> Details" ajaxr="remove_cache_user=<?php echo $row['info'] ?>">
+                                            <?php
+                                            $var  = apc_fetch($row['info']);
+                                            $type = gettype($var);
+                                            ?>
+                                            <input type="hidden" name="name" value="<?php echo $row['info'] ?>"/> 
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td style="width: 150px">Name</td>
+                                                    <td colspan=2><?php echo $row['info'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td colspan=2><?php echo gettype($var); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Value</td>
+                                                    <td colspan=2><pre style="max-width: 450px;max-height: 300px;overflow: auto;"><?php echo displayVar($var); ?></td>
+                                                </tr>
+                                                <?php if($type=='double' || $type=='string' || $type=='integer'){ ?>
+                                                <tr>
+                                                    <td>Edit value</td>
+                                                    <td colspan=2><textarea class="form-control" name="value"><?php echo $var ?></textarea></td>
+                                                </tr>
+                                                <?php  } ?>
+                                                <tr>
+                                                    <td>Expire on</td>
+                                                    <td><input name="ttl" type="text" style="width: 200px" class="form-control" value="<?php echo ($row['ttl']==0)?'never':$row['ttl'] ?>"/></td>
+                                                    <td>Seconds <small>(0 if never expires)</small></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td><?php echo $row['num_hits']?> </td>
+                                    <td><?php echo $row['mem_size']?> </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['creation_time'])?>">
+                                            <?php echo date('r ',$row['creation_time'])?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['mtime'])?>">
+                                            <?php echo date('r ',$row['mtime'])?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="timeago" title="<?php echo date('c',$row['access_time'])?>">
+                                            <?php echo date('r ',$row['access_time'])?>
+                                        </span>
+                                    </td>
+                                    <td class="options">
+                                        <button type="button" class="btn btn-danger remove_cache_user" ajaxr="remove_cache_user=<?php echo $row['info'] ?>"><span class="glyphicon glyphicon-trash"></span></button>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+                <?php } ?>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save_variable">Save changes</button>
+        <button type="button" class="btn btn-danger remove_cache_user_popup" style="float: left">
+            <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+				
+				<div class="tab-pane" id="fragmentation">
+					<?php
+
+function getFragments($mem) {
+	$frags = array();
+	foreach($mem['block_lists'][0] as $block){
+		$frags[$block['offset']] = $block['size'];
+	}
+	ksort($frags);
+	
+	$text = array();
+	$prev_val = 0;
+	$i = 0;
+	foreach($frags as $key=>$value){
+		$i++;
+		$key = $key - $prev_val;
+		$text[] = "{name: 'Used-".bsize($key)."',data: [".($key)."]}";
+		$text[] = "{name: 'Free-".bsize($value)."',data: [".($value)."]}";
+		$prev_val = $key + $prev_val + $value;
+	}
+	return implode(',',array_reverse($text));
+}
+
+
+
+?>
+<style>
+    .memblock{
+        height: 20px;
+        width:20px;
+        float: left;
+        border: 1px solid cyan;
+        cursor: pointer;
+    }
+    .memblock:hover{
+        border: 1px solid blue !important;
+    }
+</style>
+<script>
+    $(function () {
+    
+        Highcharts.setOptions({
+             colors: [ '#50B432','#ED561B']
+        });
+    
+        $('#frag_container').highcharts({
+            chart: {
+                type: 'column',
+                zoomType:'y'
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['Block 1']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Memory Fragmentaions   (Bytes)'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name+'</b>'
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                        style: {
+                            textShadow: '0 0 3px black, 0 0 3px black'
+                        }
+                    }
+                }
+            },
+            series: [<?php echo getFragments($mem); ?>],
+            credits: {
+                enabled: false
+            },
+            legend : {
+                enabled: false
+            }
+        });
+    });
+</script>
+<div class="col-md-3" style="padding-left: 0px">
+    <div id="frag_container" style="width: 250px;height: 100%"></div>
+</div>
+<div class="col-md-9" style="padding-left: 0px">
+    
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#fragmentation-opcode" data-toggle="tab">Memory Segments - Opcode Cache</a></li>
+        <li><a href="#fragmentation-user" data-toggle="tab">Memory Segments - User Cache</a></li>
+    </ul>
+    
+    <div class="tab-content" style="padding-top: 20px">
+        <div class="tab-pane active" id="fragmentation-opcode">
+            <h3>Memory Segments - Opcode Cache</h3>
+            <?php
+                        
+            $slot = $cache['slot_distribution'];
+                        
+            echo'<div>';
+            foreach($slot as $key=>$value){
+                if($value==1){
+                    echo "<div class='memblock bg-primary'></div>";
+                }else{
+                    echo "<div class='memblock $key'></div>";
+                }
+            }
+            echo '</div>';
+            ?>
+        </div>
+        
+        <div class="tab-pane" id="fragmentation-user">
+            <h3>Memory Segments - User Cache</h3>
+            <?php
+            
+            $slot = apc_cache_info('user');
+            $slot = $slot['slot_distribution'];
+            
+            echo'<div>';
+            foreach($slot as $key=>$value){
+                if($value==1){
+                    echo "<div class='memblock bg-primary'></div>";
+                }else{
+                    echo "<div class='memblock $key'></div>";
+                }
+            }
+            echo '</div>';
+            ?>
+        </div>
+    </div>
+    
+</div>
+				</div>
+				
+				<div class="tab-pane" id="config">
+					
+
+
+<div class="col-md-12">
+    
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Runtime Settings</h3>
+        </div>
+        <div class="panel-body" style="padding: 0px">
+            
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <?php
+                    $i = 0;
+                    $configs = ini_get_all('apc');
+                    if(count($configs)==0){
+                        $configs = ini_get_all('apcu');
+                    }
+                    foreach ($configs as $k => $v) {
+                        if($i%2==0){
+                            echo '<tr>';
+                        }
+                        $i++;
+                        echo "<td>",$k,"</td><td>",str_replace(',',',<br />',$v['local_value']),"</td>";
+                        if($i%2==0){
+                            echo '</tr>';
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+</div>
+				</div>
+				
+				<div class="tab-pane" id="about">
+					<div class="col-md-12">
+    <script>
+        $(document).ready(function(){
+            $("#about_link").click(function(){
+                $.ajax({url:'apc.php?about_info=full'}).done(function(data){
+                    $("#apc_about").html(data);
+                })
+            })
+        })
+    </script>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">About APC Admin</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-10">
+                Author : JITHIN JOSE</br>
+                Version : 1.2</br>
+                APC Admin is created and maintained by <a href="http://www.techzonemind.com/"><img src="http://www.techzonemind.com/labz/logo.jpg" style="height: 12px;margin-bottom: 1px;margin-right: 2px"/>TechZoneMid</a>. Free to use,modify and and redistribute. </br>
+                For anyquerys/bug reports please visit github rep
+            </div>
+            <div class="col-md-2">
+                <a href="http://www.techzonemind.com/">
+                    <img src="http://www.techzonemind.com/labz/logo.jpg"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">APC Version Information</h3>
+        </div>
+        <div class="panel-body" id="apc_about">
+            <div class="alert alert-info">Please wait loading updated  information</div>
+        </div>
+    </div>
+
+</div>
+				</div>
+				
+			</div>
+			
+		</div>
+		
+    </body>
 </html>

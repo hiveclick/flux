@@ -22,7 +22,7 @@
         <div class="hidden-xs hidden-sm">
             <br /><br /><br /><br /><br />
         </div>
-        <div class="well">
+        <div class="well col-sm-7 col-sm-offset-3">
             <?php echo $template["content"] ?>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer_page Gun\OfferPage */
+    /* @var $offer_page Flux\OfferPage */
     $offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
 ?>
 <!-- Include this script here, instead of the preview pane because the preview pane is loaded via javascript and the websnapr won't load correctly -->
@@ -18,8 +18,8 @@
     <ul class="nav nav-pills" id="offer_tabs">
         <li class="active"><a id="tabs-a-main" href="#tabs-main" data-toggle="tab">Main</a></li>
         <li><a id="tabs-a-flow" href="#tabs-flow" data-toggle="tab" data-url="/offer/offer-page-pane-flow?_id=<?php echo $offer_page->getId() ?>">Flow</a></li>
-        <li><a id="tabs-a-preview" href="#tabs-preview" data-toggle="tab" data-url="/offer/offer-page-pane-preview?_id=<?php echo $offer_page->getId() ?>">Preview</a></li>
         <li><a id="tabs-a-edit" href="#tabs-edit" data-toggle="tab" data-url="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>">Edit HTML</a></li>
+        <li><a id="tabs-a-preview" href="#tabs-preview" data-toggle="tab" data-url="/offer/offer-page-pane-preview?_id=<?php echo $offer_page->getId() ?>">Preview</a></li>
     </ul>
 </div>
 
@@ -39,18 +39,21 @@
                     <input type="text" id="name" name="name" class="form-control" required placeholder="Name" value="<?php echo $offer_page->getName() ?>" />
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label hidden-xs" for="page_name">Page Name</label>
-                <div class="col-sm-10">
-                    <input type="text" id="name" name="page_name" class="form-control" required placeholder="Page Filename" value="<?php echo $offer_page->getPageName() ?>" />
-                </div>
-            </div>
-
+            
             <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="page_name">Description</label>
                 <div class="col-sm-10">
                     <textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter brief description about this page..."><?php echo $offer_page->getDescription() ?></textarea>
+                </div>
+            </div>
+
+            <hr />
+            <div class="help-block">Enter filename of this page located on the server.  This is how we can associate clicks to this page.</div>
+            <p />
+            <div class="form-group">
+                <label class="col-sm-2 control-label hidden-xs" for="page_name">Page Name</label>
+                <div class="col-sm-10">
+                    <input type="text" id="name" name="page_name" class="form-control" required placeholder="Page Filename" value="<?php echo $offer_page->getPageName() ?>" />
                 </div>
             </div>
 

@@ -1,5 +1,5 @@
 <?php
-    /* @var $split \Gun\Split */
+    /* @var $split \Flux\Split */
     $split = $this->getContext()->getRequest()->getAttribute("split", array());
 ?>
 <div id="header">

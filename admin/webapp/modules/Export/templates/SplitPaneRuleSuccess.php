@@ -23,7 +23,7 @@
             <div class="col-xs-4">
                 <input type="hidden" name="flow_nodes[][guid]" class="input_flow_nodes_guid" value="" />
                 <input type="hidden" name="flow_nodes[][ref]" class="input_flow_nodes_ref" value="" />
-                <input type="hidden" name="flow_nodes[][type]" class="input_flow_nodes_type" value="<?php echo \Gun\Split::SPLIT_NODE_TYPE_RULE_FIRST; ?>" />
+                <input type="hidden" name="flow_nodes[][type]" class="input_flow_nodes_type" value="<?php echo \Flux\Split::SPLIT_NODE_TYPE_RULE_FIRST; ?>" />
                 <input type="hidden" name="flow_nodes[][active]" class="input_flow_nodes_active" value="1" />
                 <div class="input-group flow-node-type">
                     <div class="input-group-btn">
@@ -31,8 +31,8 @@
                             <span class="glyphicon"></span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu node-type-ul" role="menu">
-                            <li><a href="#" data-node-type="<?php echo \Gun\Split::SPLIT_NODE_TYPE_RULE; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
-                            <li><a href="#" data-node-type="<?php echo \Gun\Split::SPLIT_NODE_TYPE_EXPORT; ?>" data-glyphicon-type="glyphicon glyphicon-import">Export</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Split::SPLIT_NODE_TYPE_RULE; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Split::SPLIT_NODE_TYPE_EXPORT; ?>" data-glyphicon-type="glyphicon glyphicon-import">Export</a></li>
                         </ul>
                     </div>
                     <input type="text" name="flow_nodes[][label]" class="form-control input_flow_nodes_label" placeholder="" value="" />
@@ -40,7 +40,7 @@
             </div>
             <div class="col-xs-4">
                 <div class="input-group-btn-bag">
-                    <select name="flow_nodes[][export_id]" class="form-control row_offer_type_<?php echo \Gun\Split::SPLIT_NODE_TYPE_EXPORT; ?>" style="display:none;">
+                    <select name="flow_nodes[][export_id]" class="form-control row_offer_type_<?php echo \Flux\Split::SPLIT_NODE_TYPE_EXPORT; ?>" style="display:none;">
                         <?php foreach($exports AS $export) { ?>
                             <option value="<?php echo $export->retrieveValueHtml('_id'); ?>"><?php echo $export->retrieveValueHtml('name'); ?></option>
                         <?php } ?>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-xs-4">
                             <select name="flow_nodes[][cap_time]" class="form-control">
-                                <?php foreach(\Gun\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
+                                <?php foreach(\Flux\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
                                     <option value="<?php echo $cap_time_id; ?>"><?php echo $cap_time['name']; ?></option>
                                 <?php } ?>
                             </select>
@@ -174,7 +174,7 @@ $(function() {
 
         $new_node.find('.input_flow_nodes_ref').val(node_ref);
         $new_node.find('.input_flow_nodes_guid').val(guid);
-        $new_node.find('.input_flow_nodes_type').val('<?php echo json_encode(\Gun\Split::SPLIT_NODE_TYPE_EXPORT); ?>');
+        $new_node.find('.input_flow_nodes_type').val('<?php echo json_encode(\Flux\Split::SPLIT_NODE_TYPE_EXPORT); ?>');
         $(this).append($new_node);
         //$('#flow_master_container').trigger('redraw_table');
     });

@@ -18,7 +18,7 @@
         <div class="col-sm-10 col-xs-12">
             <select name="__sr_id" id="__sr_id" class="form-control">
                 <option value="">&nbsp;</option>
-                <?php foreach(\Gun\SavedReport::retrieveReadableReports() AS $savedReport) { ?>
+                <?php foreach(\Flux\SavedReport::retrieveReadableReports() AS $savedReport) { ?>
                 <option data-querystring="<?php echo $savedReport->retrieveValueHtml('report_querystring'); ?>" value="<?php echo $savedReport->retrieveValueUrl('_id'); ?>"><?php echo $savedReport->retrieveValueHtml('name'); ?></option>
                 <?php } ?>
             </select>
@@ -37,14 +37,14 @@
             <label class="col-sm-2 control-label hidden-xs" for="date_range">Report Date</label>
             <div class="col-sm-5 col-xs-6">
                 <select name="date_range" id="date_range" class="form-control" placeholder="Report Date">
-                    <?php foreach(\Gun\RevenueReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
+                    <?php foreach(\Flux\RevenueReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
                     <option value="<?php echo $date_range_id; ?>"<?php echo $revenue_report->getDateRange() == $date_range_id ? ' selected="selected"' : ''; ?>><?php echo $date_range_name; ?></option>
                     <?php } ?>
                 </select>
             </div>
             <div class="col-sm-5 col-xs-6">
                 <select name="tz_modifier" class="form-control" placeholder="Timezone">
-                    <?php foreach(\Gun\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
+                    <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                         <option value="<?php echo $timezone_id; ?>"><?php echo $timezone_string; ?></option>
                     <?php } ?>
                 </select>
@@ -71,7 +71,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="event_window">Event Window</label>
             <div class="col-sm-10">
                 <select class="form-control" name="event_window" id="event_window">
-                    <?php foreach(\Gun\RevenueReport::getEventWindows() AS $event_window_id => $event_window_name) { ?>
+                    <?php foreach(\Flux\RevenueReport::getEventWindows() AS $event_window_id => $event_window_name) { ?>
                     <option value="<?php echo $event_window_id; ?>"<?php echo ($revenue_report->retrieveValue('event_window') === $event_window_id) ? ' selected' : ''; ?>><?php echo $event_window_name; ?></option>
                     <?php } ?>
                 </select>
@@ -104,7 +104,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="event_id">Events</label>
                 <div class="col-sm-10">
                 <select class="form-control selectize" name="event_id[]" id="event_id" multiple placeholder="Any Event">
-                    <?php foreach(\Gun\DataField::retrieveActiveEvents() AS $event) { ?>
+                    <?php foreach(\Flux\DataField::retrieveActiveEvents() AS $event) { ?>
                     <option value="<?php echo $event->retrieveValue('_id'); ?>"<?php echo in_array((string) $event->retrieveValue('_id'), (array)$revenue_report->retrieveValue('event_id')) ? ' selected' : ''; ?>><?php echo $event->retrieveValue('name'); ?></option>
                     <?php } ?>
                 </select>
@@ -115,7 +115,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="group_id">Breakdown</label>
             <div class="col-sm-10">
                 <select class="form-control selectize" name="group_id[]" id="group_id" multiple placeholder="No Breakdown">
-                    <?php foreach(\Gun\RevenueReport::getGroups() AS $revenue_group) { ?>
+                    <?php foreach(\Flux\RevenueReport::getGroups() AS $revenue_group) { ?>
                     <option value="<?php echo $revenue_group['group_id']; ?>"<?php echo $revenue_report->retrieveValue('group_id') == $revenue_group['group_id'] ? ' selected' : ''; ?>><?php echo htmlspecialchars($revenue_group['text']); ?></option>
                     <?php } ?>
                 </select>
@@ -126,7 +126,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="column_id">Columns</label>
             <div class="col-sm-10">
                 <select class="form-control selectize" name="column_id[]" id="column_id" multiple placeholder="No Columns">
-                    <?php foreach(\Gun\RevenueReport::getColumns() AS $revenue_column) { ?>
+                    <?php foreach(\Flux\RevenueReport::getColumns() AS $revenue_column) { ?>
                     <option value="<?php echo $revenue_column['column_id']; ?>"<?php echo in_array((string) $revenue_column['column_id'], (array)$revenue_report->retrieveValue('column_id')) ? ' selected' : ''; ?>><?php echo htmlspecialchars($revenue_column['text']); ?></option>
                     <?php } ?>
                 </select>
@@ -164,7 +164,7 @@
                 <div class="modal-body">
                     <br />
                     <input type="hidden" name="func" value="/report/saved-report" />
-                    <input type="hidden" name="status" value="<?php echo \Gun\SavedReport::REPORT_STATUS_ACTIVE ?>" />
+                    <input type="hidden" name="status" value="<?php echo \Flux\SavedReport::REPORT_STATUS_ACTIVE ?>" />
                     <input type="hidden" name="user_id" value="<?php echo $this->getUserDetails()->getId() ?>" />
                     <input type="hidden" name="report_querystring" value="" />
                     <div class="form-group">
@@ -173,7 +173,7 @@
                             <select name="_id" class="form-control saved-report-select">
                                 <option value="" style="font-style:italic;">New Report</option>
                                 <optgroup label="Saved Reports">
-                                    <?php foreach(\Gun\SavedReport::retrieveUserReports($this->getUserDetails()->getId()) AS $savedReport) { ?>
+                                    <?php foreach(\Flux\SavedReport::retrieveUserReports($this->getUserDetails()->getId()) AS $savedReport) { ?>
                                     <option value="<?php echo $savedReport->getId() ?>"><?php echo $savedReport->getName() ?></option>
                                     <?php } ?>
                                 </optgroup>
@@ -190,7 +190,7 @@
                         <label class="col-sm-3 control-label hidden-xs" for="type">Type</label>
                         <div class="col-sm-8">
                             <select name="type" class="form-control" placeholder="Type" required>
-                                <?php foreach(\Gun\SavedReport::retrieveTypes() AS $type_id => $type_name) { ?>
+                                <?php foreach(\Flux\SavedReport::retrieveTypes() AS $type_id => $type_name) { ?>
                                 <option value="<?php echo $type_id; ?>"><?php echo $type_name; ?></option>
                                 <?php } ?>
                             </select>
@@ -228,7 +228,7 @@ $(document).ready(function() {
     });
 
     $('[name=date_range]').on('change', function(){
-        if ($(this).val() == <?php echo \Gun\RevenueReport::DATE_RANGE_CUSTOM; ?>) {
+        if ($(this).val() == <?php echo \Flux\RevenueReport::DATE_RANGE_CUSTOM; ?>) {
             $('.custom-range').show();
         } else {
             $('.custom-range').hide();
@@ -279,8 +279,8 @@ $(document).ready(function() {
         }
     });
 
-    var revenue_groups = <?php echo json_encode(\Gun\RevenueReport::getGroups()); ?>;
-    var revenue_columns = <?php echo json_encode(\Gun\RevenueReport::getColumns()); ?>;
+    var revenue_groups = <?php echo json_encode(\Flux\RevenueReport::getGroups()); ?>;
+    var revenue_columns = <?php echo json_encode(\Flux\RevenueReport::getColumns()); ?>;
     var revenue_request;
     var save_report_request;
     var report_exporting = false;
@@ -334,7 +334,7 @@ $(document).ready(function() {
                     newrows += '<td class="' + col_class + '">';
 
                     if(value.hasOwnProperty(column_name)) {
-                        if(value2.format_type == <?php echo json_encode(\Gun\ReportColumn::COLUMN_FORMAT_PERCENTAGE); ?>) {
+                        if(value2.format_type == <?php echo json_encode(\Flux\ReportColumn::COLUMN_FORMAT_PERCENTAGE); ?>) {
                             newrows += (value[column_name] * 100).toFixed(2) + '%';
                         } else {
                             newrows += value[column_name];

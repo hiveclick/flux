@@ -1,5 +1,5 @@
 <?php
-    /* @var $campaign Gun\Campaign */
+    /* @var $campaign Flux\Campaign */
     $campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
@@ -11,7 +11,7 @@
 <br/>
 <div id="tab-content-container" class="tab-content">
     <form class="form-horizontal" name="campaign_form" method="POST" action="" autocomplete="off">
-        <input type="hidden" name="status" value="<?php echo \Gun\Campaign::CAMPAIGN_STATUS_ACTIVE ?>" />
+        <input type="hidden" name="status" value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>" />
         <div class="form-group">
             <label class="col-sm-2 control-label hidden-xs" for="description">Name</label>
             <div class="col-sm-10">

@@ -3,15 +3,15 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Client;
-use Gun\Flow;
-use Gun\Vertical;
+use Flux\Offer;
+use Flux\Client;
+use Flux\Flow;
+use Flux\Vertical;
 use Mojavi\Logging\LoggerManager;
-use Gun\OfferPage;
-use Gun\Server;
+use Flux\OfferPage;
+use Flux\Server;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -30,12 +30,12 @@ class OfferPagePaneEditAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer_page Gun\OfferPage */
+        /* @var $offer_page Flux\OfferPage */
         $offer_page = new OfferPage();
         $offer_page->populate($_GET);
         $offer_page->query();
         
-        /* @var $server Gun\Server */
+        /* @var $server Flux\Server */
         $server = new Server();
         $server->setIgnorePagination(true);
         $servers = $server->queryAll();

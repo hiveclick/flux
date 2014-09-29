@@ -2,9 +2,9 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Error\Error;
-use Gun\User;
+use Flux\User;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -28,7 +28,7 @@ class LoginAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $user Gun\User */
+        /* @var $user Flux\User */
         $user = new User();
         $user->populate($_POST);
         $is_cookie_login = false;
@@ -55,7 +55,7 @@ class LoginAction extends BasicAction
             if (strlen($user->getEmail()) == 0 || strlen($user->getPassword()) == 0) {
                 return View::SUCCESS;
             } else {
-                /* @var $user Gun\User */
+                /* @var $user Flux\User */
                 try {
                     $user->tryLogin();
                 } catch (\Exception $e) {

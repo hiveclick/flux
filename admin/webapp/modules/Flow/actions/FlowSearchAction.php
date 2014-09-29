@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Flow;
+use Flux\Flow;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -24,7 +24,7 @@ class FlowSearchAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $flow Gun\Flow */
+        /* @var $flow Flux\Flow */
         $flow = new Flow();
         $flow->populate($_REQUEST);
 

@@ -3,11 +3,11 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Campaign;
-use Gun\Server;
+use Flux\Offer;
+use Flux\Campaign;
+use Flux\Server;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -27,11 +27,11 @@ class OfferPanePushToServerAction extends BasicAction
     public function execute ()
     {
         
-        /* @var $offer Gun\Offer */
+        /* @var $offer Flux\Offer */
         $input_form = new Offer();
         $input_form->populate($_REQUEST);
         
-        /* @var $offer Gun\Offer */
+        /* @var $offer Flux\Offer */
         $offer = new Offer();
         $offer->setId($input_form->getId());
         $offer->query();
@@ -40,7 +40,7 @@ class OfferPanePushToServerAction extends BasicAction
         $offer->setDomainName($input_form->getDomainName());
         $offer->setDocrootDir($input_form->getDocrootDir());
         
-        /* @var $server Gun\Server */
+        /* @var $server Flux\Server */
         $server = new Server();
         $server->setSort('name');
         $server->setSord('ASC');

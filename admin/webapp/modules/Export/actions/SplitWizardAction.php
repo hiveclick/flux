@@ -3,13 +3,13 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Split;
-use Gun\Offer;
-use Gun\Vertical;
-use Gun\DomainGroup;
-use Gun\DataField;
+use Flux\Split;
+use Flux\Offer;
+use Flux\Vertical;
+use Flux\DomainGroup;
+use Flux\DataField;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -30,7 +30,7 @@ class SplitWizardAction extends BasicAction
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
             try {
-                /* @var $split Gun\Split */
+                /* @var $split Flux\Split */
                 $split = new Split();
                 $split->populate($_POST);
                 $split->insert();
@@ -41,32 +41,32 @@ class SplitWizardAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("split", $split);
             return View::SUCCESS;
         } else {
-            /* @var $split Gun\Split */
+            /* @var $split Flux\Split */
             $split = new Split();
             $split->populate($_GET);
 
-            /* @var $offer Gun\Offer */
+            /* @var $offer Flux\Offer */
             $offer = new Offer();
             $offer->setSort('name');
             $offer->setSord('ASC');
             $offer->setIgnorePagination(true);
             $offers = $offer->queryAll();
 
-            /* @var $vertical Gun\Vertical */
+            /* @var $vertical Flux\Vertical */
             $vertical = new Vertical();
             $vertical->setSort('name');
             $vertical->setSord('ASC');
             $vertical->setIgnorePagination(true);
             $verticals = $vertical->queryAll();
 
-            /* @var $domain_group Gun\DomainGroup */
+            /* @var $domain_group Flux\DomainGroup */
             $domain_group = new DomainGroup();
             $domain_group->setSort('name');
             $domain_group->setSord('ASC');
             $domain_group->setIgnorePagination(true);
             $domain_groups = $domain_group->queryAll();
 
-            /* @var $data_field Gun\DataField */
+            /* @var $data_field Flux\DataField */
             $data_field = new DataField();
             $data_field->setSort('name');
             $data_field->setSord('ASC');

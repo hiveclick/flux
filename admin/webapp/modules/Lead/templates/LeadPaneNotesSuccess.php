@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 	$notes = array_reverse($lead->getNotes());
 ?>

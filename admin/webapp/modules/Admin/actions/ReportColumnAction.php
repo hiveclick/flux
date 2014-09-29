@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\ReportColumn;
+use Flux\ReportColumn;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,7 +25,7 @@ class ReportColumnAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $report_column Gun\ReportColumn */
+            /* @var $report_column Flux\ReportColumn */
             $report_column = new ReportColumn();
             $report_column->populate($_POST);
             $report_column->update();
@@ -35,7 +35,7 @@ class ReportColumnAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("report_column", $report_column);
             $this->getContext()->getRequest()->setAttribute("report_columns", $report_columns);
         } else {
-            /* @var $report_column Gun\ReportColumn */
+            /* @var $report_column Flux\ReportColumn */
             $report_column = new ReportColumn();
             $report_column->populate($_GET);
             $report_column->query();

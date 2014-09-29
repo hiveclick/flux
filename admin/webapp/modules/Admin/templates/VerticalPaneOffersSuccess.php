@@ -1,5 +1,5 @@
 <?php
-    /* @var $vertical Gun\DataField */
+    /* @var $vertical Flux\DataField */
     $vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <?php
-            /* @var $offer Gun\Offer */
+            /* @var $offer Flux\Offer */
             foreach($offers AS $offer) {
         ?>
         <tr>

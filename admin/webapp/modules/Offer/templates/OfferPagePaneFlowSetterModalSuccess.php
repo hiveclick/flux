@@ -1,5 +1,5 @@
 <?php 
-    /* @var $offer_page_flow \Gun\OfferPageFlow */
+    /* @var $offer_page_flow \Flux\OfferPageFlow */
     $offer_page_flow = $this->getContext()->getRequest()->getAttribute('offer_page_flow', array());
 ?>
 <div class="modal-header">
@@ -13,7 +13,7 @@
             <div class="panel-body" id="setters">
                 <?php if (count($offer_page_flow->getSetters()) > 0) { ?>
                     <?php
-                        /* @var $setter \Gun\OfferPageFlowSetter */ 
+                        /* @var $setter \Flux\OfferPageFlowSetter */ 
                         foreach ($offer_page_flow->getSetters() as $key => $setter) { 
                     ?>
                         <div class="row form-group setter-group-item">
@@ -27,8 +27,8 @@
                             </div>
                             <div class="col-md-4">
                                 <select id="setter_data_field_id-<?php echo $key ?>" name="offer_page_flows[<?php echo $offer_page_flow->getPosition() ?>][setters][<?php echo $key ?>][data_field_id]" class="setter_data_field_id">
-                                    <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                                        <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                                    <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                                        <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                                             <option <?php echo ($dataField->getId() == $setter->getDataFieldId()) ? "SELECTED=\"SELECTED\"" : "" ?> value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
                                         <?php } ?>
                                     <?php } ?>
@@ -71,10 +71,19 @@
     </div>
     <div class="col-md-4">
         <select class="setter_data_field_id" id="setter_data_field_id-dummy_setter_index" name="offer_page_flows[<?php echo $offer_page_flow->getPosition() ?>][setters][dummy_setter_index][data_field_id]">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+            <?php foreach (\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+            	<optgroup label="Data">
+                <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                     <option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
                 <?php } ?>
+                </optgroup>
+            <?php } ?>
+            <?php foreach (\Flux\DataField::retrieveActiveEvents() AS $dataFieldId => $dataField) { ?>
+            	<optgroup label="Events">
+	                <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+	                    <option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
+	                <?php } ?>
+	            </optgroup>
             <?php } ?>
         </select>
     </div>
@@ -177,7 +186,7 @@ $(document).ready(function() {
         	    	setter_op_text = ' to ';
         	    }
         	} else if ($(item).hasClass('setter_data_field_id')) {
-        		setter_text += ' <strong>' + $(item)[0].selectize.getItem($(item)[0].selectize.getValue()).find('.item_name').html() + '</strong> ';
+        		setter_text += ' <strong>' + $(item)[0].selectize.getItem($(item)[0].selectize.getValue()).find('.name').html() + '</strong> ';
         		setter_text += setter_op_text;
         	} else if ($(item).hasClass('setter_value')) {
         	    setter_text += '<strong>' + $(item).val() + '</strong></li>';
@@ -189,6 +198,7 @@ $(document).ready(function() {
         $('.add_setter_btn-' + position).attr('href', '/offer/offer-page-pane-flow-setter-modal?' + $(this).serialize());
         // Hide the modal
         $('#flow_setter_modal').modal('hide');
+        $('#changes_alert').show();
         event.preventDefault();
     });
 });

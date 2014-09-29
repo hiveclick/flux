@@ -1,5 +1,5 @@
 <?php
-    /* @var $server Gun\Server */
+    /* @var $server Flux\Server */
     $server = $this->getContext()->getRequest()->getAttribute("server", array());
 ?>
 <div id="header">
@@ -8,7 +8,7 @@
 <div class="help-block">Create a new server that can host landing pages</div>
 <br/>
 <form class="form-horizontal" name="server_form" method="POST" action="" autocomplete="off">
-    <input type="hidden" name="status" value="<?php echo \Gun\Server::SERVER_STATUS_ACTIVE ?>" />
+    <input type="hidden" name="status" value="<?php echo \Flux\Server::SERVER_STATUS_ACTIVE ?>" />
 
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="ip_address">IP Address</label>
@@ -60,9 +60,9 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label hidden-xs" for="gunfe_lib_dir">GunFE LIB Folder</label>
+        <label class="col-sm-2 control-label hidden-xs" for="Fluxfe_lib_dir">FluxFE LIB Folder</label>
         <div class="col-sm-10">
-            <input type="text" id="gunfe_lib_dir" name="gunfe_lib_dir" class="form-control" required placeholder="Location of GunFE webapp/lib folder" value="<?php echo $server->getGunfeLibDir() ?>" />
+            <input type="text" id="Fluxfe_lib_dir" name="Fluxfe_lib_dir" class="form-control" required placeholder="Location of FluxFE webapp/lib folder" value="<?php echo $server->getFluxfeLibDir() ?>" />
         </div>
     </div>
 

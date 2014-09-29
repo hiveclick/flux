@@ -3,12 +3,12 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Split;
-use Gun\Offer;
-use Gun\Vertical;
-use Gun\Client;
+use Flux\Split;
+use Flux\Offer;
+use Flux\Vertical;
+use Flux\Client;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -28,12 +28,12 @@ class SplitPaneRuleAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $split Gun\Split */
+            /* @var $split Flux\Split */
             $split = new Split();
             $split->populate($_POST);
             $split->update();
             
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
             $client->setSord('ASC');
@@ -43,12 +43,12 @@ class SplitPaneRuleAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("split", $split);
             $this->getContext()->getRequest()->setAttribute("clients", $clients);
         } else {
-            /* @var $split Gun\Split */
+            /* @var $split Flux\Split */
             $split = new Split();
             $split->populate($_GET);
             $split->query();
             
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
             $client->setSord('ASC');

@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Export;
+use Flux\Export;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -24,15 +24,15 @@ class ExportSearchAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $export Gun\Export */
+        /* @var $export Flux\Export */
         $export = new Export();
         $export->populate($_REQUEST);
         
-        $split = new \Gun\Split();
+        $split = new \Flux\Split();
         $split->setIgnorePagination(true);
         $splits = $split->queryAll();
         
-        $client_export = new \Gun\ClientExport();
+        $client_export = new \Flux\ClientExport();
         $client_export->setIgnorePagination(true);
         $client_exports = $client_export->queryAll();
         

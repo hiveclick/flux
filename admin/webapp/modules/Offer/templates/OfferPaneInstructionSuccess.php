@@ -7,22 +7,22 @@
     <div class="col-sm-5">
         <select name="posting_url_dataField_name" class="form-control posting_url_change">
             <optgroup label="Events">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
                     <option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                 <?php  } ?>
             <?php } ?>
             </optgroup>
             <optgroup label="Data Fields">
-                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                    <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                    <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                         <option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                     <?php } ?>
                 <?php } ?>
             </optgroup>
             <optgroup label="Tracking">
-                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                    <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                    <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
                         <option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                     <?php } ?>
                 <?php } ?>
@@ -85,7 +85,7 @@
                 <div class="col-sm-12">
                     <select name="posting_url_client" class="form-control posting_url_change">
                     <?php
-                        /* @var $campaign \Gun\Campaign */ 
+                        /* @var $campaign \Flux\Campaign */ 
                         foreach($campaigns AS $campaign) { 
                     ?>
                         <option value="<?php echo $campaign->getOfferId() ?>,<?php echo $campaign->getClientId() ?>,<?php echo $campaign->getId() ?>"><?php echo $campaign->getClient()->getName() . ' &ndash; ' . $offer->getName() ?></option>
@@ -141,20 +141,20 @@ function buildPostingUrl() {
     var posting_params = {};
 
     if($('[name=posting_url_pixel]').is(':checked')) {
-        posting_params[<?php echo json_encode(\Gun\DataField::DATA_FIELD_AGG_CKID); ?>] = 'REPLACE_WITH_TRACKING_ID';
+        posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_AGG_CKID); ?>] = 'REPLACE_WITH_TRACKING_ID';
     } else {
         var offer_client_campaign_pair = $('[name=posting_url_client]').val().split(",");
-        //posting_params[<?php echo json_encode(\Gun\DataField::DATA_FIELD_REF_OFFER_ID); ?>] = offer_client_campaign_pair[0];
-    	//posting_params[<?php echo json_encode(\Gun\DataField::DATA_FIELD_REF_CLIENT_ID); ?>] = offer_client_campaign_pair[1];
-    	posting_params[<?php echo json_encode(\Gun\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = offer_client_campaign_pair[2];
+        //posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_OFFER_ID); ?>] = offer_client_campaign_pair[0];
+    	//posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CLIENT_ID); ?>] = offer_client_campaign_pair[1];
+    	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = offer_client_campaign_pair[2];
     }
 
     if($('[name=posting_url_save]').is(':checked')) {
-        posting_params[<?php echo json_encode(\Gun\Lead::LEAD_SAVE_FLAG); ?>] = 1;
+        posting_params[<?php echo json_encode(\Flux\Lead::LEAD_SAVE_FLAG); ?>] = 1;
     }
 
     if($('[name=posting_url_clear]').is(':checked')) {
-        posting_params[<?php echo json_encode(\Gun\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
+        posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
     }
 
     $('#dataField_posting_url_container .form-group').each(function() {

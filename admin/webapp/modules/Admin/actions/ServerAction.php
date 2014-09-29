@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Server;
+use Flux\Server;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,14 +25,14 @@ class ServerAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $server Gun\Server */
+            /* @var $server Flux\Server */
             $server = new Server();
             $server->populate($_POST);
             $server->update();
 
             $this->getContext()->getController()->redirect('/admin/server?_id=' . $server->getId());
         } else {
-            /* @var $server Gun\Server */
+            /* @var $server Flux\Server */
             $server = new Server();
             $server->populate($_GET);
             $server->query();

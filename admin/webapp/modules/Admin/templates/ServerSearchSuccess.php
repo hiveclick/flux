@@ -1,5 +1,5 @@
 <?php
-    /* @var $server \Gun\Server */
+    /* @var $server \Flux\Server */
     $server = $this->getContext()->getRequest()->getAttribute("server", array());
 ?>
 <div id="header">

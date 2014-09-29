@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\DataField;
+use Flux\DataField;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -24,7 +24,7 @@ class DataFieldPaneSetAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $datafield Gun\DataField */
+        /* @var $datafield Flux\DataField */
         $datafield = new DataField();
         $datafield->populate($_GET);
         $datafield->query();

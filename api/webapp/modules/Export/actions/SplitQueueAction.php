@@ -3,7 +3,7 @@ use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,13 +26,13 @@ class SplitQueueAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
         if ($this->getContext()->getRequest()->hasParameter('split_id')) {
-            return new \Gun\SplitQueue($this->getContext()->getRequest()->getParameter('split_id'));
+            return new \Flux\SplitQueue($this->getContext()->getRequest()->getParameter('split_id'));
         }
-        return new \Gun\SplitQueue();
+        return new \Flux\SplitQueue();
     }
     
     /**

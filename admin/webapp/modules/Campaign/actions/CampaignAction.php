@@ -3,11 +3,11 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Campaign;
-use Gun\Client;
-use Gun\Offer;
+use Flux\Campaign;
+use Flux\Client;
+use Flux\Offer;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -27,14 +27,14 @@ class CampaignAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $user Gun\Campaign */
+            /* @var $user Flux\Campaign */
             $campaign = new Campaign();
             $campaign->populate($_POST);
             $campaign->update();
             
             $this->getContext()->getController()->redirect('/campaign/campaign?_id=' . $campaign->getId());
         } else {
-            /* @var $user Gun\Campaign */
+            /* @var $user Flux\Campaign */
             $campaign = new Campaign();
             $campaign->populate($_GET);
             $campaign->query();

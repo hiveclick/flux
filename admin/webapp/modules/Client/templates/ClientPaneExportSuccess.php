@@ -1,5 +1,5 @@
 <?php
-    /* @var $client \Gun\Client */
+    /* @var $client \Flux\Client */
     $client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
 <div class="help-block">Define how this client can receive data through various feeds</div>
@@ -44,15 +44,15 @@ $(document).ready(function() {
                 $(td).html('<a href="/client/client?_id=' + rowData.client_id + '">' + cellData + '</a>');
             }},
             { name: "_export_type_name", data: "_export_type_name", createdCell: function (td, cellData, rowData, row, col) {
-                if (rowData.export_type == <?php echo json_encode(\Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP) ?>) {
+                if (rowData.export_type == <?php echo json_encode(\Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP) ?>) {
                     $(td).html(cellData + ' <small>(' + rowData.ftp_username + '@' + rowData.ftp_hostname + ')</small>');
-                } else if (rowData.export_type == <?php echo json_encode(\Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL) ?>) {
+                } else if (rowData.export_type == <?php echo json_encode(\Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL) ?>) {
                     email_addresses = [];
                     $.each(rowData.email_address, function(i, item) {
                     	email_addresses.push(item);
                     });
                     $(td).html(cellData + ' <small>(' + email_addresses.join(', ') + ')</small>');
-                } else if (rowData.export_type == <?php echo json_encode(\Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) ?>) {
+                } else if (rowData.export_type == <?php echo json_encode(\Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) ?>) {
                 	$(td).html(cellData);
                 }
             }}

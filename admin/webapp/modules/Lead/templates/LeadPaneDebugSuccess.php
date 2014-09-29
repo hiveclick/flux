@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 ?>
 <div class="help-block">This page will help you debug the lead to determine any problems when testing offers and flows</div>
@@ -22,9 +22,9 @@
         	</thead>
         	<tbody>
         	<?php
-        	   /* @var $lead_event \Gun\LeadEvent */ 
+        	   /* @var $lead_event \Flux\LeadEvent */ 
         	   foreach ($lead->getD() as $key => $value) { 
-                    $data_field = \Gun\DataField::retrieveDataFieldFromName($key);
+                    $data_field = \Flux\DataField::retrieveDataFieldFromName($key);
             ?>
                 <tr>
                     <td>
@@ -50,7 +50,7 @@
         		              MongoDate
         		         <?php } else if (is_object($value) && $value instanceof \MongoId) { ?>
         		              MongoId
-        		         <?php } else if (is_object($value) && $value instanceof \Gun\LeadEvent) { ?>
+        		         <?php } else if (is_object($value) && $value instanceof \Flux\LeadEvent) { ?>
         		              LeadEvent
         		         <?php } else if (is_object($value)) { ?>
         		              Object <span class="label label-warning">Unknown object (<?php echo get_class($value) ?>)</span>
@@ -98,7 +98,7 @@
         	</thead>
         	<tbody>
         	<?php
-        	   /* @var $lead_event \Gun\LeadEvent */ 
+        	   /* @var $lead_event \Flux\LeadEvent */ 
         	   foreach ($lead->getE() as $key => $lead_event) { 
             ?>
                 <tr>

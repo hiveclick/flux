@@ -166,7 +166,7 @@ function drawClickByHourChart() {
     	        }
     	    });
     	} else {
-    		$('#conversion_by_hour_chart_div').html('<div class="text-center"><img src="/images/no_graph.png" border="0" class="img-responsive" /></div>');
+    		$('#click_by_hour_chart_div').html('<div class="text-center"><img src="/images/no_graph.png" border="0" class="img-responsive" /></div>');
         }
 	});
 }

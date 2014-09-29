@@ -2,10 +2,10 @@
 use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Logging\LoggerManager;
-use Gun\Server;
-use Gun\OfferPage;
+use Flux\Server;
+use Flux\OfferPage;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -28,10 +28,10 @@ class OfferPageSourceAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\OfferPage();
+        return new \Flux\OfferPage();
     }
 
     /**
@@ -42,14 +42,14 @@ class OfferPageSourceAction extends BasicRestAction
     	/* @var $ajax_form BasicAjaxForm */
     	$ajax_form = new BasicAjaxForm();
     
-    	/* @var $offer_page \Gun\OfferPage */
+    	/* @var $offer_page \Flux\OfferPage */
     	$offer_page = new OfferPage();
     	$offer_page->setId($input_form->getId());
     	$offer_page->query();
     	
     	$offer_page->setPageSource($input_form->getPageSource());
     
-    	/* @var $server \Gun\Server */
+    	/* @var $server \Flux\Server */
     	$server = new Server();
     	$server->setId($input_form->getServerId());
     	$server->query();
@@ -73,12 +73,12 @@ class OfferPageSourceAction extends BasicRestAction
         /* @var $ajax_form BasicAjaxForm */
         $ajax_form = new BasicAjaxForm();
         
-        /* @var $offer_page \Gun\OfferPage */
+        /* @var $offer_page \Flux\OfferPage */
         $offer_page = new OfferPage();
         $offer_page->setId($input_form->getId());
         $offer_page->query();
         
-        /* @var $server \Gun\Server */
+        /* @var $server \Flux\Server */
         $server = new Server();
         $server->setId($input_form->getServerId());
         $server->query();

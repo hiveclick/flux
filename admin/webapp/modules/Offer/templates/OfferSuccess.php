@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer Gun\Offer */
+    /* @var $offer Flux\Offer */
     $offer = $this->getContext()->getRequest()->getAttribute("offer", array());
 ?>
  <script type="text/javascript" src="https://www.google.com/jsapi"></script>

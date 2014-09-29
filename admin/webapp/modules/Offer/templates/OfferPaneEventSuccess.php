@@ -6,14 +6,14 @@
 <div class="form-group event-group-item" style="display:none;" id="dummy_event_div">
     <div class="col-sm-4">
         <select name="eventsDummyReqName[dummy_event_id][event_id]" class="form-control selectize">
-            <?php foreach(\Gun\DataField::retrieveActiveEvents() AS $event) { ?>
+            <?php foreach(\Flux\DataField::retrieveActiveEvents() AS $event) { ?>
             <option value="<?php echo $event->retrieveValueHtml('_id'); ?>">When the <?php echo $event->retrieveValueHtml('name'); ?> event is fired</option>
             <?php } ?>
         </select>
     </div>
     <div class="col-sm-2">
         <select name="eventsDummyReqName[dummy_event_id][modifier_id]" class="form-control selectize">
-            <?php foreach(\Gun\DataField::retrieveModifiers() AS $modifier_id => $modifier_name) { ?>
+            <?php foreach(\Flux\DataField::retrieveModifiers() AS $modifier_id => $modifier_name) { ?>
             <option value="<?php echo $modifier_id; ?>"><?php echo $modifier_name; ?></option>
             <?php } ?>
         </select>
@@ -43,14 +43,14 @@
         <div class="form-group event-group-item">
             <div class="col-sm-4">
                 <select name="events[<?php echo $counter;?>][event_id]" class="form-control selectize">
-                    <?php foreach(\Gun\DataField::retrieveActiveEvents() AS $event) { ?>
+                    <?php foreach(\Flux\DataField::retrieveActiveEvents() AS $event) { ?>
                     <option value="<?php echo $event->retrieveValueHtml('_id'); ?>"<?php echo $event->retrieveValue('_id') == $offer_event['event_id'] ? ' selected' : ''; ?>>When the <?php echo $event->retrieveValueHtml('name'); ?> event is fired</option>
                     <?php } ?>
                 </select>
             </div>
             <div class="col-sm-2">
                 <select name="events[<?php echo $counter;?>][modifier_id]" class="form-control selectize">
-                    <?php foreach(\Gun\DataField::retrieveModifiers() AS $modifier_id => $modifier_name) { ?>
+                    <?php foreach(\Flux\DataField::retrieveModifiers() AS $modifier_id => $modifier_name) { ?>
                     <option value="<?php echo $modifier_id; ?>"<?php echo $modifier_id == $offer_event['modifier_id'] ? ' selected' : ''; ?>><?php echo $modifier_name; ?></option>
                     <?php } ?>
                 </select>

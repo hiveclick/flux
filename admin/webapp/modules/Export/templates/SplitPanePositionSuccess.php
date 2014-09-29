@@ -35,14 +35,14 @@
                                         <?php if (count($split_position->getDomainGroupId()) > 0) { ?>
                                             <strong>Domains:</strong>
                                             <?php foreach ($split_position->getDomainGroupId() as $key => $domain_group_id) { ?>
-                                                <?php echo ($key > 0) ? ", " : "" ?><?php echo \Gun\DomainGroup::retrieveById($domain_group_id)->getName() ?>
+                                                <?php echo ($key > 0) ? ", " : "" ?><?php echo \Flux\DomainGroup::retrieveById($domain_group_id)->getName() ?>
                                             <?php } ?>
                                             &nbsp;&nbsp;
                                         <?php } ?>
                                         <?php if (count($split_position->getDataFieldId()) > 0) { ?>
                                             <strong>Required Fields:</strong>
                                             <?php foreach ($split_position->getDataFieldId() as $key => $data_field_id) { ?>
-                                                <?php echo ($key > 0) ? " ," : "" ?><?php echo \Gun\DataField::retrieveById($data_field_id)->getName() ?>
+                                                <?php echo ($key > 0) ? " ," : "" ?><?php echo \Flux\DataField::retrieveById($data_field_id)->getName() ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </small>
@@ -90,7 +90,7 @@
                                             <strong>Domains:</strong>
                                             <?php foreach ($split_position->getDomainGroupId() as $key => $domain_group_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DomainGroup::retrieveById($domain_group_id)->getName() ?>
+                                                <?php echo \Flux\DomainGroup::retrieveById($domain_group_id)->getName() ?>
                                             <?php } ?>
                                             &nbsp;&nbsp;
                                         <?php } ?>
@@ -98,7 +98,7 @@
                                             <strong>Required Fields:</strong>
                                             <?php foreach ($split_position->getDataFieldId() as $key => $data_field_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DataField::retrieveById($data_field_id)->getName() ?>
+                                                <?php echo \Flux\DataField::retrieveById($data_field_id)->getName() ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </small>
@@ -146,7 +146,7 @@
                                             <strong>Domains:</strong>
                                             <?php foreach ($split_position->getDomainGroupId() as $key => $domain_group_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DomainGroup::retrieveById($domain_group_id)->getName() ?>
+                                                <?php echo \Flux\DomainGroup::retrieveById($domain_group_id)->getName() ?>
                                             <?php } ?>
                                             &nbsp;&nbsp;
                                         <?php } ?>
@@ -154,7 +154,7 @@
                                             <strong>Required Fields:</strong>
                                             <?php foreach ($split_position->getDataFieldId() as $key => $data_field_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DataField::retrieveById($data_field_id)->getName() ?>
+                                                <?php echo \Flux\DataField::retrieveById($data_field_id)->getName() ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </small>
@@ -202,7 +202,7 @@
                                             <strong>Domains:</strong>
                                             <?php foreach ($split_position->getDomainGroupId() as $key => $domain_group_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DomainGroup::retrieveById($domain_group_id)->getName() ?>
+                                                <?php echo \Flux\DomainGroup::retrieveById($domain_group_id)->getName() ?>
                                             <?php } ?>
                                             &nbsp;&nbsp;
                                         <?php } ?>
@@ -211,7 +211,7 @@
                                             <strong>Required Fields:</strong>
                                             <?php foreach ($split_position->getDataFieldId() as $key => $data_field_id) { ?>
                                                 <?php echo ($key > 0) ? ", " : "" ?>
-                                                <?php echo \Gun\DataField::retrieveById($data_field_id)->getName() ?>
+                                                <?php echo \Flux\DataField::retrieveById($data_field_id)->getName() ?>
                                             <?php } ?>
                                         <?php } ?>
                                     </small>

@@ -3,11 +3,11 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Client;
-use Gun\ClientExport;
-use Gun\DataField;
+use Flux\Client;
+use Flux\ClientExport;
+use Flux\DataField;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,12 +26,12 @@ class ClientExportPaneMapAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer Gun\ClientExport */
+        /* @var $offer Flux\ClientExport */
         $client_export = new ClientExport();
         $client_export->populate($_REQUEST);
         $client_export->query();
         
-        /* @var $data_field Gun\DataField */
+        /* @var $data_field Flux\DataField */
         $data_field = new DataField();
         $data_field->setStorageTypeArray(array(0 => DataField::DATA_FIELD_STORAGE_TYPE_TRACKING));
         $data_field->setSort('name');
@@ -39,7 +39,7 @@ class ClientExportPaneMapAction extends BasicAction
         $data_field->setIgnorePagination(true);
         $tracking_data_fields = $data_field->queryAll();
         
-        /* @var $data_field Gun\DataField */
+        /* @var $data_field Flux\DataField */
         $data_field = new DataField();
         $data_field->setStorageTypeArray(array(0 => DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT));
         $data_field->setSort('name');
@@ -47,7 +47,7 @@ class ClientExportPaneMapAction extends BasicAction
         $data_field->setIgnorePagination(true);
         $default_data_fields = $data_field->queryAll();
         
-        /* @var $data_field Gun\DataField */
+        /* @var $data_field Flux\DataField */
         $data_field = new DataField();
         $data_field->setStorageTypeArray(array(0 => DataField::DATA_FIELD_STORAGE_TYPE_EVENT));
         $data_field->setSort('name');

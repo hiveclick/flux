@@ -23,7 +23,7 @@ abstract class MongoForm extends PageListForm {
      */
     function setId($arg0) {
         if ($this->getIdType() == self::ID_TYPE_AUTO_INC) {
-            parent::setId((int)$arg0);
+           	parent::setId((int)$arg0);
         } else if ($this->getIdType() == self::ID_TYPE_MONGO && \MongoId::isValid($arg0)) {
             parent::setId(new \MongoId($arg0));
         } else {

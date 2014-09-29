@@ -3,11 +3,11 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\User;
-use Gun\Client;
+use Flux\User;
+use Flux\Client;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -27,7 +27,7 @@ class ProfileAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $user Gun\User */
+            /* @var $user Flux\User */
             $user = new User();
             // Unset the image data variables because we'll update it with the $_FILES array if it exists
             if (isset($_POST['image_data'])) { unset($_POST['image_data']); }
@@ -46,7 +46,7 @@ class ProfileAction extends BasicAction
 
             $this->getContext()->getController()->redirect('/admin/profile');
         } else {
-            /* @var $user Gun\User */
+            /* @var $user Flux\User */
             $user = new User();
             $user->setId($this->getContext()->getUser()->getUserDetails()->getId());
             $user->query();

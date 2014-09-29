@@ -3,7 +3,7 @@ use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Error\Error;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,20 +26,20 @@ class ManualFulfillDiabloMeshAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\Lead();
+        return new \Flux\Lead();
     }
     
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function executePost($input_form) {
         $ajax_form = new BasicAjaxForm();
         
-        $lead = new \Gun\Lead();
+        $lead = new \Flux\Lead();
         $lead->setId($input_form->getId());
         $lead->query();
         if (!is_null($lead->getId())) {

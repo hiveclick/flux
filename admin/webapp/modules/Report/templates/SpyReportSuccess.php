@@ -22,14 +22,14 @@
         <label class="col-sm-2 control-label hidden-xs" for="date_range">Report Date</label>
         <div class="col-sm-5 col-xs-6">
             <select name="date_range" class="form-control">
-                <?php foreach(\Gun\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
+                <?php foreach(\Flux\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
                 <option value="<?php echo $date_range_id; ?>"<?php echo $spy_report->getDateRange() == $date_range_id ? ' selected="selected"' : ''; ?>><?php echo $date_range_name; ?></option>
                 <?php } ?>
             </select>
         </div>
         <div class="col-sm-5 col-xs-6">
             <select name="tz_modifier" class="form-control">
-                <?php foreach(\Gun\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
+                <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                     <option value="<?php echo $timezone_id; ?>"><?php echo $timezone_string; ?></option>
                 <?php } ?>
             </select>
@@ -125,7 +125,7 @@ $(document).ready(function() {
     });
 
     $('[name=date_range]').on('change', function(){
-        if ($(this).val() == <?php echo \Gun\SpyReport::DATE_RANGE_CUSTOM; ?>) {
+        if ($(this).val() == <?php echo \Flux\SpyReport::DATE_RANGE_CUSTOM; ?>) {
             $('.custom-range').show();
         } else {
             $('.custom-range').hide();
@@ -170,7 +170,7 @@ $(document).ready(function() {
             { name: "_offer_name", data: "_offer_name" },
             { name: "_client_name", data: "_client_name" },
     	    <?php foreach($spy_columns AS $spy_column) { ?>
-    	        <?php if ($spy_column['storage_type'] == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+    	        <?php if ($spy_column['storage_type'] == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
     	        { name: "<?php echo $spy_column['datafield'] ?>", data: "_d.<?php echo $spy_column['datafield'] ?>" },
     	        <?php } else { ?>
     	        { name: "<?php echo $spy_column['datafield'] ?>", data: function data( row, type, set, meta ) {
@@ -178,7 +178,7 @@ $(document).ready(function() {
         	        $.each(row._e, function(i, item) {
         	            if (item.n == <?php echo $spy_column['datafield'] ?>) {
         	                // This is our event
-        	                <?php if ($spy_column['type'] == \Gun\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
+        	                <?php if ($spy_column['type'] == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
         	                ret_val = moment.unix(item.t.sec).calendar();
         	                <?php } else { ?>
         	                ret_val = item.n;

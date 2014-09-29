@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 	$lead_pages = $this->getContext()->getRequest()->getAttribute('lead_pages', array());
 ?>

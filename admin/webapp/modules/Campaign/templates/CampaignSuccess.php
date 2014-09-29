@@ -1,5 +1,5 @@
 <?php
-    /* @var $user Gun\User */
+    /* @var $user Flux\User */
     $campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
@@ -26,7 +26,8 @@
     <div id="tabs-main" class="tab-pane active">
         <div class="help-block">View this campaign and generate urls to use for tracking</div>
         <br />
-        <form class="form-horizontal" name="campaign_form" method="PUT" action="" autocomplete="off">
+        <form class="form-horizontal" id="campaign_form" name="campaign_form" method="PUT" action="/api" autocomplete="off">
+        	<input type="hidden" name="func" value="/campaign/campaign" />
             <input type="hidden" name="_id" value="<?php echo $campaign->getId() ?>" />
             
             <div class="form-group">
@@ -39,47 +40,33 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="offer_id">Offer</label>
                 <div class="col-sm-10">
-                    <div class="input-group">
-                        <select class="form-control" name="offer_id" id="offer_id" required placeholder="Offer">
-                            <?php foreach($offers AS $offer_record) { ?>
-                            <option value="<?php echo $offer_record->getId(); ?>"<?php echo $campaign->getOfferId() == $offer_record->getId() ? ' selected="selected"' : ''; ?>><?php echo $offer_record->getName() ?></option>
-                            <?php } ?>
-                        </select>
-                        <div class="input-group-btn">
-                            <a href="/offer/offer?_id=<?php echo $campaign->getOfferId() ?>" target="_blank" class="btn btn-default" role="button">
-                                <span class="glyphicon glyphicon-share"></span>
-                            </a>
-                        </div>
-                    </div>
+					<select class="form-control" name="offer_id" id="offer_id" required placeholder="Offer">
+						<?php foreach ($offers AS $offer_record) { ?>
+							<option value="<?php echo $offer_record->getId(); ?>"<?php echo $campaign->getOfferId() == $offer_record->getId() ? ' selected="selected"' : ''; ?>><?php echo $offer_record->getName() ?></option>
+						<?php } ?>
+					</select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="client_id">Publisher Client</label>
                 <div class="col-sm-10">
-                    <div class="input-group">
-                        <select class="form-control" name="client_id" id="client_id" required placeholder="Publisher Client">
-                            <?php foreach($clients AS $client_record) { ?>
-                            <option value="<?php echo $client_record->getId(); ?>"<?php echo $campaign->getClientId() == $client_record->getId() ? ' selected="selected"' : ''; ?>><?php echo $client_record->getName() ?></option>
-                            <?php } ?>
-                        </select>
-                        <div class="input-group-btn">
-                            <a href="/client/client?_id=<?php echo $campaign->getClientId() ?>" target="_blank" class="btn btn-default" role="button">
-                                <span class="glyphicon glyphicon-share"></span>
-                            </a>
-                        </div>
-                    </div>
+					<select class="form-control" name="client_id" id="client_id" required placeholder="Publisher Client">
+						<?php foreach ($clients AS $client_record) { ?>
+							<option value="<?php echo $client_record->getId(); ?>"<?php echo $campaign->getClientId() == $client_record->getId() ? ' selected="selected"' : ''; ?>><?php echo $client_record->getName() ?></option>
+						<?php } ?>
+					</select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="status" id="status" required placeholder="Status">
-                        <?php foreach(\Gun\Campaign::retrieveStatuses() AS $status_id => $status_name) { ?>
-                        <option value="<?php echo $status_id; ?>"<?php echo $campaign->retrieveValue('status') == $status_id ? ' selected="selected"' : ''; ?>><?php echo $status_name; ?></option>
-                        <?php } ?>
-                    </select>
+					<select class="form-control" name="status" id="status" required placeholder="Status">
+						<?php foreach(\Flux\Campaign::retrieveStatuses() AS $status_id => $status_name) { ?>
+							<option value="<?php echo $status_id; ?>"<?php echo $campaign->retrieveValue('status') == $status_id ? ' selected="selected"' : ''; ?>><?php echo $status_name; ?></option>
+						<?php } ?>
+					</select>
                 </div>
             </div>
     
@@ -97,6 +84,14 @@
 <script>
 //<!--
 $(document).ready(function() {
+	$('#offer_id,#client_id,#status').selectize();
+
+	$('#campaign_form').form(function(data) {
+		if (data.record) {
+			$.rad.notify('Campaign Updated', 'The campaign has been updated successfully');
+		}
+	},{keep_form: 1});
+	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         e.preventDefault();
         var hash = this.hash;

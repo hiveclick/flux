@@ -1,7 +1,8 @@
 <?php
-    /* @var $campaign \Gun\Campaign */
+    /* @var $campaign \Flux\Campaign */
     $campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
+    $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
 <div id="header">
     <div class="pull-right">
@@ -25,17 +26,33 @@
                     <div class="form-group">
                         <input type="text" name="keywords" class="form-control" placeholder="search by campaign id" value="" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label hidden-xs" for="name">Offer</label>
-                        <div class="">
-                            <select class="form-control selectize" name="offer_id_array[]" id="offer_id" multiple placeholder="All Offers">
-                                <?php foreach($offers as $offer) { ?>
-                                    <option value="<?php echo $offer->getId() ?>"><?php echo $offer->getName() ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
+                    <div style="display:none;" id="advanced_search_div">
+                    	<fieldset>
+                    		<legend>Advanced Search</legend>
+                    		<div class="form-group col-sm-6">
+		                        <label class="control-label hidden-xs" for="name">Offer</label>
+		                        <div class="">
+		                            <select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="All Offers">
+		                                <?php foreach($offers as $offer) { ?>
+		                                    <option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
+		                                <?php } ?>
+		                            </select>
+		                        </div>
+		                    </div>
+		                    <div class="form-group col-sm-6">
+		                    	<label class="control-label hidden-xs" for="name">Client</label>
+		                        <div class="">
+		                            <select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="All Clients">
+		                                <?php foreach ($clients as $client) { ?>
+		                                    <option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+		                                <?php } ?>
+		                            </select>
+		                        </div>
+		                    </div>
+	                    </fieldset>
                     </div>
                     <div class="text-center">
+                    	<input type="button" class="btn btn-warning" id="show_advanced" name="show_advanced" value="show advanced filters" />
                         <input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
                     </div>
                 </form>
@@ -61,8 +78,12 @@
 <script>
 //<!--
 $(document).ready(function() {
-	$('#offer_id').selectize();
+	$('#offer_id_array,#client_id_array').selectize();
 
+	$('#show_advanced').click(function() {
+		$('#advanced_search_div').slideToggle();
+	});
+	
 	$('#campaign_search_form').on('submit', function(e) {
         $('#campaign_table').DataTable().clearPipeline().draw();
         e.preventDefault();

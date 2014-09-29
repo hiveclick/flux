@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Export;
-use Gun\Client;
+use Flux\Export;
+use Flux\Client;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,12 +26,12 @@ class ExportAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $export Gun\Export */
+            /* @var $export Flux\Export */
             $export = new Export();
             $export->populate($_POST);
             $export->update();
             
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
             $client->setIgnorePagination(true);
@@ -40,12 +40,12 @@ class ExportAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("export", $export);
             $this->getContext()->getRequest()->setAttribute("clients", $clients);
         } else {
-            /* @var $export Gun\Export */
+            /* @var $export Flux\Export */
             $export = new Export();
             $export->populate($_GET);
             $export->query();
             
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
             $client->setIgnorePagination(true);

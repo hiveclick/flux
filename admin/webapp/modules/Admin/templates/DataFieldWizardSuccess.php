@@ -1,5 +1,5 @@
 <?php
-    /* @var $datafield Gun\DataField */
+    /* @var $datafield Flux\DataField */
     $dataField = $this->getContext()->getRequest()->getAttribute("datafield", array());
 ?>
 <div id="header">
@@ -8,7 +8,7 @@
 <div class="help-block">Data Fields define which data can be collected on offer pages</div>
 <br/>
 <form class="form-horizontal" name="import_form" method="POST" action="" autocomplete="off" role="form">
-    <input type="hidden" name="status" value="<?php echo \Gun\DataField::DATA_FIELD_STATUS_ACTIVE ?>" />
+    <input type="hidden" name="status" value="<?php echo \Flux\DataField::DATA_FIELD_STATUS_ACTIVE ?>" />
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
         <div class="col-sm-10">
@@ -49,13 +49,13 @@
         <div class="col-sm-10">
             <?php if ($dataField->isAccessTypeSystem() === true) { ?>
             <select class="form-control" name="access_type" id="access_type" disabled placeholder="Access Type">
-                <?php foreach(\Gun\DataField::retrieveAccessTypes() AS $access_type_id => $access_type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveAccessTypes() AS $access_type_id => $access_type_name) { ?>
                 <option value="<?php echo $access_type_id; ?>"<?php echo $dataField->getAccessType() == $access_type_id ? ' selected' : ''; ?>><?php echo $access_type_name; ?></option>
                 <?php } ?>
             </select>
             <?php } else { ?>
             <select class="form-control" name="access_type" id="access_type" required placeholder="Access Type">
-                <?php foreach(\Gun\DataField::retrieveSettableAccessTypes() AS $access_type_id => $access_type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveSettableAccessTypes() AS $access_type_id => $access_type_name) { ?>
                 <option value="<?php echo $access_type_id; ?>"<?php echo $dataField->getAccessType() == $access_type_id ? ' selected' : ''; ?>><?php echo $access_type_name; ?></option>
                 <?php } ?>
             </select>
@@ -70,13 +70,13 @@
         <div class="col-sm-10">
             <?php if($dataField->isAccessTypeSystem() === true) { ?>
             <select class="form-control" name="storage_type" id="storage_type" disabled placeholder="Storage Type">
-                <?php foreach(\Gun\DataField::retrieveStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
                     <option value="<?php echo $storage_type_id; ?>"<?php echo $dataField->getStorageType() == $storage_type_id ? ' selected' : ''; ?>><?php echo $storage_type_name; ?></option>
                 <?php } ?>
             </select>
             <?php } else { ?>
             <select class="form-control" name="storage_type" id="storage_type" required placeholder="Storage Type">
-                <?php foreach(\Gun\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
                 <option value="<?php echo $storage_type_id; ?>"<?php echo $dataField->getStorageType() == $storage_type_id ? ' selected' : ''; ?>><?php echo $storage_type_name; ?></option>
                 <?php } ?>
             </select>
@@ -91,13 +91,13 @@
         <div class="col-sm-10">
             <?php if($dataField->isAccessTypeSystem() === true) { ?>
             <select class="form-control" name="type" id="type" disabled placeholder="Data Type">
-                <?php foreach(\Gun\DataField::retrieveFieldTypes() AS $type_id => $type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveFieldTypes() AS $type_id => $type_name) { ?>
                 <option value="<?php echo $type_id; ?>"<?php echo $dataField->getFieldType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
                 <?php } ?>
             </select>
             <?php } else { ?>
             <select class="form-control" name="type" id="type" required placeholder="Data Type">
-                <?php foreach(\Gun\DataField::retrieveSettableTypes() AS $type_id => $type_name) { ?>
+                <?php foreach(\Flux\DataField::retrieveSettableTypes() AS $type_id => $type_name) { ?>
                 <option value="<?php echo $type_id; ?>"<?php echo $dataField->getFieldType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
                 <?php } ?>
             </select>

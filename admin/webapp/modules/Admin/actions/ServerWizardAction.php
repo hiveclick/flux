@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Server;
+use Flux\Server;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,7 +26,7 @@ class ServerWizardAction extends BasicAction
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
             try {
-                /* @var $server Gun\Server */
+                /* @var $server Flux\Server */
                 $server = new Server();
                 $server->populate($_POST);
                 $server->insert();
@@ -37,7 +37,7 @@ class ServerWizardAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("server", $server);
             return View::SUCCESS;
         } else {
-            /* @var $server Gun\Server */
+            /* @var $server Flux\Server */
             $server = new Server();
             $server->populate($_GET);
 

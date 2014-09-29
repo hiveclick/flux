@@ -3,13 +3,13 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Client;
-use Gun\Flow;
-use Gun\Vertical;
-use Gun\OfferAsset;
+use Flux\Offer;
+use Flux\Client;
+use Flux\Flow;
+use Flux\Vertical;
+use Flux\OfferAsset;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -28,7 +28,7 @@ class OfferAssetPreviewModalAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer_asset Gun\OfferAsset */
+        /* @var $offer_asset Flux\OfferAsset */
         $offer_asset = new OfferAsset();
         $offer_asset->populate($_GET);
         if ($offer_asset->getId() > 0) {

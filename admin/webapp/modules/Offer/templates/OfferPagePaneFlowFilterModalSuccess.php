@@ -1,5 +1,5 @@
 <?php 
-    /* @var $offer_page_flow \Gun\OfferPageFlow */
+    /* @var $offer_page_flow \Flux\OfferPageFlow */
     $offer_page_flow = $this->getContext()->getRequest()->getAttribute('offer_page_flow', array());
 ?>
 <div class="modal-header">
@@ -23,14 +23,14 @@
             <div class="panel-body" id="filter_conditions">
                 <?php if (count($offer_page_flow->getFilterConditions()) > 0) { ?>
                     <?php 
-                        /* @var $filter_condition \Gun\OfferPageFlowFilter */ 
+                        /* @var $filter_condition \Flux\OfferPageFlowFilter */ 
                         foreach ($offer_page_flow->getFilterConditions() as $key => $filter_condition) { 
                     ?>
                         <div class="row form-group filter-condition-group-item">
                             <div class="col-md-4">
                                 <select id="filter_data_field_id-<?php echo $key ?>" name="offer_page_flows[<?php echo $offer_page_flow->getPosition() ?>][filter_conditions][<?php echo $key ?>][data_field_id]" class="filter_data_field_id">
-                                    <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                                        <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                                    <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                                        <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                                             <option <?php echo ($dataField->getId() == $filter_condition->getDataFieldId()) ? "SELECTED=\"SELECTED\"" : "" ?> value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
                                         <?php } ?>
                                     <?php } ?>
@@ -42,6 +42,8 @@
                                     <option value="2" <?php echo ($filter_condition->getFilterOp() == '2' ? "SELECTED" : "") ?>>begins with</option>
                                     <option value="3" <?php echo ($filter_condition->getFilterOp() == '3' ? "SELECTED" : "") ?>>ends with</option>
                                     <option value="4" <?php echo ($filter_condition->getFilterOp() == '4' ? "SELECTED" : "") ?>>is</option>
+                                    <option value="5" <?php echo ($filter_condition->getFilterOp() == '5' ? "SELECTED" : "") ?>>is not</option>
+            						<option value="6" <?php echo ($filter_condition->getFilterOp() == '6' ? "SELECTED" : "") ?>>does not contain</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -73,8 +75,8 @@
 <div class="row form-group filter-condition-group-item" style="display:none;" id="dummy_filter_condition">
     <div class="col-md-4">
         <select class="filter_data_field_id" id="filter_data_field_id-dummy_condition_index" name="offer_page_flows[<?php echo $offer_page_flow->getPosition() ?>][filter_conditions][dummy_condition_index][data_field_id]">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-                <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
+                <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                     <option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
                 <?php } ?>
             <?php } ?>
@@ -86,6 +88,8 @@
             <option value="2">begins with</option>
             <option value="3">ends with</option>
             <option value="4">is</option>
+            <option value="5">is not</option>
+            <option value="6">does not contain</option>
         </select>
     </div>
     <div class="col-md-4">
@@ -191,7 +195,7 @@ $(document).ready(function() {
       		    	input_text = '<div class="offer_page_flow_filter_description_filter_type">Filters applied when <strong>all</strong> conditions match:</div>';
       		    }
         	} else if ($(item).hasClass('filter_data_field_id')) {
-        		filter_text += '<li>When data field <strong>' + $(item)[0].selectize.getItem($(item)[0].selectize.getValue()).find('.item_name').html() + '</strong> ';
+        		filter_text += '<li>When the data field <strong>' + $(item)[0].selectize.getItem($(item)[0].selectize.getValue()).find('.name').html() + '</strong> ';
         	} else if ($(item).hasClass('filter_op')) {
         	    if ($(item).val() == '1') {
         	    	filter_text += ' <em>contains</em> ';
@@ -201,9 +205,13 @@ $(document).ready(function() {
         	    	filter_text += ' <em>ends with</em> ';
         	    } else if ($(item).val() == '4') {
         	    	filter_text += ' <em>is</em> ';
+        	    } else if ($(item).val() == '5') {
+        	    	filter_text += ' <em>is not</em> ';
+        	    } else if ($(item).val() == '6') {
+        	    	filter_text += ' <em>does not contain</em> ';
             	}
         	} else if ($(item).hasClass('filter_value')) {
-        	    filter_text += '<strong>' + $(item).val() + '</strong></li>';
+        	    filter_text += '<strong>' + ($(item).val().trim() != '' ? $(item).val() : 'blank') + '</strong></li>';
         	}
         });
         // If we do not have any filters, then just do no filtering
@@ -218,6 +226,7 @@ $(document).ready(function() {
         $('.add_filter_btn-' + position).attr('href', '/offer/offer-page-pane-flow-filter-modal?' + $(this).serialize());
         // Hide the modal
         $('#flow_filter_modal').modal('hide');
+        $('#changes_alert').show();
         event.preventDefault();
     });
 });

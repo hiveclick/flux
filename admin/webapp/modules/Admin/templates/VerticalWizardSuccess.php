@@ -1,5 +1,5 @@
 <?php
-    /* @var $vertical Gun\Vertical */
+    /* @var $vertical Flux\Vertical */
     $vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
 ?>
 <div id="header">
@@ -8,7 +8,7 @@
 <div class="help-block">Create a new vertical that you can use to organize offers</div>
 <br/>
 <form class="form-horizontal" name="vertical_form" method="POST" action="" autocomplete="off" role="form">
-    <input type="hidden" name="status" value="<?php echo \Gun\Vertical::VERTICAL_STATUS_ACTIVE ?>" />
+    <input type="hidden" name="status" value="<?php echo \Flux\Vertical::VERTICAL_STATUS_ACTIVE ?>" />
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
         <div class="col-sm-10">

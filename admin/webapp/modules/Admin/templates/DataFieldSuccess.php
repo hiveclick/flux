@@ -1,5 +1,5 @@
 <?php
-    /* @var $datafield Gun\DataField */
+    /* @var $datafield Flux\DataField */
     $dataField = $this->getContext()->getRequest()->getAttribute("datafield", array());
 ?>
 <div id="header">
@@ -65,7 +65,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="access_type">Access Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="access_type" id="access_type" required placeholder="Access Type">
-                        <?php foreach(\Gun\DataField::retrieveSettableAccessTypes() AS $access_type_id => $access_type_name) { ?>
+                        <?php foreach(\Flux\DataField::retrieveSettableAccessTypes() AS $access_type_id => $access_type_name) { ?>
                         <option value="<?php echo $access_type_id; ?>"<?php echo $dataField->getAccessType() == $access_type_id ? ' selected' : ''; ?>><?php echo $access_type_name; ?></option>
                         <?php } ?>
                     </select>
@@ -76,7 +76,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="status" id="status" required placeholder="Status">
-                        <?php foreach(\Gun\DataField::retrieveStatuses() AS $status_id => $status_name) { ?>
+                        <?php foreach(\Flux\DataField::retrieveStatuses() AS $status_id => $status_name) { ?>
                         <option value="<?php echo $status_id; ?>"<?php echo $dataField->getStatus() == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                         <?php } ?>
                     </select>
@@ -94,7 +94,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="storage_type">Storage Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="storage_type" id="storage_type" required placeholder="Storage Type">
-                        <?php foreach(\Gun\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
+                        <?php foreach(\Flux\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
                         <option value="<?php echo $storage_type_id; ?>"<?php echo $dataField->getStorageType() == $storage_type_id ? ' selected' : ''; ?>><?php echo $storage_type_name; ?></option>
                         <?php } ?>
                     </select>
@@ -106,7 +106,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="field_type">Data Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="field_type" id="field_type" required  placeholder="Data Type">
-                        <?php foreach(\Gun\DataField::retrieveSettableTypes() AS $type_id => $type_name) { ?>
+                        <?php foreach(\Flux\DataField::retrieveSettableTypes() AS $type_id => $type_name) { ?>
                             <option value="<?php echo $type_id; ?>"<?php echo $dataField->getFieldType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
                         <?php } ?>
                     </select>
@@ -137,9 +137,9 @@
                     <label class="col-sm-2 control-label hidden-xs" for="<?php echo $additionalParameter->getFieldName() ?>"><?php echo $additionalParameter->getName() ?></label>
                     <div class="col-sm-10">
                         <input type="hidden" name="parameters[<?php echo $additionalParameter->getFieldName() ?>][type]" value="<?php echo $additionalParameter->getType() ?>" />
-                        <?php if ($additionalParameter->getType() === \Gun\DataFieldParameter::PARAMETER_TYPE_DATA_FIELD) { ?>
+                        <?php if ($additionalParameter->getType() === \Flux\DataFieldParameter::PARAMETER_TYPE_DATA_FIELD) { ?>
                             <select class="form-control" name="parameters[<?php echo $additionalParameter->getFieldName() ?>][field_value]" id="<?php echo $additionalParameter->getFieldName() ?>"<?php echo $additionalParameter->getRequired() ? ' required':''; ?> placeholder="<?php echo $additionalParameter->getFieldName() ?>">
-                                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $activeDataField) { ?>
+                                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $activeDataField) { ?>
                                     <option value="<?php echo $activeDataField->getId() ?>" <?php echo $activeDataField->getId() == $dataField->retrieveParameterValue($additionalParameter->getFieldName()) ? 'selected' : '' ?>><?php echo $activeDataField->getName() ?></option>
                                 <?php } ?>
                             </select>

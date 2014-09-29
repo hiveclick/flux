@@ -3,7 +3,7 @@ use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,18 +26,18 @@ class OfferEventAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\Offer();
+        return new \Flux\Offer();
     }
     
     /**
      * Executes a PUT request
      */
     function executePut($input_form) {
-        /* @var $offer_form \Gun\Offer */
-        $offer_form = new \Gun\Offer();
+        /* @var $offer_form \Flux\Offer */
+        $offer_form = new \Flux\Offer();
         $offer_form->setId($input_form->getId());
         $offer_form->flushEvents();
         

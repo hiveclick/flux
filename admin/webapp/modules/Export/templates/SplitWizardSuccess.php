@@ -1,5 +1,5 @@
 <?php
-    /* @var $split Gun\Split */
+    /* @var $split Flux\Split */
     $split = $this->getContext()->getRequest()->getAttribute("split", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
     $verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
@@ -13,7 +13,7 @@
 <br/>
 <div id="tab-content-container" class="tab-content">
     <form class="form-horizontal" name="split_form" method="POST" action="" autocomplete="off" role="form">
-        <input type="hidden" name="status" value="<?php echo \Gun\Split::SPLIT_STATUS_ACTIVE ?>" />
+        <input type="hidden" name="status" value="<?php echo \Flux\Split::SPLIT_STATUS_ACTIVE ?>" />
 
         <div class="form-group">
             <label class="col-md-2 control-label" for="name">Name</label>

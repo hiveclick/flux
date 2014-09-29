@@ -1,5 +1,5 @@
 <?php
-    /* @var $flow \Gun\Flow */
+    /* @var $flow \Flux\Flow */
     $flow = $this->getContext()->getRequest()->getAttribute("flow", array());
 ?>
 <div id="header">

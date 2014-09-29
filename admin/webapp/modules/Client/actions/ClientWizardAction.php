@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Client;
+use Flux\Client;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,7 +26,7 @@ class ClientWizardAction extends BasicAction
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
             try {
-                /* @var $client Gun\Client */
+                /* @var $client Flux\Client */
                 $client = new Client();
                 $client->populate($_POST);
                 $client->insert();
@@ -37,7 +37,7 @@ class ClientWizardAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("client", $client);
             return View::SUCCESS;
         } else {
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->populate($_GET);
             

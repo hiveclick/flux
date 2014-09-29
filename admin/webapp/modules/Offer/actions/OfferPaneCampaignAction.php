@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Campaign;
+use Flux\Offer;
+use Flux\Campaign;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,7 +25,7 @@ class OfferPaneCampaignAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer Gun\Offer */
+        /* @var $offer Flux\Offer */
         $offer = new Offer();
         $offer->populate($_REQUEST);
         $offer->query();

@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer_asset Gun\OfferAsset */
+    /* @var $offer_asset Flux\OfferAsset */
     $offer_asset = $this->getContext()->getRequest()->getAttribute("offer_asset", array());
 ?>
 <div class="modal-header">

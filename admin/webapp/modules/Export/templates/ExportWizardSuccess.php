@@ -1,5 +1,5 @@
 <?php
-    /* @var $export Gun\Export */
+    /* @var $export Flux\Export */
     $export = $this->getContext()->getRequest()->getAttribute("export", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
     $default_mapping = array();
@@ -27,14 +27,14 @@
 <div id="tab-content-container" class="tab-content">
     <form class="form-horizontal" name="export_form" method="POST" action="" autocomplete="off" role="form">
         <!-- default export to active -->
-        <input type="hidden" name="status" value="<?php echo \Gun\Export::EXPORT_STATUS_ACTIVE ?>" />
+        <input type="hidden" name="status" value="<?php echo \Flux\Export::EXPORT_STATUS_ACTIVE ?>" />
         <!-- default mapping -->
         <?php
             $counter = 0;
             foreach ($default_mapping as $request_name) {
-                if (isset(\Gun\DataField::retrieveActiveDataFieldsByRequestName()[$request_name])) {
+                if (isset(\Flux\DataField::retrieveActiveDataFieldsByRequestName()[$request_name])) {
         ?>
-                <input type="hidden" name="mapping[<?php echo $counter ?>][datafield_id]" value="<?php echo \Gun\DataField::retrieveActiveDataFieldsByRequestName()[$request_name]->getId() ?>" />
+                <input type="hidden" name="mapping[<?php echo $counter ?>][datafield_id]" value="<?php echo \Flux\DataField::retrieveActiveDataFieldsByRequestName()[$request_name]->getId() ?>" />
                 <input type="hidden" name="mapping[<?php echo $counter ?>][default]" value="" />
         <?php
                     $counter++;
@@ -66,14 +66,14 @@
             <div class="col-md-10">
                 <select class="form-control" name="export_type" id="export_type" required="required" placeholder="Select export type...">
                     <option value="">Select export type...</option>
-                    <?php foreach(\Gun\Export::retrieveExportTypes() AS $export_type_id => $export_type_name) { ?>
+                    <?php foreach(\Flux\Export::retrieveExportTypes() AS $export_type_id => $export_type_name) { ?>
                         <option value="<?php echo $export_type_id; ?>"<?php echo $export->getExportType() == $export_type_id ? ' selected="selected"' : ''; ?>><?php echo $export_type_name; ?></option>
                     <?php } ?>
                 </select>
             </div>
         </div>
 
-        <div id="ftp_settings" class="<?php echo $export->getExportType() != \Gun\Export::EXPORT_TYPE_BATCH ? 'hidden' : ''; ?>">
+        <div id="ftp_settings" class="<?php echo $export->getExportType() != \Flux\Export::EXPORT_TYPE_BATCH ? 'hidden' : ''; ?>">
             <div class="form-group">
                 <label class="col-md-2 control-label" for="ftp_hostname">FTP Host/Port</label>
                 <div class="col-md-10">
@@ -104,7 +104,7 @@
             </div>
            </div>
 
-           <div id="post_settings" class="<?php echo $export->getExportType() != \Gun\Export::EXPORT_TYPE_REALTIME ? 'hidden' : ''; ?>">
+           <div id="post_settings" class="<?php echo $export->getExportType() != \Flux\Export::EXPORT_TYPE_REALTIME ? 'hidden' : ''; ?>">
                <div class="form-group">
                 <label class="col-md-2 control-label" for="ftp_folder">Post URL</label>
                 <div class="col-md-10">
@@ -128,7 +128,7 @@ $(document).ready(function() {
     $('#client_id,#export_type').selectize();
 
     $('#export_type').change(function() {
-        if ($('#export_type').val() == <?php echo \Gun\Export::EXPORT_TYPE_BATCH ?>) {
+        if ($('#export_type').val() == <?php echo \Flux\Export::EXPORT_TYPE_BATCH ?>) {
             $('#ftp_settings').removeClass('hidden');
             $('#post_settings').addClass('hidden');
         } else {

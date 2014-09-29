@@ -217,11 +217,11 @@ class MojaviForm extends MojaviObject {
                         $ret_val[$property->getName()][] = $item->toArray();
                     }
                 } else if (is_array($value)) {
-                    foreach ($value as $item) {
+                    foreach ($value as $key => $item) {
                     	if ($item instanceof MojaviForm) {
-                        	$ret_val[$property->getName()][] = $item->toArray();
+                        	$ret_val[$property->getName()][$key] = $item->toArray();
                     	} else {
-                    		$ret_val[$property->getName()][] = $item;
+                    		$ret_val[$property->getName()][$key] = $item;
                     	}
                     }
                 } else {

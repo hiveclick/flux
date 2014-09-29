@@ -1,5 +1,5 @@
 <?php
-    /* @var $user \Gun\User */
+    /* @var $user \Flux\User */
     $user = $this->getContext()->getRequest()->getAttribute("user", array());
 ?>
 <div id="header">

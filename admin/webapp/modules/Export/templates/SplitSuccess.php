@@ -1,5 +1,5 @@
 <?php
-    /* @var $split Gun\Split */
+    /* @var $split Flux\Split */
     $split = $this->getContext()->getRequest()->getAttribute("split", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
     $verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
@@ -50,7 +50,7 @@
                 <label class="col-md-2 control-label" for="status">Status</label>
                 <div class="col-md-10">
                     <select class="form-control" name="status" id="status" required>
-                        <?php foreach(\Gun\Split::retrieveStatuses() AS $status_id => $status_name) { ?>
+                        <?php foreach(\Flux\Split::retrieveStatuses() AS $status_id => $status_name) { ?>
                         <option value="<?php echo $status_id; ?>"<?php echo $split->getStatus() == $status_id ? ' selected="selected"' : ''; ?>><?php echo $status_name; ?></option>
                         <?php } ?>
                     </select>

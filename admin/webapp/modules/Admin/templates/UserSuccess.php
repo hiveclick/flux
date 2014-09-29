@@ -1,5 +1,5 @@
 <?php
-    /* @var $user Gun\User */
+    /* @var $user Flux\User */
     $user = $this->getContext()->getRequest()->getAttribute("user", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
@@ -37,7 +37,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="status" id="status" required placeholder="Status">
-                        <?php foreach(\Gun\User::retrieveStatuses() AS $status_id => $status_name) { ?>
+                        <?php foreach(\Flux\User::retrieveStatuses() AS $status_id => $status_name) { ?>
                         <option value="<?php echo $status_id; ?>"<?php echo $user->getStatus() == $status_id ? ' selected="selected"' : ''; ?>><?php echo $status_name; ?></option>
                         <?php } ?>
                     </select>
@@ -48,7 +48,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="type">Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="user_type" id="type" required placeholder="Type">
-                        <?php foreach(\Gun\User::retrieveUserTypes() AS $type_id => $type_name) { ?>
+                        <?php foreach(\Flux\User::retrieveUserTypes() AS $type_id => $type_name) { ?>
                         <option value="<?php echo $type_id; ?>"<?php echo $user->getUserType() == $type_id ? ' selected="selected"' : ''; ?>><?php echo $type_name; ?></option>
                         <?php } ?>
                     </select>
@@ -84,7 +84,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="type">Timezone</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="timezone" id="timezone" required placeholder="Timezone">
-                        <?php foreach(\Gun\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
+                        <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                         <option value="<?php echo $timezone_id; ?>"<?php echo $user->getTimezone() == $timezone_id ? ' selected="selected"' : ''; ?>><?php echo $timezone_string; ?></option>
                         <?php } ?>
                     </select>

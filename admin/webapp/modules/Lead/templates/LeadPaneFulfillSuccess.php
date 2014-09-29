@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 ?>
 <div class="help-block">You can fulfill this lead manually to various lead providers on this page</div>
@@ -17,6 +17,7 @@
                 <p />
                 <button id="fulfill_to_test_email" class="btn-info btn">Send as an email</button>
                 <button id="fulfill_to_test_post" class="btn-info btn">Send as a POST</button>
+                <button id="fulfill_to_test_custom" data-toggle="modal" data-target="#fulfill_handler_modal" class="btn-info btn">Send to custom export</button>
             </div>
         </div>
     </div>
@@ -72,10 +73,20 @@
     </div>
 </div>
 <p />
-
+<!-- Map Preview modal -->
+<div class="modal fade" id="fulfill_handler_modal">
+    <div class="modal-dialog">
+        <div class="modal-content"></div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
 //<!--
 $('document').ready(function() {
+	$('#fulfill_handler_modal').modal({
+        show: false,
+        remote: '/lead/lead-pane-fulfill-handler-modal?_id=<?php echo $lead->getId() ?>'
+    });
+	
 	$('#fulfill_to_test_email,#fulfill_to_test_post').click(function() {
         $.rad.post('/api', { func: '/lead/manual-fulfill-test-email', _id:  '<?php echo $lead->getId() ?>' }, function(data) {
             if (data.record) {

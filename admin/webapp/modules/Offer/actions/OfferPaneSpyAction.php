@@ -3,11 +3,11 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Campaign;
-use Gun\SpyReport;
+use Flux\Offer;
+use Flux\Campaign;
+use Flux\SpyReport;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,14 +26,14 @@ class OfferPaneSpyAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer Gun\Offer */
+        /* @var $offer Flux\Offer */
         $offer = new Offer();
         $offer->populate($_REQUEST);
         $offer->query();
         
         $spy_report = new SpyReport();
         
-        $datafield = new \Gun\DataField();
+        $datafield = new \Flux\DataField();
         $datafield->setIgnorePagination(true);
         $datafields = $datafield->queryAll();
         

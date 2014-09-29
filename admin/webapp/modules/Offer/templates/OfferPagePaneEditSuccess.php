@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer_page \Gun\OfferPage */
+    /* @var $offer_page \Flux\OfferPage */
     $offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
     $servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 ?>

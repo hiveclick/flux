@@ -21,7 +21,7 @@ try {
     
     // Start Output
     if (!$is_silent) {
-        echo StringTools::consoleColor('Gun Installation Script', StringTools::CONSOLE_COLOR_GREEN) . "\n";
+        echo StringTools::consoleColor('Flux Installation Script', StringTools::CONSOLE_COLOR_GREEN) . "\n";
         echo StringTools::consoleColor(str_repeat('=', 50), StringTools::CONSOLE_COLOR_GREEN) . "\n";
         
         echo 'Configuring your application';
@@ -40,7 +40,7 @@ try {
     // | Setup the DAO modules and any other links that need to be setup        |
     // +------------------------------------------------------------------------+
     $lib_folders = array(
-        'Gun' => 'Gun',
+        'Flux' => 'Flux',
         'Mojavi' => 'Mojavi',
         'Zend' => 'Zend',
     );
@@ -212,7 +212,7 @@ try {
         if (isset($ini_settings['upload_username'])) {
             $settings_contents = preg_replace("/<<upload_username>>/", $ini_settings['upload_username'], $settings_contents);
         } else {
-            $settings_contents = preg_replace("/<<upload_username>>/", 'gun', $settings_contents);
+            $settings_contents = preg_replace("/<<upload_username>>/", 'flux', $settings_contents);
         }
         if (isset($ini_settings['upload_password'])) {
             $settings_contents = preg_replace("/<<upload_password>>/", $ini_settings['upload_password'], $settings_contents);
@@ -234,18 +234,18 @@ try {
             passthru('chown ' . $cache_user . ':' . $cache_group . ' ' . $ini_settings['log_folder']. ' -Rf');
             passthru('chmod 775 ' . $ini_settings['log_folder']. ' -Rf');
         } else {
-            $settings_contents = preg_replace("/<<log_folder>>/", '/var/log/gun', $settings_contents);
+            $settings_contents = preg_replace("/<<log_folder>>/", '/var/log/flux', $settings_contents);
             
             $cache_user = isset($ini_settings['cache_user']) ? $ini_settings['cache_user'] : 'apache';
             $cache_group = isset($ini_settings['cache_group']) ? $ini_settings['cache_group'] : 'apache';
             
-            passthru('chown ' . $cache_user . ':' . $cache_group . ' /var/log/gun -Rf');
-            passthru('chmod 775 /var/log/gun -Rf');
+            passthru('chown ' . $cache_user . ':' . $cache_group . ' /var/log/flux -Rf');
+            passthru('chmod 775 /var/log/flux -Rf');
         }
         if (isset($ini_settings['realtime_url'])) {
             $settings_contents = preg_replace("/<<realtime_url>>/", $ini_settings['realtime_url'], $settings_contents);
         } else {
-            $settings_contents = preg_replace("/<<realtime_url>>/", 'http://www.gunrt.local', $settings_contents);
+            $settings_contents = preg_replace("/<<realtime_url>>/", 'http://www.fluxrt.local', $settings_contents);
         }
         if (isset($ini_settings['version_file'])) {
             $settings_contents = preg_replace("/<<version_file>>/", $ini_settings['version_file'], $settings_contents);

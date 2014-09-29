@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Vertical;
-use Gun\DomainGroup;
+use Flux\Vertical;
+use Flux\DomainGroup;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,14 +26,14 @@ class DomainGroupAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $domain_group Gun\DomainGroup */
+            /* @var $domain_group Flux\DomainGroup */
             $domain_group = new DomainGroup();
             $domain_group->populate($_POST);
             $domain_group->update();
 
             $this->getContext()->getRequest()->setAttribute("domain_group", $domain_group);
         } else {
-            /* @var $domain_group Gun\DomainGroup */
+            /* @var $domain_group Flux\DomainGroup */
             $domain_group = new DomainGroup();
             $domain_group->populate($_GET);
             $domain_group->query();

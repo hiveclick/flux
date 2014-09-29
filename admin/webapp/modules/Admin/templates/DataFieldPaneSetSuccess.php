@@ -1,5 +1,5 @@
 <?php
-    /* @var ClientExportPaneExportSuccess.php \Gun\DataField */
+    /* @var ClientExportPaneExportSuccess.php \Flux\DataField */
     $data_field = $this->getContext()->getRequest()->getAttribute("data_field", array());
 ?>
 <div class="help-block">These are the values that can be used in this data field.  Use these when adding data fields to a lead</div>
@@ -26,7 +26,7 @@
     <div id="data_field_set_groups">
         <?php
             $counter = 0;
-            /* @var $data_field_set \Gun\DataFieldSet */
+            /* @var $data_field_set \Flux\DataFieldSet */
             foreach($data_field->getDataFieldSet() AS $data_field_set) {
         ?>
         <div class="form-group data-field-set-group-item">

@@ -1,5 +1,5 @@
 <?php
-    /* @var $client_export \Gun\ClientExport */
+    /* @var $client_export \Flux\ClientExport */
     $client_export = $this->getContext()->getRequest()->getAttribute("client_export", array());
 ?>
 <div class="modal-header">
@@ -7,7 +7,7 @@
     <h4 class="modal-title" id="myModalLabel">Mapping Preview</h4>
 </div>
 <div class="modal-body">
-    <?php if ($client_export->getExportClass()->getClientExportType() == \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) { ?>
+    <?php if ($client_export->getExportClass()->getClientExportType() == \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) { ?>
         This export will POST to the following URL:
         <p />
         <pre><?php echo $client_export->getPostUrl() ?></pre>
@@ -20,7 +20,7 @@
                     <tr>
                         <td><strong><?php echo $client_export_mapping->getFieldName() == '' ? $client_export_mapping->getDataField()->getKeyName() : $client_export_mapping->getFieldName() ?></strong></td>
                         <td>
-                            <?php if ($client_export_mapping->getMappingFunc() != \Gun\ClientExportMap::getDefaultMappingFunc()) { ?>
+                            <?php if ($client_export_mapping->getMappingFunc() != \Flux\ClientExportMap::getDefaultMappingFunc()) { ?>
                                 <div class="custom-function">
                                     <button class="btn btn-sm btn-info btn-show-code pull-right">show</button>
                                     <em>- custom function -</em>
@@ -49,7 +49,7 @@
                     <tr>
                         <td><strong><?php echo $client_export_mapping->getFieldName() == '' ? $client_export_mapping->getDataField()->getKeyName() : $client_export_mapping->getFieldName() ?></strong></td>
                         <td>
-                            <?php if ($client_export_mapping->getMappingFunc() != \Gun\ClientExportMap::getDefaultMappingFunc()) { ?>
+                            <?php if ($client_export_mapping->getMappingFunc() != \Flux\ClientExportMap::getDefaultMappingFunc()) { ?>
                                 <div class="custom-function">
                                     <button class="btn btn-sm btn-info btn-show-code pull-right">show</button>
                                     getValue("<em><?php echo $client_export_mapping->getDataField()->getKeyName() ?></em>") with <em>custom function</em>

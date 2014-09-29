@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -23,11 +23,11 @@ class ExportQueueAction extends BasicConsoleAction
     public function execute ()
     {
         try {
-            $export = new \Gun\Export();
+            $export = new \Flux\Export();
             $export->populate($_REQUEST);
             $export->query();
             if ($export->getId() > 0) {
-                $exporter = new \Gun\ExportQueueExporter();
+                $exporter = new \Flux\ExportQueueExporter();
                 $exporter->setExportId($export->getId());
                 $exporter->processExport();
             } else {

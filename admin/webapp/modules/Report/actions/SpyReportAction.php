@@ -3,9 +3,9 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\SpyReport;
+use Flux\SpyReport;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -24,12 +24,12 @@ class SpyReportAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $spy_report Gun\SpyReport */
+        /* @var $spy_report Flux\SpyReport */
         $spy_report = new SpyReport();
 
         $spy_columns = SpyReport::getColumns();
 
-        $offer = new \Gun\Offer();
+        $offer = new \Flux\Offer();
         $offer->setIgnorePagination(true);
         $offer->setSort('name');
         $offer->setSord('ASC');

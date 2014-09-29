@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\User;
-use Gun\Client;
+use Flux\User;
+use Flux\Client;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,14 +26,14 @@ class UserAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $user Gun\User */
+            /* @var $user Flux\User */
             $user = new User();
             $user->populate($_POST);
             $user->update();
             
             $this->getContext()->getController()->redirect('/admin/user?_id=' . $user->getId());
         } else {
-            /* @var $user Gun\User */
+            /* @var $user Flux\User */
             $user = new User();
             $user->populate($_GET);
             $user->query();

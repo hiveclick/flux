@@ -1,11 +1,11 @@
 <?php
 use Mojavi\Action\BasicRestAction;
 use Mojavi\View\View;
-use Gun\Pixel;
+use Flux\Pixel;
 use Mojavi\Logging\LoggerManager;
-use Gun\LeadPage;
+use Flux\LeadPage;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -24,18 +24,18 @@ class PxlAction extends BasicRestAction
     public function execute ()
     {
         
-        /* @var $pixel \Gun\Pixel */
+        /* @var $pixel \Flux\Pixel */
         $pixel = new Pixel();
         $pixel->populate($_REQUEST);
         if ($pixel->getPage() == '') { $pixel->setPage('index.php'); }
         // Track the page name and find the offer associated with it
         if ($pixel->getOffer()->getId() > 0) {
-            $offer_page = new \Gun\OfferPage();
+            $offer_page = new \Flux\OfferPage();
             $offer_page->setOfferId($pixel->getOffer()->getId());
             $offer_page->setPageName($pixel->getPage());
             if (($page_found = $offer_page->queryByPageName()) === false) {
             	// we couldn't find the page, so add it
-                $offer_page = new \Gun\OfferPage();
+                $offer_page = new \Flux\OfferPage();
             	$offer_page->setOfferId($pixel->getOffer()->getId());
             	$offer_page->setPageName($pixel->getPage());
             	$offer_page->setPreviewUrl($pixel->getHref());
@@ -46,7 +46,7 @@ class PxlAction extends BasicRestAction
             	$offer_page->setName($pixel->getPage());
             	$offer_page->insert();
             } else {
-                //LoggerManager::error(__METHOD__ . " :: " . 'Page ' . $pixel->getPage() . ' already exists on offer ' . $pixel->getOffer()->getName());
+                LoggerManager::error(__METHOD__ . " :: " . 'Page ' . $pixel->getPage() . ' already exists on offer ' . $pixel->getOffer()->getName());
             }
             
             // Increment the click count on the offer page
@@ -78,7 +78,7 @@ class PxlAction extends BasicRestAction
                 LoggerManager::error(__METHOD__ . " :: " . 'No lead found from pixel using id ' . $pixel->getLead()->getId());
             }
         } else {
-        	LoggerManager::error(__METHOD__ . " :: " . 'No offer found from pixel using domain ' . $pixel->getDomain());
+        	LoggerManager::error(__METHOD__ . " :: " . 'No offer found (' . $pixel->getOffer()->getId() . ') from pixel using domain ' . $pixel->getDomain() . '/' . $pixel->getFolder());
         }
         
         // Finally return a 1x1 pixel gif for tracking

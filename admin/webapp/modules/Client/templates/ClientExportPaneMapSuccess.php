@@ -13,6 +13,9 @@
         </div>
         <div class="col-sm-3">
             <select name="mapDummyReqName[dummy_datafield_id][datafield_id]" class="form-control">
+                <optgroup label="Custom Field">
+					<option value="0" data-data="<?php echo htmlentities(json_encode(array('_id' => 0, 'name' => 'Custom Field', 'keyname' => 'custom', 'description' => 'Custom field such as an API Token', 'request_names' => ''))) ?>">Custom Field</option>
+				</optgroup>
                 <optgroup label="Tracking Fields">
                     <?php foreach($tracking_data_fields AS $datafield) { ?>
                         <option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
@@ -29,7 +32,7 @@
                     <?php } ?>
                 </optgroup>
             </select>
-            <input type="hidden" id="mapping_func-dummy_datafield_id" name="mapping[dummy_datafield_id][mapping_func]" value="<?php echo htmlspecialchars(\Gun\ClientExportMap::getDefaultMappingFunc()) ?>" />
+            <input type="hidden" id="mapping_func-dummy_datafield_id" name="mapping[dummy_datafield_id][mapping_func]" value="<?php echo htmlspecialchars(\Flux\ClientExportMap::getDefaultMappingFunc()) ?>" />
         </div>
         <div class="col-sm-5">
             <div class="col-sm-6">
@@ -75,6 +78,9 @@
                 </div>
                 <div class="col-sm-3">
                     <select name="mapping[<?php echo $counter;?>][datafield_id]" class="form-control selectize">
+                        <optgroup label="Custom Field">
+                            <option value="0"<?php echo $client_export_map->getDataFieldId() == 0 ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => 0, 'name' => 'Custom Field', 'keyname' => 'custom', 'description' => 'Custom field such as an API Token', 'request_names' => ''))) ?>">Custom Field</option>
+                        </optgroup>
                         <optgroup label="Tracking Fields">
                             <?php foreach($tracking_data_fields AS $datafield) { ?>
                                 <option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $client_export_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
@@ -100,20 +106,20 @@
                     <div class="col-sm-6">
                         <input type="text" name="mapping[<?php echo $counter;?>][default_value]" class="form-control" value="<?php echo $client_export_map->getDefaultValue() ?>" placeholder="default value (optional)" />
                     </div>
-                    <div class="col-sm-12 <?php echo ($client_export_map->getMappingFunc() == \Gun\ClientExportMap::getDefaultMappingFunc()) ? 'collapse' : '' ?> map_alert-<?php echo $counter; ?>">
+                    <div class="col-sm-12 <?php echo ($client_export_map->getMappingFunc() == \Flux\ClientExportMap::getDefaultMappingFunc()) ? 'collapse' : '' ?> map_alert-<?php echo $counter; ?>">
                         <p />
                         <div class="help-text small warning bg-warning text-warning" style="padding:2px;"><span class="glyphicon glyphicon-info-sign"></span> This field uses a custom function to format the value.  Click on Options to view it</div>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="hidden-xs hidden-sm">
-                        <a class="btn btn-<?php echo ($client_export_map->getMappingFunc() == \Gun\ClientExportMap::getDefaultMappingFunc()) ? 'info' : 'warning' ?> map_options-<?php echo $counter ?>" type="button" data-toggle="modal" data-target="#map_options_modal" href="/client/client-export-pane-map-options-modal?<?php echo http_build_query($client_export_map->toArray(true), null, '&') ?>&column_id=<?php echo $counter ?>"><?php echo ($client_export_map->getMappingFunc() == \Gun\ClientExportMap::getDefaultMappingFunc()) ? 'Options&nbsp;' : 'Options*' ?></a>
+                        <a class="btn btn-<?php echo ($client_export_map->getMappingFunc() == \Flux\ClientExportMap::getDefaultMappingFunc()) ? 'info' : 'warning' ?> map_options-<?php echo $counter ?>" type="button" data-toggle="modal" data-target="#map_options_modal" href="/client/client-export-pane-map-options-modal?<?php echo http_build_query($client_export_map->toArray(true), null, '&') ?>&column_id=<?php echo $counter ?>"><?php echo ($client_export_map->getMappingFunc() == \Flux\ClientExportMap::getDefaultMappingFunc()) ? 'Options&nbsp;' : 'Options*' ?></a>
                         <button type="button" class="btn btn-danger btn-sm btn-remove-map">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                     </div>
                     <div class="visible-xs visible-sm">
-                        <a class="form-control btn btn-<?php echo ($client_export_map->getMappingFunc() == \Gun\ClientExportMap::getDefaultMappingFunc()) ? 'info' : 'warning' ?> map_options-<?php echo $counter ?>" type="button" data-toggle="modal" data-target="#map_options_modal"  href="/client/client-export-pane-map-options-modal?<?php echo http_build_query($client_export_map->toArray(true), null, '&') ?>&column_id=<?php echo $counter ?>"><?php echo ($client_export_map->getMappingFunc() == \Gun\ClientExportMap::getDefaultMappingFunc()) ? 'Options&nbsp;' : 'Options*' ?></a>
+                        <a class="form-control btn btn-<?php echo ($client_export_map->getMappingFunc() == \Flux\ClientExportMap::getDefaultMappingFunc()) ? 'info' : 'warning' ?> map_options-<?php echo $counter ?>" type="button" data-toggle="modal" data-target="#map_options_modal"  href="/client/client-export-pane-map-options-modal?<?php echo http_build_query($client_export_map->toArray(true), null, '&') ?>&column_id=<?php echo $counter ?>"><?php echo ($client_export_map->getMappingFunc() == \Flux\ClientExportMap::getDefaultMappingFunc()) ? 'Options&nbsp;' : 'Options*' ?></a>
                         <button type="button" class="form-control btn btn-danger btn-remove-map">remove</button>
                     </div>
                     

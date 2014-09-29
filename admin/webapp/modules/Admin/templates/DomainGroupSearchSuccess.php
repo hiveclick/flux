@@ -1,5 +1,5 @@
 <?php
-    /* @var DomainGroup \Gun\DomainGroup */
+    /* @var DomainGroup \Flux\DomainGroup */
     $domain_group = $this->getContext()->getRequest()->getAttribute("domain_group", array());
 ?>
 <div id="header">

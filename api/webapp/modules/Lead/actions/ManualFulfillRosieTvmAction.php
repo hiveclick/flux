@@ -2,7 +2,7 @@
 use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,20 +25,20 @@ class ManualFulfillRosieTvmAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\Lead();
+        return new \Flux\Lead();
     }
     
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function executePost($input_form) {
         $ajax_form = new BasicAjaxForm();
         
-        $lead = new \Gun\Lead();
+        $lead = new \Flux\Lead();
         $lead->setId($input_form->getId());
         $lead->query();
         if (!is_null($lead->getId())) {
@@ -51,7 +51,7 @@ class ManualFulfillRosieTvmAction extends BasicRestAction
             $buffer[] = '';
             $buffer[] = '<b>Id</b>: ' . $lead->getId();
             $buffer[] = '<b>Campaign #</b>: ' . 312;
-            $buffer[] = '<b>Created</b>: ' . date('m/d/Y g:i a', $lead->getValue(\Gun\DataField::DATA_FIELD_EVENT_CREATED_NAME, new \MongoDate())->sec);
+            $buffer[] = '<b>Created</b>: ' . date('m/d/Y g:i a', $lead->getValue(\Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME, new \MongoDate())->sec);
             $buffer[] = '';
             
             $data = $lead->getD();
@@ -68,18 +68,18 @@ class ManualFulfillRosieTvmAction extends BasicRestAction
             $buffer[] = '<b>State</b>: ' . $lead->getValue('state');
             $buffer[] = '<b>Zip</b>: ' . $lead->getValue('zip');
             $buffer[] = '';
-            $datafield = new \Gun\DataField();
+            $datafield = new \Flux\DataField();
             $datafield->setTags('mesh');
             $datafield->setIgnorePagination(true);
             $datafields = $datafield->queryAll();
             foreach ($datafields as $datafield) {
                 $field = '<b>' . $datafield->getDescription() . '</b>: ';
                 $value = $lead->getValue($datafield->getKeyName(), null); 
-                if ($datafield->getFieldType() == \Gun\DataField::DATA_FIELD_TYPE_BIRTHDATE && $value != null) {
+                if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_BIRTHDATE && $value != null) {
                     $field .= date('m/d/Y', $value->sec);   
-                } else if ($datafield->getFieldType() == \Gun\DataField::DATA_FIELD_TYPE_DATETIME && $value != null) {
+                } else if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME && $value != null) {
     	           $field .= date('m/d/Y g:i:s a', $value->sec);
-	            } else if ($datafield->getFieldType() == \Gun\DataField::DATA_FIELD_TYPE_ARRAY) {
+	            } else if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY) {
 	                if (is_array($value)) {
 	                    $field .= implode(', ', $value);
 	                } else if (is_string($value)) {

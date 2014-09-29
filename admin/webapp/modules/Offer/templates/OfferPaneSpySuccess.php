@@ -18,14 +18,14 @@
         <label class="col-sm-2 control-label hidden-xs" for="date_range">Report Date</label>
         <div class="col-sm-5 col-xs-6">
             <select name="date_range" class="form-control">
-                <?php foreach(\Gun\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
+                <?php foreach(\Flux\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
                 <option value="<?php echo $date_range_id; ?>"<?php echo $spy_report->getDateRange() == $date_range_id ? ' selected="selected"' : ''; ?>><?php echo $date_range_name; ?></option>
                 <?php } ?>
             </select>
         </div>
         <div class="col-sm-5 col-xs-6">
             <select name="tz_modifier" class="form-control">
-                <?php foreach(\Gun\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
+                <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                     <option value="<?php echo $timezone_id; ?>"><?php echo $timezone_string; ?></option>
                 <?php } ?>
             </select>
@@ -108,7 +108,7 @@ $(document).ready(function() {
     });
 
     $('[name=date_range]').on('change', function(){
-        if ($(this).val() == <?php echo \Gun\SpyReport::DATE_RANGE_CUSTOM; ?>) {
+        if ($(this).val() == <?php echo \Flux\SpyReport::DATE_RANGE_CUSTOM; ?>) {
             $('.custom-range').show();
         } else {
             $('.custom-range').hide();
@@ -145,17 +145,17 @@ $(document).ready(function() {
             	$(td).html('<a href="/lead/lead?_id=' + cellData + '">' + cellData + '</a>');
             }},
     	    <?php foreach($datafields AS $datafield) { ?>
-    	        <?php if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+    	        <?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
     	            { name: "<?php echo $datafield->getKeyName() ?>", data: "_d.<?php echo $datafield->getKeyName() ?>" },
-    	        <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+    	        <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
     	        	{ name: "<?php echo $datafield->getKeyName() ?>", data: "_t.<?php echo $datafield->getKeyName() ?>", createdCell: function (td, cellData, rowData, row, col) {
-	        	        <?php if ($datafield->getKeyName() == \Gun\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
+	        	        <?php if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
 	        	        	if (cellData.name) {
 	                    		$(td).html('<a href="/client/client?_id=' + cellData._id + '">' + cellData.name + '</a>');
 	        	        	} else {
 								$(td).html('<em class="text-muted">-- not set --</em>');
 	        	        	}
-	        	        <?php } else if ($datafield->getKeyName() == \Gun\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
+	        	        <?php } else if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
 	        	        	if (cellData.name) {
 	        	        		$(td).html('<a href="/offer/offer?_id=' + cellData._id + '">' + cellData.name + '</a>');
 	        	        	} else {
@@ -166,13 +166,13 @@ $(document).ready(function() {
 	        	        <?php } ?>
                 	}},
     	        
-    	        <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+    	        <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
 	    	        { name: "<?php echo $datafield->getKeyName() ?>", data: function data( row, type, set, meta ) {
 	        	        var ret_val;
 	        	        $.each(row._e, function(i, item) {
 	        	            if (item.n == '<?php echo $datafield->getKeyName() ?>') {
 	        	                // This is our event
-	        	                <?php if ($datafield->getFieldType() == \Gun\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
+	        	                <?php if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
 	        	                	ret_val = moment.unix(item.t.sec).calendar();
 	        	                <?php } else { ?>
 	        	                	ret_val = item.n;

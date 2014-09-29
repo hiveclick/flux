@@ -582,12 +582,13 @@
 				
 				if (data['errors']) {
 					if(data['errors'].length == 0) {	
-						
 						data['errors'].push({
 							id: 'errors',
 							message: typeof(e) == 'object' ? e.name + ': ' + e.message : e
 						});
-						window.console.log(data['errors']);
+						if (window.console) {
+							window.console.log(data['errors']);
+						}
 					}
 				}
 				

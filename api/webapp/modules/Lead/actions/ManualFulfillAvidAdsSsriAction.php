@@ -2,7 +2,7 @@
 use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,20 +25,20 @@ class ManualFulfillAvidAdsSsriAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\Lead();
+        return new \Flux\Lead();
     }
     
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function executePost($input_form) {
         $ajax_form = new BasicAjaxForm();
         
-        $lead = new \Gun\Lead();
+        $lead = new \Flux\Lead();
         $lead->setId($input_form->getId());
         $lead->query();
         if (!is_null($lead->getId())) {
@@ -68,7 +68,7 @@ class ManualFulfillAvidAdsSsriAction extends BasicRestAction
             
             $params['notes'] = $lead->getValue('notes', 'no notes');
             $params['ip_address'] = $lead->getValue('ip_address');
-            $params['datetime'] = date('Y-m-d G:i:s', $lead->getValue(\Gun\DataField::DATA_FIELD_EVENT_CREATED_NAME, new \MongoDate())->sec);
+            $params['datetime'] = date('Y-m-d G:i:s', $lead->getValue(\Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME, new \MongoDate())->sec);
             $params['has_birth_defect'] = 1;
             $params['has_attorney'] = 0;
             $params['medication'] = implode(",", $lead->getValue('medication_type'));

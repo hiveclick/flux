@@ -1,5 +1,5 @@
 <?php
-    /* @var $datafield \Gun\DataField */
+    /* @var $datafield \Flux\DataField */
     $datafield = $this->getContext()->getRequest()->getAttribute("datafield", array());
 ?>
 <div id="header">
@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-group">
                             <select class="form-control" name="storage_type_array" id="storage_type_array" required placeholder="only display selected storage types" multiple>
-                                <?php foreach(\Gun\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
+                                <?php foreach(\Flux\DataField::retrieveSettableStorageTypes() AS $storage_type_id => $storage_type_name) { ?>
                                 <option value="<?php echo $storage_type_id; ?>"><?php echo $storage_type_name; ?></option>
                                 <?php } ?>
                             </select>
@@ -79,24 +79,28 @@ $(document).ready(function() {
     	paging: true,
     	dom: 'Rfrtpi',
     	columns: [
-            { name: "name", data: "name", createdCell: function (td, cellData, rowData, row, col) {
+            { name: "name", data: "name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
                 $(td).html('<a href="/admin/data-field?_id=' + rowData._id + '">' + cellData + '<div class="small text-muted">' + rowData.description + '</div></a>');
             }},
-            { name: "key_name", data: "key_name", className: "text-center" },
-            { name: "field_type", data: "_field_type_name", className: "text-center" },
-            { name: "storage_type", data: "_storage_type_name", className: "text-center" },
-            { name: "tags", data: "tags", createdCell: function (td, cellData, rowData, row, col) {
+            { name: "key_name", data: "key_name", defaultContent: '', className: "text-center" },
+            { name: "field_type", data: "_field_type_name", defaultContent: '', className: "text-center" },
+            { name: "storage_type", data: "_storage_type_name", defaultContent: '', className: "text-center" },
+            { name: "tags", data: "tags", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
                 var cell_html = '';
-                $.each(cellData, function(i,item) {
-                	cell_html += '<span class="badge alert-info">' + item + '</span> ';
-                });
+                if (cellData instanceof Array) {
+	                $.each(cellData, function(i,item) {
+	                	cell_html += '<span class="badge alert-info">' + item + '</span> ';
+	                });
+                }
                 $(td).html(cell_html);
             }},
-            { name: "request_name", data: "request_name", createdCell: function (td, cellData, rowData, row, col) {
+            { name: "request_name", data: "request_name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
                 var cell_html = '<i class="badge alert-success">' + rowData.key_name + '</i> ';
-                $.each(cellData, function(i,item) {
-                	cell_html += '<span class="badge alert-info">' + item + '</span> ';
-                });
+                if (cellData instanceof Array) {
+	                $.each(cellData, function(i,item) {
+	                	cell_html += '<span class="badge alert-info">' + item + '</span> ';
+	                });
+                }
                 $(td).html(cell_html);
             }}
       	]

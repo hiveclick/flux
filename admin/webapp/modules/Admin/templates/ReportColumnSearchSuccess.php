@@ -1,5 +1,5 @@
 <?php
-    /* @var $report_column \Gun\ReportColumn */
+    /* @var $report_column \Flux\ReportColumn */
     $report_column = $this->getContext()->getRequest()->getAttribute("report_column", array());
 ?>
 <div id="header">
@@ -73,14 +73,14 @@ $(document).ready(function() {
             { name: "column_type", data: "_column_type_name" },
             { name: "format_type", data: "_format_type_name" },
             { name: "sum_type", data: "_sum_type_name", createdCell: function (td, cellData, rowData, row, col) {
-                if (rowData.format_type == <?php echo json_encode(\Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD) ?>) {
+                if (rowData.format_type == <?php echo json_encode(\Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD) ?>) {
                 	$(td).html(cellData);
                 } else {
                 	$(td).html('--');
                 }
             }},
             { name: "operator_type", data: "_operator_type_name", createdCell: function (td, cellData, rowData, row, col) {
-            	if (rowData.format_type == <?php echo json_encode(\Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD) ?>) {
+            	if (rowData.format_type == <?php echo json_encode(\Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD) ?>) {
             		$(td).html('--');
                 } else {
                 	$(td).html(cellData);

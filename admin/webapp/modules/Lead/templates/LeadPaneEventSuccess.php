@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 ?>
 <div class="help-block">You can view the various events that fired on this lead and when they fired</div>
@@ -15,7 +15,7 @@
 	</thead>
 	<tbody>
 	<?php
-	   /* @var $lead_event \Gun\LeadEvent */ 
+	   /* @var $lead_event \Flux\LeadEvent */ 
 	   foreach ($lead->getE() as $key => $lead_event) { 
     ?>
 		<tr>

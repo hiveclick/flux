@@ -1,5 +1,5 @@
 <?php
-    /* @var $client_export Gun\ClientExport */
+    /* @var $client_export Flux\ClientExport */
     $client_export = $this->getContext()->getRequest()->getAttribute("client_export", array());
     $export_handlers = $this->getContext()->getRequest()->getAttribute("export_handlers", array());
     $default_mapping = array();
@@ -27,15 +27,15 @@
 <div id="tab-content-container" class="tab-content">
     <form class="form-horizontal" name="export_form" method="POST" action="" autocomplete="off" role="form">
         <!-- default export to active -->
-        <input type="hidden" name="status" value="<?php echo \Gun\ClientExport::CLIENT_EXPORT_STATUS_ACTIVE ?>" />
+        <input type="hidden" name="status" value="<?php echo \Flux\ClientExport::CLIENT_EXPORT_STATUS_ACTIVE ?>" />
         <input type="hidden" name="client_id" value="<?php echo $client_export->getClientId() ?>" />
         <!-- default mapping -->
         <?php
             $counter = 0;
             foreach ($default_mapping as $request_name) {
-                if (isset(\Gun\DataField::retrieveActiveDataFieldsByRequestName()[$request_name])) {
+                if (isset(\Flux\DataField::retrieveActiveDataFieldsByRequestName()[$request_name])) {
         ?>
-                <input type="hidden" name="mapping[<?php echo $counter ?>][datafield_id]" value="<?php echo \Gun\DataField::retrieveActiveDataFieldsByRequestName()[$request_name]->getId() ?>" />
+                <input type="hidden" name="mapping[<?php echo $counter ?>][datafield_id]" value="<?php echo \Flux\DataField::retrieveActiveDataFieldsByRequestName()[$request_name]->getId() ?>" />
                 <input type="hidden" name="mapping[<?php echo $counter ?>][default]" value="" />
         <?php
                     $counter++;
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div id="ftp_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP ? 'hidden' : ''; ?>">
+        <div id="ftp_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP ? 'hidden' : ''; ?>">
             <div class="form-group">
                 <label class="col-md-2 control-label" for="ftp_hostname">FTP Host/Port</label>
                 <div class="col-md-10 form-inline row">
@@ -91,7 +91,7 @@
             </div>
            </div>
 
-           <div id="post_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST ? 'hidden' : ''; ?>">
+           <div id="post_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST ? 'hidden' : ''; ?>">
                <div class="form-group">
                     <label class="col-md-2 control-label" for="post_url">Post URL</label>
                     <div class="col-md-8">
@@ -103,7 +103,7 @@
                 </div>
            </div>
            
-           <div id="email_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL ? 'hidden' : ''; ?>">
+           <div id="email_settings" class="<?php echo $client_export->getExportClass()->getClientExportType() != \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL ? 'hidden' : ''; ?>">
                <div class="form-group">
                     <label class="col-md-2 control-label" for="email_address">Email Address</label>
                     <div class="col-md-10">
@@ -148,17 +148,17 @@ $(document).ready(function() {
     $('#export_class_name').change(function() {
     	<?php foreach($export_handlers AS $export_class_name => $export_class_instance) { ?>
         	if ($('#export_class_name').val() == '<?php echo $export_class_name ?>') {
-            	<?php if ($export_class_instance->getClientExportType() == \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP) { ?>
+            	<?php if ($export_class_instance->getClientExportType() == \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_FTP) { ?>
          	        $('#ftp_settings').removeClass('hidden');
             	<?php } else { ?>
             	    $('#ftp_settings').addClass('hidden');
             	<?php } ?>
-            	<?php if ($export_class_instance->getClientExportType() == \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL) { ?>
+            	<?php if ($export_class_instance->getClientExportType() == \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_EMAIL) { ?>
          	        $('#email_settings').removeClass('hidden');
             	<?php } else { ?>
             	    $('#email_settings').addClass('hidden');
             	<?php } ?>
-            	<?php if ($export_class_instance->getClientExportType() == \Gun\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) { ?>
+            	<?php if ($export_class_instance->getClientExportType() == \Flux\Export\ExportAbstract::CLIENT_EXPORT_TYPE_POST) { ?>
          	        $('#post_settings').removeClass('hidden');
             	<?php } else { ?>
             	    $('#post_settings').addClass('hidden');

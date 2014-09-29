@@ -1,5 +1,5 @@
 <?php
-    /* @var $flow Gun\Flow */
+    /* @var $flow Flux\Flow */
     $flow = $this->getContext()->getRequest()->getAttribute("flow", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
     $flows = $this->getContext()->getRequest()->getAttribute("flows", array());
@@ -50,10 +50,10 @@
                                 <span class="glyphicon"></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu node-type-ul" role="menu">
-                                <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
-                                <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_OFFER; ?>" data-glyphicon-type="glyphicon glyphicon-import">Offer</a></li>
-                                <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_FLOW; ?>" data-glyphicon-type="glyphicon glyphicon-indent-left">Flow</a></li>
-                                <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_URL; ?>" data-glyphicon-type="glyphicon glyphicon-share-alt">URL</a></li>
+                                <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
+                                <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_OFFER; ?>" data-glyphicon-type="glyphicon glyphicon-import">Offer</a></li>
+                                <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_FLOW; ?>" data-glyphicon-type="glyphicon glyphicon-indent-left">Flow</a></li>
+                                <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_URL; ?>" data-glyphicon-type="glyphicon glyphicon-share-alt">URL</a></li>
                             </ul>
                         </div>
                         <input type="text" name="flow_nodes[<?php echo $flow_node['guid']; ?>][label]" class="form-control input_flow_nodes_label" placeholder="" value="<?php echo $flow_node['label']; ?>" />
@@ -61,17 +61,17 @@
                 </div>
                 <div class="col-xs-4">
                     <div class="input-group-btn-bag">
-                        <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][offer_id]" class="form-control row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_OFFER; ?>" style="display:none;">
+                        <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][offer_id]" class="form-control row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_OFFER; ?>" style="display:none;">
                             <?php foreach($offers AS $offer) { ?>
                                 <option value="<?php echo $offer->retrieveValueHtml('_id'); ?>"<?php echo $flow_node['offer_id'] == $offer->retrieveValue('_id') ? ' selected' : ''; ?>><?php echo $offer->retrieveValueHtml('name'); ?></option>
                             <?php } ?>
                         </select>
-                        <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][flow_id]" class="form-control row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_FLOW; ?>" style="display:none;">
+                        <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][flow_id]" class="form-control row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_FLOW; ?>" style="display:none;">
                             <?php foreach($flows AS $flow_item) { ?>
                                 <option value="<?php echo $flow_item->retrieveValueHtml('_id'); ?>"<?php echo $flow_node['flow_id'] == $flow_item->retrieveValue('_id') ? ' selected' : ''; ?>><?php echo $flow_item->retrieveValueHtml('name'); ?></option>
                             <?php } ?>
                         </select>
-                        <div class="input-group row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_URL; ?>" style="display:none;">
+                        <div class="input-group row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_URL; ?>" style="display:none;">
                             <input name="flow_nodes[][url]" class="form-control" placeholder="URL" value="<?php echo $flow_node['url']; ?>" />
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dataFieldModal">
@@ -118,14 +118,14 @@
                         <div class="form-group form-group-filter">
                             <div class="col-xs-3">
                                 <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][filters][<?php echo $flow_node_filter_id; ?>][dataField]" class="form-control input_flow_nodes_filters_dataField">
-                                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataField_id => $dataField) { ?>
+                                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataField_id => $dataField) { ?>
                                     <option value="<?php echo $dataField_id; ?>" data-type="<?php echo $dataField->retrieveValueHtml('type'); ?>" data-set="<?php echo htmlspecialchars(json_encode($dataField->retrieveValue('set'))); ?>"<?php echo $flow_node_filter['dataField'] == $dataField_id ? ' selected' : ''; ?>><?php echo $dataField->retrieveValueHtml('name'); ?></option>
                                 <?php } ?>
                                 </select>
                             </div>
                             <div class="col-xs-2">
                                 <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][filters][<?php echo $flow_node_filter_id; ?>][operator]" class="form-control input_flow_nodes_filters_operator">
-                                <?php foreach(\Gun\Flow::retrieveFilterOperators() AS $flow_operator_id => $flow_operator) { ?>
+                                <?php foreach(\Flux\Flow::retrieveFilterOperators() AS $flow_operator_id => $flow_operator) { ?>
                                     <option value="<?php echo $flow_operator_id; ?>" data-type="<?php echo $flow_operator['type']; ?>"<?php echo $flow_node_filter['operator'] == $flow_operator_id ? ' selected' : ''; ?>><?php echo $flow_operator['name']; ?></option>
                                 <?php } ?>
                                 </select>
@@ -177,7 +177,7 @@
                             </div>
                             <div class="col-xs-4">
                                 <select name="flow_nodes[<?php echo $flow_node['guid']; ?>][cap_time]" class="form-control">
-                                    <?php foreach(\Gun\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
+                                    <?php foreach(\Flux\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
                                         <option value="<?php echo $cap_time_id; ?>"<?php echo $flow_node['cap_time'] == $cap_time_id ? ' selected' : ''; ?>><?php echo $cap_time['name']; ?></option>
                                     <?php } ?>
                                 </select>
@@ -216,7 +216,7 @@
                             </div>
                             <div class="col-xs-2">
                                 <select name="flow_nodes[][setters][][operator]" class="form-control">
-                                <?php foreach(\Gun\Flow::retrieveSetterOperators() AS $flow_operator_id => $flow_operator) { ?>
+                                <?php foreach(\Flux\Flow::retrieveSetterOperators() AS $flow_operator_id => $flow_operator) { ?>
                                     <option value="<?php echo $flow_operator_id; ?>"<?php echo $flow_node_setter['operator'] == $flow_operator_id ? ' selected' : ''; ?>><?php echo $flow_operator['name']; ?></option>
                                 <?php } ?>
                                 </select>
@@ -255,7 +255,7 @@
             </div>
             <div class="modal-body">
 <pre>
-<?php foreach(\Gun\DataField::getUrlPlaceholders() AS $url_placeholder) { ?>
+<?php foreach(\Flux\DataField::getUrlPlaceholders() AS $url_placeholder) { ?>
 #<?php echo $url_placeholder['request_name']; ?>#
 <?php } ?>
 </pre>
@@ -268,14 +268,14 @@
     <div class="form-group form-group-filter">
         <div class="col-xs-3">
             <select name="flow_nodes[][filters][][dataField]" class="form-control input_flow_nodes_filters_dataField">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataField_id => $dataField) { ?>
+            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataField_id => $dataField) { ?>
                 <option value="<?php echo $dataField_id; ?>" data-type="<?php echo $dataField->retrieveValueHtml('type'); ?>" data-set="<?php echo htmlspecialchars(json_encode($dataField->retrieveValue('set'))); ?>"><?php echo $dataField->retrieveValueHtml('name'); ?></option>
             <?php } ?>
             </select>
         </div>
         <div class="col-xs-2">
             <select name="flow_nodes[][filters][][operator]" class="form-control input_flow_nodes_filters_operator">
-            <?php foreach(\Gun\Flow::retrieveFilterOperators() AS $flow_operator_id => $flow_operator) { ?>
+            <?php foreach(\Flux\Flow::retrieveFilterOperators() AS $flow_operator_id => $flow_operator) { ?>
                 <option value="<?php echo $flow_operator_id; ?>" data-type="<?php echo $flow_operator['type']; ?>"><?php echo $flow_operator['name']; ?></option>
             <?php } ?>
             </select>
@@ -295,7 +295,7 @@
         </div>
         <div class="col-xs-2">
             <select name="flow_nodes[][setters][][operator]" class="form-control">
-            <?php foreach(\Gun\Flow::retrieveSetterOperators() AS $flow_operator_id => $flow_operator) { ?>
+            <?php foreach(\Flux\Flow::retrieveSetterOperators() AS $flow_operator_id => $flow_operator) { ?>
                 <option value="<?php echo $flow_operator_id; ?>"><?php echo $flow_operator['name']; ?></option>
             <?php } ?>
             </select>
@@ -314,7 +314,7 @@
             <div class="col-xs-4">
                 <input type="hidden" name="flow_nodes[][guid]" class="input_flow_nodes_guid" value="" />
                 <input type="hidden" name="flow_nodes[][ref]" class="input_flow_nodes_ref" value="" />
-                <input type="hidden" name="flow_nodes[][type]" class="input_flow_nodes_type" value="<?php echo \Gun\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" />
+                <input type="hidden" name="flow_nodes[][type]" class="input_flow_nodes_type" value="<?php echo \Flux\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" />
                 <input type="hidden" name="flow_nodes[][active]" class="input_flow_nodes_active" value="1" />
                 <div class="input-group flow-node-type">
                     <div class="input-group-btn">
@@ -322,10 +322,10 @@
                             <span class="glyphicon"></span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu node-type-ul" role="menu">
-                            <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
-                            <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_OFFER; ?>" data-glyphicon-type="glyphicon glyphicon-import">Offer</a></li>
-                            <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_FLOW; ?>" data-glyphicon-type="glyphicon glyphicon-indent-left">Flow</a></li>
-                            <li><a href="#" data-node-type="<?php echo \Gun\Flow::FLOW_NODE_TYPE_URL; ?>" data-glyphicon-type="glyphicon glyphicon-share-alt">URL</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_RULE_FIRST; ?>" data-glyphicon-type="glyphicon glyphicon-align-left">Rule</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_OFFER; ?>" data-glyphicon-type="glyphicon glyphicon-import">Offer</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_FLOW; ?>" data-glyphicon-type="glyphicon glyphicon-indent-left">Flow</a></li>
+                            <li><a href="#" data-node-type="<?php echo \Flux\Flow::FLOW_NODE_TYPE_URL; ?>" data-glyphicon-type="glyphicon glyphicon-share-alt">URL</a></li>
                         </ul>
                     </div>
                     <input type="text" name="flow_nodes[][label]" class="form-control input_flow_nodes_label" placeholder="" value="" />
@@ -333,17 +333,17 @@
             </div>
             <div class="col-xs-4">
                 <div class="input-group-btn-bag">
-                    <select name="flow_nodes[][offer_id]" class="form-control row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_OFFER; ?>" style="display:none;">
+                    <select name="flow_nodes[][offer_id]" class="form-control row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_OFFER; ?>" style="display:none;">
                         <?php foreach($offers AS $offer) { ?>
                             <option value="<?php echo $offer->retrieveValueHtml('_id'); ?>"><?php echo $offer->retrieveValueHtml('name'); ?></option>
                         <?php } ?>
                     </select>
-                    <select name="flow_nodes[][flow_id]" class="form-control row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_FLOW; ?>" style="display:none;">
+                    <select name="flow_nodes[][flow_id]" class="form-control row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_FLOW; ?>" style="display:none;">
                         <?php foreach($flows AS $flow_item) { ?>
                             <option value="<?php echo $flow_item->retrieveValueHtml('_id'); ?>"><?php echo $flow_item->retrieveValueHtml('name'); ?></option>
                         <?php } ?>
                     </select>
-                    <div class="input-group row_offer_type_<?php echo \Gun\Flow::FLOW_NODE_TYPE_URL; ?>" style="display:none;">
+                    <div class="input-group row_offer_type_<?php echo \Flux\Flow::FLOW_NODE_TYPE_URL; ?>" style="display:none;">
                         <input name="flow_nodes[][url]" class="form-control" placeholder="URL" />
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dataFieldModal">
@@ -411,7 +411,7 @@
                         </div>
                         <div class="col-xs-4">
                             <select name="flow_nodes[][cap_time]" class="form-control">
-                                <?php foreach(\Gun\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
+                                <?php foreach(\Flux\Flow::retrieveCapTimes() AS $cap_time_id => $cap_time) { ?>
                                     <option value="<?php echo $cap_time_id; ?>"><?php echo $cap_time['name']; ?></option>
                                 <?php } ?>
                             </select>
@@ -465,7 +465,7 @@ $(function() {
         $('ul.nav-pills a:first').tab('show');
     }
 
-    var flow_type_names = <?php echo json_encode(\Gun\Flow::retrieveFlowTypeNames()); ?>;
+    var flow_type_names = <?php echo json_encode(\Flux\Flow::retrieveFlowTypeNames()); ?>;
 
     $('#flow_master_container').on('redraw_table', function (e) {
         e.preventDefault();
@@ -503,7 +503,7 @@ $(function() {
 
         $new_node.find('.input_flow_nodes_ref').val(node_ref);
         $new_node.find('.input_flow_nodes_guid').val(guid);
-        $new_node.find('.input_flow_nodes_type').val('<?php echo json_encode(\Gun\Flow::FLOW_NODE_TYPE_OFFER); ?>');
+        $new_node.find('.input_flow_nodes_type').val('<?php echo json_encode(\Flux\Flow::FLOW_NODE_TYPE_OFFER); ?>');
         $(this).append($new_node);
         $('#flow_master_container').trigger('redraw_table');
     });
@@ -677,13 +677,13 @@ $(function() {
 
 
         //check for rules for rule/child
-        var rule_node_types = ['<?php echo json_encode(\Gun\Flow::FLOW_NODE_TYPE_RULE_FIRST); ?>'];
+        var rule_node_types = ['<?php echo json_encode(\Flux\Flow::FLOW_NODE_TYPE_RULE_FIRST); ?>'];
         if($.inArray(node_type, rule_node_types) >= 0) {
             //ensure I have at least one child, if not then create me
             var $children_flow_nodes = $('#flow_master_container').find('.flow-node').has('.input_flow_nodes_ref[value^=' + ref_string + '-]');
 
             if($children_flow_nodes.length <= 0) {
-                $flow_node.trigger('add_node', ['child', <?php echo json_encode(\Gun\Flow::FLOW_NODE_TYPE_OFFER); ?>]);
+                $flow_node.trigger('add_node', ['child', <?php echo json_encode(\Flux\Flow::FLOW_NODE_TYPE_OFFER); ?>]);
             }
 
         } else {

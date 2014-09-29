@@ -1,5 +1,5 @@
 <?php
-    /* @var $domain_group Gun\DomainGroup */
+    /* @var $domain_group Flux\DomainGroup */
     $domain_group = $this->getContext()->getRequest()->getAttribute("domain_group", array());
 ?>
 <div id="header">
@@ -8,7 +8,7 @@
 <div class="help-block">Create a new domain group that you can use to organize emails</div>
 <br/>
 <form class="form-horizontal" name="domain_group_form" method="POST" action="" autocomplete="off" role="form">
-    <input type="hidden" name="status" value="<?php echo \Gun\DomainGroup::DOMAIN_GROUP_STATUS_ACTIVE ?>" />
+    <input type="hidden" name="status" value="<?php echo \Flux\DomainGroup::DOMAIN_GROUP_STATUS_ACTIVE ?>" />
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
         <div class="col-sm-10">

@@ -1,5 +1,5 @@
 <?php
-    /* @var $client \Gun\Client */
+    /* @var $client \Flux\Client */
     $client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
 <div class="help-block">This client can send traffic to offers owned by other clients using campaigns</div>

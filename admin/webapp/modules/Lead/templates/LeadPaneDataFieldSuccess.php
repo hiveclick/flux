@@ -1,36 +1,36 @@
 <?php
-	/* @var $lead \Gun\Lead */
+	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute('lead', array());
 ?>
 <div class="form-group" style="display:none;" id="dummy_posting_url_dataField">
     <div class="col-sm-6">
         <select name="posting_url_dataField_name[]" class="form-control selectize">
             <optgroup label="Data Fields">
-                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
+                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
                     $data_field_set = $dataField->getDataFieldSet();
-                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Gun\DataFieldSet) { $value = $value->toArray(); }});
+                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\DataFieldSet) { $value = $value->toArray(); }});
                 ?>
-                    <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                    <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                         <option value="<?php echo $dataField->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $dataField->getName(), 'key_name' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'data_field_set' => $data_field_set, 'request_names' => array_merge(array($dataField->getKeyName(), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                     <?php } ?>
                 <?php } ?>
             </optgroup>
             <optgroup label="Tracking">
-                <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
+                <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
                         $data_field_set = $dataField->getDataFieldSet();
-                        array_walk($data_field_set, function(&$value) { if ($value instanceof \Gun\DataFieldSet) { $value = $value->toArray(); }});
+                        array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\DataFieldSet) { $value = $value->toArray(); }});
                 ?>
-                    <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+                    <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
                         <option value="<?php echo $dataField->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $dataField->getName(), 'key_name' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'data_field_set' => $data_field_set, 'request_names' => array_merge(array($dataField->getKeyName(), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                     <?php } ?>
                 <?php } ?>
             </optgroup>
             <optgroup label="Events">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
+            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { 
                     $data_field_set = $dataField->getDataFieldSet();
-                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Gun\DataFieldSet) { $value = $value->toArray(); }});
+                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\DataFieldSet) { $value = $value->toArray(); }});
             ?>
-                <?php if ($dataField->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+                <?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
                     <option value="<?php echo $dataField->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $dataField->getName(), 'key_name' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'data_field_set' => $data_field_set, 'request_names' => array_merge(array($dataField->getKeyName(), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
                 <?php  } ?>
             <?php } ?>

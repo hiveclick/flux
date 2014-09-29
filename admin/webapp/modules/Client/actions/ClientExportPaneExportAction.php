@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Client;
-use Gun\ClientExport;
+use Flux\Client;
+use Flux\ClientExport;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,7 +25,7 @@ class ClientExportPaneExportAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer Gun\ClientExport */
+        /* @var $offer Flux\ClientExport */
         $client_export = new ClientExport();
         $client_export->populate($_REQUEST);
         $client_export->query();

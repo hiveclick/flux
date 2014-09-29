@@ -9,7 +9,7 @@
     </div>
     <div class="col-sm-4">
         <select name="mapDummyReqName[dummy_datafield_id][datafield_id]" class="form-control">
-            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $datafield) { ?>
+            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $datafield) { ?>
             <option value="<?php echo $datafield->retrieveValueHtml('_id'); ?>"><?php echo $datafield->retrieveValueHtml('name'); ?></option>
             <?php } ?>
         </select>
@@ -36,7 +36,7 @@
             </div>
             <div class="col-sm-4">
                 <select name="mapping[<?php echo $counter;?>][datafield_id]" class="form-control">
-                    <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $datafield) { ?>
+                    <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $datafield) { ?>
                     <option value="<?php echo $datafield->retrieveValueHtml('_id'); ?>"<?php echo $datafield->retrieveValue('_id') == $export_map['datafield_id'] ? ' selected' : ''; ?>><?php echo $datafield->retrieveValueHtml('name'); ?></option>
                     <?php } ?>
                 </select>

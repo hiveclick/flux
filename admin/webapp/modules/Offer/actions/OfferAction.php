@@ -3,15 +3,15 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Client;
-use Gun\Flow;
-use Gun\Vertical;
+use Flux\Offer;
+use Flux\Client;
+use Flux\Flow;
+use Flux\Vertical;
 use Mojavi\Logging\LoggerManager;
-use Gun\Server;
-use Gun\Campaign;
+use Flux\Server;
+use Flux\Campaign;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -31,38 +31,38 @@ class OfferAction extends BasicAction
     public function execute ()
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $offer Gun\Offer */
+            /* @var $offer Flux\Offer */
             $offer = new Offer();
             $offer->populate($_POST);
             $offer->update();
             
             $this->getContext()->getController()->redirect('/offer/offer?_id=' . $offer->getId());
         } else {
-            /* @var $offer Gun\Offer */
+            /* @var $offer Flux\Offer */
             $offer = new Offer();
             $offer->populate($_GET);
             $offer->query();
             
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
             $client->setIgnorePagination(true);
             $clients = $client->queryAll();
             
-            /* @var $flow Gun\Flow */
+            /* @var $flow Flux\Flow */
             $flow = new Flow();
             $flow->setSort('name');
             $flow->setIgnorePagination(true);
             $flows = $flow->queryAll();
             
-            /* @var $vertical Gun\Vertical */
+            /* @var $vertical Flux\Vertical */
             $vertical = new Vertical();
             $vertical->setSort('name');
             $vertical->setSord('ASC');
             $vertical->setIgnorePagination(true);
             $verticals = $vertical->queryAll();
             
-            /* @var $vertical Gun\Campaign */
+            /* @var $vertical Flux\Campaign */
             $campaign = new Campaign();
             $campaign->setSort('name');
             $campaign->setSord('ASC');

@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer \Gun\Offer */
+    /* @var $offer \Flux\Offer */
     $offer = $this->getContext()->getRequest()->getAttribute("offer", array());
 ?>
 <div class="help-block">Assign this offer to clients so they can run traffic</div>

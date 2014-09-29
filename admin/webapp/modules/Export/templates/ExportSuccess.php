@@ -1,5 +1,5 @@
 <?php
-    /* @var $export Gun\Export */
+    /* @var $export Flux\Export */
     $export = $this->getContext()->getRequest()->getAttribute("export", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
@@ -12,7 +12,7 @@
             <span class="icon-bar"></span>
         </button>
     </div>
-    <h2><a href="/export/export-search">Exports</a> <small><?php echo $export->getSplitName() ?> on <?php echo date('m/d/Y', $export->getExportDate()->sec) ?></small></h2>
+    <h2><a href="/export/export-search">Exports</a> <small>Export #<?php echo $export->getId() ?> - <?php echo $export->getSplitName() ?> on <?php echo date('m/d/Y', $export->getExportDate()->sec) ?></small></h2>
 </div>
 <div id="tabs" class="navbar-collapse collapse">
     <ul id="export_tabs" class="nav nav-pills">
@@ -25,42 +25,47 @@
     <div id="tabs-main" class="tab-pane active">
         <div class="help-block">View the progress of this export and a sample of the data in the queue</div>
         <br/>
-        <div style="width:100%;" class="clearfix small">
-            <div style="width:20%;border-Right:2px solid gray;float:left;padding:2px;">
-                Preparing
-                <?php if (is_object($export->getStartTime())) { ?>
-                    <br /><?php echo date('m/d/Y g:i a', $export->getStartTime()->sec) ?>
-                <?php } ?>
-            </div>
-            <div class="text-center" style="width:30%;border-Right:2px solid gray;float:left;padding:2px;">
-                Finding Records
-                <?php if ($export->getFindingRecordsTime() > 0) { ?>
-                    <br /><?php echo number_format($export->getFindingRecordsTime(), 2, null, ',') ?> seconds
-                <?php } ?>
-            </div>
-            <div class="text-center" style="width:40%;border-Right:2px solid gray;float:left;padding:2px;">
-                Sending
-                <?php if ($export->getSendingRecordsTime() > 0) { ?>
-                    <br /><?php echo number_format($export->getSendingRecordsTime(), 2, null, ',') ?> seconds
-                <?php } ?>
-            </div>
-            <div class="text-right" style="width:10%;float:left;padding:2px;">
-                Finished
-                <?php if (is_object($export->getEndTime())) { ?>
-                    <br /><?php echo date('m/d/Y g:i a', $export->getEndTime()->sec) ?>
-                <?php } ?>
-            </div>
-        </div>
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo number_format($export->getPercentComplete(), 0) ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo number_format($export->getPercentComplete(),0) ?>%;"></div>
-        </div>
-        
+        <div class="well">
+	        <div style="width:100%;" class="clearfix small">
+	            <div style="width:20%;border-Right:2px solid gray;float:left;padding:2px;">
+	                Preparing
+	                <?php if (is_object($export->getStartTime())) { ?>
+	                    <br /><?php echo date('m/d/Y g:i a', $export->getStartTime()->sec) ?>
+	                <?php } ?>
+	            </div>
+	            <div class="text-center" style="width:30%;border-Right:2px solid gray;float:left;padding:2px;">
+	                Finding Records
+	                <?php if ($export->getFindingRecordsTime() > 0) { ?>
+	                    <br /><?php echo number_format($export->getFindingRecordsTime(), 2, null, ',') ?> seconds
+	                <?php } ?>
+	            </div>
+	            <div class="text-center" style="width:30%;border-Right:2px solid gray;float:left;padding:2px;">
+	                Sending
+	                <?php if ($export->getSendingRecordsTime() > 0) { ?>
+	                    <br /><?php echo number_format($export->getSendingRecordsTime(), 2, null, ',') ?> seconds
+	                <?php } ?>
+	            </div>
+	            <div class="text-right" style="width:20%;float:left;padding:2px;">
+	                Finished
+	                <?php if (is_object($export->getEndTime())) { ?>
+	                    <br /><?php echo date('m/d/Y g:i a', $export->getEndTime()->sec) ?>
+	                <?php } ?>
+	            </div>
+	        </div>
+	        <div class="progress">
+	            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo number_format($export->getPercentComplete(), 0) ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo number_format($export->getPercentComplete(),0) ?>%;"></div>
+	        </div>
+	    </div>
        
         <h2><?php echo number_format($export->getNumRecords(), 0, null, ',') ?> records</h2>
+        <div class="help-block"><?php echo $export->getName() ?></div>
         Split: <a href="/export/split?_id=<?php echo $export->getSplitId() ?>"><?php echo $export->getSplitName() ?></a><p />
         Client: <a href="/client/client?_id=<?php echo $export->getClientId() ?>"><?php echo $export->getClientName() ?></a>
         <p />
         Created: <?php echo date('m/d/Y g:i a', $export->getCreated()->sec) ?><p />
+        <p />
+        Records Exported: <?php echo number_format($export->getNumRecordsSuccessful(), 0, null, ',') ?> <span class="small">(<?php echo number_format((($export->getNumRecordsSuccessful() / ($export->getNumRecords() > 0 ? $export->getNumRecords() : 1))  * 100), 0) ?>%)</span><br />
+        Records Failed: <?php echo number_format($export->getNumRecordsError(), 0, null, ',') ?> <span class="small">(<?php echo number_format((($export->getNumRecordsError() / ($export->getNumRecords() > 0 ? $export->getNumRecords() : 1)) * 100), 0) ?>%)</span><br />
     </div>
     <div id="tabs-log" class="tab-pane"></div>
     <div id="tabs-spy" class="tab-pane"></div>

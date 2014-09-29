@@ -1,5 +1,5 @@
 <?php
-    /* @var $flow Gun\Flow */
+    /* @var $flow Flux\Flow */
     $flow = $this->getContext()->getRequest()->getAttribute("flow", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
@@ -71,7 +71,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="status" id="status" required placeholder="Status">
-                        <?php foreach(\Gun\Flow::retrieveStatuses() AS $status_id => $status_name) { ?>
+                        <?php foreach(\Flux\Flow::retrieveStatuses() AS $status_id => $status_name) { ?>
                         <option value="<?php echo $status_id; ?>"<?php echo $flow->retrieveValue('status') == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                         <?php } ?>
                     </select>

@@ -1,5 +1,5 @@
 <?php
-    /* @var $client \Gun\Client */
+    /* @var $client \Flux\Client */
     $client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
 <div class="help-block">Add a new user to the system that can login and manage offers on this client</div>

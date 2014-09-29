@@ -1,5 +1,5 @@
 <?php
-    /* @var $domain_group Gun\DomainGroup */
+    /* @var $domain_group Flux\DomainGroup */
     $domain_group = $this->getContext()->getRequest()->getAttribute("domain_group", array());
 ?>
 <div id="header">
@@ -27,7 +27,7 @@
         <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
         <div class="col-sm-10">
             <select class="form-control" name="status" id="status" required placeholder="Status">
-                <?php foreach(\Gun\DomainGroup::retrieveStatuses() AS $status_id => $status_name) { ?>
+                <?php foreach(\Flux\DomainGroup::retrieveStatuses() AS $status_id => $status_name) { ?>
                 <option value="<?php echo $status_id; ?>"<?php echo $domain_group->getStatus() == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                 <?php } ?>
             </select>

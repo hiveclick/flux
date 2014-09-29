@@ -3,11 +3,12 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Campaign;
-use Gun\Export;
+use Flux\Offer;
+use Flux\Campaign;
+use Flux\Export;
+use Flux\ExportQueue;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,12 +27,17 @@ class ExportPaneSpyAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer Gun\Export */
+        /* @var $offer Flux\Export */
         $export = new Export();
         $export->populate($_REQUEST);
         $export->query();
         
+        /* @var $offer Flux\ExportQueue */
+        $export_queue = new ExportQueue($export->getId());
+        $export_queue->populate($_REQUEST);
+        
         $this->getContext()->getRequest()->setAttribute("export", $export);
+        $this->getContext()->getRequest()->setAttribute("export_queue", $export_queue);
          
         return View::SUCCESS;
     }

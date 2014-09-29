@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Lead;
-use Gun\LeadPage;
+use Flux\Lead;
+use Flux\LeadPage;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,7 +25,7 @@ class LeadPanePagesAction extends BasicAction
      */
     public function execute ()
     {
-        /* @var $offer \Gun\Lead */
+        /* @var $offer \Flux\Lead */
         $lead = new Lead();
         $lead->populate($_REQUEST);
         $lead->query();

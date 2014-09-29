@@ -1,5 +1,5 @@
 <?php
-    /* @var $user Gun\User */
+    /* @var $user Flux\User */
     $user = $this->getContext()->getRequest()->getAttribute("user", array());
 ?>
 <div id="header">
@@ -36,7 +36,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="type">Timezone</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="timezone" id="timezone" required placeholder="Timezone">
-                        <?php foreach(\Gun\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
+                        <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                         <option value="<?php echo $timezone_id; ?>"<?php echo $user->getTimezone() == $timezone_id ? ' selected="selected"' : ''; ?>><?php echo $timezone_string; ?></option>
                         <?php } ?>
                     </select>

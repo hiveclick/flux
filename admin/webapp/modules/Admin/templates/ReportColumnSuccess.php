@@ -1,5 +1,5 @@
 <?php
-    /* @var $report_column Gun\ReportColumn */
+    /* @var $report_column Flux\ReportColumn */
     $report_column = $this->getContext()->getRequest()->getAttribute("report_column", array());
     $report_columns = $this->getContext()->getRequest()->getAttribute("report_columns", array());
 ?>
@@ -37,7 +37,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="status" id="status" required placeholder="Status">
-                        <?php foreach(\Gun\ReportColumn::retrieveStatuses() AS $status_id => $status_name) { ?>
+                        <?php foreach(\Flux\ReportColumn::retrieveStatuses() AS $status_id => $status_name) { ?>
                         <option value="<?php echo $status_id; ?>"<?php echo $report_column->retrieveValue('status') == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                         <?php } ?>
                     </select>
@@ -48,7 +48,7 @@
                 <label class="col-sm-2 control-label hidden-xs" for="type">Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="column_type" id="column_type" required placeholder="Type">
-                        <?php foreach(\Gun\ReportColumn::retrieveColumnTypes() AS $type_id => $type_name) { ?>
+                        <?php foreach(\Flux\ReportColumn::retrieveColumnTypes() AS $type_id => $type_name) { ?>
                         <option value="<?php echo $type_id; ?>"<?php echo $report_column->getColumnType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
                         <?php } ?>
                     </select>
@@ -59,19 +59,19 @@
                 <label class="col-sm-2 control-label hidden-xs" for="format_type">Format Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="format_type" id="format_type" required placeholder="Format Type">
-                        <?php foreach(\Gun\ReportColumn::retrieveFormatTypes() AS $format_type_id => $format_type_name) { ?>
+                        <?php foreach(\Flux\ReportColumn::retrieveFormatTypes() AS $format_type_id => $format_type_name) { ?>
                         <option value="<?php echo $format_type_id; ?>"<?php echo $report_column->retrieveValue('format_type') == $format_type_id ? ' selected' : ''; ?>><?php echo $format_type_name; ?></option>
                         <?php } ?>
                     </select>
                 </div>
             </div>
 
-            <div id="parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>" class="<?php echo $report_column->getColumnType() == \Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ? "" : "hidden" ?>">
+            <div id="parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>" class="<?php echo $report_column->getColumnType() == \Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ? "" : "hidden" ?>">
                 <div class="form-group">
                     <label class="col-sm-2 control-label hidden-xs" for="sum_type">Sum Type</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="sum_type" id="sum_type" required placeholder="Sum Type">
-                            <?php foreach(\Gun\ReportColumn::retrieveSumTypes() AS $sum_type_id => $sum_type_name) { ?>
+                            <?php foreach(\Flux\ReportColumn::retrieveSumTypes() AS $sum_type_id => $sum_type_name) { ?>
                             <option value="<?php echo $sum_type_id; ?>"<?php echo $report_column->retrieveValue('sum_type') == $sum_type_id ? ' selected' : ''; ?>><?php echo $sum_type_name; ?></option>
                             <?php } ?>
                         </select>
@@ -82,19 +82,19 @@
                     <label class="col-sm-2 control-label hidden-xs" for="parameter">Data Fields</label>
                     <div class="col-sm-10">
                         <select class="form-control selectize" multiple name="parameters[]" id="parameter_datafield" required placeholder="Data Fields">
-                            <?php foreach(\Gun\DataField::retrieveActiveDataFields() AS $activeDataField) { ?>
+                            <?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $activeDataField) { ?>
                                 <option value="<?php echo $activeDataField->retrieveValueHtml('_id'); ?>"<?php echo in_array($activeDataField->retrieveValue('_id'), $report_column->getParameters()) ? ' selected' : ''; ?>><?php echo $activeDataField->retrieveValueHtml('name'); ?></option>
                             <?php } ?>
                         </select>
                     </div>
                 </div>
             </div>
-            <div id="parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>" class="<?php echo $report_column->getColumnType() == \Gun\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ? "" : "hidden" ?>">
+            <div id="parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>" class="<?php echo $report_column->getColumnType() == \Flux\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ? "" : "hidden" ?>">
                 <div class="form-group">
                     <label class="col-sm-2 control-label hidden-xs" for="operator_type">Operator Type</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="operator_type" id="operator_type" required placeholder="Operator Type">
-                            <?php foreach(\Gun\ReportColumn::retrieveOperatorTypes() AS $operator_type_id => $operator_type_name) { ?>
+                            <?php foreach(\Flux\ReportColumn::retrieveOperatorTypes() AS $operator_type_id => $operator_type_name) { ?>
                             <option value="<?php echo $operator_type_id; ?>"<?php echo $report_column->retrieveValue('operator_type') == $operator_type_id ? ' selected' : ''; ?>><?php echo $operator_type_name; ?></option>
                             <?php } ?>
                         </select>
@@ -143,12 +143,12 @@ $(document).ready(function() {
     });
 
     $('#column_type').on('change', function() {
-        if ($('#column_type').val() == '<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>') {
-            $('#parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>').removeClass('hidden');
-            $('#parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>').addClass('hidden');
+        if ($('#column_type').val() == '<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>') {
+            $('#parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>').removeClass('hidden');
+            $('#parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>').addClass('hidden');
         } else {
-        	$('#parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>').addClass('hidden');
-            $('#parameters_<?php echo \Gun\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>').removeClass('hidden');
+        	$('#parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_CALCULATION ?>').addClass('hidden');
+            $('#parameters_<?php echo \Flux\ReportColumn::REPORT_COLUMN_TYPE_GROUP_DATAFIELD ?>').removeClass('hidden');
         }
     });
 

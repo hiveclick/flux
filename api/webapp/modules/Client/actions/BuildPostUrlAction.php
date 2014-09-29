@@ -3,7 +3,7 @@ use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,10 +26,10 @@ class BuildPostUrlAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Client
+     * @return \Flux\Client
      */
     function getInputForm() {
-        return new \Gun\ClientExport();
+        return new \Flux\ClientExport();
     }
 
     /**
@@ -43,8 +43,8 @@ class BuildPostUrlAction extends BasicRestAction
         $qs = substr($input_form->getPostUrl(), strpos($input_form->getPostUrl(), '?') + 1);
         parse_str($qs, $params);
 
-        /* @var $data_field \Gun\DataField */
-        $data_field = new \Gun\DataField();
+        /* @var $data_field \Flux\DataField */
+        $data_field = new \Flux\DataField();
         $data_field->setIgnorePagination(true);
         $data_fields = $data_field->queryAll();
         foreach ($params as $key => $param) {

@@ -1,5 +1,5 @@
 <?php
-    /* @var $client_export_map \Gun\ClientExportMap */
+    /* @var $client_export_map \Flux\ClientExportMap */
     $client_export_map = $this->getContext()->getRequest()->getAttribute("client_export_map", array());
 ?>
 <div class="modal-header">
@@ -16,7 +16,7 @@
             /**<br />
             &nbsp;* Custom mapping function<br />
             &nbsp;* $value - Value from mapping<br />
-            &nbsp;* $lead - \Gun\Lead object<br />
+            &nbsp;* $lead - \Flux\Lead object<br />
             &nbsp;*/<br />
             </span>
             <strong>
@@ -40,7 +40,7 @@ $(document).ready(function() {
     	var position = $('#client_export_map_modal_column_id').val();
     	$('#mapping_func-' + position).val($('#client_export_map_modal_mapping_func').val());
     	$('.map_options-' + position).attr('href', '/client/client-export-pane-map-options-modal?' + $(this).serialize());
-    	if (window.btoa($('#client_export_map_modal_mapping_func').val()) == '<?php echo base64_encode(\Gun\ClientExportMap::getDefaultMappingFunc()) ?>' || $('#client_export_map_modal_mapping_func').val() == '') {
+    	if (window.btoa($('#client_export_map_modal_mapping_func').val()) == '<?php echo base64_encode(\Flux\ClientExportMap::getDefaultMappingFunc()) ?>' || $('#client_export_map_modal_mapping_func').val() == '') {
     		$('.map_options-' + position).removeClass('btn-warning').addClass('btn-info').text('Options');
     		$('.map_alert-' + position).hide();
     	} else {

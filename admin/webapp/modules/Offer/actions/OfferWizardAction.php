@@ -3,12 +3,12 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Offer;
-use Gun\Client;
-use Gun\Flow;
-use Gun\Vertical;
+use Flux\Offer;
+use Flux\Client;
+use Flux\Flow;
+use Flux\Vertical;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -29,7 +29,7 @@ class OfferWizardAction extends BasicAction
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
             try {
-                /* @var $offer Gun\Offer */
+                /* @var $offer Flux\Offer */
                 $offer = new Offer();
                 $offer->populate($_POST);
                 $offer->insert();
@@ -41,23 +41,24 @@ class OfferWizardAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("offer", $offer);
             return View::SUCCESS;
         } else {
-            /* @var $offer Gun\Offer */
+            /* @var $offer Flux\Offer */
             $offer = new Offer();
             $offer->populate($_GET);
 
-            /* @var $client Gun\Client */
+            /* @var $client Flux\Client */
             $client = new Client();
             $client->setSort('name');
+            $client->setSord('ASC');
             $client->setIgnorePagination(true);
             $clients = $client->queryAll();
 
-            /* @var $flow Gun\Flow */
+            /* @var $flow Flux\Flow */
             $flow = new Flow();
             $flow->setSort('name');
             $flow->setIgnorePagination(true);
             $flows = $flow->queryAll();
 
-            /* @var $vertical Gun\Vertical */
+            /* @var $vertical Flux\Vertical */
             $vertical = new Vertical();
             $vertical->setSort('name');
             $vertical->setSord('ASC');

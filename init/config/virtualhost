@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-    DocumentRoot /home/gun/admin/docroot/
-    ServerName gun.local
+    DocumentRoot /home/flux/admin/docroot/
+    ServerName www.flux.local
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !/$
@@ -9,11 +9,11 @@
     RewriteRule ^/([^.]+)\.(.*)$ /index.php?module=Default&action=$1 [L,QSA]
     RewriteRule ^/([^.]+)$ /index.php?module=Default&action=$1 [L,QSA]
 
-    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" gun
-    CustomLog /var/log/httpd/gun.access.log gun
-    ErrorLog /var/log/httpd/gun.error.log
+    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" flux
+    CustomLog /var/log/httpd/flux.access.log flux
+    ErrorLog /var/log/httpd/flux.error.log
 
-    <Directory "/home/gun/admin/docroot/">
+    <Directory "/home/flux/admin/docroot/">
         Options FollowSymLinks
         AllowOverride None
         Order allow,deny
@@ -23,19 +23,19 @@
 </VirtualHost>
 
 <VirtualHost *:80>
-    DocumentRoot /home/gun/api/docroot
-    ServerName api.gun.local
+    DocumentRoot /home/flux/api/docroot
+    ServerName api.flux.local
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !/$
     RewriteRule ^/([^.]+)/([^.]+)$ /index.php?module=$1&action=$2 [L,QSA]
     RewriteRule ^/([^.]+)$ /index.php?module=Default&action=$1 [L,QSA]
 
-    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" gun
-    CustomLog /var/log/httpd/api.gun.access.log gun
-    ErrorLog /var/log/httpd/api.gun.error.log
+    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" flux
+    CustomLog /var/log/httpd/api.flux.access.log flux
+    ErrorLog /var/log/httpd/api.flux.error.log
 
-    <Directory /home/gun/api/docroot>
+    <Directory /home/flux/api/docroot>
         Options FollowSymLinks
         AllowOverride None
         Order allow,deny

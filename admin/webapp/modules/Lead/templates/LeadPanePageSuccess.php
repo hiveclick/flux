@@ -1,5 +1,5 @@
 <?php
-	/* @var $lead_page \Gun\LeadPage */
+	/* @var $lead_page \Flux\LeadPage */
 	$lead_page = $this->getContext()->getRequest()->getAttribute('lead_page', array());
 	if (is_array($lead_page->getCookie())) {
 	   $cookies = $lead_page->getCookie();

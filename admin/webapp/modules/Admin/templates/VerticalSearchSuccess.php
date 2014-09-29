@@ -1,5 +1,5 @@
 <?php
-    /* @var $vertical \Gun\Vertical */
+    /* @var $vertical \Flux\Vertical */
     $vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
 ?>
 <div id="header">

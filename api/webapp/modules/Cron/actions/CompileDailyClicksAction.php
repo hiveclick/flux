@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -8,8 +8,8 @@
 use Mojavi\Action\BasicConsoleAction;
 use Mojavi\Util\StringTools;
 use Mojavi\View\View;
-use Gun\Offer;
-use Gun\Campaign;
+use Flux\Offer;
+use Flux\Campaign;
 
 class CompileDailyClicksAction extends BasicConsoleAction
 {
@@ -28,7 +28,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             // Compile the number of clicks per offer
             StringTools::consoleWrite('Compiling daily clicks by offer', null, StringTools::CONSOLE_COLOR_GREEN, true);
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
-            $lead = new \Gun\Lead();
+            $lead = new \Flux\Lead();
             $criteria = array(
                 array(
                     '$match' => array(
@@ -54,7 +54,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             $results = $lead->getCollection()->aggregate($criteria);
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
-                    /* @var $offer \Gun\Offer */
+                    /* @var $offer \Flux\Offer */
                     $offer = new Offer();
                     $offer->setId((int)$result['_id']);
                     if ($offer->query() !== false) {
@@ -73,7 +73,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             // Compile the number of conversions per offer
             StringTools::consoleWrite('Compiling daily conversions by offer', null, StringTools::CONSOLE_COLOR_GREEN, true);
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
-            $lead = new \Gun\Lead();
+            $lead = new \Flux\Lead();
             $criteria = array(
             		array(
             				'$match' => array(
@@ -99,7 +99,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             $results = $lead->getCollection()->aggregate($criteria);
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
-                	/* @var $offer \Gun\Offer */
+                	/* @var $offer \Flux\Offer */
                 	$offer = new Offer();
                 	$offer->setId((int)$result['_id']);
                 	if ($offer->query() !== false) {
@@ -118,7 +118,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             // Compile the number of clicks per campaign
             StringTools::consoleWrite('Compiling daily clicks by campaign', null, StringTools::CONSOLE_COLOR_GREEN, true);
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
-            $lead = new \Gun\Lead();
+            $lead = new \Flux\Lead();
             $criteria = array(
             		array(
             				'$match' => array(
@@ -145,7 +145,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
-                	/* @var $campaign \Gun\Campaign */
+                	/* @var $campaign \Flux\Campaign */
                 	$campaign = new Campaign();
                 	$campaign->setId($result['_id']);
                 	if ($campaign->query() !== false) {
@@ -163,7 +163,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             // Compile the number of conversions per campaign
             StringTools::consoleWrite('Compiling daily conversions by campaign', null, StringTools::CONSOLE_COLOR_GREEN, true);
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
-            $lead = new \Gun\Lead();
+            $lead = new \Flux\Lead();
             $criteria = array(
             		array(
             				'$match' => array(
@@ -189,7 +189,7 @@ class CompileDailyClicksAction extends BasicConsoleAction
             $results = $lead->getCollection()->aggregate($criteria);      
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
-                	/* @var $campaign \Gun\Campaign */
+                	/* @var $campaign \Flux\Campaign */
                 	$campaign = new Campaign();
                 	$campaign->setId($result['_id']);
                 	if ($campaign->query() !== false) {

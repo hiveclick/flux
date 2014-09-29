@@ -1,5 +1,5 @@
 <?php
-    /* @var $split \Gun\Export */
+    /* @var $split \Flux\Export */
     $split = $this->getContext()->getRequest()->getAttribute("split", array());
     $offers = $this->getContext()->getRequest()->getAttribute("offers", array());
     $datafields = $this->getContext()->getRequest()->getAttribute("datafields", array());
@@ -40,11 +40,11 @@
                         <div class="">
                             <select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="No Fields">
                                 <?php foreach($datafields AS $datafield) { ?>
-                                    <?php if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                                    <?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
                                         <option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-                                    <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+                                    <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
                                         <option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-                                    <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+                                    <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
                                         <option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
                                     <?php } ?>
                                 <?php } ?>
@@ -56,12 +56,12 @@
                         <div class="">
                             <select class="form-control selectize" name="column_id[]" id="column_id" multiple placeholder="No Columns">
                                 <?php foreach($datafields AS $datafield) { ?>
-                                    <?php if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-                                        <option value="<?php echo \Gun\DataField::DATA_FIELD_DEFAULT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-                                    <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-                                        <option value="<?php echo \Gun\DataField::DATA_FIELD_EVENT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-                                    <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-                                        <option value="<?php echo \Gun\DataField::DATA_FIELD_TRACKING_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
+                                    <?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+                                        <option value="<?php echo \Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
+                                    <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+                                        <option value="<?php echo \Flux\DataField::DATA_FIELD_EVENT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
+                                    <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+                                        <option value="<?php echo \Flux\DataField::DATA_FIELD_TRACKING_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>
@@ -125,17 +125,17 @@ $(document).ready(function() {
 	                $(td).html('<a href="/lead/lead?_id=' + cellData + '">' + cellData + '</a>');
 	            }},
 	            <?php foreach($datafields AS $datafield) { ?>
-	    	        <?php if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+	    	        <?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
 	    	        	{ name: "_d.<?php echo $datafield->getKeyName() ?>", data: "_d.<?php echo $datafield->getKeyName() ?>" },
-	    	        <?php } else if ($datafield->getStorageType() == \Gun\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+	    	        <?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
 	    	        	{ name: "_t.<?php echo $datafield->getKeyName() ?>", data: "_t.<?php echo $datafield->getKeyName() ?>", createdCell: function (td, cellData, rowData, row, col) {
-		        	        <?php if ($datafield->getKeyName() == \Gun\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
+		        	        <?php if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
 		        	        	if (cellData.name) {
 		                    		$(td).html('<a href="/client/client?_id=' + cellData._id + '">' + cellData.name + '</a>');
 		        	        	} else {
 									$(td).html('<em class="text-muted">-- not set --</em>');
 		        	        	}
-		        	        <?php } else if ($datafield->getKeyName() == \Gun\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
+		        	        <?php } else if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
 		        	        	if (cellData.name) {
 		        	        		$(td).html('<a href="/offer/offer?_id=' + cellData._id + '">' + cellData.name + '</a>');
 		        	        	} else {
@@ -151,7 +151,7 @@ $(document).ready(function() {
 		        	        $.each(row._e, function(i, item) {
 		        	            if (item.n == '<?php echo $datafield->getKeyName() ?>') {
 		        	                // This is our event
-		        	                <?php if ($datafield->getFieldType() == \Gun\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
+		        	                <?php if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
 		        	                	ret_val = moment.unix(item.t.sec).calendar();
 		        	                <?php } else { ?>
 		        	                	ret_val = item.v;

@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -9,7 +9,7 @@ declare(ticks=1);
 
 use Mojavi\Action\BasicConsoleAction;
 use Mojavi\Form\DaemonForm;
-use Gun\Daemon;
+use Flux\Daemon;
 use Mojavi\Util\StringTools;
 use Mojavi\View\View;
 

@@ -3,7 +3,7 @@ use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -26,18 +26,18 @@ class ClientExportSchedulingAction extends BasicRestAction
 
     /**
      * Returns the input form to use for this rest action
-     * @return \Gun\Offer
+     * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Gun\ClientExport();
+        return new \Flux\ClientExport();
     }
     
     /**
      * Executes a PUT request
      */
     function executePut($input_form) {
-        /* @var $export_form \Gun\ClientExport */
-        $export_form = new \Gun\ClientExport();
+        /* @var $export_form \Flux\ClientExport */
+        $export_form = new \Flux\ClientExport();
         $export_form->setId($input_form->getId());
         $export_form->flushSchedule();
         

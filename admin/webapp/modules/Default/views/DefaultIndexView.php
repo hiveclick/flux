@@ -1,6 +1,6 @@
 <?php
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -25,9 +25,9 @@ class DefaultIndexView extends BasicView
         // set our template
 
         // set the title
-        $this->setTitle('Gun');
+        $this->setTitle('Flux');
 
-        $this->setDecoratorTemplate(MO_TEMPLATE_DIR . "/index2.shell.php");
+        $this->setDecoratorTemplate(MO_TEMPLATE_DIR . "/index.shell.php");
 
     }
 

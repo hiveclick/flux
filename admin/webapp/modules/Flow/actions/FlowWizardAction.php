@@ -3,10 +3,10 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Gun\Flow;
-use Gun\Offer;
+use Flux\Flow;
+use Flux\Offer;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Gun package.                                      |
+// | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
@@ -27,7 +27,7 @@ class FlowWizardAction extends BasicAction
     {
         if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
             try {
-                /* @var $flow Gun\Flow */
+                /* @var $flow Flux\Flow */
                 $flow = new Flow();
                 $flow->populate($_POST);
                 $flow->insert();
@@ -38,7 +38,7 @@ class FlowWizardAction extends BasicAction
             $this->getContext()->getRequest()->setAttribute("flow", $flow);
             return View::SUCCESS;
         } else {
-            /* @var $flow Gun\Flow */
+            /* @var $flow Flux\Flow */
             $flow = new Flow();
             $flow->populate($_GET);
             

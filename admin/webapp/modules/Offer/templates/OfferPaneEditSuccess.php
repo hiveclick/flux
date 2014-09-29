@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer Gun\Offer */
+    /* @var $offer Flux\Offer */
     $offer = $this->getContext()->getRequest()->getAttribute("offer", array());
     $clients = $this->getContext()->getRequest()->getAttribute("clients", array());
     $flows = $this->getContext()->getRequest()->getAttribute("flows", array());
@@ -32,7 +32,7 @@
         <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
         <div class="col-sm-10">
             <select class="form-control selectize" name="status" id="status" required placeholder="Status">
-                <?php foreach(\Gun\Offer::retrieveStatuses() AS $status_id => $status_name) { ?>
+                <?php foreach(\Flux\Offer::retrieveStatuses() AS $status_id => $status_name) { ?>
                 <option value="<?php echo $status_id; ?>"<?php echo $offer->getStatus() == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                 <?php } ?>
             </select>
@@ -75,69 +75,49 @@
         <label class="col-sm-2 control-label hidden-xs" for="redirect_type">Redirect Type</label>
         <div class="col-sm-10">
             <select class="form-control selectize" name="redirect_type" id="redirect_type" required placeholder="Redirect Type">
-                <?php foreach(\Gun\Offer::retrieveRedirectTypes() AS $redirect_type_id => $redirect_type_name) { ?>
+                <?php foreach(\Flux\Offer::retrieveRedirectTypes() AS $redirect_type_id => $redirect_type_name) { ?>
                 <option value="<?php echo $redirect_type_id; ?>"<?php echo $offer->getRedirectType() == $redirect_type_id ? ' selected' : ''; ?>><?php echo $redirect_type_name; ?></option>
-                <?php } ?>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group"  id="redirect_url_form_group">
-        <label class="col-sm-2 control-label hidden-xs" for="redirect_url">Redirect URL</label>
-        <div class="col-sm-10">
-            <div class="input-group">
-                <input type="text" id="redirect_url" name="redirect_url" class="form-control" placeholder="Redirect URL" value="<?php echo $offer->getRedirectUrl() ?>" />
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dataFieldModal">
-                        <span class="glyphicon glyphicon-info-sign"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group" id="ref_flow_form_group">
-        <label class="col-sm-2 control-label hidden-xs" for="flow_id">Redirect Flow</label>
-        <div class="col-sm-10">
-            <select class="form-control" name="flow_id" id="flow_id" placeholder="Redirect Flow">
-                <?php foreach ($flows AS $flow) { ?>
-                <option value="<?php echo $flow->getId(); ?>"<?php echo $offer->getFlowId() == $flow->getId() ? ' selected' : ''; ?>><?php echo $flow->getName() ?> (<?php echo $flow->getId() ?>)</option>
                 <?php } ?>
             </select>
         </div>
     </div>
     
     <hr />
-    
-    <div class="alert alert-info">
-        Use these settings to setup this offer on the remote server.  These settings should be unique for this offer so that tracking works
-    </div>
-    
-    <div class="form-group" id="domain_name_form_group">
-        <label class="col-sm-2 control-label hidden-xs" for="folder_name">Domain Name</label>
-        <div class="col-sm-10">
-            <input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain Name" value="<?php echo $offer->getDomainName() ?>" />
-        </div>
-    </div>
-
-    <div class="form-group" id="folder_name_form_group">
-        <label class="col-sm-2 control-label hidden-xs" for="folder_name">Folder Name</label>
-        <div class="col-sm-10">
-            <input type="text" id="folder_name" name="folder_name" class="form-control" placeholder="Folder Name (v1, v2, etc)" value="<?php echo $offer->getFolderName() ?>" />
-        </div>
-    </div>
-    
-    <div class="form-group" id="docroot_dir_form_group">
-        <label class="col-sm-2 control-label hidden-xs" for="docroot_dir">Document Root</label>
-        <div class="col-sm-10">
-            <div class="input-group">
-                <input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document Root Folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
-                <div class="input-group-btn">
-                    <a type="button" class="btn btn-info" href="/offer/offer-pane-push-to-server?_id=<?php echo $offer->getId() ?>" data-toggle="modal" data-target="#pushToServerModal">push to server</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">
+	    <div class="alert alert-info">
+	        Use these settings to setup this offer on the remote server.  These settings should be unique for this offer so that tracking works
+	    </div>
+	    
+	    <div class="form-group" id="domain_name_form_group">
+	        <label class="col-sm-2 control-label hidden-xs" for="folder_name">Domain Name</label>
+	        <div class="col-sm-10">
+	            <input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to landing page (www.offer-domain.com)" value="<?php echo $offer->getDomainName() ?>" />
+	        </div>
+	    </div>
+	
+	    <div class="form-group" id="folder_name_form_group">
+	        <label class="col-sm-2 control-label hidden-xs" for="folder_name">Folder Name</label>
+	        <div class="col-sm-10">
+	            <input type="text" id="folder_name" name="folder_name" class="form-control" placeholder="Folder name containing offer pages (v1, v2, etc)" value="<?php echo $offer->getFolderName() ?>" />
+	        </div>
+	    </div>
+	    
+	    <div class="form-group" id="docroot_dir_form_group">
+	        <label class="col-sm-2 control-label hidden-xs" for="docroot_dir">Document Root</label>
+	        <div class="col-sm-10">
+	            <div class="input-group">
+	                <input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
+	                <div class="input-group-btn">
+	                    <a type="button" class="btn btn-info" href="/offer/offer-pane-push-to-server?_id=<?php echo $offer->getId() ?>" data-toggle="modal" data-target="#pushToServerModal">push to server</a>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div id="redirect_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? '': 'display:none;' ?>">
+	
+	</div>
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
@@ -162,18 +142,19 @@ $(document).ready(function() {
     $('#pushToServerModal').on('shown.bs.modal', function(e) {
         $('#modal_domain_name').val($('#domain_name').val());
         $('#modal_docroot_dir').val($('#docroot_dir').val());
+        $('#modal_folder_name').val($('#folder_name').val());
     });
 
     $('#redirect_type').on('change', function() {
-        if($(this).val() == <?php echo json_encode(\Gun\Offer::REDIRECT_TYPE_OFFER); ?>) {
-            $('#redirect_url_form_group').show();
-            $('#ref_flow_form_group').hide();
-        } else if($(this).val() == <?php echo json_encode(\Gun\Offer::REDIRECT_TYPE_FLOW); ?>) {
-            $('#redirect_url_form_group').hide();
-            $('#ref_flow_form_group').show();
+        if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_HOSTED); ?>) {
+            $('#redirect_form_group').show();
+            $('#hosted_form_group').hide();
+        } else if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_REDIRECT); ?>) {
+            $('#redirect_form_group').hide();
+            $('#hosted_form_group').show();
         } else {
-            $('#redirect_url_form_group').hide();
-            $('#ref_flow_form_group').hide();
+            $('#redirect_form_group').hide();
+            $('#hosted_form_group').hide();
         }
     }).trigger('change');
 
@@ -181,6 +162,7 @@ $(document).ready(function() {
         if (confirm('Are you sure you want to delete this offer and completely remove it from the system?')) {
             $.rad.del('/api', { func: '/offer/offer/<?php echo $offer->getId() ?>' }, function(data) {
                 $.rad.notify('Offer Removed', 'This offer has been removed from the system.');
+                window.location.replace('/offer/offer-search');
             });
         }
     });

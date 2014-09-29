@@ -1,5 +1,5 @@
 <?php
-    /* @var $client Gun\Client */
+    /* @var $client Flux\Client */
     $client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
 <div id="header">
@@ -20,7 +20,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="type">Client Type</label>
             <div class="col-sm-10">
                 <select class="form-control" name="type" id="type" required placeholder="Client Type">
-                    <?php foreach(\Gun\Client::retrieveClientTypes() AS $type_id => $type_name) { ?>
+                    <?php foreach(\Flux\Client::retrieveClientTypes() AS $type_id => $type_name) { ?>
                     <option value="<?php echo $type_id; ?>"<?php echo $client->getClientType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
                     <?php } ?>
                 </select>
@@ -31,7 +31,7 @@
             <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
             <div class="col-sm-10">
                 <select class="form-control" name="status" id="status" required placeholder="Status">
-                    <?php foreach(\Gun\Client::retrieveStatuses() AS $status_id => $status_name) { ?>
+                    <?php foreach(\Flux\Client::retrieveStatuses() AS $status_id => $status_name) { ?>
                     <option value="<?php echo $status_id; ?>"<?php echo $client->getStatus() == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
                     <?php } ?>
                 </select>

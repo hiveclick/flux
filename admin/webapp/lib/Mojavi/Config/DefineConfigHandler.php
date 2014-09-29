@@ -82,8 +82,8 @@ class DefineConfigHandler extends IniConfigHandler
                 $value = $this->literalize($value);
 
                 // append new data
-                $tmp    = "define('%s', %s);";
-                $data[] = sprintf($tmp, $key, $value);
+                $tmp    = "if (!defined('%s')) { define('%s', %s); }";
+                $data[] = sprintf($tmp, $key, $key, $value);
 
             }
 

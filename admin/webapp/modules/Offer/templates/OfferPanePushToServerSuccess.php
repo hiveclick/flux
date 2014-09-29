@@ -1,5 +1,5 @@
 <?php
-    /* @var $offer \Gun\Offer */
+    /* @var $offer \Flux\Offer */
     $offer = $this->getContext()->getRequest()->getAttribute('offer');
     $servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 ?>
@@ -10,6 +10,7 @@
 <form class="form-horizontal" id="offer_server_form" name="offer_server_form" method="POST" action="/api" autocomplete="off">
     <input type="hidden" name="func" value="/Offer/PushToServer" />
     <input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
+    <input type="hidden" id="force_overwrite" name="force_overwrite" value="0" />
     <div class="modal-body">
         <div class="help-block col-md-12">
             Select a server to connect with and create this offer on:
@@ -26,10 +27,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="docroot_dir">Folder</label>
+                <label class="col-sm-2 control-label" for="docroot_dir">Document Root</label>
                 <div class="col-sm-10">
                     <input type="text" id="modal_docroot_dir" name="docroot_dir" class="form-control" value="" placeholder="Docroot Dir (/var/www/sites/...)" />
-                    <small class="help-block">Specifies the folder on the server where this offer is located</small>
+                    <small class="help-block">Specifies the root folder on the server where this offer is located</small>
                 </div>
             </div>
             <div class="form-group">
@@ -45,8 +46,18 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-9">
-                    <label class="control-label" for="modal_recreate_lib_1">Recreate /lib folder</label>
-                    <small class="help-block">Pushes new changes to the frontend shared library files</small>
+                    <label class="control-label" for="modal_flush_offer_cache_1">Clear Cache</label>
+                    <small class="help-block">Clears all caches for this offer including pages, flows, and campaigns</small>
+                </div>
+                <div class="col-sm-2">
+                    <input type="hidden" name="flush_offer_cache" value="0" />
+                    <input type="checkbox" id="modal_flush_offer_cache_1" name="flush_offer_cache" value="1" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-9">
+                    <label class="control-label" for="modal_recreate_lib_1">Push configuration</label>
+                    <small class="help-block">Pushes new configuration settings to the frontend shared library files</small>
                 </div>
                 <div class="col-sm-2">
                     <input type="hidden" name="recreate_lib_folder" value="0" />
@@ -79,7 +90,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Create on server</button>
+        <button type="submit" class="btn btn-primary">Update server</button>
     </div>
 </form>
 
@@ -87,6 +98,11 @@
 //<!--
 $(document).ready(function() {
 	$('#server_id').selectize();
+
+	$('#modal_flush_offer_cache_1').bootstrapSwitch({
+    	onText: 'Yes',
+    	offText: 'No'
+    });
 	
 	$('#modal_recreate_lib_1').bootstrapSwitch({
     	onText: 'Yes',
@@ -105,9 +121,24 @@ $(document).ready(function() {
 
     $('#offer_server_form').form(function(data) {
         if (data.record) {
-            $.rad.notify('Offer saved to server', 'The offer\'s folder was successfully created on the server')
+            $.rad.notify('Offer saved to server', 'The offer\'s was successfully created/updated on the server')
         }
-    }, {keep_form:true});
+    }, {
+        keep_form:true,
+        onerror: function(data, textStatus, xhr) {
+            if (data.errors) {
+				$.each(data.errors, function(i, err) {
+					if (err.indexOf("API: Virtualhost file already exists and will not be overwritten") != -1) {
+						if (confirm('The virtualhost file already exists on the server.  Do you want to overwrite it?')) {
+							$('#force_overwrite').val('1');
+							$('#offer_server_form').trigger('submit');
+						}
+						return;
+					}
+				});
+            }
+        }
+    });
 });
 //-->
 </script>
