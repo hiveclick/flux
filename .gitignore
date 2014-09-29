@@ -9,7 +9,7 @@ api/webapp/cache/*
 api/webapp/lib/*
 api/webapp/lib/Zend
 api/webapp/lib/Mojavi
-api/webapp/lib/Gun
+api/webapp/lib/Flux
 admin/webapp/config.php
 admin/webapp/config/databases.ini
 admin/webapp/config/factories.ini
