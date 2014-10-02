@@ -135,7 +135,7 @@ $(document).ready(function() {
         }
     });
 	
-    $('#client_id,#export_type').selectize();
+    $('#export_class_name').selectize();
 
     $('#parse_url').click(function() {
         $.rad.get('/api', { func: '/client/build-post-url', 'post_url': $('#post_url').val() }, function(data) {

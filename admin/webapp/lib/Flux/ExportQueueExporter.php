@@ -127,6 +127,22 @@ class ExportQueueExporter extends CommonForm {
 			$this->getExport()->update();
 			StringTools::consoleWrite('  Gathering queue statistics', number_format($successful_count, 0, null, ',') . ' items successful / ' . number_format($error_count, 0, null, ',') . ' items failed', StringTools::CONSOLE_COLOR_GREEN, true);
 			
+			// Update any notes on leads
+			StringTools::consoleWrite('  Updating leads', 'Updating', StringTools::CONSOLE_COLOR_RED);
+			/* @var $export_queue_item \Flux\ExportQueue */
+			foreach ($results as $export_queue_item) {
+				if (!$export_queue_item->getIsError()) {
+					$lead = $export_queue_item->getLead();
+					$lead->addNote('Lead Successfully fulfilled to ' . $this->getExport()->getName());
+					$lead->update();
+				} else {
+					$lead = $export_queue_item->getLead();
+					$lead->addNote('Lead UNSUCCESSFULLY fulfilled to ' . $this->getExport()->getName() . ' (' . htmlentities($export_queue_item->getResponse()) . ')');
+					$lead->update();
+				}
+			}
+			StringTools::consoleWrite('  Updating leads', 'Updated', StringTools::CONSOLE_COLOR_GREEN, true);
+			
 			$this->getExport()->setIsRunning(false);
 			$this->getExport()->setIsComplete(true);
 			$this->getExport()->setPercentComplete(100);

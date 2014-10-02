@@ -2,14 +2,14 @@
 /* Required lines used to instantiate the lead and setup the php environment */
 require_once(dirname($_SERVER['DOCUMENT_ROOT']) . '/lib/init.php');
 /* If you want to clear the lead whenever this page is loaded, use the following line */
-\GunFE\Lead::getInstance()->clear();
+\FluxFE\Lead::getInstance()->clear();
 
 /* This line will output debugging information about the lead that you may find useful */
-\GunFE\Lead::debug();
+\FluxFE\Lead::debug();
 
 
 /*
- * To get the current lead and use it, use \GunFE\Lead::getInstance()
+ * To get the current lead and use it, use \FluxFE\Lead::getInstance()
  *
  * Use $lead->save(true) to save this lead to the database
  * or $lead->save() to just save the lead to the session
@@ -17,7 +17,7 @@ require_once(dirname($_SERVER['DOCUMENT_ROOT']) . '/lib/init.php');
  * You can also use $lead->getValue('firstname') to get the
  * firstname (provided you have saved it before)
  *
- * $lead = \GunFE\Lead::getInstance();
+ * $lead = \FluxFE\Lead::getInstance();
  * $lead->save(true);
  * echo $lead->getValue('firstname');
  */

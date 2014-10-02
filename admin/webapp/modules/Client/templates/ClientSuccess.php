@@ -82,13 +82,6 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label hidden-xs" for="reference_id">Reference ID</label>
-                <div class="col-sm-10">
-                    <input type="text" id="reference_id" name="reference_id" class="form-control" placeholder="Reference ID" value="<?php echo $client->getReferenceId(); ?>" />
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="email">Email</label>
                 <div class="col-sm-10">
                     <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?php echo $client->getEmail() ?>" />

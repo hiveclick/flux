@@ -204,6 +204,23 @@ class Offer extends MongoForm {
 		$this->addModifiedColumn('redirect_type');
 		return $this;
 	}
+	
+	/**
+	 * Returns the redirect_url
+	 * @return string
+	 */
+	function getFormattedRedirectUrl() {
+		if ($this->getRedirectType() == self::REDIRECT_TYPE_HOSTED) {
+			$ret_val = 'http://' . $this->getDomainName() . '/';
+			if ($this->getFolderName() != '') {
+				$ret_val .= $this->getFolderName() . '/';
+			}
+			$ret_val .= '?_id=#_id#';
+			return $ret_val;
+		} else {
+			return $this->getRedirectUrl();
+		}
+	}
 
 	/**
 	 * Returns the redirect_url

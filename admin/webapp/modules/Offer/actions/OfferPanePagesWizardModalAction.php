@@ -3,16 +3,21 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Flux\Campaign;
-use Flux\Client;
 use Flux\Offer;
+use Flux\Client;
+use Flux\Flow;
+use Flux\Vertical;
+use Mojavi\Logging\LoggerManager;
+use Flux\OfferPage;
+use Flux\DataField;
+use Flux\OfferPageFlow;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
 // +----------------------------------------------------------------------------+
-class CampaignAction extends BasicAction
+class OfferPanePagesWizardModalAction extends BasicAction
 {
 
     // +-----------------------------------------------------------------------+
@@ -26,14 +31,13 @@ class CampaignAction extends BasicAction
      */
     public function execute ()
     {
-		/* @var $user Flux\Campaign */
-        $campaign = new Campaign();
-        $campaign->populate($_GET);
-        $campaign->query();
-            
-		$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
+        
+        /* @var $offer_page Flux\OfferPage */
+        $offer_page = new OfferPage();
+        $offer_page->populate($_REQUEST);
+
+        $this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
+
         return View::SUCCESS;
     }
 }
-
-?>

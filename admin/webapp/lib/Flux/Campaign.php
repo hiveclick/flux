@@ -13,6 +13,7 @@ class Campaign extends MongoForm {
 	protected $status;
 	protected $offer_id;
 	protected $client_id;
+	protected $redirect_link;
 	
 	protected $_offer_name;
 	protected $_client_name;
@@ -42,6 +43,9 @@ class Campaign extends MongoForm {
 	 * @return string
 	 */
 	function getKey() {
+		if (parent::getId() instanceof \MongoId) {
+			return parent::getId()->__toString();
+		}
 		return parent::getId();
 	}
 	
@@ -51,6 +55,43 @@ class Campaign extends MongoForm {
 	 */
 	function setKey($arg0) {
 		return parent::setId($arg0);
+	}
+	
+	/**
+	 * Returns the redirect_link
+	 * @return string
+	 */
+	function getRedirectUrl() {
+		return $this->getRedirectLink();
+	}
+	
+	/**
+	 * Sets the redirect_link
+	 * @var string
+	 */
+	function setRedirectUrl($arg0) {
+		return $this->setRedirectLink($arg0);
+	}
+	
+	/**
+	 * Returns the redirect_link
+	 * @return string
+	 */
+	function getRedirectLink() {
+		if (is_null($this->redirect_link)) {
+			$this->redirect_link = "";
+		}
+		return $this->redirect_link;
+	}
+	
+	/**
+	 * Sets the redirect_link
+	 * @var string
+	 */
+	function setRedirectLink($arg0) {
+		$this->redirect_link = $arg0;
+		$this->addModifiedColumn("redirect_link");
+		return $this;
 	}
 	
 	/**
@@ -352,6 +393,23 @@ class Campaign extends MongoForm {
 				self::CAMPAIGN_STATUS_INACTIVE => 'Inactive',
 				self::CAMPAIGN_STATUS_DELETED => 'Deleted'
 		);
+	}
+	
+	/**
+	 * Updates the campaign and possibly clears the caches
+	 * @return integer
+	 */
+	function update($criteria_array = array(), $update_array = array(), $options_array = array(), $use_set_notation = false) {
+		$ret_val = parent::update($criteria_array, $update_array, $options_array, $use_set_notation);
+		
+		// find any servers and attempte to clear the caches
+		$server = new Server();
+		$servers = $server->queryAll();
+		/* @var $server \Flux\Server */
+		foreach ($servers as $server) {
+			$server->clearCampaignCache($this);
+		}
+		return $ret_val;
 	}
 
 	/**

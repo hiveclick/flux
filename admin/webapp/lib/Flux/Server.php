@@ -672,9 +672,6 @@ class Server extends MongoForm {
 	if (!file_exists(\$docroot_folder . '/.cache/)) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
 	}
-	if (!file_exists(\$docroot_folder . '/images') && file_exists(\$root_folder . '/docroot/images')) {
-		symlink(\$root_folder . '/docroot/images', \$docroot_folder . '/images');
-	}
 	if (!file_exists(\$docroot_folder . '/img') && file_exists(\$root_folder . '/docroot/img')) {
 		symlink(\$root_folder . '/docroot/img', \$docroot_folder . '/img');
 	}
@@ -684,8 +681,13 @@ class Server extends MongoForm {
 	if (!file_exists(\$docroot_folder . '/css') && file_exists(\$root_folder . '/docroot/css')) {
 		symlink(\$root_folder . '/docroot/css', \$docroot_folder . '/css');
 	}
-	chgrp(\$root_folder . "/lib/cache", 'apache');
-	chmod(\$root_folder . "/lib/cache", 0775);
+	chgrp(\$root_folder . "/lib", "{MO_CACHE_GROUP}");
+	chmod(\$root_folder . "/lib", 0775);
+	
+	\$cmd = "chown {MO_CACHE_USER}:{MO_CACHE_GROUP} \$docroot_folder -Rf";
+	shell_exec(\$cmd);
+	\$cmd = "chmod 0775 \$docroot_folder -Rf";
+	shell_exec(\$cmd);
 EOL;
 	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
 	    $this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
@@ -729,13 +731,13 @@ EOL;
 	if (!file_exists(\$root_folder . "/docroot/css")) {
 		mkdir(\$root_folder . "/docroot/css");
 	}
-	if (!file_exists(\$root_folder . "/docroot/images")) {
-		mkdir(\$root_folder . "/docroot/images");
+	if (!file_exists(\$root_folder . "/docroot/img")) {
+		mkdir(\$root_folder . "/docroot/img");
 	}
 	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
-	if (!file_exists(\$docroot_folder . '/.cache/)) {
+	if (!file_exists(\$docroot_folder . '/.cache/')) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
 	}
 	if (!file_exists(\$docroot_folder . '/images') && file_exists(\$root_folder . '/docroot/images')) {
@@ -750,6 +752,10 @@ EOL;
 	if (!file_exists(\$docroot_folder . '/css') && file_exists(\$root_folder . '/docroot/css')) {
 		symlink(\$root_folder . '/docroot/css', \$docroot_folder . '/css');
 	}
+	\$cmd = "chown {MO_CACHE_USER}:{MO_CACHE_GROUP} \$docroot_folder -Rf";
+	shell_exec(\$cmd);
+	\$cmd = "chmod 0775 \$docroot_folder -Rf";
+	shell_exec(\$cmd);
 EOL;
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
 		$this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
@@ -779,6 +785,20 @@ EOL;
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending request to " . 'http://' . $this->getHostname() . '/admin/flush-offer-cache.json?' . http_build_query(array('_id' => $offer->getId()), '&'));
 		
 		$response = \Mojavi\Util\Ajax::sendAjax('/admin/flush-offer-cache.json', array('_id' => $offer->getId()), \Mojavi\Request\Request::POST, 'http://' . $this->getHostname());
+		if (isset($response['RESULT']) && $response['RESULT'] == 'SUCCESS') {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Clears cache entries for this offer
+	 * @return boolean
+	 */
+	function clearCampaignCache($campaign) {
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending request to " . 'http://' . $this->getHostname() . '/admin/flush-campaign-cache.json?' . http_build_query(array('_id' => $campaign->getKey()), '&'));
+		
+		$response = \Mojavi\Util\Ajax::sendAjax('/admin/flush-campaign-cache.json', array('_id' => $campaign->getKey()), \Mojavi\Request\Request::POST, 'http://' . $this->getHostname());
 		if (isset($response['RESULT']) && $response['RESULT'] == 'SUCCESS') {
 			return true;
 		}

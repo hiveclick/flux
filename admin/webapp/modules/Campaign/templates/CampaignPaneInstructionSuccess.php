@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="help-block">Use this form to generate a unique tracking link that you can use</div>
+<div class="help-block">Use this form to generate a unique tracking link that you can use in Adwords</div>
 <br />
 <form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">
     <input type="hidden" name="posting_url_client" class="form-control posting_url_change" value="<?php echo $campaign->getId() ?>">

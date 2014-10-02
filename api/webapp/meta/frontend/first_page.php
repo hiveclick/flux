@@ -24,12 +24,12 @@ This page just includes the content from pages/index.php.  This allows you to ch
 <span class="text-success">/* Required lines used to instantiate the lead and setup the php environment */</span>
 <span class="s">require_once(dirname($_SERVER['DOCUMENT_ROOT']) . '/lib/init.php');</span>
 <span class="text-success">/* This will save the lead to the session AND to the database (by passing in the [true]) */</span>
-<span class="s">\GunFE\Lead::getInstance()-&gt;save(true);</span>
+<span class="s">\FluxFE\Lead::getInstance()-&gt;save(true);</span>
 <span class="text-success">/* This line will output debugging information about the lead that you may find useful */</span>
-<span class="s">\GunFE\Lead::debug();</span>
+<span class="s">\FluxFE\Lead::debug();</span>
 <span class="text-success">/* Add redirect code here to go to the next page */</span>
 <span class="s">if (isset($_POST['btn_submit'])) {</span>
-<span class="s">    $page = 'http://www.google.com'; </span><span class="text-success">// Put the page you want to redirect to here</span>
+<span class="s">    $page = $lead->findNextPage(); </span><span class="text-success">// Finds the next page within the flow</span>
 <span class="s">    header('Location: ' . $page);</span>
 <span class="s">}</span>
 

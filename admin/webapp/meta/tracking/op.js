@@ -10,7 +10,12 @@
 	params['page'] = location.pathname.split("/").pop();
 	params['domain'] = location.hostname;
 	params['cookie'] = Base64.encode(LZString.compress(document.cookie));
-	params['folder'] = location.pathname.split("/").shift();
+	var folder_parts = location.pathname.split("/");
+	if (folder_parts[1]) {
+		params['folder'] = folder_parts[1];
+	} else {
+		params['folder'] = "";
+	}
 	params['href'] = location.href;
 		
 	pixel += ('?' + Url.buildUrl(params));

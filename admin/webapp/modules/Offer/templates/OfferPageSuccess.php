@@ -53,17 +53,36 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label hidden-xs" for="page_name">Page Name</label>
                 <div class="col-sm-10">
-                    <input type="text" id="name" name="page_name" class="form-control" required placeholder="Page Filename" value="<?php echo $offer_page->getPageName() ?>" />
+                    <input type="text" id="page_name" name="page_name" class="form-control" required placeholder="Page Filename" value="<?php echo $offer_page->getPageName() ?>" />
                 </div>
             </div>
-
+            <div id="advanced_settings_div" style="display:none;">
+            	<hr />
+	            <div class="help-block">These are advanced settings that should only be changed if you know what you are doing.</div>
+	            <p />
+	            <div class="form-group">
+	                <label class="col-sm-2 control-label hidden-xs" for="page_name">File path</label>
+	                <div class="col-sm-10">
+	                    <input type="text" id="file_path" name="file_path" class="form-control" required placeholder="Full Page path" value="<?php echo $offer_page->getFilePath() ?>" />
+	                </div>
+	            </div>
+	            <p />
+            
+	            <div class="form-group">
+	                <label class="col-sm-2 control-label hidden-xs" for="page_name">Preview Url</label>
+	                <div class="col-sm-10">
+	                    <input type="text" id="preview_url" name="preview_url" class="form-control" required placeholder="Preview Url" value="<?php echo $offer_page->getPreviewUrl() ?>" />
+	                </div>
+	            </div>
+			</div>
+			<p />
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="submit" name="__save" class="btn btn-success" value="Save" />
+                    <input type="button" id="btn_advanced" name="btn_advanced" class="btn btn-warning" value="Advanced Settings" />
                     <input type="button" id="btn_delete" name="__delete" class="btn btn-danger" value="Delete Page" />
                 </div>
             </div>
-
         </form>
     </div>
     <div id="tabs-preview" class="tab-pane"></div>
@@ -73,6 +92,11 @@
 <script>
 //<!--
 $(document).ready(function() {
+	$('#btn_advanced').click(function() {
+		$('#advanced_settings_div').slideToggle();
+	});
+
+	
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         e.preventDefault();
         var hash = this.hash;
@@ -93,6 +117,7 @@ $(document).ready(function() {
         if (confirm('Are you sure you want to delete this page and completely remove it from the system?')) {
             $.rad.del('/api', { func: '/offer/offer-page/<?php echo $offer_page->getId() ?>' }, function(data) {
                 $.rad.notify('Page Removed', 'This page has been removed from the system.');
+                location.replace('/offer/offer?_id=<?php echo $offer_page->getOfferId() ?>#tabs-pages')
             });
         }
     });

@@ -7,7 +7,12 @@ use Mojavi\Logging\LoggerManager;
 
 class GraphLeadByHour extends GoogleChart {
 	
+	const GROUP_TYPE_OFFER = 1;
+	const GROUP_TYPE_SUBID = 2;
+	
     private $offer_id_array;
+    private $campaign_id_array;
+    private $group_type;
     
 	/**
 	 * Runs the report and stores the data
@@ -17,17 +22,32 @@ class GraphLeadByHour extends GoogleChart {
 		$results = $this->queryLeads();
 		$this->addColumn('', 'Date', 'string');
 		
-		// Add columns for each offer
-		$offer_names = array();
-		foreach ($results['result'] as $item) {
-			if (!in_array($item['offer_name'], $offer_names)) {
-				$offer_names[] = $item['offer_name'];
+		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
+			// Add columns for each offer
+			$header_col_names = array();
+			foreach ($results['result'] as $item) {
+				if (!in_array($item['offer_name'], $header_col_names)) {
+					$header_col_names[] = $item['offer_name'];
+				}
 			}
-		}
-		foreach ($offer_names as $offer_name) {
-		    if (trim($offer_name) != '') {
-			     $this->addColumn('', $offer_name, 'number');
-		    }
+			foreach ($header_col_names as $header_col_name) {
+			    if (trim($header_col_name) != '') {
+				     $this->addColumn('', $header_col_name, 'number');
+			    }
+			}
+		} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
+			// Add columns for each subid
+			$header_col_names = array();
+			foreach ($results['result'] as $item) {
+				if (!in_array($item['subid'], $header_col_names)) {
+					$header_col_names[] = $item['subid'];
+				}
+			}
+			foreach ($header_col_names as $header_col_name) {
+				if (trim($header_col_name) != '') {
+					$this->addColumn('', $header_col_name, 'number');
+				}
+			}
 		}
 		
 		// Add default rows for each hour and each offer
@@ -61,8 +81,11 @@ class GraphLeadByHour extends GoogleChart {
 			if (trim($item['event_date']) != '') {
 				$result_date = new \DateTime($item['event_date'] . ":00:00", new \DateTimeZone('UTC'));
 				$result_date->setTimezone($this->getTimezone());
-				
-				$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+				if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
+					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+				} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
+					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['subid']) != '' ? $item['subid'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+				}
 			}
 		}
 	}
@@ -102,6 +125,14 @@ class GraphLeadByHour extends GoogleChart {
 				)
 		);
 		
+		if (count($this->getCampaignIdArray()) > 0) {
+			$ops[] = array(
+					'$match' => array(
+							\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '._ck._id' => array('$in' => $this->getCampaignIdArray())
+					)
+			);
+		}
+		
 		if (count($this->getOfferIdArray()) > 0) {
 		    $ops[] = array(
 		    		'$match' => array(
@@ -123,24 +154,60 @@ class GraphLeadByHour extends GoogleChart {
 			'event_offer' => '$_e.o',
 			'event_name' => '$_e.n',
 			'offer_name' => '$_t._o.name',
+			'subid' => '$_t.s1',
 			'clicks' => 1
 		));
 		
-		
-		$ops[] = array('$group' => array( 
-				'_id' => array(
-						'offer' => '$offer_name',
-						'date' => '$event_date'
-				),
-				'offer_name' => array('$max' => '$offer_name'),
-				'event_name' => array('$max' => '$event_name'),
-				'event_date' => array('$max' => '$event_date'),
-				'clicks' => array('$sum' => 1)
-			)
-		);
-				
+		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
+			$ops[] = array('$group' => array( 
+					'_id' => array(
+							'offer' => '$offer_name',
+							'date' => '$event_date'
+					),
+					'offer_name' => array('$max' => '$offer_name'),
+					'event_name' => array('$max' => '$event_name'),
+					'event_date' => array('$max' => '$event_date'),
+					'clicks' => array('$sum' => 1)
+				)
+			);
+		} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
+			$ops[] = array('$group' => array(
+					'_id' => array(
+							'subid' => '$subid',
+							'date' => '$event_date'
+					),
+					'offer_name' => array('$max' => '$offer_name'),
+					'event_name' => array('$max' => '$event_name'),
+					'event_date' => array('$max' => '$event_date'),
+					'subid' => array('$max' => '$subid'),
+					'clicks' => array('$sum' => 1)
+				)
+			);
+		}
+
 		return $lead->getCollection()->aggregate($ops);
 	}	
+	
+	/**
+	 * Returns the group_type
+	 * @return integer
+	 */
+	function getGroupType() {
+		if (is_null($this->group_type)) {
+			$this->group_type = self::GROUP_TYPE_OFFER;
+		}
+		return $this->group_type;
+	}
+	
+	/**
+	 * Sets the group_type
+	 * @var integer
+	 */
+	function setGroupType($arg0) {
+		$this->group_type = $arg0;
+		$this->addModifiedColumn("group_type");
+		return $this;
+	}
 	
 	/**
 	 * Returns the offer_id_array
@@ -169,6 +236,36 @@ class GraphLeadByHour extends GoogleChart {
 		}
 		array_walk($this->offer_id_array, function(&$value, $key) { $value = intval($value); });
 		$this->addModifiedColumn("offer_id_array");
+		return $this;
+	}
+	
+	/**
+	 * Returns the campaign_id_array
+	 * @return array
+	 */
+	function getCampaignIdArray() {
+		if (is_null($this->campaign_id_array)) {
+			$this->campaign_id_array = array();
+		}
+		return $this->campaign_id_array;
+	}
+	
+	/**
+	 * Sets the campaign_id_array
+	 * @var array
+	 */
+	function setCampaignIdArray($arg0) {
+		if (is_array($arg0)) {
+			$this->campaign_id_array = $arg0;
+		} else if (is_string($arg0)) {
+			if (strpos(",", $arg0) !== false) {
+				$this->campaign_id_array = explode(",", $arg0);
+			} else {
+				$this->campaign_id_array = array($arg0);
+			}
+		}
+		array_walk($this->campaign_id_array, function(&$value, $key) { $value = $value; });
+		$this->addModifiedColumn("campaign_id_array");
 		return $this;
 	}
 }

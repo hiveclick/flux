@@ -4,8 +4,13 @@
     $offer_pages = $this->getContext()->getRequest()->getAttribute("offer_pages", array());
 
 ?>
-<div class="help-block">Shows the pages that have been tracked or found for this offer</div>
+<div class="help-block">
+	<a class="pull-right btn btn-info" href="/offer/offer-pane-pages-wizard-modal?offer_id=<?php echo $offer->getId() ?>" data-toggle="modal" data-target="#offer_page_wizard_modal">add new page</a>
+	Shows the pages that have been tracked or found for this offer
+</div>
 <br/>
+
+<p />
 <form id="offer_page_organize" method="POST" action="/api">
     <input type="hidden" name="func" value="/offer/offer-page-organize" />
     <input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
@@ -118,6 +123,13 @@
         <?php } ?>
     </div>
 </form>
+
+<!-- Push offer to server modal -->
+<div class="modal fade" id="offer_page_wizard_modal">
+    <div class="modal-dialog">
+        <div class="modal-content"></div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
 //<!--
 $(document).ready(function() {
@@ -129,7 +141,6 @@ $(document).ready(function() {
 		if ($(this).attr('data-url') != '') {
 			if ($(this).attr('data-url').indexOf('.local') == -1) {
 				$(this).attr('src', 'http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=' + $(this).attr('data-url'));
-				//$(this).attr('src', 'http://images.websnapr.com/?size=s&key=nl9dp2uaObL6&hash=' + websnapr_hash + '&url=' + $(this).attr('data-url'));
 			} else {
 				$(this).attr('src', '/images/no_preview.png');
 			}

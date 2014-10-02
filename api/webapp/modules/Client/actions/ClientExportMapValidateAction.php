@@ -8,7 +8,7 @@ use Mojavi\Logging\LoggerManager;
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
 // +----------------------------------------------------------------------------+
-class ClientExportMapAction extends BasicRestAction
+class ClientExportMapValidateAction extends BasicRestAction
 {
 
     // +-----------------------------------------------------------------------+
@@ -29,31 +29,34 @@ class ClientExportMapAction extends BasicRestAction
      * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Flux\ClientExport();
+        return new \Flux\ClientExportMap();
     }
     
     /**
      * Executes a POST request
+     * @param $input_form \Flux\ClientExportMap
      */
     function executePost($input_form) {
-    	/* @var $export_form \Flux\ClientExport */
-    	$export_form = new \Flux\ClientExport();
-    	$export_form->setId($input_form->getId());
-    	$export_form->flushMapping();
-    
-    	return parent::executePut($input_form);
-    }
-    
-    /**
-     * Executes a PUT request
-     */
-    function executePut($input_form) {
-        /* @var $export_form \Flux\ClientExport */
-        $export_form = new \Flux\ClientExport();
-        $export_form->setId($input_form->getId());
-        $export_form->flushMapping();
-        
-        return parent::executePut($input_form);
+    	$ajax_form = new BasicAjaxForm();
+    	
+    	
+    	/* @var $export_form \Flux\ClientExportMap */
+    	$lead = new \Flux\Lead();
+    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Calling function for value " . $input_form->getDataField()->getName());
+    	try {
+    		ob_start();
+    		$input_form->callMappingFunc("", $lead);
+    		$errors = ob_get_clean();
+    		if ($errors != '') {
+    			throw new \Exception($errors);
+    		}
+    	} catch (\Exception $e) {
+    		$this->getErrors()->addError("error", $e->getMessage());
+    	}
+    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Validated value for " . $input_form->getDataField()->getName());
+    	$ajax_form->setRecord($input_form);
+    	
+    	return $ajax_form;
     }
 }
 

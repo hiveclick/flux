@@ -116,7 +116,12 @@
 	</div>
 	
 	<div id="redirect_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? '': 'display:none;' ?>">
-	
+		 <div class="form-group">
+	        <label class="col-sm-2 control-label hidden-xs" for="redirect_url">Redirect URL</label>
+	        <div class="col-sm-10">
+	        	<textarea id="redirect_url" name="redirect_url" rows="4" class="form-control" placeholder="Redirect URL"><?php echo $offer->getRedirectUrl() ?></textarea>
+	        </div>
+	    </div>
 	</div>
 
     <div class="form-group">
@@ -147,14 +152,11 @@ $(document).ready(function() {
 
     $('#redirect_type').on('change', function() {
         if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_HOSTED); ?>) {
-            $('#redirect_form_group').show();
-            $('#hosted_form_group').hide();
-        } else if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_REDIRECT); ?>) {
-            $('#redirect_form_group').hide();
             $('#hosted_form_group').show();
-        } else {
             $('#redirect_form_group').hide();
+        } else if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_REDIRECT); ?>) {
             $('#hosted_form_group').hide();
+            $('#redirect_form_group').show();
         }
     }).trigger('change');
 
