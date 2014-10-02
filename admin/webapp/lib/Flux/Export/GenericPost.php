@@ -151,7 +151,6 @@ class GenericPost extends ExportAbstract {
 		
 		while ($export_queue_items->hasNext()) {
 			$cursor_item = $export_queue_items->getNext();
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Iterating cursor");
 			$export_queue_item = new \Flux\ExportQueue();
 			$export_queue_item->populate($cursor_item);
 			$export_queue_item->setStartTime(microtime(true));
@@ -188,7 +187,6 @@ class GenericPost extends ExportAbstract {
 					
 					while ($export_queue_items->hasNext()) {
 						$cursor_item = $export_queue_items->getNext();
-						\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Iterating cursor");
 						$export_queue_item = new \Flux\ExportQueue();
 						$export_queue_item->populate($cursor_item);
 						// Prepare the cURL request

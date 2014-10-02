@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <form class="form-horizontal" id="export_map_form" name="export_map_form" method="PUT" action="/api" autocomplete="off" role="form">
+    <form class="form-horizontal" id="export_map_form" name="export_map_form" method="POST" action="/api" autocomplete="off" role="form">
         <input type="hidden" name="func" value="/client/client-export-map" />
         <input type="hidden" name="_id" value="<?php echo $client_export->getId() ?>" />
         <div id="map_groups">
