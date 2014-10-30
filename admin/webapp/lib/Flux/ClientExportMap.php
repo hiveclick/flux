@@ -126,10 +126,14 @@ class ClientExportMap extends CommonForm {
         try {
             // Define a default mapping function
             $mapping_func = function($value, $lead) { return $value; };
+            $errors = '';
             // Now overwrite the default mapping function
-            ob_start();
+            @ob_start();
             eval('$mapping_func = function ($value, $lead) {' . $this->getMappingFunc() . '};');
-            $errors = ob_get_clean();
+            if (ob_get_length() > 0) {
+            	$errors = ob_get_contents();
+            }
+            @ob_end_clean();
             if (trim($errors) != '') {
             	throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errors);
             }

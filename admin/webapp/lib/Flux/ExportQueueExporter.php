@@ -100,7 +100,6 @@ class ExportQueueExporter extends CommonForm {
 			// Update the percentage done
 			$this->getExport()->setPercentComplete(50);
 			$this->getExport()->update();
-			sleep(20);
 			if (!$queue_items->hasNext()) {
 				throw new \Exception('No records found to export, stopping');
 			}

@@ -140,17 +140,20 @@ class Pixel extends MongoForm {
                     $json_cookie = json_decode($cookie, true);
                 }
             }
+            
             if (!empty($json_cookie)) {
-                if (isset($json_cookie['_t']) && isset($json_cookie['_t']['_o']) && isset($json_cookie['_t']['_o']['_id']) && trim($json_cookie['_t']['_o']['_id']) != '') {
+                if (isset($json_cookie['_t']) && isset($json_cookie['_t']['_o']) && isset($json_cookie['_t']['_o']['_id']) && trim($json_cookie['_t']['_o']['_id']) != '' && intval(trim($json_cookie['_t']['_o']['_id'])) > 0) {
                 	$this->offer = new \Flux\Offer();
+                	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from _t._o._id: " . $json_cookie['_t']['_o']['_id']);
                 	$this->offer->setId((int)$json_cookie['_t']['_o']['_id']);
                 	$this->offer->query();
                 	if ($this->offer->getId() > 0) {
                 		$offer_found = true;
                 	}
                 }
-                if (!$offer_found && isset($json_cookie['_t']) && isset($json_cookie['_t']['_offer_id']) && trim($json_cookie['_t']['_offer_id']) != '') {
+                if (!$offer_found && isset($json_cookie['_t']) && isset($json_cookie['_t']['_offer_id']) && trim($json_cookie['_t']['_offer_id']) != '' && intval(trim($json_cookie['_t']['_offer_id'])) > 0) {
                 	$this->offer = new \Flux\Offer();
+                	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from _t._offer_id: " . $json_cookie['_t']['_offer_id']);
                 	$this->offer->setId((int)$json_cookie['_t']['_offer_id']);
                 	$this->offer->query();
                 	if ($this->offer->getId() > 0) {
@@ -161,11 +164,22 @@ class Pixel extends MongoForm {
             // Try to find the offer using the domain name and folder name
             if (!$offer_found) {
                 if ($this->getDomain() != '') {
+                	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from domain: " . $this->getDomain() . '/' . $this->getFolder());
                     $this->offer->setFolderName($this->getFolder());
                     $this->offer->setDomainName($this->getDomain());
                     $offers = $this->offer->queryAll();
-                    if (count($offers) == 1) {
+                    if (count($offers) == 0) {
+                    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from domain: " . $this->getDomain() . '/*');
+                    	$this->offer->setFolderName('');
+                    	$this->offer->setDomainName($this->getDomain());
+                    	$offers = $this->offer->queryAll();
+                    }
+                    if (count($offers) == 0) {
+                    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Cannot find offer from " . $this->getDomain() . '/' . $this->getFolder() . ' or ' . $this->getDomain() . '/*');
+                    	$offer_found = false;
+                    } else if (count($offers) == 1) {
                         // We found only one offer, so use that one
+                    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found 1 offer, using it");
                         $this->offer = array_shift($offers);
                         $offer_found = true;
                     } else {

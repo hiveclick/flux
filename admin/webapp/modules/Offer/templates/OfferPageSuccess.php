@@ -18,6 +18,7 @@
     <ul class="nav nav-pills" id="offer_tabs">
         <li class="active"><a id="tabs-a-main" href="#tabs-main" data-toggle="tab">Main</a></li>
         <li><a id="tabs-a-flow" href="#tabs-flow" data-toggle="tab" data-url="/offer/offer-page-pane-flow?_id=<?php echo $offer_page->getId() ?>">Flow</a></li>
+        <li><a id="tabs-a-path" href="#tabs-path" data-toggle="tab" data-url="/offer/offer-page-pane-path?_id=<?php echo $offer_page->getId() ?>">Path</a></li>
         <li><a id="tabs-a-edit" href="#tabs-edit" data-toggle="tab" data-url="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>">Edit HTML</a></li>
         <li><a id="tabs-a-preview" href="#tabs-preview" data-toggle="tab" data-url="/offer/offer-page-pane-preview?_id=<?php echo $offer_page->getId() ?>">Preview</a></li>
     </ul>
@@ -87,6 +88,7 @@
     </div>
     <div id="tabs-preview" class="tab-pane"></div>
     <div id="tabs-flow" class="tab-pane"></div>
+    <div id="tabs-path" class="tab-pane"></div>
     <div id="tabs-edit" class="tab-pane"></div>
 </div>
 <script>

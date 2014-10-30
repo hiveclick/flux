@@ -40,7 +40,7 @@
             </ul>
         </li>
         -->
-        <li><a id="tabs-a-report" href="#tabs-report" data-toggle="tab">Report</a></li>
+        <li><a id="tabs-a-report" href="#tabs-report" data-toggle="tab" data-url="/offer/offer-pane-report?_id=<?php echo $offer->getId() ?>">Report</a></li>
         <li><a id="tabs-a-spy" href="#tabs-spy" data-toggle="tab" data-url="/offer/offer-pane-spy?_id=<?php echo $offer->getId() ?>">Spy</a></li>
         <li><a id="tabs-a-instructions" href="#tabs-instructions" data-toggle="tab" data-url="/offer/offer-pane-instruction?_id=<?php echo $offer->getId() ?>">Instructions</a></li>
     </ul>

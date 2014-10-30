@@ -1,6 +1,6 @@
 <?php
+	/* @var $offer_page \Flux\OfferPage */
     $offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
-    $offer_pages = $this->getContext()->getRequest()->getAttribute("offer_pages", array());
 ?>
 
 <div class="help-block">Use this page to define where a user will be taken when they leave this page.  Rules are processed in order from the top.</div>

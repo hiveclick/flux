@@ -81,7 +81,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label hidden-xs" for="type">Timezone</label>
+                <label class="col-sm-2 control-label hidden-xs" for="timezone">Timezone</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="timezone" id="timezone" required placeholder="Timezone">
                         <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
@@ -112,6 +112,8 @@
 <script>
 //<!--
 $(document).ready(function() {
+	$('#status,#timezone,#type,#client_id').selectize();
+	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         e.preventDefault();
         var hash = this.hash;

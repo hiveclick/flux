@@ -17,14 +17,14 @@
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="date_range">Report Date</label>
         <div class="col-sm-5 col-xs-6">
-            <select name="date_range" class="form-control">
+            <select name="date_range" id="date_range" class="form-control">
                 <?php foreach(\Flux\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
                 <option value="<?php echo $date_range_id; ?>"<?php echo $spy_report->getDateRange() == $date_range_id ? ' selected="selected"' : ''; ?>><?php echo $date_range_name; ?></option>
                 <?php } ?>
             </select>
         </div>
         <div class="col-sm-5 col-xs-6">
-            <select name="tz_modifier" class="form-control">
+            <select name="tz_modifier" id="tz_modifier" class="form-control">
                 <?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
                     <option value="<?php echo $timezone_id; ?>"><?php echo $timezone_string; ?></option>
                 <?php } ?>
@@ -62,7 +62,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label hidden-xs" for="items_per_page">Limit</label>
         <div class="col-sm-10">
-            <select name="items_per_page" class="form-control" placeholder="Limit">
+            <select name="items_per_page" id="items_per_page" class="form-control" placeholder="Limit">
                 <option value="10">Limit 10</option>
                 <option value="100">Limit 100</option>
                 <option value="1000">Limit 1000</option>
@@ -281,6 +281,8 @@ $(document).ready(function() {
     }).change(function(value) {
             $('#column_id').trigger('update_columns');
     });
+
+    $('#tz_modifier,#date_range,#items_per_page').selectize();
 });
 //-->
 </script>

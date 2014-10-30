@@ -33,16 +33,8 @@ class OfferPagePaneFlowAction extends BasicAction
         $offer_page = new OfferPage();
         $offer_page->populate($_GET);
         $offer_page->query();
-        
-        /* @var $offer_page Flux\OfferPage */
-        $op = new OfferPage();
-        $op->populate($_GET);
-        $op->setOfferId($offer_page->getOfferId());
-        $offer_pages = $op->queryAll();
 
         $this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-        $this->getContext()->getRequest()->setAttribute("offer_pages", $offer_pages);
-
         return View::SUCCESS;
     }
 }

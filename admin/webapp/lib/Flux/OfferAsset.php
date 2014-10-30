@@ -365,4 +365,15 @@ class OfferAsset extends MongoForm {
     	return $this->offer;
     }
     
+    /**
+     * Queries multiple assets
+     * @return array
+     */
+    function queryAll(array $criteria = array(), $hydrate = true) {
+    	if ($this->getOfferId() > 0) {
+    		$criteria['offer_id'] = (int)$this->getOfferId();
+    	}
+    	return parent::queryAll($criteria, $hydrate);
+    }
+    
 }

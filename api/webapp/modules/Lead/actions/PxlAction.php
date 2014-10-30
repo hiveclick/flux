@@ -28,6 +28,7 @@ class PxlAction extends BasicRestAction
         $pixel = new Pixel();
         $pixel->populate($_REQUEST);
         if ($pixel->getPage() == '') { $pixel->setPage('index.php'); }
+        LoggerManager::error(__METHOD__ . " :: " . var_export($pixel, true));
         // Track the page name and find the offer associated with it
         if ($pixel->getOffer()->getId() > 0) {
             $offer_page = new \Flux\OfferPage();

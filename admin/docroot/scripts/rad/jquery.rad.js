@@ -477,9 +477,15 @@
 			var sticky = false;
 			var title = 'Your request has failed';
 			var message = thrownError;
+			var responseText = XMLHttpRequest.responseText;
 			var callback = false;
 			switch(XMLHttpRequest.status) {
 				case 200:
+					message = (thrownError ? thrownError : '') + '<hr />' +
+						(responseText ? responseText.substring(0, 200) : '');
+					if (window.console) {
+						console.log(responseText);
+					}
 					break;
 //				case 401:
 //					this.abortAll();
@@ -508,9 +514,7 @@
 						(thrownError ? thrownError : '');
 			}
 			
-			if (message != '0 <br />') {
-				$.rad.notify.error(title, message, {sticky: sticky});
-			}
+			$.rad.notify.error(title, message, {sticky: sticky});
 			
 			if(callback !== false) {
 				callback();

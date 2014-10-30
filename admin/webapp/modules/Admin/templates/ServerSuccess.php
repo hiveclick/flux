@@ -121,6 +121,8 @@
 <script>
 //<!--
 $(document).ready(function() {
+	$('#status').selectize();
+	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         e.preventDefault();
         var hash = this.hash;

@@ -111,7 +111,7 @@ class GenericPost extends ExportAbstract {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-		curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+		curl_setopt($ch, CURLOPT_SSLVERSION, 0);
 		curl_setopt($ch, CURLOPT_ENCODING , "gzip");
 				
 		return $ch;
