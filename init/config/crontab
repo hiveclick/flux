@@ -9,6 +9,11 @@ MAILTO=""
 0,15,30,45 * * * * root /home/flux/api/webapp/meta/crons/compile_daily_clicks.sh
 
 #
+# Check and restart the split daemon each night
+# 
+@daily root /home/flux/api/webapp/meta/crons/split_daemon.sh restart
+
+#
 # Process export queues that should run daily
 # 
 #0 17 * * * root /home/flux/api/webapp/meta/crons/export_queue.sh daily
