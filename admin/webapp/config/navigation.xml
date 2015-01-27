@@ -102,18 +102,6 @@
                 <controller>fulfillment-search</controller>
                 <class>nav-secondary</class>
             </fulfillmentsearch>
-            <spacer>
-				<label></label>
-				<module>export</module>
-				<controller>export-search</controller>
-				<class>nav-secondary</class>
-			</spacer>
-            <exportwizard>
-                <label>Add New Fulfillment</label>
-                <module>client</module>
-                <controller>fulfillment-wizard</controller>
-                <class>nav-secondary</class>
-            </exportwizard>
        </pages>
 	</export>
 	<reports>
