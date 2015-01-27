@@ -11,38 +11,38 @@ use Mojavi\Logging\LoggerManager;
 use Flux\OfferPage;
 use Flux\Server;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Flux package.                                      |
-// |                                                                            |
-// | For the full copyright and license information, please view the LICENSE    |
-// | file that was distributed with this source code.                           |
+// | This file is part of the Flux package.									  |
+// |																			|
+// | For the full copyright and license information, please view the LICENSE	|
+// | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
 class OfferPagePaneEditAction extends BasicAction
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any application/business logic for this action.
-     *
-     * @return mixed - A string containing the view name associated with this action
-     */
-    public function execute ()
-    {
-        /* @var $offer_page Flux\OfferPage */
-        $offer_page = new OfferPage();
-        $offer_page->populate($_GET);
-        $offer_page->query();
-        
-        /* @var $server Flux\Server */
-        $server = new Server();
-        $server->setIgnorePagination(true);
-        $servers = $server->queryAll();
+	/**
+	 * Execute any application/business logic for this action.
+	 *
+	 * @return mixed - A string containing the view name associated with this action
+	 */
+	public function execute ()
+	{
+		/* @var $offer_page Flux\OfferPage */
+		$offer_page = new OfferPage();
+		$offer_page->populate($_GET);
+		$offer_page->query();
+		
+		/* @var $server Flux\Server */
+		$server = new Server();
+		$server->setIgnorePagination(true);
+		$servers = $server->queryAll();
 
-        $this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-        $this->getContext()->getRequest()->setAttribute("servers", $servers);
+		$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
+		$this->getContext()->getRequest()->setAttribute("servers", $servers);
 
-        return View::SUCCESS;
-    }
+		return View::SUCCESS;
+	}
 }

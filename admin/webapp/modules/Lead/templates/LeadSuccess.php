@@ -40,25 +40,25 @@
 				<div class="panel-body">
 				  <dl class="dl-horizontal">
 					<?php if ($lead->getValue('fn') != '') { ?>
-						  <dt>Firstname:</dt><dd><?php echo $lead->getValue('fn') ?>&nbsp;</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $lead->getValue('fn') ?>&nbsp;</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('ln') != '') { ?>
-						  <dt>Lastname:</dt><dd><?php echo $lead->getValue('ln') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/name/<?php echo $lead->getValue('ln') ?>/<?php echo $lead->getValue('zi') ?>">address lookup</a>)</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ln')->getId() ?>">Lastname:</a></dt><dd><?php echo $lead->getValue('ln') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/name/<?php echo $lead->getValue('ln') ?>/<?php echo $lead->getValue('zi') ?>">address lookup</a>)</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('em') != '') { ?>
-						  <dt>Email:</dt><dd><?php echo $lead->getValue('em') ?>&nbsp;</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('em')->getId() ?>">Email:</a></dt><dd><?php echo $lead->getValue('em') ?>&nbsp;</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('a1') != '') { ?>
-						  <dt>Address:</dt><dd><?php echo $lead->getValue('a1') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $lead->getValue('a1') ?>&where=<?php echo $lead->getValue('zi') ?>">address lookup</a>)</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('a1')->getId() ?>">Address:</a></dt><dd><?php echo $lead->getValue('a1') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $lead->getValue('a1') ?>&where=<?php echo $lead->getValue('zi') ?>">address lookup</a>)</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('cy') != '') { ?>
-						  <dt>City:</dt><dd><?php echo $lead->getValue('cy') ?>&nbsp;</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('cy')->getId() ?>">City:</a></dt><dd><?php echo $lead->getValue('cy') ?>&nbsp;</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('st') != '') { ?>
-						<dt>State:</dt><dd><?php echo $lead->getValue('st') ?>&nbsp;</dd>
+						<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('st')->getId() ?>">State:</a></dt><dd><?php echo $lead->getValue('st') ?>&nbsp;</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('zi') != '') { ?>
-						<dt>Zip:</dt>
+						<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('zi')->getId() ?>">Zip:</a></dt>
 						<dd><?php echo $lead->getValue('zi') ?>&nbsp;
 							<?php if ($lead->getValue('a1') != '') { ?>
 								(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $lead->getValue('a1') ?>&where=<?php echo $lead->getValue('zi') ?>">address lookup</a>)
@@ -68,7 +68,7 @@
 						</dd>
 					<?php } ?>
 					<?php if ($lead->getValue('ph') != '') { ?>
-						  <dt>Phone:</dt><dd><?php echo $lead->getValue('ph') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/phone/<?php echo $lead->getValue('ph') ?>">phone lookup</a>)</dd>
+						  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ph')->getId() ?>">Phone:</a></dt><dd><?php echo $lead->getValue('ph') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/phone/<?php echo $lead->getValue('ph') ?>">phone lookup</a>)</dd>
 					<?php } ?>
 				</dl>
 				<hr />
@@ -83,22 +83,22 @@
 								 if (!is_null($data_field)) {
 							?>
 								<?php if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_BIRTHDATE) { ?>
-									<dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y', $value->sec) ?>&nbsp;</dd>
+									<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y', $value->sec) ?>&nbsp;</dd>
 								<?php } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
-									<dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y g:i:s a', $value->sec) ?>&nbsp;</dd>
+									<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y g:i:s a', $value->sec) ?>&nbsp;</dd>
 								<?php } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY) { ?>
 									<?php if (is_array($value)) { ?>
-									   <dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
+									   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
 									<?php } else if (is_string($value)) { ?>
-									   <dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
+									   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
 									<?php } ?>
 								<?php } else if (is_array($value)) { ?>
-									<dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
+									<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
 								<?php } else { ?>
-									<dt><a href="/admin/data-field?_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
+									<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
 								<?php } ?>
 							<?php } else { ?>
-								 <dt><i><?php echo $key ?></i>:</dt><dd><?php echo $value ?>&nbsp;</dd>
+								 <dt><i><?php echo $key ?></i>:</dt><dd><?php echo is_array($value) ? implode(", ", $value) : $value ?>&nbsp;</dd>
 							<?php } ?>
 						<?php } ?>
 					<?php } ?>
@@ -208,12 +208,9 @@
 	<div id="tabs-fulfillment" class="tab-pane"></div>
 	<div id="tabs-notes" class="tab-pane"></div>
 	<div id="tabs-debug" class="tab-pane"></div>
+	
 	<!-- Add data field modal -->
-	<div class="modal fade modal-wide" id="add-data-field-modal">
-		<div class="modal-dialog">  
-			<div class="modal-content"></div>  
-		</div>
-	</div>
+	<div class="modal fade" id="add-data-field-modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <script>
 //<!--
 $(document).ready(function() {
@@ -240,6 +237,10 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	$('#add-data-field-modal').on('hide.bs.modal', function(e) {
+    	$(this).removeData('bs.modal');
+    });
 
 	// Store the last clicked tab so it can be loaded on page refreshes
 	var localTabStorageName = <?php echo json_encode('lead_tab_' . $lead->getId()); ?>;

@@ -13,9 +13,11 @@ use Flux\ClientExport;
  */
 abstract class ExportAbstract extends MongoForm {
 	
+	const CLIENT_EXPORT_TYPE_NONE = 0;
 	const CLIENT_EXPORT_TYPE_POST = 1;
 	const CLIENT_EXPORT_TYPE_FTP = 2;
 	const CLIENT_EXPORT_TYPE_EMAIL = 3;
+	const CLIENT_EXPORT_TYPE_INFUSIONSOFT = 4;
 	
 	protected $name;
 	protected $description;
@@ -78,7 +80,7 @@ abstract class ExportAbstract extends MongoForm {
 	 */
 	function getClientExportType() {
 		if (is_null($this->client_export_type)) {
-			$this->client_export_type = self::CLIENT_EXPORT_TYPE_POST;
+			$this->client_export_type = self::CLIENT_EXPORT_TYPE_NONE;
 		}
 		return $this->client_export_type;
 	}

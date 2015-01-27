@@ -64,6 +64,23 @@ try {
     }
     if (!$is_silent) { StringTools::consoleWrite(' - dao path', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
     
+    if (!$is_silent) { StringTools::consoleWrite(' - vendors', 'linking', StringTools::CONSOLE_COLOR_YELLOW); }
+    if (file_exists($admin_base_dir . 'webapp/vendor/') && is_dir($admin_base_dir . 'webapp/vendor/')) {
+        // Setup lib for api
+        if (!file_exists($api_base_dir . 'webapp/vendor') && !is_link($api_base_dir . 'webapp/vendor')) {
+            $cmd = 'ln -s ' . $admin_base_dir . '/webapp/vendor' . ' ' . $api_base_dir . 'webapp/vendor';
+            shell_exec($cmd);
+        } else if (file_exists($api_base_dir . 'webapp/vendor/') && is_link($api_base_dir . 'webapp/vendor/')) {
+            $cmd = 'rm -f  ' . $api_base_dir . 'webapp/vendor/';
+            shell_exec($cmd);
+            
+            $cmd = 'ln -s ' . $admin_base_dir . 'webapp/vendor' . ' ' . $api_base_dir . 'webapp/vendor';
+            shell_exec($cmd);
+        }
+	}
+    
+    if (!$is_silent) { StringTools::consoleWrite(' - vendors', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
+    
     // +------------------------------------------------------------------------+
     // | Select which databases.ini file to use for this project.  Any file in  |
     // | /init that starts with databases_* will be enumerated and displayed as |

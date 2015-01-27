@@ -1,29 +1,29 @@
 <?php
 // +----------------------------------------------------------------------------+
-// | This file is part of the Flux package.                                      |
-// |                                                                            |
-// | For the full copyright and license information, please view the LICENSE    |
-// | file that was distributed with this source code.                           |
+// | This file is part of the Flux package.									  |
+// |																			|
+// | For the full copyright and license information, please view the LICENSE	|
+// | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ExportIndexView.php');
+require_once(MO_MODULE_DIR . '/Default/views/IndexBlankView.php');
 
-class SplitWizardSuccessView extends ExportIndexView
+class SplitWizardSuccessView extends IndexBlankView
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any presentation logic and set template attributes.
-     *
-     * @return void
-     */
-    public function execute ()
-    {
-        parent::execute();
-        $this->setTitle('Add Split');
-    }
+	/**
+	 * Execute any presentation logic and set template attributes.
+	 *
+	 * @return void
+	 */
+	public function execute ()
+	{
+		parent::execute();
+		$this->setTitle('Add Split');
+	}
 
 }
 

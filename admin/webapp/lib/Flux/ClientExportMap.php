@@ -107,12 +107,18 @@ class ClientExportMap extends CommonForm {
      */
     function getMappedValue($lead) {
     	if ($this->getDataFieldId() > 0) {
-    		$ret_val = trim($lead->getValue($this->getDataField()->getKeyName()));
-    		if (trim($ret_val) == '') {
-    			$ret_val = $this->getDefaultValue();
-    		}
+    		$ret_val = $lead->getValue($this->getDataField()->getKeyName());
+    		if (is_string($ret_val)) {
+    			if (trim($ret_val) == '') {
+    				$ret_val = $this->getDefaultValue();
+    			}	
+    		} else if (is_array($ret_val)) {
+    			if (count($ret_val) == 0) {
+    				$ret_val = $this->getDefaultValue();
+    			}
+    		}    		
     	} else {
-    		return $this->getDefaultValue();
+    		$ret_val = $this->getDefaultValue();
     	}
     	
     	return $this->callMappingFunc($ret_val, $lead);
@@ -126,16 +132,33 @@ class ClientExportMap extends CommonForm {
         try {
             // Define a default mapping function
             $mapping_func = function($value, $lead) { return $value; };
-            $errors = '';
-            // Now overwrite the default mapping function
-            @ob_start();
-            eval('$mapping_func = function ($value, $lead) {' . $this->getMappingFunc() . '};');
-            if (ob_get_length() > 0) {
-            	$errors = ob_get_contents();
+            
+            if (trim($this->getDataField()->getCustomCode()) != '' && $this->getDataField()->getCustomCode() != self::getDefaultMappingFunc()) {
+            	$errors = '';
+	            // Now overwrite the default mapping function with the one from the data field
+	            @ob_start();
+	            eval('$mapping_func = function ($value, $lead) {' . $this->getDataField()->getCustomCode() . '};');
+	            if (ob_get_length() > 0) {
+	            	$errors = ob_get_contents();
+	            }
+	            @ob_end_clean();
+	            if (trim($errors) != '') {
+	            	throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errors);
+	            }
             }
-            @ob_end_clean();
-            if (trim($errors) != '') {
-            	throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errors);
+            
+            if ($this->getMappingFunc() != self::getDefaultMappingFunc()) {
+	            $errors = '';
+	            // Now overwrite the default mapping function with the one from the export mapping
+	            @ob_start();
+	            eval('$mapping_func = function ($value, $lead) {' . $this->getMappingFunc() . '};');
+	            if (ob_get_length() > 0) {
+	            	$errors = ob_get_contents();
+	            }
+	            @ob_end_clean();
+	            if (trim($errors) != '') {
+	            	throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errors);
+	            }
             }
             // Finally call the mapping function and return the result
             return $mapping_func($value, $lead);

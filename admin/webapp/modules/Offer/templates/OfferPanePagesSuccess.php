@@ -1,7 +1,7 @@
 <?php
-    /* @var $offer \Flux\Offer */
-    $offer = $this->getContext()->getRequest()->getAttribute("offer", array());
-    $offer_pages = $this->getContext()->getRequest()->getAttribute("offer_pages", array());
+	/* @var $offer \Flux\Offer */
+	$offer = $this->getContext()->getRequest()->getAttribute("offer", array());
+	$offer_pages = $this->getContext()->getRequest()->getAttribute("offer_pages", array());
 
 ?>
 <div class="help-block">
@@ -12,130 +12,130 @@
 
 <p />
 <form id="offer_page_organize" method="POST" action="/api">
-    <input type="hidden" name="func" value="/offer/offer-page-organize" />
-    <input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
-    <div id="offer_pages">
-        <?php
-            /* @var $offer_page \Flux\OfferPage */
-            foreach ($offer_pages as $key => $offer_page) {
-        ?>
-        <div class="page_row col-sm-12">
-        	<div>
-        	<div class="col-sm-3">
-		        <div class="panel panel-default">
-		            <div class="panel-heading">
-		            	<span style="cursor:move;" class="page-move glyphicon glyphicon-resize-vertical close pull-left"><span aria-hidden="true"></span><span class="sr-only">Move</span></span>
-		                <h2 class="panel-title">
-	                        &nbsp;
-	                        <a href="/offer/offer-page?_id=<?php echo $offer_page->getId() ?>"><?php echo $offer_page->getName() ?></a>
-	                        <small>(<?php echo $offer_page->getPageName() ?>)</small>
-		                </h2>
-		            </div>
-		            <div class="panel-body">
-		                <div class="thumbnail">
-		                    <img id="offer_page_thumbnail_img_<?php echo $offer_page->getId() ?>" class="page_thumbnail" src="" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer_page->getPreviewUrl() ?>" />
-		                </div>
-		                <div class="text-muted help-block small"><?php echo $offer_page->getDescription() ?></div>
-		            </div>
-	        	</div>
-	        </div>
-	        <div class="col-sm-9">
-	        	<div class="panel panel-default">
-		            <div class="panel-heading">
-		                <a href="/offer/offer-page?_id=<?php echo $offer_page->getId() ?>" class="glyphicon glyphicon-edit close pull-right"><span aria-hidden="true"></span><span class="sr-only">Edit</span></a>
-		                <h2 class="panel-title">
-	                        Filters &amp; Options
-		                </h2>
-		            </div>
-		            <div class="panel-body">
-		            	<div class="col-sm-12">
-		                    <input type="hidden" name="offer_page_id_array[]" value="<?php echo $offer_page->getId() ?>" />
-		                    
-		                    <div class="small">
-		                    When this page submits the user will be taken to
-		                    <ul>
-		                    	<?php if (count($offer_page->getOfferPageFlows()) > 0) { ?>
-			                    	<?php foreach ($offer_page->getOfferPageFlows() as $flow_key => $offer_page_flow) { ?>
-			                    		<li>
-			                    			<?php if (count($offer_page_flow->getFilterConditions()) > 0) { ?>
-				                    			Filter when
-					                    		<?php 
-					                    			/* @var $filter_condition \Flux\OfferPageFlowFilter */
-					                    			foreach ($offer_page_flow->getFilterConditions() as $key => $filter_condition) { 
+	<input type="hidden" name="func" value="/offer/offer-page-organize" />
+	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
+	<div id="offer_pages">
+		<?php
+			/* @var $offer_page \Flux\OfferPage */
+			foreach ($offer_pages as $key => $offer_page) {
+		?>
+		<div class="page_row col-sm-12">
+			<div>
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span style="cursor:move;" class="page-move glyphicon glyphicon-resize-vertical close pull-left"><span aria-hidden="true"></span><span class="sr-only">Move</span></span>
+						<h2 class="panel-title">
+							&nbsp;
+							<a href="/offer/offer-page?_id=<?php echo $offer_page->getId() ?>"><?php echo $offer_page->getName() ?></a>
+							<small>(<?php echo $offer_page->getPageName() ?>)</small>
+						</h2>
+					</div>
+					<div class="panel-body">
+						<div class="thumbnail">
+							<img id="offer_page_thumbnail_img_<?php echo $offer_page->getId() ?>" class="page_thumbnail" src="" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer_page->getPreviewUrl() ?>" />
+						</div>
+						<div class="text-muted help-block small"><?php echo $offer_page->getDescription() ?></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<a href="/offer/offer-page?_id=<?php echo $offer_page->getId() ?>" class="glyphicon glyphicon-edit close pull-right"><span aria-hidden="true"></span><span class="sr-only">Edit</span></a>
+						<h2 class="panel-title">
+							Filters &amp; Options
+						</h2>
+					</div>
+					<div class="panel-body">
+						<div class="col-sm-12">
+							<input type="hidden" name="offer_page_id_array[]" value="<?php echo $offer_page->getId() ?>" />
+							
+							<div class="small">
+							When this page submits the user will be taken to
+							<ul>
+								<?php if (count($offer_page->getOfferPageFlows()) > 0) { ?>
+									<?php foreach ($offer_page->getOfferPageFlows() as $flow_key => $offer_page_flow) { ?>
+										<li>
+											<?php if (count($offer_page_flow->getFilterConditions()) > 0) { ?>
+												Filter when
+												<?php 
+													/* @var $filter_condition \Flux\OfferPageFlowFilter */
+													foreach ($offer_page_flow->getFilterConditions() as $key => $filter_condition) { 
 												?>
-					                    				<?php if ($key > 0) { ?>
-					                    					<?php if ($offer_page_flow->getFilterType() == \Flux\OfferPageFlow::FILTER_TYPE_ALL) { ?>
-					                    						<i>and</i>
-					                    					<?php } else { ?>
-					                    					 	<i>or</i>
-					                    					<?php } ?>
-					                    				<?php } ?>
-					                    				<?php echo $filter_condition->getDataField()->getName() ?>
-					                    				<?php echo \Flux\OfferPageFlowFilter::getFilterOpText($filter_condition->getFilterOp()) ?>
-					                    				<?php echo trim(implode(", ", $filter_condition->getFilterValue())) == '' ? 'blank' : implode(", ", $filter_condition->getFilterValue()) ?>
-					                    				<?php if ($key == count($offer_page_flow->getFilterConditions()) - 1) { ?>
-					                    					<ul>
-					                    						<?php if ($offer_page_flow->getNavigation()->getNavigationType() == '1') { ?>
-										                    		<?php if ($offer_page_flow->getNavigation()->getDestinationOfferPageId() == 0) { ?>
-										                    			<li><i>the next page in order</i></li>
-										                    		<?php } else { ?>
-										                    			<li>Local Page: <?php echo $offer_page_flow->getNavigation()->getDestinationOfferPage()->getName() ?></li>
-										                    		<?php } ?>
-										                    	<?php } else { ?>
-										                    		<li>Remote url: <?php echo $offer_page_flow->getNavigation()->getRemoteUrl() ?></li>
-										                    	<?php } ?>
-					                    					</ul>
-					                    				<?php } ?>
-					                    			
-					                    		<?php } ?>
-					                    	<?php } else { ?>
-					                    		No filters set, all <?php echo ($flow_key > 0) ? 'other' : '' ?> traffic allowed and sent to
-					                    		<ul>
-		                    						<?php if ($offer_page_flow->getNavigation()->getNavigationType() == '1') { ?>
-							                    		<?php if ($offer_page_flow->getNavigation()->getDestinationOfferPageId() == 0) { ?>
-							                    			<li><i>the next page in order</i></li>
-							                    		<?php } else { ?>
-							                    			<li>Local Page: <?php echo $offer_page_flow->getNavigation()->getDestinationOfferPage()->getName() ?></li>
-							                    		<?php } ?>
-							                    	<?php } else { ?>
-							                    		<li>Remote url: <?php echo $offer_page_flow->getNavigation()->getRemoteUrl() ?></li>
-							                    	<?php } ?>
-		                    					</ul>
-					                    	<?php } ?>
-			                    		</li>
-			                    	<?php } ?>
-			                    <?php } else { ?>
-			                    	<li><i>the next page in order</i></li>
-			                    <?php } ?>
-		                    </ul>
-		                    </div>
-		                    
-		                    <div class="hidden-xs">
-		                        <small class="text-success"><?php echo $offer_page->getFilePath() ?></small>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-	        </div>
-	        </div>
-	        <hr />
-        </div>
-        <?php } ?>
-    </div>
+														<?php if ($key > 0) { ?>
+															<?php if ($offer_page_flow->getFilterType() == \Flux\OfferPageFlow::FILTER_TYPE_ALL) { ?>
+																<i>and</i>
+															<?php } else { ?>
+															 	<i>or</i>
+															<?php } ?>
+														<?php } ?>
+														<?php echo $filter_condition->getDataField()->getName() ?>
+														<?php echo \Flux\OfferPageFlowFilter::getFilterOpText($filter_condition->getFilterOp()) ?>
+														<?php echo trim(implode(", ", $filter_condition->getFilterValue())) == '' ? 'blank' : implode(", ", $filter_condition->getFilterValue()) ?>
+														<?php if ($key == count($offer_page_flow->getFilterConditions()) - 1) { ?>
+															<ul>
+																<?php if ($offer_page_flow->getNavigation()->getNavigationType() == '1') { ?>
+																	<?php if ($offer_page_flow->getNavigation()->getDestinationOfferPageId() == 0) { ?>
+																		<li><i>the next page in order</i></li>
+																	<?php } else { ?>
+																		<li>Local Page: <?php echo $offer_page_flow->getNavigation()->getDestinationOfferPage()->getName() ?></li>
+																	<?php } ?>
+																<?php } else { ?>
+																	<li>Remote url: <?php echo $offer_page_flow->getNavigation()->getRemoteUrl() ?></li>
+																<?php } ?>
+															</ul>
+														<?php } ?>
+													
+												<?php } ?>
+											<?php } else { ?>
+												No filters set, all <?php echo ($flow_key > 0) ? 'other' : '' ?> traffic allowed and sent to
+												<ul>
+													<?php if ($offer_page_flow->getNavigation()->getNavigationType() == '1') { ?>
+														<?php if ($offer_page_flow->getNavigation()->getDestinationOfferPageId() == 0) { ?>
+															<li><i>the next page in order</i></li>
+														<?php } else { ?>
+															<li>Local Page: <?php echo $offer_page_flow->getNavigation()->getDestinationOfferPage()->getName() ?></li>
+														<?php } ?>
+													<?php } else { ?>
+														<li>Remote url: <?php echo $offer_page_flow->getNavigation()->getRemoteUrl() ?></li>
+													<?php } ?>
+												</ul>
+											<?php } ?>
+										</li>
+									<?php } ?>
+								<?php } else { ?>
+									<li><i>the next page in order</i></li>
+								<?php } ?>
+							</ul>
+							</div>
+							
+							<div class="hidden-xs">
+								<small class="text-success"><?php echo $offer_page->getFilePath() ?></small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+			<hr />
+		</div>
+		<?php } ?>
+	</div>
 </form>
 
 <!-- Push offer to server modal -->
 <div class="modal fade" id="offer_page_wizard_modal">
-    <div class="modal-dialog">
-        <div class="modal-content"></div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+	<div class="modal-dialog">
+		<div class="modal-content"></div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
 //<!--
 $(document).ready(function() {
-    $('#offer_page_organize').form(function(data) {
-        $.rad.notify('Pages organized', 'The pages have been reorganized');
-    });
+	$('#offer_page_organize').form(function(data) {
+		$.rad.notify('Pages organized', 'The pages have been reorganized');
+	});
 
 	$('.page_thumbnail').each(function(i, item) {
 		if ($(this).attr('data-url') != '') {
@@ -150,12 +150,12 @@ $(document).ready(function() {
 	});
 
 	$("#offer_pages").sortable({
-	    handle: '.page-move',
+		handle: '.page-move',
 		cursor: "move",
 		axis: "y",
-	    update: function( event, ui ) {
-	        $('#offer_page_organize').submit();
-	    }
+		update: function( event, ui ) {
+			$('#offer_page_organize').submit();
+		}
 	});
 });
 //-->

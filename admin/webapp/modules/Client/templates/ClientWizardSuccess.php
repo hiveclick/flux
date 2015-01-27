@@ -1,76 +1,66 @@
 <?php
-    /* @var $client Flux\Client */
-    $client = $this->getContext()->getRequest()->getAttribute("client", array());
+	/* @var $client Flux\Client */
+	$client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
-<div id="header">
-   <h2><a href="/client/client-search">Clients</a> <small>New Client</small></h2>
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title"><?php echo ($client->getId() > 0) ? 'Edit' : 'Add' ?> Client</h4>
 </div>
-<div class="help-block">Clients are used as advertisers or publishers to either manage offers or send traffic</div>
-<br/>
-<div id="tab-content-container" class="tab-content">
-    <form class="form-horizontal" name="client_form" method="POST" action="" autocomplete="off">
-        <div class="form-group">
-            <label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
-            <div class="col-sm-10">
-                <input type="text" id="name" name="name" class="form-control" required placeholder="Name" value="<?php echo $client->getName() ?>" />
-            </div>
-        </div>
+<form class="" id="client_form_<?php echo $client->getId() ?>" method="<?php echo ($client->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+	<input type="hidden" name="func" value="/client/client" />
+	<input type="hidden" name="status" value="<?php echo \Flux\Client::CLIENT_STATUS_ACTIVE ?>" />
+	<?php if ($client->getId() > 0) { ?>
+		<input type="hidden" name="_id" value="<?php echo $client->getId() ?>" />
+	<?php } ?>
+	<div class="modal-body">
+		<div class="help-block">Clients are used as advertisers or publishers to either manage offers or send traffic</div>
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="name">Name</label>
+			<input type="text" id="name" name="name" class="form-control" placeholder="Enter client's name..." value="<?php echo $client->getName() ?>" />
+		</div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label hidden-xs" for="type">Client Type</label>
-            <div class="col-sm-10">
-                <select class="form-control" name="type" id="type" required placeholder="Client Type">
-                    <?php foreach(\Flux\Client::retrieveClientTypes() AS $type_id => $type_name) { ?>
-                    <option value="<?php echo $type_id; ?>"<?php echo $client->getClientType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="type">Client Type</label>
+			<select class="form-control" name="client_type" id="client_type" placeholder="Select the role of this client...">
+				<?php foreach(\Flux\Client::retrieveClientTypes() AS $type_id => $type_name) { ?>
+				<option value="<?php echo $type_id; ?>"<?php echo $client->getClientType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
+				<?php } ?>
+			</select>
+		</div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
-            <div class="col-sm-10">
-                <select class="form-control" name="status" id="status" required placeholder="Status">
-                    <?php foreach(\Flux\Client::retrieveStatuses() AS $status_id => $status_name) { ?>
-                    <option value="<?php echo $status_id; ?>"<?php echo $client->getStatus() == $status_id ? ' selected' : ''; ?>><?php echo $status_name; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label hidden-xs" for="email">Email</label>
-            <div class="col-sm-10">
-                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?php echo $client->getEmail() ?>" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label hidden-xs" for="pixel">Global Client Pixel</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <input type="text" id="pixel" name="pixel" class="form-control" placeholder="Global Client Pixel" value="<?php echo $client->getPixel() ?>" />
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dataFieldModal">
-                            <span class="glyphicon glyphicon-info-sign"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <input type="submit" name="__save" class="btn btn-success" value="Save" />
-            </div>
-        </div>
-
-    </form>
-</div>
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="email">Email</label>
+			<input type="email" id="email" name="email" class="form-control" placeholder="Enter client's email..." value="<?php echo $client->getEmail() ?>" />
+		</div>
+	</div>
+	<div class="modal-footer">
+		<?php if ($client->getId() > 0) { ?>
+			<input type="button" class="btn btn-danger" value="Delete Client" class="small" onclick="javascript:confirmDelete();" />
+		<?php } ?>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="submit" class="btn btn-primary">Save changes</button>
+	</div>
+</form>
 <script>
 //<!--
 $(document).ready(function() {
-	$('#type,#status').selectize();
+	$('#client_form_<?php echo $client->getId() ?>').form(function(data) {
+		$.rad.notify('Client Updated', 'The client has been added/updated in the system');
+		$('#client_search_form').trigger('submit');
+	}, {keep_form:1});
+
+	$('#client_type,#status').selectize();
 });
+
+<?php if ($client->getId() > 0) { ?>
+function confirmDelete() {
+	if (confirm('Are you sure you want to delete this client from the system?')) {
+		$.rad.del({ func: '/client/client/<?php echo $client->getId() ?>' }, function(data) {
+			$.rad.notify('You have deleted this client', 'You have deleted this client.  You will need to refresh this page to see your changes.');
+			$('#client_search_form').trigger('submit');
+		});
+	}
+}
+<?php } ?>
 //-->
 </script>

@@ -54,20 +54,22 @@
 //<!--
 $('#client_export_id').selectize();
 
-$('#lead_fulfill_manual_form').form(function(data) {
-	if (data.record) {
-		if (data.record.fulfill_log_contents) {
-			$('#fulfill_log_contents').html(data.record.fulfill_log_contents);
+$('#lead_fulfill_manual_form').form(
+	function(data) {
+		if (data.record) {
+			if (data.record.fulfill_log_contents) {
+				$('#fulfill_log_contents').html(data.record.fulfill_log_contents);
+			}
+			if (data.record.fulfill_export_id && data.record.fulfill_export_id > 0) {
+				$('#fulfill_export_btn').attr('href', '/export/export?_id=' + data.record.fulfill_export_id);
+			} else {
+				$('#fulfill_export_btn').attr('href', '/export/export-search?name=<?php echo $lead->getId() ?>');
+			}
+			$.rad.notify('Lead Submitted', 'The lead has been submitted to the export successfully');
 		}
-		if (data.record.fulfill_export_id && data.record.fulfill_export_id > 0) {
-			$('#fulfill_export_btn').attr('href', '/export/export?_id=' + data.record.fulfill_export_id);
-		} else {
-			$('#fulfill_export_btn').attr('href', '/export/export-search?name=<?php echo $lead->getId() ?>');
-		}
-		$.rad.notify('Lead Submitted', 'The lead has been submitted to the export successfully');
-	}
-}, {
+	}, {
 	prepare: function() {
+		$('#fulfill_log_contents').html('');
 		$('#fulfillment_log_div').show();
 	}	
 });

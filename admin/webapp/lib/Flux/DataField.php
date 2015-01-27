@@ -46,6 +46,7 @@ class DataField extends MongoForm {
 	const DATA_FIELD_STORAGE_TYPE_DEFAULT = 2;
 	const DATA_FIELD_STORAGE_TYPE_EVENT = 3;
 	const DATA_FIELD_STORAGE_TYPE_TRACKING = 4;
+	const DATA_FIELD_STORAGE_TYPE_DERIVED = 5;
 
 	const DATA_FIELD_MODIFIER_SET = 1;
 	const DATA_FIELD_MODIFIER_UNSET = 2;
@@ -93,6 +94,7 @@ class DataField extends MongoForm {
 	protected $field_value;
 	protected $tags;
 	protected $data_field_set;
+	protected $custom_code;
 
 	protected $_storage_type_name;
 	protected $_access_type_name;
@@ -140,6 +142,27 @@ class DataField extends MongoForm {
 	function setName($arg0) {
 		$this->name = $arg0;
 		$this->addModifiedColumn('name');
+		return $this;
+	}
+	
+	/**
+	 * Returns the custom_code
+	 * @return string
+	 */
+	function getCustomCode() {
+		if (is_null($this->custom_code)) {
+			$this->custom_code = "";
+		}
+		return $this->custom_code;
+	}
+	
+	/**
+	 * Sets the custom_code
+	 * @var string
+	 */
+	function setCustomCode($arg0) {
+		$this->custom_code = $arg0;
+		$this->addModifiedColumn("custom_code");
 		return $this;
 	}
 	
@@ -566,6 +589,7 @@ class DataField extends MongoForm {
 			self::DATA_FIELD_STORAGE_TYPE_DEFAULT => 'Default',
 			self::DATA_FIELD_STORAGE_TYPE_EVENT => 'Event',
 			self::DATA_FIELD_STORAGE_TYPE_TRACKING => 'Tracking',
+			self::DATA_FIELD_STORAGE_TYPE_DERIVED => 'Derived'
 		);
 	}
 
@@ -577,7 +601,8 @@ class DataField extends MongoForm {
 		return array(
 			self::DATA_FIELD_STORAGE_TYPE_DEFAULT => 'Default',
 			self::DATA_FIELD_STORAGE_TYPE_EVENT => 'Event',
-			self::DATA_FIELD_STORAGE_TYPE_TRACKING => 'Tracking'
+			self::DATA_FIELD_STORAGE_TYPE_TRACKING => 'Tracking',
+			self::DATA_FIELD_STORAGE_TYPE_DERIVED => 'Derived'
 		);
 	}
 

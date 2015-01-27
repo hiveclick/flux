@@ -12,6 +12,7 @@ class Offer extends MongoForm {
 
 	const REDIRECT_TYPE_HOSTED = 1;
 	const REDIRECT_TYPE_REDIRECT = 2;
+	const REDIRECT_TYPE_POST = 3;
 
 	protected $name;
 	protected $status;
@@ -780,7 +781,8 @@ class Offer extends MongoForm {
 	public static function retrieveRedirectTypes() {
 		return array(
 				self::REDIRECT_TYPE_HOSTED => 'Hosted',
-				self::REDIRECT_TYPE_REDIRECT => 'Redirect'
+				self::REDIRECT_TYPE_REDIRECT => 'Redirect',
+				self::REDIRECT_TYPE_POST => 'Post'
 		);
 	}
 

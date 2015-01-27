@@ -1,0 +1,66 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "560cd093e1650555218cadeede4c25fb",
+    "packages": [
+        {
+            "name": "novaksolutions/infusionsoft-php-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/novaksolutions/infusionsoft-php-sdk.git",
+                "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
+                "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Infusionsoft/infusionsoft.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Novak Solutions",
+                    "homepage": "https://novaksolutions.com"
+                }
+            ],
+            "description": "A better Infusionsoft SDK for PHP",
+            "homepage": "https://novaksolutions.com",
+            "keywords": [
+                "api",
+                "infusion",
+                "infusionsoft",
+                "infusionsoft-api",
+                "marketing",
+                "php-infusionsoft-api"
+            ],
+            "time": "2015-01-09 00:55:49"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "novaksolutions/infusionsoft-php-sdk": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

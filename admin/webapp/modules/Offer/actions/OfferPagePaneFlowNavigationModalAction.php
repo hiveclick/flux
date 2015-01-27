@@ -12,51 +12,51 @@ use Flux\OfferPage;
 use Flux\DataField;
 use Flux\OfferPageFlow;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Flux package.                                      |
-// |                                                                            |
-// | For the full copyright and license information, please view the LICENSE    |
-// | file that was distributed with this source code.                           |
+// | This file is part of the Flux package.									  |
+// |																			|
+// | For the full copyright and license information, please view the LICENSE	|
+// | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
 class OfferPagePaneFlowNavigationModalAction extends BasicAction
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any application/business logic for this action.
-     *
-     * @return mixed - A string containing the view name associated with this action
-     */
-    public function execute ()
-    {
-        
-        /* @var $offer_page Flux\OfferPage */
-        $offer_page_flow = new OfferPageFlow();
-        
-        if (isset($_GET['offer_page_flows']) && is_array($_GET['offer_page_flows'])) {            
-            $page_flow_array = array_shift($_GET['offer_page_flows']);
-            $offer_page_flow->populate($page_flow_array);
-        } else {
-            $offer_page_flow->populate($_GET);
-        }
-        
-        /* @var $offer_page Flux\OfferPage */
-        $op = new OfferPage();
-        $op->populate($_GET);
-        $op->query();
-        
-        $offer_page = new OfferPage();
-        $offer_page->setOfferId($op->getOfferId());
-        $offer_page->setSort('priority');
-        $offer_page->setSord('ASC');
-        $offer_pages = $offer_page->queryAll();
-        
-        $this->getContext()->getRequest()->setAttribute("offer_page", $op);
-        $this->getContext()->getRequest()->setAttribute("offer_pages", $offer_pages);
-        $this->getContext()->getRequest()->setAttribute("offer_page_flow", $offer_page_flow);
+	/**
+	 * Execute any application/business logic for this action.
+	 *
+	 * @return mixed - A string containing the view name associated with this action
+	 */
+	public function execute ()
+	{
+		
+		/* @var $offer_page Flux\OfferPage */
+		$offer_page_flow = new OfferPageFlow();
+		
+		if (isset($_GET['offer_page_flows']) && is_array($_GET['offer_page_flows'])) {			
+			$page_flow_array = array_shift($_GET['offer_page_flows']);
+			$offer_page_flow->populate($page_flow_array);
+		} else {
+			$offer_page_flow->populate($_GET);
+		}
+		
+		/* @var $offer_page Flux\OfferPage */
+		$op = new OfferPage();
+		$op->populate($_GET);
+		$op->query();
+		
+		$offer_page = new OfferPage();
+		$offer_page->setOfferId($op->getOfferId());
+		$offer_page->setSort('priority');
+		$offer_page->setSord('ASC');
+		$offer_pages = $offer_page->queryAll();
+		
+		$this->getContext()->getRequest()->setAttribute("offer_page", $op);
+		$this->getContext()->getRequest()->setAttribute("offer_pages", $offer_pages);
+		$this->getContext()->getRequest()->setAttribute("offer_page_flow", $offer_page_flow);
 
-        return View::SUCCESS;
-    }
+		return View::SUCCESS;
+	}
 }

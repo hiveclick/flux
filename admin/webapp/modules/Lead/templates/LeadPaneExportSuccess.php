@@ -16,15 +16,15 @@
 	<?php
 	   /* @var $lead_export \Flux\LeadExport */ 
 	   foreach ($lead->getExports() as $key => $lead_export) { 
-    ?>
+	?>
 		<tr>
 			<td><?php echo $lead_export->getClientExport()->getName() ?></td>
 			<td>
-			    <?php if ($lead_export->getExportDate() instanceof \MongoDate) { ?>
-                    <?php echo date('m/d/Y g:i:s a', $lead_export->getExportDate()->sec) ?>
-                <?php } else { ?>
-                    <mark><?php echo $lead_export->getExportDate() ?></mark> <span class="label label-danger">Date missing or not \MongoDate object</span>
-                <?php } ?>
+				<?php if ($lead_export->getExportDate() instanceof \MongoDate) { ?>
+					<?php echo date('m/d/Y g:i:s a', $lead_export->getExportDate()->sec) ?>
+				<?php } else { ?>
+					<mark><?php echo $lead_export->getExportDate() ?></mark> <span class="label label-danger">Date missing or not \MongoDate object</span>
+				<?php } ?>
 			</td>
 			<td>$<?php echo number_format($lead_export->getRevenue(), 2, null, ',') ?></td>
 		</tr>

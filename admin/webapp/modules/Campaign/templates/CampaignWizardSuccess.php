@@ -22,7 +22,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label hidden-xs" for="client_id">Publisher Client</label>
 			<div class="col-sm-10">
-				<select class="form-control" name="client_id" id="client_id" required placeholder="Publisher Client">
+				<select class="form-control" name="client_id" id="client_id" placeholder="Publisher Client">
 					<?php
 					/* @var $client \Flux\Client */
 					foreach ($clients AS $client) { 
@@ -36,7 +36,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label hidden-xs" for="offer_id">Offer</label>
 			<div class="col-sm-10">
-				<select class="form-control" name="offer_id" id="offer_id" required placeholder="Offer">
+				<select class="form-control" name="offer_id" id="offer_id" placeholder="Offer">
 					<?php
 					/* @var $offer \Flux\Offer */ 
 					foreach ($offers AS $offer) { 

@@ -145,7 +145,7 @@ class DomainGroup extends MongoForm {
 			$criteria['domains'] = array('$in' => $this->getDomains());
 		}
 		if (trim($this->getName()) != '') {
-			$criteria['name'] = \MongoRegex("/" . $this->getName()  . "/");
+			$criteria['name'] = new \MongoRegex("/" . $this->getName()  . "/i");
 		}
 		return parent::queryAll($criteria, $hydrate);
 	}

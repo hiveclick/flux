@@ -21,6 +21,7 @@ class SplitAction extends BasicRestAction
      */
     public function execute ()
     {
+    	LoggerManager::error(__METHOD__ . " :: " . var_export($_REQUEST, true));
         return parent::execute();
     }
 

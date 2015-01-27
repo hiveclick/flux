@@ -217,13 +217,17 @@ class MojaviForm extends MojaviObject {
                         $ret_val[$property->getName()][] = $item->toArray();
                     }
                 } else if (is_array($value)) {
-                    foreach ($value as $key => $item) {
-                    	if ($item instanceof MojaviForm) {
-                        	$ret_val[$property->getName()][$key] = $item->toArray();
-                    	} else {
-                    		$ret_val[$property->getName()][$key] = $item;
-                    	}
-                    }
+                	if (count($value) > 0) {
+	                    foreach ($value as $key => $item) {
+	                    	if ($item instanceof MojaviForm) {
+	                        	$ret_val[$property->getName()][$key] = $item->toArray();
+	                    	} else {
+	                    		$ret_val[$property->getName()][$key] = $item;
+	                    	}
+	                    }
+                	} else {
+                		$ret_val[$property->getName()] = $value;
+                	}
                 } else {
                     $ret_val[$property->getName()] = $value;
                 }

@@ -1,31 +1,55 @@
 <?php
-    /* @var $vertical Flux\Vertical */
-    $vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
+	/* @var $vertical Flux\Vertical */
+	$vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
 ?>
-<div id="header">
-   <h2><a href="/admin/vertical-search">Verticals</a> <small>New Vertical</small></h2>
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title"><?php echo ($vertical->getId() > 0) ? 'Edit' : 'Add' ?> Vertical</h4>
 </div>
-<div class="help-block">Create a new vertical that you can use to organize offers</div>
-<br/>
-<form class="form-horizontal" name="vertical_form" method="POST" action="" autocomplete="off" role="form">
-    <input type="hidden" name="status" value="<?php echo \Flux\Vertical::VERTICAL_STATUS_ACTIVE ?>" />
-    <div class="form-group">
-        <label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
-        <div class="col-sm-10">
-            <input type="text" id="name" name="name" class="form-control" required placeholder="Name" value="<?php echo $vertical->getName() ?>" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label hidden-xs" for="description">Description</label>
-        <div class="col-sm-10">
-               <textarea name="description" id="description" class="form-control" placeholder="Enter Description..."><?php echo $vertical->getDescription() ?></textarea>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <input type="submit" name="__save" class="btn btn-success" value="Save" />
-        </div>
-    </div>
+<form class="" id="vertical_form_<?php echo $vertical->getId() ?>" method="<?php echo ($vertical->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+	<input type="hidden" name="func" value="/admin/vertical" />
+	<input type="hidden" name="status" value="<?php echo \Flux\Vertical::VERTICAL_STATUS_ACTIVE ?>" />
+	<?php if ($vertical->getId() > 0) { ?>
+		<input type="hidden" name="_id" value="<?php echo $vertical->getId() ?>" />
+	<?php } ?>
+	<div class="modal-body">
+		<div class="help-block">Create a new vertical that you can use to organize offers</div>
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="name">Name</label>
+			<input type="text" id="name" name="name" class="form-control" placeholder="Enter Name..." value="<?php echo $vertical->getName() ?>" />
+		</div>
+	
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="description">Description</label>
+			<textarea name="description" id="description" class="form-control" placeholder="Enter Description..."><?php echo $vertical->getDescription() ?></textarea>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<?php if ($vertical->getId() > 0) { ?>
+			<input type="button" class="btn btn-danger" value="Delete Vertical" class="small" onclick="javascript:confirmDelete();" />
+		<?php } ?>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="submit" class="btn btn-primary">Save changes</button>
+	</div>
 </form>
+<script>
+//<!--
+$(document).ready(function() {
+	$('#vertical_form_<?php echo $vertical->getId() ?>').form(function(data) {
+		$.rad.notify('Vertical Updated', 'The vertical has been added/updated in the system');
+		$('#vertical_search_form').trigger('submit');
+	}, {keep_form:1});
+});
+
+<?php if ($vertical->getId() > 0) { ?>
+function confirmDelete() {
+	if (confirm('Are you sure you want to delete this vertical from the system?')) {
+		$.rad.del({ func: '/admin/vertical/<?php echo $vertical->getId() ?>' }, function(data) {
+			$.rad.notify('You have deleted this vertical', 'You have deleted this vertical.  You will need to refresh this page to see your changes.');
+			$('#vertical_search_form').trigger('submit');
+		});
+	}
+}
+<?php } ?>
+//-->
+</script>

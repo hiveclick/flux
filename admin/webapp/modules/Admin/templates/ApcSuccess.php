@@ -1,1 +1,1 @@
-<iframe src="/apcu.php" width="100%" height="100%" frameborder="0"></iframe>
+<iframe src="/apcu.php" width="100%" height="700" frameborder="0"></iframe>

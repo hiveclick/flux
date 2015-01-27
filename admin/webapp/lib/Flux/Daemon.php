@@ -11,6 +11,7 @@ class Daemon extends MongoForm {
 	const DAEMON_RUN_STATUS_INACTIVE = 2;
 	
 	protected $name;
+	protected $description;
 	protected $type;
 	protected $class_name;
 	protected $threads;
@@ -47,6 +48,27 @@ class Daemon extends MongoForm {
 	function setName($arg0) {
 		$this->name = $arg0;
 		$this->addModifiedColumn('name');
+		return $this;
+	}
+	
+	/**
+	 * Returns the description
+	 * @return string
+	 */
+	function getDescription() {
+		if (is_null($this->description)) {
+			$this->description = "";
+		}
+		return $this->description;
+	}
+	
+	/**
+	 * Sets the description
+	 * @var string
+	 */
+	function setDescription($arg0) {
+		$this->description = $arg0;
+		$this->addModifiedColumn("description");
 		return $this;
 	}
 	

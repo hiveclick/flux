@@ -5,7 +5,7 @@
  */
 namespace Mojavi\Form;
 
-use Gun\Daemon as DaemonDocument;
+use Flux\Daemon as DaemonDocument;
 
 class DaemonForm extends MojaviForm {
 

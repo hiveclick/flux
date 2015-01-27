@@ -66,7 +66,8 @@ function __autoload ($class)
             if (file_exists(MO_LIB_DIR . DIRECTORY_SEPARATOR . $class_file . '.php')) {
 //                 error_log("Autoloading from underscores (" . number_format(memory_get_usage(true), 0, null, ',') . "): " . $class);
                 require_once(MO_LIB_DIR . DIRECTORY_SEPARATOR . $class_file . '.php');
-            } else {
+            } else if (false) {            	
+            	
                 // Destroy the session completely
                 session_destroy();
 
@@ -113,7 +114,10 @@ try
     define('MO_LIB_DIR',      MO_WEBAPP_DIR . '/lib');
     define('MO_MODULE_DIR',   MO_WEBAPP_DIR . '/modules');
     define('MO_TEMPLATE_DIR', MO_WEBAPP_DIR . '/templates');
-
+    
+    // Try the composer autoloader
+    require_once(MO_WEBAPP_DIR . '/vendor/autoload.php');
+    
     spl_autoload_register(function($className) {
         __autoload($className);
     });

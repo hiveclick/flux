@@ -272,14 +272,19 @@ class SplitPosition extends MongoForm {
 			$export->setIsRunning(false);
 			$export->setIsComplete(false);
 			$export = $export->queryBySplitAndClientExport();
-			if (is_null($export)) {
+			
+			if ($export === false) {
 				// Create a new export
 				$export = new \Flux\Export();
+				$export->setName('Export for ' . $this->getSplit()->getName() . ' on ' . date('m/d/Y'));
 				$export->setSplitId($this->getSplitId());
 				$export->setClientExportId($this->getClientExportId());
 				$export->setExportDate(new \MongoDate());
 				$insert_id = $export->insert();
 				$export->setId($insert_id);
+			} else if (($export->getName()) == '') {
+				$export->setName('Export for ' . $this->getSplit()->getName() . ' on ' . date('m/d/Y'));
+				$export->update();
 			}
 			
 			/* @var $export_queue \Flux\SplitQueue */

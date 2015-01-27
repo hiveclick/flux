@@ -10,40 +10,40 @@ use Flux\Vertical;
 use Mojavi\Logging\LoggerManager;
 use Flux\OfferPage;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Flux package.                                      |
-// |                                                                            |
-// | For the full copyright and license information, please view the LICENSE    |
-// | file that was distributed with this source code.                           |
+// | This file is part of the Flux package.									  |
+// |																			|
+// | For the full copyright and license information, please view the LICENSE	|
+// | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
 class OfferPageAction extends BasicAction
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any application/business logic for this action.
-     *
-     * @return mixed - A string containing the view name associated with this action
-     */
-    public function execute ()
-    {
-        if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            /* @var $offer_page Flux\OfferPage */
-            $offer_page = new OfferPage();
-            $offer_page->populate($_POST);
-            $offer_page->update();
+	/**
+	 * Execute any application/business logic for this action.
+	 *
+	 * @return mixed - A string containing the view name associated with this action
+	 */
+	public function execute ()
+	{
+		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
+			/* @var $offer_page Flux\OfferPage */
+			$offer_page = new OfferPage();
+			$offer_page->populate($_POST);
+			$offer_page->update();
 
-            $this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-        } else {
-            /* @var $offer_page Flux\OfferPage */
-            $offer_page = new OfferPage();
-            $offer_page->populate($_GET);
-            $offer_page->query();
+			$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
+		} else {
+			/* @var $offer_page Flux\OfferPage */
+			$offer_page = new OfferPage();
+			$offer_page->populate($_GET);
+			$offer_page->query();
 
-            $this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-        }
-        return View::SUCCESS;
-    }
+			$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
+		}
+		return View::SUCCESS;
+	}
 }

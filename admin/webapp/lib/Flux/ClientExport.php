@@ -35,6 +35,9 @@ class ClientExport extends MongoForm {
 	protected $ftp_folder;
 
 	protected $post_url;
+	
+	protected $infusionsoft_host;
+	protected $infusionsoft_api_key;
 
 	protected $mapping;
 	protected $scheduling;
@@ -107,7 +110,7 @@ class ClientExport extends MongoForm {
 			$ret_val = new $class_name();
 			$ret_val->setClientExportId($this->getId());
 		} else {
-			$ret_val = new \Flux\Export\GenericFtp();
+			$ret_val = new \Flux\Export\Generic();
 			$ret_val->setClientExportId($this->getId());
 		}
 		return $ret_val;
@@ -350,6 +353,48 @@ class ClientExport extends MongoForm {
 		$this->addModifiedColumn('email_address');
 		return $this;
 	}
+	
+	/**
+	 * Returns the infusionsoft_host
+	 * @return string
+	 */
+	function getInfusionsoftHost() {
+		if (is_null($this->infusionsoft_host)) {
+			$this->infusionsoft_host = "";
+		}
+		return $this->infusionsoft_host;
+	}
+	
+	/**
+	 * Sets the infusionsoft_host
+	 * @var string
+	 */
+	function setInfusionsoftHost($arg0) {
+		$this->infusionsoft_host = $arg0;
+		$this->addModifiedColumn("infusionsoft_host");
+		return $this;
+	}
+	
+	/**
+	 * Returns the infusionsoft_api_key
+	 * @return string
+	 */
+	function getInfusionsoftApiKey() {
+		if (is_null($this->infusionsoft_api_key)) {
+			$this->infusionsoft_api_key = "";
+		}
+		return $this->infusionsoft_api_key;
+	}
+	
+	/**
+	 * Sets the infusionsoft_api_key
+	 * @var string
+	 */
+	function setInfusionsoftApiKey($arg0) {
+		$this->infusionsoft_api_key = $arg0;
+		$this->addModifiedColumn("infusionsoft_api_key");
+		return $this;
+	}
 
 	/**
 	 * Returns the post_url
@@ -527,6 +572,11 @@ class ClientExport extends MongoForm {
 	 * @return \Flux\Export
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
+		if (trim($this->getKeywords()) != '') {
+			$criteria['$or'] = array(
+				array('name' => new \MongoRegex("/" . $this->getKeywords() . "/i"))
+			);
+		}
 		if ($this->getClientId() > 0) {
 			$criteria['client_id'] = $this->getClientId();
 		}

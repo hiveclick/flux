@@ -168,6 +168,8 @@ class Split extends MongoForm {
 			if (strpos($arg0, ',')) {
 				$this->offer_id = implode(',', $arg0);
 				array_walk($this->offer_id, function(&$val, $key) { $val = (int)$val; });
+			} else if (trim($arg0) == '') {
+				$this->offer_id = array();
 			} else {
 				$this->offer_id = array((int)$arg0);
 			}
@@ -196,9 +198,11 @@ class Split extends MongoForm {
 			$this->domain_group_id = $arg0;
 			array_walk($this->domain_group_id, function(&$val, $key) { $val = (int)$val; });
 		} else if (is_string($arg0)) {
-			if (strpos($arg0, ',')) {
+			if (strpos($arg0, ',') !== false) {
 				$this->domain_group_id = implode(',', $arg0);
 				array_walk($this->domain_group_id, function(&$val, $key) { $val = (int)$val; });
+			} else if (trim($arg0) == '') {
+				$this->domain_group_id = array();
 			} else {
 				$this->domain_group_id = array((int)$arg0);
 			}
@@ -261,6 +265,8 @@ class Split extends MongoForm {
 			if (strpos($arg0, ',')) {
 				$this->data_field_id = implode(',', $arg0);
 				array_walk($this->data_field_id, function(&$val, $key) { $val = (int)$val; });
+			} else if (trim($arg0) == '') {
+				$this->data_field_id = array();
 			} else {
 				$this->data_field_id = array((int)$arg0);
 			}

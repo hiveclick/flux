@@ -614,7 +614,7 @@
 		login_form: false,
 		defaults: {
 			global: true,
-			url: '/Ajax/Api.html',
+			url: '/api',
 			dataType: 'json',
 			data: {
 				format: 'json'
@@ -666,7 +666,6 @@
 		setup: function(options) {
 			var _this = this;			
 			this.setOptions(options);
-			
 			if(this._form !== null) {
 				this._form.bind({
 					'submit': function(e) {
@@ -689,13 +688,14 @@
 			if(this._options['validate'] != true) {
 				return true;
 			}
-			
-			var validator = this.getValidator();
-			validator.reset();
-			return validator.validateAll();
+			return true;
+			/* Removed validation library so that validation can be done manually */
+//			var validator = this.getValidator();
+//			validator.reset();
+//			return validator.validateAll();
 		},
 		reset: function() {
-			this.getValidator().reset();
+			//this.getValidator().reset();
 			$('input[type="text"], textarea', this._form).val('');
 			$('input[type="checkbox"]', this._form).removeAttr('selected').change();
 			$('input[type="checkbox"].select-all', this._form).attr('selected', true).change();
@@ -782,7 +782,7 @@
 			if (this._options['keep_form'] === false) {
 				this.reset();
 			} else {
-				this.getValidator().reset();
+				//this.getValidator().reset();
 			}
 			
 			if ($.isFunction(this._options['onsuccess'])) {
@@ -799,7 +799,7 @@
 				if ($input.length > 0) {
 					$input.error(error['message']);
 				} else {
-					$.rad.notify('Validation Error', error['message'] || error);
+					$.rad.notify('Error', error['message'] || error);
 				}
 				
 			});

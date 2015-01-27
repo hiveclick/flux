@@ -1,10 +1,10 @@
 <?php
-    $offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
+	$offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
 ?>
 
 <div class="help-block">View a preview of this page</div>
 <div class="thumbnail">
-    <img src="" id="offer_page_preview" border="0" alt="Loading thumbnail..." />
+	<img src="" id="offer_page_preview" border="0" alt="Loading thumbnail..." />
 </div>
 <div class="text-center">
 <a href="<?php echo $offer_page->getPreviewUrl() ?>"><?php echo $offer_page->getPreviewUrl() ?></a>

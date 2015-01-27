@@ -75,106 +75,71 @@
         </style>
     </head>
     <body>
-        <div class="wrapper">
-            <div class="box">
-                <div class="row row-offcanvas row-offcanvas-left">
-                    <!-- main sidebar -->
-                      <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-                          <div>
-                               <ul class="nav">
-                                  <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-                            </ul>
-
-                            <ul class="nav hidden-xs" id="lg-menu">
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/', '/index.php')) ? " active":"" ;?>"><a href="/"><i class="glyphicon glyphicon-th-large"></i> Dashboard</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/offer/offer-search', '/offer/offer', '/offer/offer-wizard')) ? " active":"" ;?>"><a href="/offer/offer-search"><i class="glyphicon glyphicon-import"></i> Offers</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/campaign/campaign-search', '/campaign/campaign-wizard', '/campaign/campaign')) ? " active":"" ;?>"><a href="/campaign/campaign-search"><i class="glyphicon glyphicon-tag"></i> Campaigns</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/lead/lead-search', '/lead/lead')) ? " active":"" ;?>"><a href="/lead/lead-search"><i class="glyphicon glyphicon-check"></i> Leads</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/export/export', '/export/export-wizard', '/export/export-search')) ? " active":"" ;?>"><a href="/export/export-search"><i class="glyphicon glyphicon-export"></i> Exports</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/export/split-search', '/export/split-wizard', '/export/split')) ? " active":"" ;?>"><a href="/export/split-search"><i class="glyphicon glyphicon-filter"></i> Splits</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/client/client-search', '/client/client-wizard', '/client/client')) ? " active":"" ;?>"><a href="/client/client-search"><i class="glyphicon glyphicon-book"></i> Clients</a></li>
-                            </ul>
-                            <ul class="nav hidden-xs" id="sidebar-footer">
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/revenue-report', '/upsell-report', '/spy-report')) ? " active":"" ;?>"><a href="#" id="nav-reports"><i class="glyphicon glyphicon-usd"></i> Reports</a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/user-search', '/admin/user', '/admin/user-wizard', '/admin/data-field-search', '/admin/data-field', '/admin/data-field-wizard', '/admin/report-column-wizard', '/admin/report-column-search', '/admin/report-column', '/admin/vertical-wizard', '/admin/vertical-search', '/admin/vertical')) ? " active":"" ;?>"><a href="#" id="nav-admin"><i class="glyphicon glyphicon-wrench"></i> Admin</a></li>
-                            </ul>
-
-                              <!-- tiny only nav-->
-                            <ul class="nav visible-xs" id="xs-menu">
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/', '/index.php')) ? " active":"" ;?>"><a href="/" class="text-center"><i class="glyphicon glyphicon-th-large"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/offer/offer-search', '/offer/offer', '/offer/offer-wizard')) ? " active":"" ;?>"><a href="/offer/offer-search" class="text-center"><i class="glyphicon glyphicon-import"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/campaign/campaign-search', '/campaign/campaign-wizard', '/campaign/campaign')) ? " active":"" ;?>"><a href="/campaign/campaign-search" class="text-center"><i class="glyphicon glyphicon-tag"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/lead/lead-search', '/lead/lead')) ? " active":"" ;?>"><a href="/lead/lead-search" class="text-center"><i class="glyphicon glyphicon-check"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/export/export', '/export/export-wizard', '/export/export-search')) ? " active":"" ;?>"><a href="/export/export-search" class="text-center"><i class="glyphicon glyphicon-export"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/export/split-search', '/export/split-wizard', '/export/split')) ? " active":"" ;?>"><a href="/export/split-search" class="text-center"><i class="glyphicon glyphicon-filter"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/client/client-search', '/client/client-wizard', '/client/client')) ? " active":"" ;?>"><a href="/client/client-search" class="text-center"><i class="glyphicon glyphicon-book"></i></a></li>
-                            </ul>
-                            <ul class="nav visible-xs" id="xs-sidebar-footer">
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/revenue-report', '/upsell-report', '/spy-report')) ? "active":"" ;?>"><a href="#" class="text-center" id="nav-reports-sm"><i class="glyphicon glyphicon-usd"></i></a></li>
-                                <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/user-search', '/admin/user', '/admin/user-wizard', '/admin/data-field-search', '/admin/data-field', '/admin/data-field-wizard', '/admin/report-column-wizard', '/admin/report-column-search', '/admin/report-column', '/admin/vertical-wizard', '/admin/vertical-search', '/admin/vertical')) ? " active":"" ;?>"><a href="#" class="text-center" id="nav-admin-sm"><i class="glyphicon glyphicon-wrench"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- secondary sidebar -->
-                    <div class="column col-sm-2 col-xs-1" style="<?php echo !in_array($_SERVER['SCRIPT_NAME'], array('/admin/apc', '/admin/server-search', '/admin/server', '/admin/server-wizard', '/admin/user-search', '/admin/user', '/admin/user-wizard', '/admin/data-field-search', '/admin/data-field', '/admin/data-field-wizard', '/admin/report-column-wizard', '/admin/report-column-search', '/admin/report-column', '/admin/vertical-wizard', '/admin/vertical-search', '/admin/vertical', '/admin/domain-group-wizard', '/admin/domain-group-search', '/admin/domain-group')) ? "display:none;":"" ;?>" id="sidebar-secondary-admin">
-                        <ul class="nav hidden-xs">
-                            <li class="separator"><h5>Admin</h5></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/data-field-search', '/admin/data-field', '/admin/data-field-wizard')) ? "active":"" ;?>"><a href="/admin/data-field-search"><i class="glyphicon glyphicon-list"></i> Data fields</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/vertical-wizard', '/admin/vertical-search', '/admin/vertical')) ? "active":"" ;?>"><a href="/admin/vertical-search"><i class="glyphicon glyphicon-wrench"></i> Verticals</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/domain-group-wizard', '/admin/domain-group-search', '/admin/domain-group')) ? "active":"" ;?>"><a href="/admin/domain-group-search"><i class="glyphicon glyphicon-th-list"></i> Domain Groups</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/report-column-wizard', '/admin/report-column-search', '/admin/report-column')) ? "active":"" ;?>"><a href="/admin/report-column-search"><i class="glyphicon glyphicon-stats"></i> Report Columns</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/server-search', '/admin/server', '/admin/server-wizard')) ? "active":"" ;?>"><a href="/admin/server-search"><i class="glyphicon glyphicon-hdd"></i> Servers</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/user-search', '/admin/user', '/admin/user-wizard')) ? "active":"" ;?>"><a href="/admin/user-search"><i class="glyphicon glyphicon-user"></i> Users</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/admin/apc')) ? "active":"" ;?>"><a href="/admin/apc"><i class="glyphicon glyphicon-cloud"></i> APC</a></li>
-                            <li><a href="/logout"><i class="glyphicon glyphicon-share"></i> Logout</a></li>
-                        </ul>
-                          <!-- tiny only nav-->
-                        <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="/admin/data-field-search"><i class="glyphicon glyphicon-list"></i> </a></li>
-                            <li><a href="/admin/vertical-search"><i class="glyphicon glyphicon-wrench"></i> </a></li>
-                            <li><a href="/admin/domain-group-search"><i class="glyphicon glyphicon-th-list"></i></a></li>
-                            <li><a href="/admin/report-column-search"><i class="glyphicon glyphicon-stats"></i> </a></li>
-                            <li><a href="/admin/server-search"><i class="glyphicon glyphicon-hdd"></i> </a></li>
-                            <li><a href="/admin/user-search"><i class="glyphicon glyphicon-user"></i> </a></li>
-                            <li><a href="/logout"><i class="glyphicon glyphicon-share"></i> </a></li>
-                        </ul>
-                    </div>
-
-                    <div class="column col-sm-2 col-xs-1" style="<?php echo !in_array($_SERVER['SCRIPT_NAME'], array('/report/revenue-report', '/report/spy-report')) ? "display:none;":"" ;?>" id="sidebar-secondary-reports">
-                        <ul class="nav hidden-xs">
-                            <li class="separator"><h5>Reports</h5></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/report/revenue-report')) ? "active":"" ;?>"><a href="/report/revenue-report"><i class="glyphicon glyphicon-usd"></i> Revenue Report</a></li>
-                            <li><a href="/report/revenue-report"><i class="glyphicon glyphicon-share-alt"></i> Upsell Report</a></li>
-                            <li class="<?php echo in_array($_SERVER['SCRIPT_NAME'], array('/report/spy-report')) ? "active":"" ;?>"><a href="/report/spy-report"><i class="glyphicon glyphicon-search"></i> Spy Report</a></li>
-                        </ul>
-                          <!-- tiny only nav-->
-                        <ul class="nav visible-xs" id="xs-menu">
-                            <li><a href="/report/revenue-report"><i class="glyphicon glyphicon-usd"></i> </a></li>
-                            <li><a href="/report/revenue-report"><i class="glyphicon glyphicon-share-alt"></i> </a></li>
-                            <li><a href="/report/spy-report"><i class="glyphicon glyphicon-search"></i> </a></li>
-                        </ul>
-                    </div>
-                    <!-- /sidebar -->
-
-                    <!-- main right col -->
-                    <div class="column" id="main">
-                        <!-- content -->
-                          <div class="row container-fluid">
-                            <!-- main col left -->
-                            <?php echo $template['content'] ?>
-                            <div class="clearfix"></div>
-                         </div>
-                    </div>
-                    <!-- /main -->
-
-                </div>
-            </div>
-        </div>
+    	<nav class="navbar-collapse navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">flux</a>
+					
+				</div>
+				<p class="navbar-text navbar-right hidden-xs"><a href="/logout" class="navbar-link"><?php echo $this->getContext()->getUser()->getUserDetails()->getName() ?>, Logout</a></p>
+			</div>
+		</nav>
+		<nav class="navbar-collapse navbar-default" role="navigation">
+			<!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+				<?php if ($this->getMenu() !== null) { ?>
+					<ul class="nav navbar-nav">
+					<?php
+						/* @var $page Zend\Navigation\Page */
+						foreach ($this->getMenu()->getPages() as $page) {
+					?>
+						<?php if ($page->hasChildren()) { ?>
+							<li class="dropdown""><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $page->getLabel() ?> <span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+								<?php
+									/* @var $child_page \Zend\Navigation\Page */
+									foreach ($page->getPages() as $child_page) {
+								?>
+									<?php if ($child_page->getLabel() != '') { ?>
+										<li><a href="/<?php echo $child_page->get('module') ?>/<?php echo $child_page->get('controller') ?><?php echo (count($child_page->get('params')) > 0) ? "?" : "" ?><?php echo http_build_query($child_page->get('params')) ?>" class="<?php echo $child_page->getClass() ?>"><?php echo $child_page->getLabel() ?></a></li>
+									<?php } else { ?>
+										<li class="divider"></li>
+									<?php } ?>
+								<?php } ?>
+								</ul>
+							</li>
+						<?php } else { ?>
+							<li><a href="/<?php echo $page->get('module') ?>/<?php echo $page->get('controller') ?><?php echo (count($page->get('params')) > 0) ? "?" : "" ?><?php echo http_build_query($page->get('params')) ?>" role="button" aria-expanded="false"><?php echo $page->getLabel() ?></a></li>
+						<?php } ?>
+					<?php } ?>
+					</ul>
+				<?php } ?>
+			</div>
+		</nav>
+		
+		<div class="container-fluid">
+			<?php if (!$this->getErrors()->isEmpty()) { ?>
+				<div class="error">
+					<img src="/theme/global/images/icons/ico_critical.gif" border="0" align="absmiddle" style="float:left;padding:2px;">
+					<?php echo $this->getErrors()->getAllErrors(); ?>
+				</div>
+			<?php } ?>
+			<!-- Insert body here -->
+			<?php echo $template["content"] ?>
+		</div>
+		
     </body>
 <script>
 //<!--
 $(document).ready(function() {
+	/*
     $('#nav-admin,#nav-admin-sm').click(function() {
         $('#sidebar-secondary-reports').hide();
         $('#sidebar-secondary-admin').toggle();
@@ -193,6 +158,7 @@ $(document).ready(function() {
         $('#xs-sidebar-footer').toggleClass('visible-xs').toggleClass('hidden-xs');
         $('#btnShow').toggle();
     });
+    */
 });
 //-->
 </script>

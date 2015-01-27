@@ -5,47 +5,35 @@ use Mojavi\Request\Request;
 
 use Flux\Vertical;
 // +----------------------------------------------------------------------------+
-// | This file is part of the Flux package.                                      |
-// |                                                                            |
-// | For the full copyright and license information, please view the LICENSE    |
-// | file that was distributed with this source code.                           |
+// | This file is part of the Flux package.									  |
+// |																			|
+// | For the full copyright and license information, please view the LICENSE	|
+// | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
 class VerticalWizardAction extends BasicAction
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any application/business logic for this action.
-     *
-     * @return mixed - A string containing the view name associated with this action
-     */
-    public function execute ()
-    {
-        if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-            try {
-                /* @var $vertical Flux\Vertical */
-                $vertical = new Vertical();
-                $vertical->populate($_POST);
-                $vertical->insert();
+	/**
+	 * Execute any application/business logic for this action.
+	 *
+	 * @return mixed - A string containing the view name associated with this action
+	 */
+	public function execute ()
+	{
+		/* @var $vertical Flux\Vertical */
+		$vertical = new Vertical();
+		$vertical->populate($_GET);
+		if ($vertical->getId() > 0) {
+			$vertical->query();
+		}
 
-                $this->getContext()->getController()->redirect('/admin/vertical-search');
-            } catch (Exception $e) {
-                $this->getErrors()->addError('error', $e->getMessage());
-            }
-            $this->getContext()->getRequest()->setAttribute("vertical", $vertical);
-            return View::SUCCESS;
-        } else {
-            /* @var $vertical Flux\Vertical */
-            $vertical = new Vertical();
-            $vertical->populate($_GET);
-
-            $this->getContext()->getRequest()->setAttribute("vertical", $vertical);
-        }
-        return View::SUCCESS;
-    }
+		$this->getContext()->getRequest()->setAttribute("vertical", $vertical);
+		return View::SUCCESS;
+	}
 }
 
 ?>

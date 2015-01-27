@@ -1,0 +1,50 @@
+[
+    {
+        "name": "novaksolutions/infusionsoft-php-sdk",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/novaksolutions/infusionsoft-php-sdk.git",
+            "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
+            "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.2.0"
+        },
+        "time": "2015-01-09 00:55:49",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "Infusionsoft/infusionsoft.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Novak Solutions",
+                "homepage": "https://novaksolutions.com"
+            }
+        ],
+        "description": "A better Infusionsoft SDK for PHP",
+        "homepage": "https://novaksolutions.com",
+        "keywords": [
+            "api",
+            "infusion",
+            "infusionsoft",
+            "infusionsoft-api",
+            "marketing",
+            "php-infusionsoft-api"
+        ]
+    }
+]

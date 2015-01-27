@@ -269,7 +269,7 @@ class ExportQueue extends MongoForm {
 	function queueLead($lead) {
 		$params = array();
 		/* @var $mapping \Flux\ClientExportMap */
-		foreach ($this->getClientExport()->getMapping() as $mapping) {
+		foreach ($this->getExport()->getClientExport()->getMapping() as $mapping) {
 			$value = $mapping->getMappedValue($lead);
 			if (trim($mapping->getFieldName()) == '') {
 				$params[$mapping->getDataField()->getKeyName()] = $value;
@@ -283,7 +283,7 @@ class ExportQueue extends MongoForm {
 		$this->setIsError(false);
 		$this->setResponse(null);
 		$this->setResponseTime(0);
-		
+		$this->setLeadId($lead->getId());
 		return parent::insert();
 	}
 	
