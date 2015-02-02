@@ -44,27 +44,37 @@ class InfusionSoft extends ExportAbstract {
 			$params = $export_queue_item->getQs();
 			$api_key = '';
 			$infusion_host = '';
+			$tags = array();
 			/* @var $contact Infusionsoft_Contact */
 			$contact = new \Infusionsoft_Contact();
 			foreach ($params as $key => $value) {
 				if ($key == 'apiKey') { continue; }
 				if ($key == 'infusionsoftHost') { continue; }
-				try {
-					$contact->{$key} = $value;
-				} catch (\Exception $e) {
+				if (strtolower($key) == 'tag') { 
+					$tags[] = $value;
+				} else {
 					try {
-						$contact->addCustomField($key);
 						$contact->{$key} = $value;
 					} catch (\Exception $e) {
-						echo StringTools::consoleColor($e->getMessage(), StringTools::CONSOLE_COLOR_RED) . "\n";
+						try {
+							$contact->addCustomField($key);
+							$contact->{$key} = $value;
+						} catch (\Exception $e) {
+							echo StringTools::consoleColor($e->getMessage(), StringTools::CONSOLE_COLOR_RED) . "\n";
+						}
 					}
 				}
 			}
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending infusionsoft request using host: " . $this->getExport()->getClientExport()->getInfusionsoftHost());
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending infusionsoft request using key: " . $this->getExport()->getClientExport()->getInfusionsoftApiKey());
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending infusionsoft request using contact: " . var_export($contact->toArray(), true));
 			\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getExport()->getClientExport()->getInfusionsoftHost(), $this->getExport()->getClientExport()->getInfusionsoftApiKey(), 443));			
-			\Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
+			$contact_id = \Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
+			
+			// Now add tags to the contact
+			if (count($tags) > 0) {
+				foreach ($tags as $tag_id) {
+					\Infusionsoft_ContactService::addToGroup($contact_id, $tag_id);
+				}
+			}
+			
 			\Infusionsoft_AppPool::clearApps();
 		}
 
