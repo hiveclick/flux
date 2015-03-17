@@ -43,9 +43,9 @@ class LeadDataFieldAction extends BasicRestAction
         
             // Convert the data field names and values to a key/value array
             $params = array();
-            if ($this->getContext()->getRequest()->hasParameter('posting_url_dataField_name') && $this->getContext()->getRequest()->hasParameter('posting_url_dataField_value')) {
-                $values = $this->getContext()->getRequest()->getParameter('posting_url_dataField_value', array());
-                foreach ($this->getContext()->getRequest()->getParameter('posting_url_dataField_name', array()) as $key => $name) {
+            if ($this->getContext()->getRequest()->hasParameter('posting_url_data_field_name') && $this->getContext()->getRequest()->hasParameter('posting_url_data_field_value')) {
+                $values = $this->getContext()->getRequest()->getParameter('posting_url_data_field_value', array());
+                foreach ($this->getContext()->getRequest()->getParameter('posting_url_data_field_name', array()) as $key => $name) {
                     if (isset($values[$key])) {
                         $params[$name] = $values[$key];
                     } else {

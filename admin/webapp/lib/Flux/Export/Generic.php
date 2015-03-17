@@ -16,7 +16,7 @@ class Generic extends ExportAbstract {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_NONE);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_NONE);
 		$this->setName('Generic Export');
 		$this->setDescription('An export that doesn\'t do anything at all');
 	}

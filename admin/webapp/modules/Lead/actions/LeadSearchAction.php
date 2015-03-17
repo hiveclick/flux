@@ -29,18 +29,31 @@ class LeadSearchAction extends BasicAction
 		$lead = new Lead();
 		$lead->populate($_REQUEST);
 
-		$datafield = new \Flux\DataField();
-		$datafield->setIgnorePagination(true);
-		$datafields = $datafield->queryAll();
+		/* @var $datafield \Flux\DataField */
+		$data_field = new \Flux\DataField();
+		$data_field->setSort('name');
+		$data_field->setSord('asc');
+		$data_field->setIgnorePagination(true);
+		$data_fields = $data_field->queryAll();
 		
+		/* @var $offer \Flux\Offer */
 		$offer = new \Flux\Offer();
 		$offer->setSort('name');
+		$offer->setSord('asc');
 		$offer->setIgnorePagination(true);
 		$offers = $offer->queryAll();
+		
+		/* @var $campaign \Flux\Campaign */
+		$campaign = new \Flux\Campaign();
+		$campaign->setSort('_id');
+		$campaign->setSord('desc');
+		$campaign->setItemsPerPage(100);
+		$campaigns = $campaign->queryAll();
 
 		$this->getContext()->getRequest()->setAttribute("lead", $lead);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		$this->getContext()->getRequest()->setAttribute("datafields", $datafields);
+		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
+		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);
 		return View::SUCCESS;
 	}
 }

@@ -2,7 +2,7 @@
 	/* @var $flow \Flux\Flow */
 	$flow = $this->getContext()->getRequest()->getAttribute("flow", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right">
 		<a href="/flow/flow-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Flow</a>
 	</div>

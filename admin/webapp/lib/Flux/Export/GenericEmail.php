@@ -15,7 +15,7 @@ class GenericEmail extends ExportAbstract {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_EMAIL);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_EMAIL);
 		$this->setName('Generic Email Export');
 		$this->setDescription('Send an email to the recipients with multiple leads in an attachment');
 	}
@@ -30,7 +30,7 @@ class GenericEmail extends ExportAbstract {
 		StringTools::consoleWrite('  Building file of recipients', 'Building', StringTools::CONSOLE_COLOR_RED);
 		// Create an export file that we will for the FTP or email attachment
 		if (($fh = fopen($this->getExportFolder() . '/original.txt', 'w')) !== false) {
-			$mapping = $this->getExport()->getClientExport()->getMapping();
+			$mapping = $this->getExport()->getFulfillment()->getMapping();
 		
 			// Write out our headers
 			$header = array();
@@ -102,7 +102,7 @@ class GenericEmail extends ExportAbstract {
 		$message->setBody($body);
 		$message->setFrom(MO_MAIL_USERNAME, 'Leads');
 		
-		foreach ($this->getExport()->getClientExport()->getEmailAddress() as $email_address) {
+		foreach ($this->getExport()->getFulfillment()->getEmailAddress() as $email_address) {
 			StringTools::consoleWrite('  Sending as email w/ attachment', $email_address . ' (' . number_format((microtime(true) - $start_time), 3) . 's)', StringTools::CONSOLE_COLOR_GREEN, true);
 			$message->addTo($email_address);
 		}

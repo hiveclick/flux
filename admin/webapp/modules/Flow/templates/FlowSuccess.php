@@ -30,7 +30,7 @@
 		background-color:#ccc;
 	}
 </style>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right visible-xs">
 		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
 			<span class="sr-only">Toggle navigation</span>

@@ -4,134 +4,130 @@
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right">
 		<a href="/campaign/campaign-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Campaign</a>
 	</div>
-   <h2>Campaigns</h2>
+	<h1>Campaigns</h1>
 </div>
 <div class="help-block">These are all the campaigns assigned to the clients and offers</div>
-<br/>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default" style="overflow:visible;">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Search Filters</a>
-			</h4>
-		</div>
-		<div id="collapseOne" class="panel-collapse collapse in">
-			<div class="panel-body">
-				<form id="campaign_search_form" method="GET" action="/api">
-					<input type="hidden" name="func" value="/campaign/campaign-search">
-					<div class="form-group">
-						<input type="text" name="keywords" class="form-control" placeholder="search by campaign id" value="" />
-					</div>
-					<div style="display:none;" id="advanced_search_div">
-						<fieldset>
-							<legend>Advanced Search</legend>
-							<div class="form-group col-sm-6">
-								<label class="control-label hidden-xs" for="name">Offer</label>
-								<div class="">
-									<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="All Offers">
-										<?php foreach($offers as $offer) { ?>
-											<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-							<div class="form-group col-sm-6">
-								<label class="control-label hidden-xs" for="name">Client</label>
-								<div class="">
-									<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="All Clients">
-										<?php foreach ($clients as $client) { ?>
-											<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-					<div class="text-center">
-						<input type="button" class="btn btn-warning" id="show_advanced" name="show_advanced" value="show advanced filters" />
-						<input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
-					</div>
-				</form>
+<div class="panel panel-primary">
+	<div id='campaign-header' class='grid-header panel-heading clearfix'>
+		<form id="campaign_search_form" class="form-inline" method="GET" action="/api">
+			<input type="hidden" name="func" value="/campaign/campaign">
+			<input type="hidden" name="format" value="json" />
+			<input type="hidden" id="page" name="page" value="1" />
+			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+			<input type="hidden" id="sort" name="sort" value="name" />
+			<input type="hidden" id="sord" name="sord" value="asc" />
+			<div class="text-right">
+				<div class="form-group text-left">
+					<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
+						<?php 
+							/* @var $offer \Flux\Offer */
+							foreach($offers as $offer) { 
+						?>
+							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+						<?php
+							/* @var $client \Flux\Client */ 
+							foreach ($clients as $client) { 
+						?>
+							<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
+	<div id="campaign-grid"></div>
+	<div id="campaign-pager" class="panel-footer"></div>
 </div>
-<table id="campaign_table" class="table table-hover table-bordered table-striped table-responsive">
-	<thead>
-		<tr>
-			<th>Campaign</th>
-			<th>Client</th>
-			<th>Offer</th>
-			<th>Campaign Key</th>
-			<th>Status</th>
-			<th>Clicks</th>
-			<th>Conversions</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
+
 <script>
 //<!--
 $(document).ready(function() {
-	$('#offer_id_array,#client_id_array').selectize();
-
-	$('#show_advanced').click(function() {
-		$('#advanced_search_div').slideToggle();
+	var columns = [
+		{id:'_id', name:'name', field:'_id', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a href="/campaign/campaign?_id=' + dataContext._id + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">' + dataContext.description + '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '<a href="/client/client?_id=' + dataContext.client.client_id + '">' + value + '</a>';
+		}},
+		{id:'offer_name', name:'offer', field:'offer.offer_name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '<a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + value + '</a>';
+		}},
+		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>') {
+				return '<span class="text-success">Active</span>';
+			} else if (value == '<?php echo \Flux\Campaign::CAMPAIGN_STATUS_INACTIVE ?>') {
+				return '<span class="text-danger">Inactive</span>';
+			} else if (value == '<?php echo \Flux\Campaign::CAMPAIGN_STATUS_DELETED ?>') {
+				return '<span class="text-muted">Deleted</span>';
+			}
+		}},
+		{id:'daily_clicks', name:'# clicks', field:'daily_clicks', sort_field:'daily_clicks', cssClass: 'text-center', def_value: ' ', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '0') {
+				return '<span class="text-muted">' + $.number(value) + '</span>';
+			} else {
+				return $.number(value);
+			}
+		}},
+		{id:'daily_conversions', name:'# conversions', field:'daily_conversions', sort_field:'daily_conversions', cssClass: 'text-center', def_value: ' ', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '0') {
+				return '<span class="text-muted">' + $.number(value) + '</span>';
+			} else {
+				return $.number(value);
+			}
+		}}
+	];
+	
+ 	slick_grid = $('#campaign-grid').slickGrid({
+		pager: $('#campaign-pager'),
+		form: $('#campaign_search_form'),
+		columns: columns,
+		useFilter: false,
+		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
+		pagingOptions: {
+			pageSize: 25,
+			pageNum: 1
+		},
+		slickOptions: {
+			defaultColumnWidth: 150,
+			forceFitColumns: true,
+			enableCellNavigation: false,
+			width: 800,
+			rowHeight: 48
+		}
 	});
 	
-	$('#campaign_search_form').on('submit', function(e) {
-		$('#campaign_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
+ 	$("#txtSearch").keyup(function(e) {
+  		// clear on Esc
+  		if (e.which == 27) {
+  			this.value = "";
+  		} else if (e.which == 13) {
+  			$('#campaign_search_form').trigger('submit');
+  		}
+  	});
+	  	
+  	$('#campaign_search_form').trigger('submit');
 	
-	$('#campaign_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#campaign_search_form').serializeObject();
-			},
-			method: 'POST'
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-			{ name: "description", data: "description", createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/campaign/campaign?_id=' + rowData._id + '">' + cellData + '</a>');
-			}},
-			{ name: "client_id", data: "_client_name", createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/client/client?_id=' + rowData.client_id + '">' + cellData + '</a>');
-			}},
-			{ name: "offer_id", data: "_offer_name", createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/offer/offer?_id=' + rowData.offer_id + '">' + cellData + '</a>');
-			}},
-			{ name: "_id", data: "_id", createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/campaign/campaign?_id=' + rowData._id + '">' + cellData + '</a>');
-			}},
-			{ name: "status", data: "_status_name" },
-			{ name: "daily_clicks", data: "daily_clicks", sClass: "text-right", createdCell: function (td, cellData, rowData, row, col) {
-				if (cellData == '0') {
-					$(td).html('<span class="text-muted">' + $.number(cellData) + '</span>');
-				} else {
-					$(td).html($.number(cellData));
-				}
-			}},
-			{ name: "daily_conversions", data: "daily_conversions", sClass: "text-right", createdCell: function (td, cellData, rowData, row, col) {
-				if (cellData == '0') {
-					$(td).html('<span class="text-muted">' + $.number(cellData) + '</span>');
-				} else {
-					$(td).html($.number(cellData));
-				}
-			}}
-	  	]
+	$('#offer_id_array,#client_id_array').selectize({
+		dropdownWidthOffset: 150,
+		allowEmptyOption: true
+	}).on('change', function(e) {
+		$('#campaign_search_form').trigger('submit');
 	});
 });
 //-->

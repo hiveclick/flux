@@ -19,7 +19,7 @@ class HipHmlEmail extends GenericSingleEmail {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_EMAIL);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_EMAIL);
 		$this->setName('Metal Hip Single Email Export');
 		$this->setDescription('Send an email to the recipients with multiple leads sent in multiple emails');
 	}

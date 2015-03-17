@@ -32,7 +32,7 @@ class OfferPanePagesAction extends BasicAction
 
 		/* @var $offer_page Flux\OfferPage */
 		$offer_page = new \Flux\OfferPage();
-		$offer_page->setOfferId($offer->getId());
+		$offer_page->setOffer($offer->getId());
 		$offer_page->setIgnorePagination(true);
 		$offer_page->setSort('priority');
 		$offer_page->setSord('ASC');

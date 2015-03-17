@@ -3,148 +3,119 @@
 	$offer = $this->getContext()->getRequest()->getAttribute("offer", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right">
 		<a href="/offer/offer-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Offer</a>
 	</div>
-   <h2>Offers</h2>
+   <h1>Offers</h1>
 </div>
 <div class="help-block">These are all the offers in the system.  Choose one to change settings on it and view reports for it</div>
-<br/>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Search Filters</a>
-			</h4>
-		</div>
-		<div id="collapseOne" class="panel-collapse collapse in">
-			<div class="panel-body">
-				<form id="offer_search_form" method="GET" action="/api">
-					<input type="hidden" name="func" value="/offer/offer">
-					<div class="form-group">
-						<div class="">
-							<input type="text" name="keywords" class="form-control" placeholder="search by name or vertical" value="" />
-						</div>
-					</div>
-					<div style="display:<?php echo (count($offer->getClientIdArray()) > 0) ? 'block' : 'none' ?>;" id="advanced_search_div">
-						<fieldset>
-							<legend>Advanced Search</legend>
-							<div class="form-group col-sm-6">
-								<label class="control-label hidden-xs" for="name">Status</label>
-								<div class="">
-									<select class="form-control selectize" name="status_array[]" id="status_array" multiple placeholder="All Statuses">
-										<?php foreach (\Flux\Offer::retrieveStatuses() as $status_id => $status_name) { ?>
-											<option value="<?php echo $status_id ?>" <?php echo ((count($offer->getStatusArray()) == 0 && $status_id == \Flux\Offer::OFFER_STATUS_ACTIVE) || in_array($status_id, $offer->getStatusArray())) ? "selected" : "" ?>><?php echo $status_name ?></option>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-							<div class="form-group col-sm-6">
-								<label class="control-label hidden-xs" for="name">Client</label>
-								<div class="">
-									<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="All Clients">
-										<?php foreach ($clients as $client) { ?>
-											<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $offer->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-					<div class="text-center">
-						<input type="button" class="btn btn-warning" id="show_advanced" name="show_advanced" value="show advanced filters" />
-						<input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
-					</div>
-				</form>
+<div class="panel panel-primary">
+	<div id='offer-header' class='grid-header panel-heading clearfix'>
+		<form id="offer_search_form" method="GET" action="/api">
+			<input type="hidden" name="func" value="/offer/offer">
+			<input type="hidden" name="format" value="json" />
+			<input type="hidden" id="page" name="page" value="1" />
+			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+			<input type="hidden" id="sort" name="sort" value="name" />
+			<input type="hidden" id="sord" name="sord" value="asc" />
+			<div class="pull-right">
+				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
 			</div>
-		</div>
+		</form>
 	</div>
+	<div id="offer-grid"></div>
+	<div id="offer-pager" class="panel-footer"></div>
 </div>
 
-<div class="pane">
-	<table id="offer_table" class="table table-hover table-bordered table-striped table-responsive">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Payout</th>
-				<th>Verticals</th>
-				<th>Clicks</th>
-				<th>Conversions</th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
-</div>
 <script>
 //<!--
 $(document).ready(function() {
-	$('#offer_search_form').on('submit', function(e) {
-		$('#offer_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
-
-	$('#status_array,#client_id_array').selectize();
-
-	$('#show_advanced').click(function() {
-		$('#advanced_search_div').slideToggle();
-	});
-
-	$('#offer_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#offer_search_form').serializeObject();
+	var columns = [
+		{id:'_id', name:'id', field:'_id', sort_field:'_id', def_value: ' ', sortable:true, type: 'string', hidden:true, formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a href="/offer/offer?_id=' + dataContext._id + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">';
+			if (dataContext.status == '<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>') {
+				ret_val += ' <span class="label label-success">active</span> ';
+			} else if (dataContext.status == '<?php echo \Flux\Offer::OFFER_STATUS_INACTIVE ?>') {
+				ret_val += ' <span class="label label-danger">inactive</span> ';
 			}
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-			{ name: "name", data: "name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				var html = '<a href="/offer/offer?_id=' + rowData._id + '">' + rowData.name + '</a>';
-				
-				html += '<div class="small">';
-				if (rowData.status == '<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>') {
-					html += ' <span class="label label-success">active</span> ';
-				} else if (rowData.status == '<?php echo \Flux\Offer::OFFER_STATUS_INACTIVE ?>') {
-					html += ' <span class="label label-danger">inactive</span> ';
-				}
-				html += rowData._client_name + '</div>';
-				$(td).html(html);
-			}},
-			{ name: "payout", data: "payout", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('$' + $.number(cellData, 2));
-			}},
-			{ name: "verticals", data: "verticals", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				var cell_html = '';
-				if (cellData instanceof Array) {
-					$.each(cellData, function(i,item) {
-						cell_html += '<span class="badge alert-info">' + item + '</span> ';
-					});
-				}
-				$(td).html(cell_html);
-			}},
-			{ name: "daily_clicks", data: "daily_clicks", defaultContent: '', sClass: "text-right", createdCell: function (td, cellData, rowData, row, col) {
-				if (cellData == '0') {
-					$(td).html('<span class="text-muted">' + $.number(cellData) + '</span>');
-				} else {
-					$(td).html($.number(cellData));
-				}
-			}},
-			{ name: "daily_conversions", data: "daily_conversions", defaultContent: '', sClass: "text-right", createdCell: function (td, cellData, rowData, row, col) {
-				if (cellData == '0') {
-					$(td).html('<span class="text-muted">' + $.number(cellData) + '</span>');
-				} else {
-					$(td).html($.number(cellData));
-				}
-			}}
-	  	]
+			ret_val += dataContext.client.client_name + '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'payout', name:'payout', field:'payout', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '$' + $.number(value, 2);
+		}},
+		{id:'verticals', name:'verticals', field:'verticals', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var cell_html = '';
+			if (value instanceof Array) {
+				$.each(value, function(i,item) {
+					cell_html += '<span class="badge alert-info">' + item + '</span> ';
+				});
+			}
+			return cell_html;
+		}},
+		{id:'clicks', name:'clicks', field:'clicks', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '0') {
+				return '<span class="text-muted">' + $.number(value) + '</span>';
+			} else {
+				return $.number(value);
+			}
+		}},
+		{id:'conversions', name:'conversions', field:'conversions', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '0') {
+				return '<span class="text-muted">' + $.number(value) + '</span>';
+			} else {
+				return $.number(value);
+			}
+		}},
+		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>') {
+				return '<span class="text-success">Active</span>';
+			} else if (value == '<?php echo \Flux\Offer::OFFER_STATUS_INACTIVE ?>') {
+				return '<span class="text-danger">Inactive</span>';
+			} else if (value == '<?php echo \Flux\Offer::OFFER_STATUS_DELETED ?>') {
+				return '<span class="text-muted">Deleted</span>';
+			}
+		}}
+	];
+
+ 	slick_grid = $('#offer-grid').slickGrid({
+		pager: $('#offer-pager'),
+		form: $('#offer_search_form'),
+		columns: columns,
+		useFilter: false,
+		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
+		pagingOptions: {
+			pageSize: 25,
+			pageNum: 1
+		},
+		slickOptions: {
+			defaultColumnWidth: 150,
+			forceFitColumns: true,
+			enableCellNavigation: false,
+			width: 800,
+			rowHeight: 48
+		}
 	});
+
+  	$("#txtSearch").keyup(function(e) {
+  		// clear on Esc
+  		if (e.which == 27) {
+  			this.value = "";
+  		} else if (e.which == 13) {
+  			$('#offer_search_form').trigger('submit');
+  		}
+  	});
+  	
+  	$('#offer_search_form').trigger('submit');
+	
+	$('#status_array,#client_id_array').selectize();
 });
 //-->
 </script>

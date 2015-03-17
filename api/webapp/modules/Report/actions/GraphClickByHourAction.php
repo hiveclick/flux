@@ -28,7 +28,7 @@ class GraphClickByHourAction extends BasicRestAction
      * @return \Flux\SpyReport
      */
     function getInputForm() {
-        return new \Flux\GraphLeadByHour();
+        return new \Flux\Report\GraphLeadByHour();
     }
 
     /**

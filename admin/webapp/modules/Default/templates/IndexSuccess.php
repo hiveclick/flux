@@ -1,10 +1,10 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <br /><br />
-<div class="full col-sm-11">
+<div class="full">
 	<!-- content -->
 	<div class="row">
 		<!-- main col right -->
-		<div class="col-sm-9">
+		<div class="col-md-9 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading"><a href="/report/revenue-report" class="pull-right">View all</a> <h4>Click Traffic</h4></div>
 				<div class="panel-body">
@@ -22,7 +22,7 @@
 
 
 		<!-- main col right -->
-		<div class="col-sm-3">
+		<div class="col-md-3 hidden-sm hidden-xs">
 			<div class="panel panel-default well">
 				<img class="col-sm-12" src="/api?func=/admin/user-profile-image?_id=<?php echo $this->getUserDetails()->getId() ?>" border="0" />
 				<br />
@@ -35,9 +35,8 @@
 				<div class="panel-heading"><h4>Common Links</h4></div>
 				<div class="panel">
 					<div class="list-group">
-						<a href="/report/spy-report" class="list-group-item">Spy Report</a>
-						<a href="/admin/datafield-search" class="list-group-item">Data Fields</a>
 						<a href="/offer/offer-search" class="list-group-item">Offers</a>
+						<a href="/lead/lead-search" class="list-group-item">Leads</a>
 					</div>
 				</div>
 			</div>
@@ -50,18 +49,6 @@
 			</div>
 		</div>
 	</div><!--/row-->
-
-	<div class="row" id="footer">
-		<div class="col-sm-6">
-
-		</div>
-		<div class="col-sm-6">
-			<p>
-			<a href="#" class="pull-right">&copy;Copyright 2014</a>
-			</p>
-		</div>
-	</div>
-	<hr>
 </div>
 <script>
 //<!--

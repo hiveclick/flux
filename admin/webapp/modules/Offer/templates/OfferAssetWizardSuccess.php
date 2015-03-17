@@ -3,7 +3,7 @@
 	$offer_asset = $this->getContext()->getRequest()->getAttribute("offer_asset", array());
 ?>
 <?php if ($offer_asset->getId() == 0) { ?>
-	<div id="header">
+	<div class="page-header">
 		<h2><a href="/offer/offer?_id=<?php echo $offer_asset->getOfferId() ?>"><?php echo $offer_asset->getOffer()->getName() ?></a> <small>New Asset</small></h2>
 	</div>
 	<div class="help-block">Use this form to add a new asset to this offer</div>
@@ -241,7 +241,7 @@
 	//-->
 	</script>
 <?php } else { ?>
-	<div id="header">
+	<div class="page-header">
 		<h2><a href="/offer/offer?_id=<?php echo $offer_asset->getOfferId() ?>"><?php echo $offer_asset->getOffer()->getName() ?></a> <small><?php echo $offer_asset->getName() ?></small></h2>
 	</div>
 	<div class="help-block">Use this form to update an existing asset on this offer</div>

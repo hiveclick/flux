@@ -24,29 +24,20 @@ class DataFieldWizardAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-			try {
-				/* @var $datafield Flux\DataField */
-				$datafield = new DataField();
-				$datafield->populate($_POST);
-				$datafield->insert();
-
-				$this->getContext()->getController()->redirect('/admin/data-field?_id=' . $datafield->getId());
-			} catch (Exception $e) {
-				$this->getErrors()->addError('error', $e->getMessage());
-			}
-			$this->getContext()->getRequest()->setAttribute("datafield", $datafield);
-			return View::SUCCESS;
-		} else {
-			/* @var $datafield Flux\DataField */
-			$datafield = new DataField();
-			$datafield->populate($_GET);
-			if ($datafield->getId() > 0) {
-				$datafield->query();
-			}
-
-			$this->getContext()->getRequest()->setAttribute("datafield", $datafield);
+		
+		/* @var $datafield Flux\DataField */
+		$datafield = new DataField();
+		$datafield->populate($_GET);
+		if ($datafield->getId() > 0) {
+			$datafield->query();
 		}
+		
+		// Pull in the list of unique tag names
+		$tags = $datafield->queryUniqueTagNames();
+
+		$this->getContext()->getRequest()->setAttribute("datafield", $datafield);
+		$this->getContext()->getRequest()->setAttribute("tags", $tags);
+			
 		return View::SUCCESS;
 	}
 }

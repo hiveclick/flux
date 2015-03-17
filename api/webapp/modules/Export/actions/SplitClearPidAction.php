@@ -35,6 +35,13 @@ class SplitClearPidAction extends BasicRestAction
     /**
      * Executes a PUT request
      */
+    function executeGet($input_form) {
+    	return $this->executePost($input_form);
+    }
+    
+    /**
+     * Executes a PUT request
+     */
     function executePost($input_form) {
         $ajax_form = new BasicAjaxForm();
         /* @var $split_form \Flux\Split */

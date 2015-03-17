@@ -15,18 +15,18 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label hidden-xs" for="type">Export</label>
 			<div class="col-sm-10">
-				<select id="client_export_id" name="client_export_id" class="form-control selectize">
+				<select id="fulfillment_id" name="fulfillment_id" class="form-control selectize">
 					<?php
 						/* @var $client \Flux\Client */ 
 						foreach ($clients as $client) { 
 					?>
-						<?php if (count($client->getClientExports()) > 0) { ?>
+						<?php if (count($client->getFulfillments()) > 0) { ?>
 							<optgroup label="<?php echo $client->getName() ?>">
 								<?php 
-									/* @var $client \Flux\ClientExport */
-									foreach ($client->getClientExports() AS $client_export) { 
+									/* @var $client \Flux\Fulfillment */
+									foreach ($client->getFulfillments() AS $fulfillment) { 
 								?>
-									<option value="<?php echo $client_export->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $client_export->getId(), 'name' => $client_export->getName()))) ?>"><?php echo $client_export->getName() ?></option>
+									<option value="<?php echo $fulfillment->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
 								<?php } ?>
 							</optgroup>
 						<?php } ?>
@@ -52,7 +52,7 @@
 </form>
 <script>
 //<!--
-$('#client_export_id').selectize();
+$('#fulfillment_id').selectize();
 
 $('#lead_fulfill_manual_form').form(
 	function(data) {

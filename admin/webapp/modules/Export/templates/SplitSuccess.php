@@ -6,108 +6,114 @@
 	$domain_groups = $this->getContext()->getRequest()->getAttribute("domain_groups", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 ?>
-<div id="header">
-	<h2><a href="/export/split-search">Splits</a> <small><?php echo $split->getName() ?></small></h2>
-</div>
-<div id="tabs">
-	<ul id="split_tabs" class="nav nav-pills">
-		<li class="active"><a id="tabs-a-main" href="/export/split?_id=<?php echo $split->getId() ?>">Split</a></li>
-		<li><a id="tabs-a-positions" href="/export/split-pane-position?_id=<?php echo $split->getId() ?>">Positions</a></li>
-	</ul>
-</div>
-<div class="help-block">Manage a split and it's rules that determine what exports receive data</div>
-<br/>
-<form id="split_queue_search_form" method="GET" action="/api">
-	<input type="hidden" name="items_per_page" value="100">
-	<input type="hidden" name="func" value="/export/split-queue">
-	<input type="hidden" name="split_id" value="<?php echo $split->getId() ?>">
-</form>
-<div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">Pending Leads</h4>
+<div class="page-header">
+	<!-- Actions -->
+	<div class="pull-right">
+		<div class="visible-sm visible-xs">
+			<div class="btn-group">
+  				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li><a data-toggle="modal" data-target="#edit_split_modal" href="/export/split-pane-edit?_id=<?php echo $split->getId() ?>">edit split</a></li>
+					<li class="divider"></li>
+					<li><a href="/export/split-pane-spy?_id=<?php echo $split->getId() ?>">view leads</a></li>
+					<li class="divider"></li>
+					<li><a href="#" id="clear_pid_sm">clear pid</a></li>
+					<li class="divider"></li>
+					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+				</ul>
+			</div>
 		</div>
-		<div class="panel-body">
-			<table id="split_queue_table" class="table table-hover table-bordered table-striped table-responsive">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Email</th>
-						<th>Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td colspan="<?php echo count($data_fields) + 1 ?>">
-							<div class="alert alert-default text-center"><span class="fa fa-spinner fa-spin"></span> Please wait, loading data...</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div class="hidden-sm hidden-xs">
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" data-toggle="modal" data-target="#edit_split_modal" href="/export/split-pane-edit?_id=<?php echo $split->getId() ?>">edit split</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="/export/split-pane-spy?_id=<?php echo $split->getId() ?>">view leads</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="#" id="clear_pid">clear pid</a>
+			</div>
+			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
 		</div>
 	</div>
+	<h1><?php echo $split->getName() ?></h1>
+</div>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb">
+	<li><a href="/export/split-search">Splits</a></li>
+	<li class="active"><?php echo $split->getName() ?></li>
+</ol>
+
+<!-- Page Content -->
+
+<div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
+	<div class="help-block"><?php echo $split->getDescription() ?></div>
+	<h3>Filters</h3>
+	<hr />
+	<div class="help-block">This split will use the following filters when finding and fulfilling leads</div>
+	<b>Offers</b>
+	<ul>
+		<?php if (count($split->getOffers()) > 0) { ?>
+			<?php
+				/* @var $offer \Flux\Link\Offer */ 
+				foreach ($split->getOffers() as $offer) { 
+			?>
+				<li><?php echo $offer->getOfferName() ?></li>
+			<?php } ?>
+		<?php } else { ?>
+			<li class="help-block"><i>All Offers</i></li>
+		<?php } ?>
+	</ul>
+	<p />
+	<b>Filters</b>
+	<ul>
+		<?php if (count($split->getFilters()) > 0) { ?>
+			<?php
+				/* @var $filter \Flux\Link\DataField */ 
+				foreach ($split->getFilters() as $filter) {
+			?>
+				<li>
+					<?php echo $filter->getDataFieldName() ?>
+					<?php if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) { ?>
+						<i>is</i>
+						<?php echo implode(", ", $filter->getDataFieldValue()) ?>
+					<?php } else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) { ?>
+						<i>is not</i>
+						<?php echo implode(", ", $filter->getDataFieldValue()) ?>
+					<?php } else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) { ?>
+						<i>is not blank</i>
+					<?php } else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET) { ?>
+						<i>is set</i>
+					<?php } else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) { ?>
+						<i>is greater than</i>
+						<?php echo implode(", ", $filter->getDataFieldValue()) ?>
+					<?php } else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) { ?>
+						<i>is less than</i>
+						<?php echo implode(", ", $filter->getDataFieldValue()) ?>
+					<?php } ?>
+				</li>
+			<?php } ?>
+		<?php } else { ?>
+			<li class="help-block"><i>No Filters</i></li>
+		<?php } ?>
+	</ul>
 </div>
 <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">Split Info</h4>
-		</div>
-		<div class="panel-body">
-			<b><?php echo $split->getName() ?></b>
-			<div class="help-block"><?php echo $split->getDescription() ?></div>
-			<hr />
-			<b>Offers</b>
-			<ul>
-				<?php if (count($split->getOfferId()) > 0) { ?>
-					<?php foreach ($split->getOfferId() as $offer_id) { ?>
-						<?php 
-							$offer = new \Flux\Offer();
-							$offer->setId($offer_id);
-							$offer->query();
-						?>
-						<li><?php echo $offer->getName() ?></li>
-					<?php } ?>
-				<?php } else { ?>
-					<li class="help-block"><i>All Offers</i></li>
-				<?php } ?>
-			</ul>
-			<b>Domain Groups</b>
-			<ul>
-				<?php if (count($split->getDomainGroupId()) > 0) { ?>
-					<?php foreach ($split->getDomainGroupId() as $domain_group_id) { ?>
-						<?php 
-							$domain_group = new \Flux\DomainGroup();
-							$domain_group->setId($domain_group_id);
-							$domain_group->query();
-						?>
-						<li><?php echo $domain_group->getName() ?></li>
-					<?php } ?>
-				<?php } else { ?>
-					<li><i class="help-block">All Domain Groups</i></li>
-				<?php } ?>
-			</ul>
-			<b>Required Fields</b>
-			<ul>
-				<?php if (count($split->getDataFieldId()) > 0) { ?>
-					<?php foreach ($split->getDataFieldId() as $data_field_id) { ?>
-						<?php 
-							$data_field = new \Flux\DataField();
-							$data_field->setId($data_field_id);
-							$data_field->query();
-						?>
-						<li><?php echo $data_field->getName() ?></li>
-					<?php } ?>
-				<?php } else { ?>
-					<li class="help-block"><i>All Data Fields</i></li>
-				<?php } ?>
-			</ul>
-		</div>
-		<div class="text-center">
-			<a data-toggle="modal" data-target="#edit_split_modal" href="/export/split-wizard?_id=<?php echo $split->getId() ?>" class="btn btn-success"><span class="glyphicon glyphicon-check"></span> Edit Split Settings</a>
-		</div>
-		<p class="clearfix" />
-	</div>	
-	<p />
+	<ul class="list-group">
+		<li class="list-group-item active">Split Statistics</li>
+		<li class="list-group-item">
+			<span class="badge">0</span>
+			Leads this hour
+		</li>
+		<li class="list-group-item">
+			<span class="badge">0</span>
+			Leads today
+		</li>
+		<li class="list-group-item">
+			<span class="badge">0</span>
+			Leads yesterday
+		</li>
+	</ul>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">Split Info</h4>
@@ -129,53 +135,10 @@
 <script>
 //<!--
 $(document).ready(function() {
-
-	$('#split_clear_pid_form').form(function(data) {
-		if (data.record) {
-			$.rad.notify('Split reset', 'This split has been reset and will resume normal operation within a few minutes');
-		}
-	});
-	
-	$('#split_queue_search_form').on('submit', function(e) {
-		$('#split_queue_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
-	
-	$('#split_queue_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#split_queue_search_form').serializeObject();
-			},
-			method: 'POST'
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-  				{ name: "_id", data: "_id", createdCell: function (td, cellData, rowData, row, col) {
-					$(td).html('<a href="/lead/lead?_id=' + cellData + '">' + cellData + '</a>');
-				}},
-				{ name: "_d.em", data: "_d.em", createdCell: function (td, cellData, rowData, row, col) {
-					$(td).html('<a href="/lead/lead?_id=' + rowData._id + '">' + cellData + '</a>');
-				}},
-				{ name: "_d.fn", data: "_d.fn", createdCell: function (td, cellData, rowData, row, col) {
-					value = rowData._d.fn + ' ' + rowData._d.ln;
-					$(td).html('<a href="/lead/lead?_id=' + rowData._id + '">' + value + '</a>');
-				}}
-				
-		  	],
-			columnDefs: [
-				{
-					targets: [ 0,1,2 ], // Show the first column by default
-					visible: true,
-					orderable: true
-					
-				}
-		   ]
+	$('#clear_pid,#clear_pid_sm').click(function() {
+		$.rad.post('/api', { func: '/export/split-clear-pid', _id: '<?php echo $split->getId() ?>' }, function(data) {
+			$.rad.notify('Split PID Cleared', 'The Split PID has been cleared and this split should start promptly.')
+		});
 	});
 
 	$('#edit_split_modal').on('hide.bs.modal', function(e) {

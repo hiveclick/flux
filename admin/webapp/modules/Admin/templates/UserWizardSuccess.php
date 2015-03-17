@@ -45,12 +45,12 @@
 
 		<div class="form-group">
 			<label class="control-label hidden-xs" for="client_id">Client</label>
-			<select class="form-control" name="client_id" id="client_id" placeholder="Assign this user to a client...">
+			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Assign this user to a client...">
 				<?php
 					/* @var $client \Flux\Client */ 
 					foreach($clients AS $client) { 
 				?>
-					<option value="<?php echo $client->getId() ?>"<?php echo $user->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
+					<option value="<?php echo $client->getId() ?>"<?php echo $user->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
 				<?php } ?>
 			</select>
 		</div>

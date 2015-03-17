@@ -15,7 +15,7 @@ class Migrate extends Migration {
 		StringTools::consoleWrite('   - Index Initialization', 'Building', StringTools::CONSOLE_COLOR_YELLOW);
 		\Flux\Campaign::ensureIndexes();
 		\Flux\Client::ensureIndexes();
-		\Flux\ClientExport::ensureIndexes();
+		\Flux\Fulfillment::ensureIndexes();
 		\Flux\DataField::ensureIndexes();
 		\Flux\DomainGroup::ensureIndexes();
 		\Flux\Export::ensureIndexes();

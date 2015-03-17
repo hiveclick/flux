@@ -66,7 +66,7 @@ class OfferAction extends BasicAction
 			$campaign = new Campaign();
 			$campaign->setSort('name');
 			$campaign->setSord('ASC');
-			$campaign->setOfferId($offer->getId());
+			$campaign->setOfferIdArray(array(0 => $offer->getId()));
 			$campaign->setIgnorePagination(true);
 			$campaigns = $campaign->queryAll();
 			

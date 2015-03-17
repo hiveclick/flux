@@ -65,7 +65,7 @@
         <class>nav-primary</class>
         <pages>
             <leadsearch>
-                <label>Leads</label>
+                <label>Search Leads</label>
                 <module>lead</module>
                 <controller>lead-search</controller>
                 <class>nav-secondary</class>
@@ -98,7 +98,7 @@
 			</spacer2>
             <fulfillmentsearch>
                 <label>Fulfillment Handlers</label>
-                <module>client</module>
+                <module>admin</module>
                 <controller>fulfillment-search</controller>
                 <class>nav-secondary</class>
             </fulfillmentsearch>
@@ -208,6 +208,18 @@
                 <controller>apc</controller>
                 <class>nav-secondary</class>
             </apc>
+            <spacer3>
+				<label></label>
+				<module></module>
+				<controller></controller>
+				<class>nav-secondary</class>
+			</spacer3>
+			<logout>
+                <label>Logout</label>
+                <module>default</module>
+                <controller>logout</controller>
+                <class>nav-secondary</class>
+            </logout>
        </pages>
 	</admin>
 </nav>

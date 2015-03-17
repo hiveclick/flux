@@ -19,7 +19,7 @@
 	$default_mapping[] = '__created';
 
 ?>
-<div id="header">
+<div class="page-header">
    <h2><a href="/export/export-search">Exports</a> <small>New Export</small></h2>
 </div>
 <div class="help-block">Exports store how a client can receive data from a split, either through FTP or a Real-time post</div>

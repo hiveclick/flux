@@ -25,21 +25,25 @@ class ExportSearchAction extends BasicAction
 	public function execute ()
 	{
 		/* @var $export Flux\Export */
-		$export = new Export();
+		$export = new \Flux\Export();
 		$export->populate($_REQUEST);
 		
 		$split = new \Flux\Split();
 		$split->setIgnorePagination(true);
+		$split->setSort('name');
+		$split->setSord('asc');
 		$splits = $split->queryAll();
 		
-		$client_export = new \Flux\ClientExport();
-		$client_export->setIgnorePagination(true);
-		$client_exports = $client_export->queryAll();
+		$fulfillment = new \Flux\Fulfillment();
+		$fulfillment->setIgnorePagination(true);
+		$fulfillment->setSort('name');
+		$fulfillment->setSord('asc');
+		$fulfillments = $fulfillment->queryAll();
 		
 
 		$this->getContext()->getRequest()->setAttribute("export", $export);
 		$this->getContext()->getRequest()->setAttribute("splits", $splits);
-		$this->getContext()->getRequest()->setAttribute("client_exports", $client_exports);
+		$this->getContext()->getRequest()->setAttribute("fulfillments", $fulfillments);
 		return View::SUCCESS;
 	}
 }

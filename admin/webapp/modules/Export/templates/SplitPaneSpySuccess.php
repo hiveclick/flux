@@ -2,243 +2,143 @@
 	/* @var $split \Flux\Export */
 	$split = $this->getContext()->getRequest()->getAttribute("split", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
-	$datafields = $this->getContext()->getRequest()->getAttribute("datafields", array());
-	$selected_columns = array();
+	$data_fields = $this->getContext()->getRequest()->getAttribute("datafields", array());
 ?>
-<div id="header">
-	<div class="pull-right visible-xs">
-		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-	</div>
-	<h2><a href="/export/split-search">Splits</a> <small><?php echo $split->getName() ?></small></h2>
+<div class="page-header">
+   <h1>Queued Leads</h1>
 </div>
-<div id="tabs" class="navbar-collapse collapse" class="navbar-collapse collapse">
-	<ul id="split_tabs" class="nav nav-pills">
-		<li><a id="tabs-a-main" href="/export/split?_id=<?php echo $split->getId() ?>">Split</a></li>
-		<li><a id="tabs-a-positions" href="/export/split-pane-position?_id=<?php echo $split->getId() ?>">Positions</a></li>
-		<li><a id="tabs-a-process" href="/export/split-pane-pid?_id=<?php echo $split->getId() ?>">Processes</a></li>
-		<li class="active"><a id="tabs-a-spy" href="/export/split-pane-spy?_id=<?php echo $split->getId() ?>">Queue</a></li>
-	</ul>
-</div>
-<div class="help-block">View a sample of the data included in this split</div>
-<br/>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default" style="overflow:visible;">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Search Filters</a>
-			</h4>
-		</div>
-		<div id="collapseOne" class="panel-collapse collapse in">
-			<div class="panel-body">
-				<form id="split_queue_search_form" method="GET" action="/api">
-					<input type="hidden" name="items_per_page" value="100">
-					<input type="hidden" name="func" value="/export/split-queue">
-					<input type="hidden" name="split_id" value="<?php echo $split->getId() ?>">
-					<div class="form-group">
-						<div>
-							<input type="text" name="keywords" class="form-control" placeholder="search by name or id" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label hidden-xs" for="name">Offer</label>
-						<div class="">
-							<select class="form-control selectize" name="offer_id_array[]" id="split_queue_spy_offer_id" multiple placeholder="All Offers">
-								<?php foreach ($offers as $offer) { ?>
-									<option value="<?php echo $offer->getId() ?>"><?php echo $offer->getName() ?></option>
-								<?php } ?>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label hidden-xs" for="name">Require Fields</label>
-						<div class="">
-							<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="No Fields">
-								<?php foreach($datafields AS $datafield) { ?>
-									<?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-										<option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-										<option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-										<option value="<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } ?>
-								<?php } ?>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label hidden-xs" for="name">Show/Hide Columns</label>
-						<div class="">
-							<select class="form-control selectize" name="column_id[]" id="column_id" multiple placeholder="No Columns">
-								<?php foreach($datafields AS $datafield) { ?>
-									<?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-										<option value="<?php echo \Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-										<option value="<?php echo \Flux\DataField::DATA_FIELD_EVENT_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-										<option value="<?php echo \Flux\DataField::DATA_FIELD_TRACKING_CONTAINER ?>.<?php echo $datafield->getKeyName() ?>"<?php echo in_array($datafield->getKeyName(), $selected_columns) ? ' selected' : ''; ?>><?php echo $datafield->getName() ?></option>
-									<?php } ?>
-								<?php } ?>
-							</select>
-						</div>
-					</div>
-					<div class="text-center">
-						<input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
-					</div>
-				</form>
+	
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb">
+	<li><a href="/export/split-search">Splits</a></li>
+	<li><a href="/export/split?_id=<?php echo $split->getId() ?>"><?php echo $split->getName() ?></a></li>
+	<li class="active">View Queued Leads</li>
+</ol>
+<div class="panel panel-primary">
+	<div id='split-header' class='grid-header panel-heading clearfix'>
+		<form id="split_search_form" method="GET" class="form-inline" action="/api">
+			<input type="hidden" name="func" value="/export/split-queue">
+			<input type="hidden" name="split[split_id]" value="<?php echo $split->getId() ?>">
+			<input type="hidden" name="format" value="json" />
+			<input type="hidden" id="page" name="page" value="1" />
+			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+			<input type="hidden" id="sort" name="sort" value="_id" />
+			<input type="hidden" id="sord" name="sord" value="desc" />
+			<div class="text-right">
+				<div class="form-group text-left">
+					<select class="form-control selectize" name="offer_id_array[]" id="split_queue_spy_offer_id" multiple placeholder="Filter by offer">
+						<?php
+							/* @var $offer \Flux\Offer */ 
+							foreach ($offers as $offer) { 
+						?>
+							<option value="<?php echo $offer->getId() ?>"><?php echo $offer->getName() ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
+	<div id="split-grid"></div>
+	<div id="split-pager" class="panel-footer"></div>
 </div>
-<table id="split_queue_table" class="table table-hover table-bordered table-striped table-responsive">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<?php
-				foreach ($datafields as $key => $datafield) {
-			?>
-				<th><?php echo $datafield->getName() ?></th>
-			<?php } ?>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td colspan="<?php echo count($datafields) + 1 ?>">
-				<div class="alert alert-default text-center"><span class="fa fa-spinner fa-spin"></span> Please wait, loading data...</div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+
 <script>
 //<!--
 $(document).ready(function() {
 
-	$('#required_fields').selectize();
-	$('#split_queue_spy_offer_id').selectize();
-	
-	$('#split_queue_search_form').on('submit', function(e) {
-		$('#split_queue_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
-	
-	$('#split_queue_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#split_queue_search_form').serializeObject();
-			},
-			method: 'POST'
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-  				{ name: "_id", data: "_id", createdCell: function (td, cellData, rowData, row, col) {
-					$(td).html('<a href="/lead/lead?_id=' + cellData + '">' + cellData + '</a>');
-				}},
-				<?php foreach($datafields AS $datafield) { ?>
-					<?php if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-						{ name: "_d.<?php echo $datafield->getKeyName() ?>", data: "_d.<?php echo $datafield->getKeyName() ?>" },
-					<?php } else if ($datafield->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-						{ name: "_t.<?php echo $datafield->getKeyName() ?>", data: "_t.<?php echo $datafield->getKeyName() ?>", createdCell: function (td, cellData, rowData, row, col) {
-							<?php if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
-								if (cellData.name) {
-									$(td).html('<a href="/client/client?_id=' + cellData._id + '">' + cellData.name + '</a>');
-								} else {
-									$(td).html('<em class="text-muted">-- not set --</em>');
-								}
-							<?php } else if ($datafield->getKeyName() == \Flux\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
-								if (cellData.name) {
-									$(td).html('<a href="/offer/offer?_id=' + cellData._id + '">' + cellData.name + '</a>');
-								} else {
-									$(td).html('<em class="text-muted">-- not set --</em>');
-								}
-							<?php } else { ?>
-								$(td).html(cellData);
-							<?php } ?>
-						}},
-					<?php } else { ?>
-						{ name: "_e.<?php echo $datafield->getKeyName() ?>", data: function data( row, type, set, meta ) {
-							var ret_val;
-							$.each(row._e, function(i, item) {
-								if (item.n == '<?php echo $datafield->getKeyName() ?>') {
-									// This is our event
-									<?php if ($datafield->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
-										ret_val = moment.unix(item.t.sec).calendar();
-									<?php } else { ?>
-										ret_val = item.v;
-									<?php } ?>
-								}
-							});
-							return ret_val;
-						} },
-					<?php } ?>
-				<?php } ?>
-		  	],
-			columnDefs: [
-				{
-					targets: [ 0 ], // Show the first column by default
-					visible: true,
-					orderable: true
-					
-				},
-				{
-					 targets: "_all", // Hide all other columns by default
-					 visible: false,
-					 defaultContent: '',
-					 orderable: true
+	var columns = [
+		{id:'lead.lead_id', name:'Lead #', field:'lead.lead_id', sort_field:'lead.lead_id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
+			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
+			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a href="/lead/lead?_id=' + value + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">';
+			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
+			ret_val += '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'name', name:'Name', field:'lead_name', sort_field:'lead_name', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var email = (dataContext.lead.email == '') ? '' : 'E: ' + dataContext.lead.email;
+			var phone = (dataContext.lead.phone == '') ? '' : ', P: ' + dataContext.lead.phone;
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '">' + dataContext.lead.lead_name + '</a>';
+				ret_val += '<div class="small text-muted">';
+				ret_val += ' (' + email + phone + ')';
+				ret_val += '</div>';
+				ret_val += '</div>';
+				return ret_val;
+		}},
+		{id:'is_fulfilled', name:'Fulfilled', field:'is_fulfilled', def_value: ' ', width:60, sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value) {
+				return '<span class="text-success">Yes</span>';
+			} else {
+				return '<span class="text-danger">No</span>';
+			}
+		}},
+		{id:'error_message', name:'Errors', field:'error_message', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value != '') {
+				return '<span class="text-danger">' + value + '</span>';
+			} else {
+				return '<i class="text-muted">no errors</i>';
+			}
+		}},
+		{id:'last_attempt_time', name:'Last Attempt', field:'last_attempt_time', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+				if (value != null) {
+					ret_val += moment.unix(value.sec).calendar() + ' (' + dataContext.attempt_count + ' attempts)';
+				} else {
+					ret_val += '<i class="text-muted">Not Attempted Yet</i>';
 				}
-		   ]
-	});
+				ret_val += '<div class="small text-muted">';
+				ret_val += (' Next Attempt: ' + moment.unix(dataContext.next_attempt_time.sec).calendar());
+				ret_val += '</div>';
+				ret_val += '</div>';
+				return ret_val;
+		}}
+	];
 
-	/*
-	 * Load the default columns from the LocalStorage
-	 */
-	var selectize_object = $('#column_id').selectize();
-	var selectize_control = selectize_object[0].selectize;
-	var spyColumnStorageName = <?php echo json_encode('split_queue_search_column'); ?>;
-	var lastColumnStorageSetting = localStorage.getItem(spyColumnStorageName);
-	lastColumnStorageSetting = JSON.parse(lastColumnStorageSetting);
-	if (lastColumnStorageSetting && (lastColumnStorageSetting instanceof Array)) {
-		$.each(lastColumnStorageSetting, function(key, value) {
-			// Add the column to the selectize control
-			selectize_control.addItem(value);
-			// Enable the column for datatables
-
-			col = $('#split_queue_table').DataTable().column(value + ":name");
-			col.visible(true);
-		});
-	}
-
-	/*
-	 * Handle when columns are added or removed in the selectize
-	 */
-	$('#column_id').on('update_columns', function(e) {
-		e.preventDefault();
-		var columns_checked_array = $(this).val();
-		if (columns_checked_array && (columns_checked_array instanceof Array)) {
-			// Hide all the columns, then reshow the ones that are selected
-			$('#split_queue_table').DataTable().columns().visible(false);
-			// Alwasy enable the first column
-			col = $('#split_queue_table').DataTable().column(0);
-			col.visible(true);
-			$.each(columns_checked_array, function(index, value) {
-				// Enable the column for datatables
-				col = $('#split_queue_table').DataTable().column(value + ":name");
-				col.visible(true);
-			});
+	slick_grid = $('#split-grid').slickGrid({
+		pager: $('#split-pager'),
+		form: $('#split_search_form'),
+		columns: columns,
+		useFilter: false,
+		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
+		pagingOptions: {
+			pageSize: 25,
+			pageNum: 1
+		},
+		slickOptions: {
+			defaultColumnWidth: 150,
+			forceFitColumns: true,
+			enableCellNavigation: false,
+			width: 800,
+			rowHeight: 48
 		}
-		localStorage.setItem(spyColumnStorageName, JSON.stringify(columns_checked_array));
-	}).change(function(value) {
-			$('#column_id').trigger('update_columns');
 	});
+
+	$("#txtSearch").keyup(function(e) {
+		// clear on Esc
+		if (e.which == 27) {
+			this.value = "";
+		} else if (e.which == 13) {
+			$('#split_search_form').trigger('submit');
+		}
+	});
+	
+	$('#split_queue_spy_offer_id').selectize({
+		dropdownWidthOffset: 150,
+		allowEmptyOption: true
+	}).on('change', function(e) {
+		$('#split_search_form').trigger('submit');
+	});
+
+	// submit the form to initially fill in the grid
+	$('#split_search_form').trigger('submit');
 });
 //-->
 </script>

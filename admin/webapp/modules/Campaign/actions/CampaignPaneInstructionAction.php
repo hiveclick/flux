@@ -3,7 +3,7 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Flux\Offer;
+use Flux\DataField;
 use Flux\Campaign;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -31,6 +31,14 @@ class CampaignPaneInstructionAction extends BasicAction
 		$campaign->query();
 		
 		$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
+		
+		/* @var $data_field Flux\DataField */
+		$data_field = new DataField();
+		$data_field->setIgnorePagination(true);
+		$data_field->setSort('name');
+		$data_fields = $data_field->queryAll();
+		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);
+		
 		return View::SUCCESS;
 	}
 }

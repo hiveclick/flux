@@ -32,12 +32,12 @@ class PxlAction extends BasicRestAction
         // Track the page name and find the offer associated with it
         if ($pixel->getOffer()->getId() > 0) {
             $offer_page = new \Flux\OfferPage();
-            $offer_page->setOfferId($pixel->getOffer()->getId());
+            $offer_page->setOffer($pixel->getOffer()->getId());
             $offer_page->setPageName($pixel->getPage());
             if (($page_found = $offer_page->queryByPageName()) === false) {
             	// we couldn't find the page, so add it
                 $offer_page = new \Flux\OfferPage();
-            	$offer_page->setOfferId($pixel->getOffer()->getId());
+            	$offer_page->setOffer($pixel->getOffer()->getId());
             	$offer_page->setPageName($pixel->getPage());
             	$offer_page->setPreviewUrl($pixel->getHref());
             	$file_path = $pixel->getOffer()->getDocrootDir() . ($pixel->getFolder() != '' ? '/' . $pixel->getFolder() : ''). ($pixel->getPage() != '' ? '/' . $pixel->getPage() : '');
@@ -56,9 +56,9 @@ class PxlAction extends BasicRestAction
             // Add the offer page visit to the lead and track the time spent on the page
             if (\MongoId::isValid($pixel->getLead()->getId())) {
                 $lead_page = new LeadPage();
-                $lead_page->setLeadId($pixel->getLead()->getId());
-                $lead_page->setOfferId($pixel->getOffer()->getId());
-                $lead_page->setOfferPageId($offer_page->getId());
+                $lead_page->setLead($pixel->getLead()->getId());
+                $lead_page->setOffer($pixel->getOffer()->getId());
+                $lead_page->setOfferPage($offer_page->getId());
                 $lead_page->setHref($pixel->getHref());
                 $lead_page->setPage($pixel->getPage());
                 $lead_page->setDomain($pixel->getDomain());

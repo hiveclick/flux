@@ -22,9 +22,17 @@
 		<div class="form-group">
 			<label class="control-label hidden-xs" for="type">Client Type</label>
 			<select class="form-control" name="client_type" id="client_type" placeholder="Select the role of this client...">
-				<?php foreach(\Flux\Client::retrieveClientTypes() AS $type_id => $type_name) { ?>
-				<option value="<?php echo $type_id; ?>"<?php echo $client->getClientType() == $type_id ? ' selected' : ''; ?>><?php echo $type_name; ?></option>
-				<?php } ?>
+				<option value="<?php echo \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ? ' selected' : '' ?>>Primary Administrator</option>
+				<option value="<?php echo \Flux\Client::CLIENT_TYPE_SECONDARY_ADMIN ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_SECONDARY_ADMIN ? ' selected' : '' ?>>Secondary Administrator</option>
+				<option value="<?php echo \Flux\Client::CLIENT_TYPE_AFFILIATE ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE ? ' selected' : '' ?>>Affiliate</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<label class="control-label hidden-xs" for="type">Status</label>
+			<select class="form-control" name="status" id="status" placeholder="Select the status of this client...">
+				<option value="<?php echo \Flux\Client::CLIENT_STATUS_ACTIVE ?>" <?php echo $client->getStatus() == \Flux\Client::CLIENT_STATUS_ACTIVE ? ' selected' : '' ?>>Active</option>
+				<option value="<?php echo \Flux\Client::CLIENT_STATUS_INACTIVE ?>" <?php echo $client->getStatus() == \Flux\Client::CLIENT_STATUS_INACTIVE ? ' selected' : '' ?>>Inactive</option>
 			</select>
 		</div>
 

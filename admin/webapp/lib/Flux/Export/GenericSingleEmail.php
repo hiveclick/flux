@@ -15,7 +15,7 @@ class GenericSingleEmail extends ExportAbstract {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_EMAIL);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_EMAIL);
 		$this->setName('Generic Single Email Export');
 		$this->setDescription('Send an email to the recipients with multiple leads sent in multiple emails');
 	}
@@ -39,7 +39,7 @@ class GenericSingleEmail extends ExportAbstract {
 			$buffer[] = '';
 		
 			$qs = $export_queue_item->getQs();
-			foreach ($this->getExport()->getClientExport()->getMapping() as $mapping) {
+			foreach ($this->getExport()->getFulfillment()->getMapping() as $mapping) {
 				$data_field = \Flux\DataField::retrieveDataFieldFromId($mapping['datafield_id']);
 		
 				$line = '<b>' . $data_field->getDescription() . '</b>: ';
@@ -79,7 +79,7 @@ class GenericSingleEmail extends ExportAbstract {
 			$message->setFrom(MO_MAIL_USERNAME, 'Leads');
 			$message->getHeaders()->addHeaderLine('Content-Type', 'multipart/alternative');
 		
-			foreach ($this->getExport()->getClientExport()->getEmailAddress() as $email_address) {
+			foreach ($this->getExport()->getFulfillment()->getEmailAddress() as $email_address) {
 				$message->addTo($email_address);
 			}
 			$message->setSubject('Leads for ' . $this->getExport()->getName());

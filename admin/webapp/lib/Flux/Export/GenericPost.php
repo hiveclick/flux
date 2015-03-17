@@ -19,7 +19,7 @@ class GenericPost extends ExportAbstract {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_POST);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_POST);
 		$this->setName('Generic POST Export');
 		$this->setDescription('Send leads to a POST url');
 	}
@@ -128,11 +128,11 @@ class GenericPost extends ExportAbstract {
 		$export_queue_item->setResponse($response);
 		$export_queue_item->setLastSentTime(new \MongoDate());
 		$export_queue_item->setResponseTime(microtime(true) - $export_queue_item->getStartTime());
-		if (strpos($response, $this->getClientExport()->getSuccessMsg()) !== false) {
-			\Mojavi\Util\StringTools::consoleWrite('  Queue lead [ ' . $export_queue_item->getLeadId() . ' ]', 'Sent', \Mojavi\Util\StringTools::CONSOLE_COLOR_GREEN, true);
+		if (strpos($response, $this->getFulfillment()->getSuccessMsg()) !== false) {
+			\Mojavi\Util\StringTools::consoleWrite('  Queue lead [ ' . $export_queue_item->getLead()->getLeadId() . ' ]', 'Sent', \Mojavi\Util\StringTools::CONSOLE_COLOR_GREEN, true);
 			$export_queue_item->setIsError(false);
 		} else {
-			\Mojavi\Util\StringTools::consoleWrite('  Queue lead [ ' . $export_queue_item->getLeadId() . ' ]', 'Error', \Mojavi\Util\StringTools::CONSOLE_COLOR_RED, true);
+			\Mojavi\Util\StringTools::consoleWrite('  Queue lead [ ' . $export_queue_item->getLead()->getLeadId() . ' ]', 'Error', \Mojavi\Util\StringTools::CONSOLE_COLOR_RED, true);
 			$export_queue_item->setIsError(true);
 		}
 		return $export_queue_item;

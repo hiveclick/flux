@@ -2,7 +2,7 @@
 	/* @var $user Flux\User */
 	$user = $this->getContext()->getRequest()->getAttribute("user", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right visible-xs">
 		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
 			<span class="sr-only">Toggle navigation</span>
@@ -11,7 +11,7 @@
 			<span class="icon-bar"></span>
 		</button>
 	</div>
-	<h2><a href="/admin/user-search">Profile</a> <small><?php echo $user->getName() ?></small></h2>
+	<h1><a href="/admin/user-search">Profile</a> <small><?php echo $user->getName() ?></small></h1>
 </div>
 <div id="tabs" class="navbar-collapse collapse">
 	<ul id="user_tabs" class="nav nav-pills">

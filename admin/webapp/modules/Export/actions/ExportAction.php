@@ -25,35 +25,22 @@ class ExportAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-			/* @var $export Flux\Export */
-			$export = new Export();
-			$export->populate($_POST);
-			$export->update();
-			
-			/* @var $client Flux\Client */
-			$client = new Client();
-			$client->setSort('name');
-			$client->setIgnorePagination(true);
-			$clients = $client->queryAll();
-			
-			$this->getContext()->getRequest()->setAttribute("export", $export);
-			$this->getContext()->getRequest()->setAttribute("clients", $clients);
-		} else {
-			/* @var $export Flux\Export */
-			$export = new Export();
-			$export->populate($_GET);
-			$export->query();
-			
-			/* @var $client Flux\Client */
-			$client = new Client();
-			$client->setSort('name');
-			$client->setIgnorePagination(true);
-			$clients = $client->queryAll();
-			
-			$this->getContext()->getRequest()->setAttribute("export", $export);
-			$this->getContext()->getRequest()->setAttribute("clients", $clients);
-		}
+		
+		/* @var $export Flux\Export */
+		$export = new Export();
+		$export->populate($_GET);
+		$export->query();
+		
+		/* @var $client Flux\Client */
+		$client = new Client();
+		$client->setSort('name');
+		$client->setSord('asc');
+		$client->setIgnorePagination(true);
+		$clients = $client->queryAll();
+		
+		$this->getContext()->getRequest()->setAttribute("export", $export);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
+		
 		return View::SUCCESS;
 	}
 }

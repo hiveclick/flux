@@ -3,7 +3,7 @@
 	$offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
 ?>
 <!-- Include this script here, instead of the preview pane because the preview pane is loaded via javascript and the websnapr won't load correctly -->
-<div id="header">
+<div class="page-header">
 	<div class="pull-right visible-xs">
 		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
 			<span class="sr-only">Toggle navigation</span>

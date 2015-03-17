@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+body {
+	background-image: url('../images/38.jpg');
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+	color: #333333;	
+}
+
+.loginbox {
+	background: rgba(245, 245, 245, .4);
+}
+
+.loginbox .panel-heading {
+	background: rgba(245, 245, 245, .6);
+	color: #455964;
+}
+
+.loginbox input.btn:hover {
+	box-shadow: 0px 0px 25px #c3c9ce;
+}

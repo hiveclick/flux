@@ -2,17 +2,17 @@
 	/* @var $export_queue Flux\ExportQueue */
 	$export_queue = $this->getContext()->getRequest()->getAttribute("export_queue", array());
 ?>
-<div id="header">
-	<div class="pull-right visible-xs">
-		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-	</div>
-	<h2><a href="/export/export?_id=<?php echo $export_queue->getExportId() ?>">Export #<?php echo $export_queue->getExportId() ?></a> <small>Queue Item #<?php echo $export_queue->getId() ?></small></h2>
+<div class="page-header">
+	<h1>Queue Item #<?php echo $export_queue->getId() ?></h1>
 </div>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb">
+	<li><a href="/export/export-search">Exports</a></li>
+	<li><a href="/export/export?_id=<?php echo $export_queue->getExport()->getExportId() ?>">Export #<?php echo $export_queue->getExport()->getExportId() ?></a></li>
+	<li class="active">Export Queue Item #<?php echo $export_queue->getId() ?></li>
+</ol>
+
+<!-- Page Content -->
 <div id="tab-content-container" class="tab-content">
 	<div id="tabs-main" class="tab-pane active">
 		<div class="help-block">You can view a lead on this screen and see how it was tracked</div>
@@ -57,9 +57,9 @@
 				</div>
 				<div class="panel-body">
 					<dl class="dl-horizontal">
-						<dt>Lead:</dt><dd><a href="/lead/lead?_id=<?php echo $export_queue->getLeadId() ?>"><?php echo $export_queue->getLead()->getId() ?>&nbsp;</a></dd>
+						<dt>Lead:</dt><dd><a href="/lead/lead?_id=<?php echo $export_queue->getLead()->getLeadId() ?>"><?php echo $export_queue->getLead()->getLeadId() ?>&nbsp;</a></dd>
 						<p />
-						<dt>Export:</dt><dd><a href="/export/export?_id=<?php echo $export_queue->getExportId() ?>"><?php echo $export_queue->getExport()->getName() ?>&nbsp;</a></dd>
+						<dt>Export:</dt><dd><a href="/export/export?_id=<?php echo $export_queue->getExport()->getExportId() ?>"><?php echo $export_queue->getExport()->getExportName() ?>&nbsp;</a></dd>
 					</dl>
 				</div>
 			</div>

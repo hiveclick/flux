@@ -45,30 +45,35 @@ class ManualFulfillCustomAction extends BasicRestAction
         if (!is_null($lead->getId())) {
         	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Fulfilling lead " . $lead->getId());
             // Find the client export id
-            if ($this->getContext()->getRequest()->hasParameter('client_export_id')) {
-            	/* @var $client_export \Flux\ClientExport */
-            	$client_export = new \Flux\ClientExport();
-            	$client_export->setId($this->getContext()->getRequest()->getParameter('client_export_id'));
-            	$client_export->query();
+            if ($this->getContext()->getRequest()->hasParameter('fulfillment_id')) {
+            	/* @var $fulfillment \Flux\Fulfillment */
+            	$fulfillment = new \Flux\Fulfillment();
+            	$fulfillment->setId($this->getContext()->getRequest()->getParameter('fulfillment_id'));
+            	$fulfillment->query();
             	
+            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Creating export...");
             	// Create a new export to use for this test
             	/* @var $export \Flux\Export */
             	$export = new \Flux\Export();
-            	$export->setName('Test Export for Lead ' . $lead->getId());
-            	$export->setClientExportId($client_export->getId());
-            	$export->setSplitId(0);
+            	$export->setName($fulfillment->getName() . ' for Lead ' . $lead->getId());
+            	$export->setFulfillment($fulfillment->getId());
+            	$export->setSplit(0);
             	$export->setExportType(\Flux\Export::EXPORT_TYPE_TEST);
             	$export->setIsRunning(false);
             	$export_id = $export->insert();
             	$export->setId($export_id);
             	// Queue the lead to the export
+            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Queueing lead...");
             	$export->queueLead($lead);
+            	
+            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Running ExportQueueExporter...");
             	
             	/* @var $export_queue_exporter \Flux\ExportQueueExporter */
             	$export_queue_exporter = new \Flux\ExportQueueExporter();
             	$export_queue_exporter->setExportId($export->getId());
             	ob_start();
             	try {
+            		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Running ExportQueueExporter::processExport...");
             		$export_queue_exporter->processExport();
             		$export_queue_log = ob_get_clean();
             	} catch (\Exception $e) {
@@ -79,13 +84,13 @@ class ManualFulfillCustomAction extends BasicRestAction
             	}
             	@file_put_contents(MO_LOG_FOLDER . '/export_queue.sh_' . $export->getId() . '.log', $export_queue_log);
             	
-            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Fulfilling lead " . $lead->getId() . " to export " . $client_export->getName());
+            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Fulfilling lead " . $lead->getId() . " to export " . $fulfillment->getName());
             	$log_contents = \Mojavi\Util\StringTools::consoleToHtmlColor($export_queue_log);
             	$lead->setFulfillLogContents($log_contents);
             	$lead->setFulfillExportId($export_id);
             	$ajax_form->setRecord($lead);
             } else {
-            	throw new Exception('We cannot find an export given the id (' . $this->getContext()->getRequest()->getParameter('client_export_id') . ')');
+            	throw new Exception('We cannot find an export given the id (' . $this->getContext()->getRequest()->getParameter('fulfillment_id') . ')');
             }
         } else {
         	throw new Exception('We cannot find a lead given the id (' . $input_form->getId() . ')');

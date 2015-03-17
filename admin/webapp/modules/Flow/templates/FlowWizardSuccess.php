@@ -2,7 +2,7 @@
 	/* @var $flow Flux\Flow */
 	$flow = $this->getContext()->getRequest()->getAttribute("flow", array());
 ?>
-<div id="header">
+<div class="page-header">
    <h2><a href="/flow/flow-search">Flows</a> <small>New Flow</small></h2>
 </div>
 <div class="help-block">Use this page to add a new flow to the system.  This flow will have default rules loaded for it</div>

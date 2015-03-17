@@ -1,162 +1,147 @@
 <?php
-
 namespace Flux\Daemon;
-
-use Flux\Split as SplitDocument;
-use Flux\Lead;
 
 class Split extends BaseDaemon
 {
 	public function action() {
-		$split_record = $this->getNextSplit();
-		if ($split_record instanceof SplitDocument) {
-			//$this->log('==============================================', array($this->pid, $split_record->getId()));
-			//$this->log('Processing Split: ' . $split_record->getName(), array($this->pid, $split_record->getId()));
-
+		$split = $this->getNextSplit();
+		if ($split instanceof \Flux\Split) {
+			$max_event_time = strtotime('now - 1 minute');
+			$max_event_mongo_date = new \MongoDate($max_event_time);
 			// Based on the split parameters, find leads that match and place them into the split collection
 			$criteria = array();
-			$this->log('Finding leads for ' . $split_record->getName() . ' after ' . date('m/d/Y g:i:s', $split_record->getLastRunTime()->sec));
+			$this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec) . ' and ' . date('m/d/Y g:i:s', $max_event_mongo_date->sec), array($this->pid, $split->getId()));
 			
-			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gte' => $split_record->getLastRunTime());
+			// Always add a time constraint to the offers
+			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER] = array('$elemMatch' => array('t' => array('$gte' => $split->getLastRunTime(), '$lt' => $max_event_mongo_date)));
 			
-			if (count($split_record->getOfferId()) > 0) {
-				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . \Flux\DataField::DATA_FIELD_REF_OFFER_ID . '._id'] = array('$in' => $split_record->getOfferId());
-			} else if (count($split_record->getVerticalId()) > 0) {
-				/* @var $offer \Flux\Offer */
-				$offer = new \Flux\Offer();
-				$offer->setVerticals($split_record->getVerticalId());
-				$offer->setIgnorePagination(true);
-				$offers = $offer->queryAll();
-				$offer_ids = array();
-				foreach ($offers as $offer) {
-					$offer_ids[] = (int)$offer->getId();				
-				}
-				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . \Flux\DataField::DATA_FIELD_REF_OFFER_ID . '._id'] = array('$in' => $offer_ids);
+			// Add the offers to the criteria
+			if (count($split->getOffers()) > 0) {
+				$offer_ids = $split->getOffers();
+				array_walk($offer_ids, function(&$value) { $value = $value->getOfferId(); });
+				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $offer_ids);
 			}
 			
-			if (count($split_record->getDomainGroupId()) > 0) {
-				/* @var $domain_group \Flux\DomainGroup */
-				$domains = array();
-				$domain_group = new \Flux\DomainGroup();
-				foreach ($split_record->getDomainGroupId() as $domain_group_id) {
-					$domain_group->setId($domain_group_id);
+			// Add the filters to the criteria
+			if (count($split->getFilters()) > 0) {
+				/* @var $filter \Flux\Link\DataField */
+				$data_field = new \Flux\DataField();
+				foreach ($split->getFilters() as $filter) {
+					$filter_criteria = array();
+					if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) {
+						$filter_criteria = array('$in' => $filter->getDataFieldValue());
+					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) {
+						$filter_criteria = array('$nin' => $filter->getDataFieldValue());
+					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) {
+						$filter_criteria = array('$ne' => '');
+					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET) {
+						$filter_criteria = array('$exists' => true);
+					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
+						$filter_criteria = array('$gte' => array_shift($filter->getDataFieldValue()));
+					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) {
+						$filter_criteria = array('$lte' => array_shift($filter->getDataFieldValue()));
+					}					
 					
-					$domain_group->query();
-					foreach ($domain_group->getDomains() as $domain_name) {
-						$domains[] = '@' . $domain_name;
+					if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) {
+						$criteria[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $filter->getDataFieldKeyName()] = $filter_criteria;
+					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
+						$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . $data_field->getKeyName()] = $filter_criteria;
+					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
+						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['data_field.data_field_id'] = $filter->getDataFieldId();
+						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['v'] = $filter_criteria;
 					}
 				}
-				if (count($domains) > 0) {
-					$criteria[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . \Flux\DataField::retrieveDataFieldFromName('email')->getKeyName()] = array('$regex' => new \MongoRegex('/(' . implode("|", $domains) . '/i)'));
-				}
 			}
 			
-			if (count($split_record->getDataFieldId()) > 0) {
-				/* @var $data_field \Flux\DataField */
-				$data_field = new \Flux\DataField();
-				foreach ($split_record->getDataFieldId() as $data_field_id) {
-					$data_field->setId($data_field_id);
-					$data_field->query();
-					if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) {
-						$criteria[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $data_field->getKeyName()] = array('$exists' => true);
-					} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
-						$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . $data_field->getKeyName()] = array('$exists' => true);
-					} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
-						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.n'] = $data_field->getKeyName();
-					}					
-				}
-			}
-						
+			$this->log(json_encode($criteria), array($this->pid, $split->getId()));		
 			
-			
+			/* @var $lead \Flux\Lead */
 			$lead = new \Flux\Lead();
+			$lead->setSort("-1");
 			$lead->setIgnorePagination(true);
 			$matched_leads = $lead->queryAll($criteria, false);
-			
-			//$this->log("Criteria: " . var_export($criteria, true), array($this->pid, $split_record->getId()));
-			//$this->log("Criteria: " . var_export($matched_leads, true), array($this->pid, $split_record->getId()));
 						
 			if ($matched_leads->hasNext()) {
-				$this->log('Found ' . $matched_leads->count() . ' leads, processing...', array($this->pid, $split_record->getId()));
+				$this->log('Found ' . $matched_leads->count() . ' leads, processing...', array($this->pid, $split->getId()));
 				
 				// Save the # of leads to the split for accounting reasons
-				$split_record->update(array('_id' => $split_record->retrieveValue('_id')), array('$inc' => array('queue_count' => $matched_leads->count())), array());
-			}
+				$split->update(array('_id' => $split->getId()), array('$inc' => array('queue_count' => $matched_leads->count())), array());
 			
-			/* @var $split_queue \Flux\SplitQueue */
-			$split_queue = new \Flux\SplitQueue($split_record->getId());
-			foreach ($matched_leads as $key => $lead_doc) {
-				$lead = new Lead();
-				$lead->populate($lead_doc);
-				$this->log('Lead found [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
-				
-				// Add the lead to the queue
-				$split_queue->getCollection()->save($lead->toArray());
-				
-				/* @TODO optimize this by removing position 1-4 and make them dynamic */
-				$lead_accepted = false;
-				// Now also process rules for the real-time processing
-				foreach ($split_record->getPosition1() as $split_recipient) {
-					if ($split_recipient->canReceiveLead($lead)) {
-						$lead_accepted = $split_recipient->sendLead($lead);
-						// Lead was received, so mark it
-						$this->log('Lead Accepted by Position 1 [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
-						if ($lead_accepted) { break; }
-					}
-				}
-				
-				if (!$lead_accepted) {
-					// Now also process rules for the real-time processing
-					foreach ($split_record->getPosition2() as $split_recipient) {
-						if ($split_recipient->canReceiveLead($lead)) {
-							$lead_accepted = $split_recipient->sendLead($lead);
-							$this->log('Lead Accepted by Position 2 [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
-							// Lead was received, so mark it
-							if ($lead_accepted) { break; }
-						}
-					}
-				}
-				
-				if (!$lead_accepted) {
-					// Now also process rules for the real-time processing
-					foreach ($split_record->getPosition3() as $split_recipient) {
-						if ($split_recipient->canReceiveLead($lead)) {
-							$lead_accepted = $split_recipient->sendLead($lead);
-							$this->log('Lead Accepted by Position 3 [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
-							// Lead was received, so mark it
-							if ($lead_accepted) { break; }
-						}
-					}
-				}
-				
-				if (!$lead_accepted) {
-					// Now also process rules for the real-time processing
-					foreach ($split_record->getPosition4() as $split_recipient) {
-						if ($split_recipient->canReceiveLead($lead)) {
-							$lead_accepted = $split_recipient->sendLead($lead);
-							$this->log('Lead Accepted by Position 4 [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
-							// Lead was received, so mark it
-							if ($lead_accepted) { break; }
-						}
-					}
-				}
-				
-				if (!$lead_accepted) {
-					// Lead was not accepted anywhere
-					$this->log('Lead NOT Accepted by Any Position [' . $key . ']: ' . $lead->getId(), array($this->pid, $split_record->getId()));
+				/* @var $split_queue \Flux\SplitQueue */
+				$split_queue = new \Flux\SplitQueue($split->getId());
+				while ($matched_leads->hasNext()) {
+					$lead_doc = $matched_leads->next();
 					
+					/* @var $lead \Flux\Lead */
+					$lead = new \Flux\Lead();
+					$lead->populate($lead_doc);
+					$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId(), array($this->pid, $split->getId()));
+					
+					$split_queue->setLead($lead->getId());
+					$split_queue->setIsFulfilled(false);
+					$split_queue->setIsProcessing(false);
+					$split_queue->setIsError(false);
+					$split_queue->setErrorMessage('');
+					$split_queue->setNextAttemptTime(new \MongoDate());
+					
+					/*
+					$lead_array = $lead->toArray();
+					$lead_array['split'] = $split_queue->getSplit()->toArray();
+					$lead_array['is_fulfilled'] = false;
+					$lead_array['is_error'] = false;
+					$lead_array['is_processing'] = false;
+					*/
+					
+					$split_queue->insert();
+					
+					// Add the lead to the queue
+					#$split_queue->getCollection()->save($lead_array);
 				}
 			}
+			sleep(10);
 			
-			
-			$split_record->update(array('_id' => $split_record->retrieveValue('_id')), array('$unset' => array('__pid_split' => 1), '$set' => array('last_run_time' => new \MongoDate())), array());
+			$split->update(array('_id' => $split->getId()), array('$unset' => array('__pid_split' => 1), '$set' => array('last_run_time' => $max_event_mongo_date)), array());
 
 
 			//$this->log('Done Processing Split: ' . $split_record->getName(), array($this->pid, $split_record->getId()));
 			return true;
+		} else {
+			$this->clearExpiredPids();
 		}
-		$this->log('No Split to Use', array($this->pid));
 		return false;
+	}
+	
+	/**
+	 * Clears expired pids
+	 * @return \Flux\Fulfill
+	 */
+	protected function clearExpiredPids() {
+		// If there are no exports, then let's clean up some of the older ones
+		$split = new \Flux\Split();
+		$criteria = array(
+				'status' => \Flux\Split::SPLIT_STATUS_ACTIVE,
+				'pid_split' => array('$exists' => true),
+				'last_run_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime('now')))))
+		);		
+		$split_records = $split->queryAll($criteria);
+		if (count($split_records) > 0) {
+			foreach ($split_records as $split_record) {				
+				if (!is_null($split_record->getPidSplit())) {
+					$cmd = 'ps -p ' . $split_record->getPidSplit() . ' | grep -v "PID"';
+					$cmd_response = trim(shell_exec($cmd));
+					if ($cmd_response == '') {
+						$this->log('Clearing expired PIDs: ' . $split_record->getPidSplit(), array($this->pid));
+						// if there isn't a process running, then clear the PID
+						$split_record->clearPid();
+					}
+				} else {
+					$this->log('Clearing blank PIDs: ' . $split_record->getId(), array($this->pid));
+					$split_record->clearPid();
+				}
+			}
+		} else {
+			$this->log('No Split to Use and no cleared PIDs', array($this->pid));
+		}
 	}
 
 	/**
@@ -164,16 +149,17 @@ class Split extends BaseDaemon
 	 * @return \Flux\Split
 	 */
 	protected function getNextSplit() {
-		$splitDocument = new \Flux\Split();
+		$split = new \Flux\Split();
 		// Find active splits with no pid, set the pid, and return the split
-		$split_record = $splitDocument->findAndModify(
+		$split_record = $split->findAndModify(
 			array(
-				'status' => SplitDocument::SPLIT_STATUS_ACTIVE,
-				'__pid_split' => array('$exists' => false)
+				'status' => \Flux\Split::SPLIT_STATUS_ACTIVE,
+				'pid_split' => array('$exists' => false),
+				'last_run_time' => array('$lt' => new \MongoDate(strtotime('now - 2 minutes')))
 			),
 			array('$set' => array(
-				'__pid_split' => $this->pid,
-				'__pid_time_split' => new \MongoDate()
+				'pid_split' => $this->pid,
+				'pid_time_split' => new \MongoDate()
 			)),
 			null,
 			array(

@@ -7,9 +7,16 @@
 
 	$conversion_data_field = \Flux\DataField::retrieveDataFieldFromKeyName(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
 ?>
-<div id="header">
-	<h2><a href="/offer/offer-search">Offers</a> <small>New Offer</small></h2>
+<div class="page-header">
+	<h1>New Offer</h1>
 </div>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb">
+	<li><a href="/offer/offer-search">Offers</a></li>
+	<li class="active">Add New Offer</li>
+</ol>
+
+<!-- Page Content -->
 <div class="help-block">Use this form to add a new offer to the system assigned to an advertiser</div>
 <br/>
 <form class="form-horizontal" name="offer_form" method="POST" action="" autocomplete="off">
@@ -36,9 +43,9 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label hidden-xs" for="client_id">Advertising Client</label>
 		<div class="col-sm-10">
-			<select class="form-control" name="client_id" id="client_id" placeholder="Advertising Client">
+			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Advertising Client">
 				<?php foreach($clients AS $client) { ?>
-					<option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+					<option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
 				<?php } ?>
 			</select>
 		</div>
@@ -76,9 +83,9 @@
 		<label class="col-sm-2 control-label hidden-xs" for="redirect_type">Redirect Type</label>
 		<div class="col-sm-10">
 			<select class="form-control" name="redirect_type" id="redirect_type" placeholder="Redirect Type">
-				<?php foreach(\Flux\Offer::retrieveRedirectTypes() AS $redirect_type_id => $redirect_type_name) { ?>
-				<option value="<?php echo $redirect_type_id; ?>"<?php echo $offer->getRedirectType() == $redirect_type_id ? ' selected' : ''; ?>><?php echo $redirect_type_name; ?></option>
-				<?php } ?>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?>>Hosted</option>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?>>Redirect</option>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_POST ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? ' selected' : ''; ?>>Incoming Post</option>
 			</select>
 		</div>
 	</div>

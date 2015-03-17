@@ -1,81 +1,134 @@
 <?php
 	$campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
+	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 ?>
-<div class="form-group" style="display:none;" id="dummy_posting_url_dataField">
-	<div class="col-sm-5">
-		<select name="posting_url_dataField_name" class="form-control posting_url_change">
-			<optgroup label="Events">
-			<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-				<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-					<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
-				<?php  } ?>
-			<?php } ?>
-			</optgroup>
-			<optgroup label="Data Fields">
-				<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-					<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-						<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-			<optgroup label="Tracking">
-				<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-					<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-						<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-		</select>
-	</div>
-	<div class="col-sm-5">
-		<input type="text" name="posting_url_dataField_value" class="form-control posting_url_change" placeholder="Value" />
-	</div>
-	<div class="col-sm-2">
-		<button type="button" class="btn btn-danger btn-remove-dataField">
-			<span class="glyphicon glyphicon-minus"></span> Remove
-		</button>
-	</div>
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title">Posting Instructions</h4>
 </div>
+<div class="modal-body">
+	<div class="form-group" style="display:none;" id="dummy_posting_url_dataField">
+		<div class="col-sm-5">
+			<select name="posting_url_dataField_name" class="form-control posting_url_change">
+				<optgroup label="Events">
+				<?php foreach($data_fields AS $data_field) { ?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+					<?php  } ?>
+				<?php } ?>
+				</optgroup>
+				<optgroup label="Tracking">
+					<?php foreach($data_fields AS $data_field) { ?>
+						<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+							<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+						<?php } ?>
+					<?php } ?>
+				</optgroup>
+				<optgroup label="Data Fields">
+					<?php foreach($data_fields AS $data_field) { ?>
+						<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+							<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+						<?php } ?>
+					<?php } ?>
+				</optgroup>
+			</select>
+		</div>
+		<div class="col-sm-5">
+			<input type="text" name="posting_url_dataField_value" class="form-control posting_url_change" placeholder="Value" />
+		</div>
+		<div class="col-sm-2">
+			<button type="button" class="btn btn-danger btn-remove-dataField">
+				<span class="glyphicon glyphicon-minus"></span> Remove
+			</button>
+		</div>
+	</div>
 
-<div class="help-block">Use this form to generate a unique tracking link that you can use in Adwords</div>
-<br />
-<form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">
-	<input type="hidden" name="posting_url_client" class="form-control posting_url_change" value="<?php echo $campaign->getId() ?>">
-	<div class="form-group">
-		<label class="col-sm-2 control-label" for="example_url">Example Posting URL</label>
-		<div class="col-sm-10">
-			<textarea type="text" id="example_url" rows="5" name="example_url" class="form-control" /></textarea>
-		</div>
-	</div>
-	<div class="row">
-		<label class="col-sm-2 control-label"></label>
-		<div class="col-sm-10">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="help-block">
-						Use the form controls below to create an example Posting URL
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-12">
-					<div class="btn-group has-feedback" data-toggle="buttons">
-						<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
-						<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
-						<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
-					</div>
-					<button type="button" class="btn btn-success btn-add-dataField">
-						<span class="glyphicon glyphicon-plus"></span> Add Data Field
-					</button>
-				</div>
-			</div>
-			<div id="dataField_posting_url_container">
+	<div class="help-block">Use this form to generate a unique tracking link that you can use in Adwords</div>
+	<br />
+	<form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">
+		<input type="hidden" name="posting_url_client" class="form-control posting_url_change" value="<?php echo $campaign->getId() ?>">
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="example_url">Example Posting URL</label>
+			<div class="col-sm-10">
+				<textarea type="text" id="example_url" rows="5" name="example_url" class="form-control" /></textarea>
 			</div>
 		</div>
-	</div>
-</form>
+		<div class="row">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-10">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="help-block">
+							Use the form controls below to create an example Posting URL
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<div class="btn-group has-feedback" data-toggle="buttons">
+							<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
+							<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
+							<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
+						</div>
+						<button type="button" class="btn btn-success btn-add-dataField">
+							<span class="glyphicon glyphicon-plus"></span> Add Data Field
+						</button>
+					</div>
+				</div>
+				<div id="dataField_posting_url_container">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
 <script>
 //<!--
+//Define our data field options
+var $selectize_options = {
+	valueField: 'key_name',
+	labelField: 'name',
+	searchField: ['name', 'description', 'request_names'],
+	dropdownWidthOffset: 150,
+	render: {
+		item: function(item, escape) {
+			var label = item.name || item.key;
+            var caption = item.description ? item.description : null;
+            var keyname = item.key_name ? item.key_name : null;
+            var tags = item.tags ? item.tags : null;
+            var tag_span = '';
+			$.each(tags, function(j, tag_item) {
+				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+			});	            
+            return '<div style="width:100%;padding-right:25px;">' +
+                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+                '<div>' + tag_span + '</div>' +   
+            '</div>';
+		},
+		option: function(item, escape) {
+			var label = item.name || item.key;
+            var caption = item.description ? item.description : null;
+            var keyname = item.key_name ? item.key_name : null;
+            var tags = item.tags ? item.tags : null;
+            var tag_span = '';
+			$.each(tags, function(j, tag_item) {
+				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+			});	            
+            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+                '<div>' + tag_span + '</div>' +
+            '</div>';
+		}
+	},
+	onChange: function(value) {
+		buildPostingUrl();
+	}
+};
+
 $(document).ready(function() {
 	$('.posting_url_change').on('change', function(e) {
 		e.preventDefault();
@@ -84,6 +137,8 @@ $(document).ready(function() {
 
 	$('.btn-add-dataField').on('click', function() {
 		var $dataFieldRow = $('#dummy_posting_url_dataField').clone(true);
+		$dataFieldRow.removeAttr('id');
+		$dataFieldRow.find('select').selectize($selectize_options);
 		$('#dataField_posting_url_container').append($dataFieldRow);
 		$dataFieldRow.show();
 		buildPostingUrl();
@@ -101,12 +156,8 @@ $(document).ready(function() {
 function buildPostingUrl() {
 	var posting_params = {};
 
-	if($('[name=posting_url_pixel]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_AGG_CKID); ?>] = 'REPLACE_WITH_TRACKING_ID';
-	} else {
-		posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = $('[name=posting_url_client]').val();
-	}
-
+	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = $('[name=posting_url_client]').val();
+	
 	if($('[name=posting_url_save]').is(':checked')) {
 		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_SAVE_FLAG); ?>] = 1;
 	}

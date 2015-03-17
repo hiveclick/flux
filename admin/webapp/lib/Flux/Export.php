@@ -1,285 +1,26 @@
 <?php
 namespace Flux;
 
-use Mojavi\Form\MongoForm;
-
-class Export extends MongoForm {
-
-	const EXPORT_STATUS_ACTIVE = 1;
-	const EXPORT_STATUS_INACTIVE = 2;
-	const EXPORT_STATUS_DELETED = 3;
-
-	const EXPORT_TYPE_BATCH = 1;
-	const EXPORT_TYPE_REALTIME = 2;
-	const EXPORT_TYPE_EMAIL_BATCH = 3;
-	const EXPORT_TYPE_EMAIL_REALTIME = 4;
-	const EXPORT_TYPE_TEST = 5;
-
-	protected $split_id;
-	protected $client_export_id;
-	protected $export_date;
-	protected $export_type;
-	protected $created;
-	
-	protected $name;
-	protected $status;
-	
-	protected $num_records;
-	protected $num_records_successful;
-	protected $num_records_error;
-	protected $percent_complete;
-	protected $is_running;
-	protected $is_complete;
-	protected $processing_log;
-	
-	protected $start_time;
-	protected $end_time;
-	protected $finding_records_time;
-	protected $sending_records_time;
-	
-	protected $_status_name;
-	protected $_split_name;
-	protected $_client_name;
-	protected $_client_export_name;
-	protected $_client_id;
-	protected $_export_type_name;
+class Export extends Base\Export {
 	
 	private $export_type_array;
-	private $client_export_id_array;
+	private $fulfillment_id_array;
 	private $split_id_array;
-	private $client_export;
-	private $split;
-
-	/**
-	 * Constructs new user
-	 * @return void
-	 */
-	function __construct() {
-		$this->setCollectionName('export');
-		$this->setDbName('admin');
-	}
-	
-	/**
-	 * Returns the created
-	 * @return int
-	 */
-	function getCreated() {
-		if (is_null($this->created)) {
-			$this->created = new \MongoDate();
-		}
-		return $this->created;
-	}
-	
-	/**
-	 * Sets the created
-	 * @var int
-	 */
-	function setCreated($arg0) {
-		$this->created = $arg0;
-		$this->addModifiedColumn('created');
-		return $this;
-	}
-	
-	/**
-	 * Returns the name
-	 * @return string
-	 */
-	function getName() {
-		if (is_null($this->name)) {
-			$this->name = "";
-		}
-		return $this->name;
-	}
-
-	/**
-	 * Sets the name
-	 * @var string
-	 */
-	function setName($arg0) {
-		$this->name = $arg0;
-		$this->addModifiedColumn('name');
-		return $this;
-	}
-	
-	/**
-	 * Returns the export_date
-	 * @return MongoDate
-	 */
-	function getExportDate() {
-		if (is_null($this->export_date)) {
-			$this->export_date = new \MongoDate();
-		}
-		return $this->export_date;
-	}
-	
-	/**
-	 * Sets the export_date
-	 * @var MongoDate
-	 */
-	function setExportDate($arg0) {
-		$this->export_date = $arg0;
-		$this->addModifiedColumn('export_date');
-		return $this;
-	}
-	
-	/**
-	 * Returns the _split_name
-	 * @return string
-	 */
-	function getSplitName() {
-		if (is_null($this->_split_name)) {
-			$this->_split_name = $this->getSplit()->getName();
-		}
-		return $this->_split_name;
-	}
-	
-	/**
-	 * Returns the _client_export_name
-	 * @return string
-	 */
-	function getClientExportName() {
-		if (is_null($this->_client_export_name)) {
-			$this->_client_export_name = $this->getClientExport()->getName();
-		}
-		return $this->_client_export_name;
-	}
-	
-	/**
-	 * Returns the _client_name
-	 * @return string
-	 */
-	function getClientName() {
-		if (is_null($this->_client_name)) {
-			$this->_client_name = $this->getClientExport()->getClientName();
-		}
-		return $this->_client_name;
-	}
-	
-	/**
-	 * Returns the _client_id
-	 * @return string
-	 */
-	function getClientId() {
-		if (is_null($this->_client_id)) {
-			$this->_client_id = $this->getClientExport()->getClientId();
-		}
-		return $this->_client_id;
-	}
 	
 	/**
 	 * Returns the _status_name
 	 * @return string
 	 */
 	function getStatusName() {
-		if (is_null($this->_status_name)) {
-			$this->_status_name = self::retrieveStatuses()[$this->getStatus()];
+		if ($this->getStatus() == self::EXPORT_STATUS_ACTIVE) {
+			return "Active";
+		} else if ($this->getStatus() == self::EXPORT_STATUS_INACTIVE) {
+			return "Inactive";
+		} else if ($this->getStatus() == self::EXPORT_STATUS_DELETED) {
+			return "Deleted";
+		} else {
+			return "Unknown Status";
 		}
-		return $this->_status_name;
-	}
-
-	/**
-	 * Returns the status
-	 * @return integer
-	 */
-	function getStatus() {
-		if (is_null($this->status)) {
-			$this->status = self::EXPORT_STATUS_ACTIVE;
-		}
-		return $this->status;
-	}
-
-	/**
-	 * Sets the status
-	 * @var integer
-	 */
-	function setStatus($arg0) {
-		$this->status = (int)$arg0;
-		$this->addModifiedColumn('status');
-		return $this;
-	}
-	
-	/**
-	 * Returns the start_time
-	 * @return integer
-	 */
-	function getStartTime() {
-		if (is_null($this->start_time)) {
-			$this->start_time = 0;
-		}
-		return $this->start_time;
-	}
-	
-	/**
-	 * Sets the start_time
-	 * @var integer
-	 */
-	function setStartTime($arg0) {
-		$this->start_time = $arg0;
-		$this->addModifiedColumn("start_time");
-		return $this;
-	}
-	
-	/**
-	 * Returns the end_time
-	 * @return integer
-	 */
-	function getEndTime() {
-		if (is_null($this->end_time)) {
-			$this->end_time = 0;
-		}
-		return $this->end_time;
-	}
-	
-	/**
-	 * Sets the end_time
-	 * @var integer
-	 */
-	function setEndTime($arg0) {
-		$this->end_time = $arg0;
-		$this->addModifiedColumn("end_time");
-		return $this;
-	}
-	
-	/**
-	 * Returns the finding_records_time
-	 * @return integer
-	 */
-	function getFindingRecordsTime() {
-		if (is_null($this->finding_records_time)) {
-			$this->finding_records_time = 0;
-		}
-		return $this->finding_records_time;
-	}
-	
-	/**
-	 * Sets the finding_records_time
-	 * @var integer
-	 */
-	function setFindingRecordsTime($arg0) {
-		$this->finding_records_time = $arg0;
-		$this->addModifiedColumn("finding_records_time");
-		return $this;
-	}
-	
-	/**
-	 * Returns the sending_records_time
-	 * @return integer
-	 */
-	function getSendingRecordsTime() {
-		if (is_null($this->sending_records_time)) {
-			$this->sending_records_time = 0;
-		}
-		return $this->sending_records_time;
-	}
-	
-	/**
-	 * Sets the sending_records_time
-	 * @var integer
-	 */
-	function setSendingRecordsTime($arg0) {
-		$this->sending_records_time = $arg0;
-		$this->addModifiedColumn("sending_records_time");
-		return $this;
 	}
 	
 	/**
@@ -287,210 +28,19 @@ class Export extends MongoForm {
 	 * @return string
 	 */
 	function getExportTypeName() {
-		if (is_null($this->_export_type_name)) {
-			$this->_export_type_name = self::retrieveExportTypes()[$this->getExportType()];
+		if ($this->getExportType() == self::EXPORT_TYPE_BATCH) {
+			return "Batch";
+		} else if ($this->getExportType() == self::EXPORT_TYPE_REALTIME) {
+			return "Realtime";
+		} else if ($this->getExportType() == self::EXPORT_TYPE_EMAIL_BATCH) {
+			return "Email Batch";
+		} else if ($this->getExportType() == self::EXPORT_TYPE_EMAIL_REALTIME) {
+			return "Email Realtime";
+		} else if ($this->getExportType() == self::EXPORT_TYPE_TEST) {
+			return "Test";
+		} else {
+			return "Unknown Type";
 		}
-		return $this->_export_type_name;
-	}
-
-	/**
-	 * Returns the export_type
-	 * @return integer
-	 */
-	function getExportType() {
-		if (is_null($this->export_type)) {
-			$this->export_type = self::EXPORT_TYPE_REALTIME;
-		}
-		return $this->export_type;
-	}
-
-	/**
-	 * Sets the export_type
-	 * @var integer
-	 */
-	function setExportType($arg0) {
-		$this->export_type = $arg0;
-		$this->addModifiedColumn('export_type');
-		return $this;
-	}
-	
-	/**
-	 * Returns the is_running
-	 * @return boolean
-	 */
-	function getIsRunning() {
-		if (is_null($this->is_running)) {
-			$this->is_running = false;
-		}
-		return $this->is_running;
-	}
-	
-	/**
-	 * Sets the is_running
-	 * @var boolean
-	 */
-	function setIsRunning($arg0) {
-		$this->is_running = (boolean)$arg0;
-		$this->addModifiedColumn('is_running');
-		return $this;
-	}
-	
-	/**
-	 * Returns the percent_complete
-	 * @return float
-	 */
-	function getPercentComplete() {
-		if (is_null($this->percent_complete)) {
-			$this->percent_complete = 0;
-		}
-		return $this->percent_complete;
-	}
-	
-	/**
-	 * Sets the percent_complete
-	 * @var float
-	 */
-	function setPercentComplete($arg0) {
-		$this->percent_complete = (float)$arg0;
-		$this->addModifiedColumn('percent_complete');
-		return $this;
-	}
-	
-	/**
-	 * Returns the num_records
-	 * @return integer
-	 */
-	function getNumRecords() {
-		if (is_null($this->num_records)) {
-			$this->num_records = 0;
-		}
-		return $this->num_records;
-	}
-	
-	/**
-	 * Sets the num_records
-	 * @var integer
-	 */
-	function setNumRecords($arg0) {
-		$this->num_records = (int)$arg0;
-		$this->addModifiedColumn('num_records');
-		return $this;
-	}
-	
-	/**
-	 * Returns the num_records_successful
-	 * @return integer
-	 */
-	function getNumRecordsSuccessful() {
-		if (is_null($this->num_records_successful)) {
-			$this->num_records_successful = 0;
-		}
-		return $this->num_records_successful;
-	}
-	
-	/**
-	 * Sets the num_records_successful
-	 * @var integer
-	 */
-	function setNumRecordsSuccessful($arg0) {
-		$this->num_records_successful = $arg0;
-		$this->addModifiedColumn("num_records_successful");
-		return $this;
-	}
-	
-	/**
-	 * Returns the num_records_error
-	 * @return integer
-	 */
-	function getNumRecordsError() {
-		if (is_null($this->num_records_error)) {
-			$this->num_records_error = 0;
-		}
-		return $this->num_records_error;
-	}
-	
-	/**
-	 * Sets the num_records_error
-	 * @var integer
-	 */
-	function setNumRecordsError($arg0) {
-		$this->num_records_error = $arg0;
-		$this->addModifiedColumn("num_records_error");
-		return $this;
-	}
-	
-	/**
-	 * Returns the processing_log
-	 * @return string
-	 */
-	function getProcessingLog() {
-		if (is_null($this->processing_log)) {
-			$this->processing_log = "";
-		}
-		return $this->processing_log;
-	}
-	
-	/**
-	 * Sets the processing_log
-	 * @var string
-	 */
-	function setProcessingLog($arg0) {
-		$this->processing_log = $arg0;
-		$this->addModifiedColumn('processing_log');
-		return $this;
-	}
-	
-	/**
-	 * Returns the is_complete
-	 * @return boolean
-	 */
-	function getIsComplete() {
-		if (is_null($this->is_complete)) {
-			$this->is_complete = false;
-		}
-		return $this->is_complete;
-	}
-	
-	/**
-	 * Sets the is_complete
-	 * @var boolean
-	 */
-	function setIsComplete($arg0) {
-		$this->is_complete = (boolean)$arg0;
-		$this->addModifiedColumn('is_complete');
-		return $this;
-	}
-	
-	/**
-	 * Returns the client_export_id
-	 * @return integer
-	 */
-	function getClientExportId() {
-		if (is_null($this->client_export_id)) {
-			$this->client_export_id = 0;
-		}
-		return $this->client_export_id;
-	}
-	
-	/**
-	 * Sets the client_export_id
-	 * @var integer
-	 */
-	function setClientExportId($arg0) {
-		$this->client_export_id = (int)$arg0;
-		$this->addModifiedColumn('client_export_id');
-		return $this;
-	}
-	
-	/**
-	 * Returns the log filename that this export would use
-	 * @return string
-	 */
-	function getLogFilename() {
-		if (defined('MO_LOG_FOLDER')) {
-			return MO_LOG_FOLDER . "/export_queue.sh_" . $this->getId() . ".log";
-		}
-		return '/var/log/Flux/export_queue.sh_' . $this->getId() . ".log";
 	}
 	
 	/**
@@ -524,30 +74,30 @@ class Export extends MongoForm {
 	}
 	
 	/**
-	 * Returns the client_export_id_array
+	 * Returns the fulfillment_id_array
 	 * @return array
 	 */
-	function getClientExportIdArray() {
-		if (is_null($this->client_export_id_array)) {
-			$this->client_export_id_array = array();
+	function getFulfillmentIdArray() {
+		if (is_null($this->fulfillment_id_array)) {
+			$this->fulfillment_id_array = array();
 		}
-		return $this->client_export_id_array;
+		return $this->fulfillment_id_array;
 	}
 	
 	/**
-	 * Sets the client_export_id_array
+	 * Sets the fulfillment_id_array
 	 * @var array
 	 */
-	function setClientExportIdArray($arg0) {
+	function setFulfillmentIdArray($arg0) {
 		if (is_array($arg0)) {
-			$this->client_export_id_array = $arg0;
-			array_walk($this->client_export_id_array, function(&$val) { $val = (int)$val; });
+			$this->fulfillment_id_array = $arg0;
+			array_walk($this->fulfillment_id_array, function(&$val) { $val = (int)$val; });
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
-				$this->client_export_id_array = explode(",", $arg0);
-				array_walk($this->client_export_id_array, function(&$val) { $val = (int)$val; });
+				$this->fulfillment_id_array = explode(",", $arg0);
+				array_walk($this->fulfillment_id_array, function(&$val) { $val = (int)$val; });
 			} else {
-				$this->client_export_id_array = array((int)$arg0);
+				$this->fulfillment_id_array = array((int)$arg0);
 			}
 		}
 		return $this;
@@ -610,77 +160,31 @@ class Export extends MongoForm {
 	}
 	
 	/**
-	 * Returns the split_id
-	 * @return integer
-	 */
-	function getSplitId() {
-		if (is_null($this->split_id)) {
-			$this->split_id = 0;
-		}
-		return $this->split_id;
-	}
-	
-	/**
-	 * Sets the split_id
-	 * @var integer
-	 */
-	function setSplitId($arg0) {
-		$this->split_id = (int)$arg0;
-		$this->addModifiedColumn('split_id');
-		return $this;
-	}
-
-	/**
-	 * Returns the split
-	 * @return \Flux\Split
-	 */
-	function getSplit() {
-		if (is_null($this->split)) {
-			$this->split = new \Flux\Split();
-			$this->split->setId($this->getSplitId());
-			$this->split->query();
-		}
-		return $this->split;
-	}
-
-	/**
-	 * Returns the client_export
-	 * @return \Flux\ClientExport
-	 */
-	function getClientExport() {
-		if (is_null($this->client_export)) {
-			$this->client_export = new \Flux\ClientExport();
-			$this->client_export->setId($this->getClientExportId());
-			$this->client_export->query();
-		}
-		return $this->client_export;
-	}
-	
-	/**
 	 * Queues a lead based on the client export mapping
 	 * @return integer
 	 */
 	function queueLead($lead) {
 		$params = array();
-		/* @var $mapping \Flux\ClientExportMap */
-		foreach ($this->getClientExport()->getMapping() as $mapping) {
+		/* @var $mapping \Flux\FulfillmentMap */
+		foreach ($this->getFulfillment()->getFulfillment()->getMapping() as $mapping) {
 			$value = $mapping->getMappedValue($lead);
-			if (trim($mapping->getFieldName()) == '') {
+			if (trim($mapping->getDataField()->getKeyName()) != '') {
 				$params[$mapping->getDataField()->getKeyName()] = $value;
-			} else {
-				$params[$mapping->getFieldName()] = $value;
 			}
 		}
 				
 		/* @var $export_queue_item \Flux\ExportQueue */
 		$export_queue_item = new \Flux\ExportQueue();
-		$export_queue_item->setExportId($this->getId());
-		$export_queue_item->setLeadId($lead->getId());
+		$export_queue_item->setExport($this->getId());
+		$export_queue_item->setLead($lead->getId());
 		$export_queue_item->setQs($params);
-		$export_queue_item->setUrl($this->getClientExport()->getPostUrl());
+		$export_queue_item->setUrl($this->getFulfillment()->getFulfillment()->getPostUrl());
 		$export_queue_item->setIsError(false);
-				
+						
 		$insert_id = $export_queue_item->insert();
+		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Export queue id: " . $insert_id);
+		
 		return $insert_id;
 	}
 
@@ -689,20 +193,17 @@ class Export extends MongoForm {
 	 * @return \Flux\Export
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
-		if ($this->getClientExportId() > 0) {
-			$criteria['client_export_id'] = $this->getClientExportId();
-		}
-		if ($this->getSplitId() > 0) {
-			$criteria['split_id'] = $this->getSplitId();
+		if (count($this->getFulfillmentIdArray()) > 0) {
+			$criteria['fulfillment.fulfillment_id'] = array('$in' => $this->getFulfillmentIdArray());
 		}
 		if (count($this->getSplitIdArray()) > 0) {
-			$criteria['split_id'] = array('$in' => $this->getSplitIdArray());
+			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
 		}
 		if (count($this->getExportTypeArray()) > 0) {
 			$criteria['export_type'] = array('$in' => $this->getExportTypeArray());
 		}
-		if (count($this->getClientExportIdArray()) > 0) {
-			$criteria['client_export_id'] = array('$in' => $this->getClientExportIdArray());
+		if (trim($this->getName()) != '') {
+			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
 		return parent::queryAll($criteria, $hydrate);
 	}
@@ -711,42 +212,16 @@ class Export extends MongoForm {
 	 * Queries for a list of exports by client id
 	 * @return \Flux\Export
 	 */
-	function queryBySplitAndClientExport(array $criteria = array()) {
-		if ($this->getClientExportId() > 0) {
-			$criteria['client_export_id'] = $this->getClientExportId();
+	function queryBySplitAndFulfillment(array $criteria = array()) {
+		if ($this->getFulfillment()->getFulfillmentId() > 0) {
+			$criteria['fulfillment.fulfillment_id'] = $this->getFulfillment()->getFulfillmentId();
 		}
-		if ($this->getSplitId() > 0) {
-			$criteria['split_id'] = $this->getSplitId();
+		if ($this->getSplit()->getSplitId() > 0) {
+			$criteria['split.split_id'] = $this->getSplit()->getSplitId();
 		}
 		$criteria['is_complete'] = false;
 		$criteria['is_running'] = false;
 		return parent::query($criteria, false);
-	}
-
-	/**
-	 * Returns an array of export statuses
-	 * @return multitype:string
-	 */
-	public static function retrieveStatuses() {
-		return array(
-				self::EXPORT_STATUS_ACTIVE => 'Active',
-				self::EXPORT_STATUS_INACTIVE => 'Inactive',
-				self::EXPORT_STATUS_DELETED => 'Deleted'
-		);
-	}
-
-	/**
-	 * Returns an array of export types
-	 * @return multitype:string
-	 */
-	public static function retrieveExportTypes() {
-		return array(
-				self::EXPORT_TYPE_BATCH => 'Batch Export to an FTP Server',
-				self::EXPORT_TYPE_REALTIME => 'Realtime Export to a POST url',
-				self::EXPORT_TYPE_EMAIL_BATCH => 'Emailed as an attachment',
-				self::EXPORT_TYPE_EMAIL_REALTIME => 'Emailed one at a time',
-				self::EXPORT_TYPE_TEST => 'Test fulfillment on a lead'
-		);
 	}
 	
 	/**
@@ -755,7 +230,7 @@ class Export extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$export = new self();
-		$export->getCollection()->ensureIndex(array('client_export_id' => 1), array('background' => true));
+		$export->getCollection()->ensureIndex(array('fulfillment_id' => 1), array('background' => true));
 		$export->getCollection()->ensureIndex(array('split_id' => 1), array('background' => true));
 		$export->getCollection()->ensureIndex(array('is_complete' => 1), array('background' => true));
 		return true;

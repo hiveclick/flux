@@ -1,117 +1,163 @@
 <?php
 	$offer = $this->getContext()->getRequest()->getAttribute("offer", array());
 	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
+	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 ?>
-<div class="help-block">Use this page to generate a tracking url for a campaign or a tracking pixel for firing events</div>
-<div class="form-group" style="display:none;" id="dummy_posting_url_dataField">
-	<div class="col-sm-5">
-		<select name="posting_url_dataField_name" class="form-control posting_url_change">
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<h4 class="modal-title">Offer Link Instructions</h4>
+</div>
+<div class="modal-body">
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#posting_url" role="tab" data-toggle="tab">Example Posting Url</a></li>
+		<li role="presentation" class=""><a href="#tracking_pixel" role="tab" data-toggle="tab">Example Tracking Pixel</a></li>
+		<li role="presentation" class=""><a href="#analytic_pixel" role="tab" data-toggle="tab">Example Analytic Pixel</a></li>
+	</ul>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane fade in active" id="posting_url">
+			<div class="help-block">Use this url on your PPC campaign to redirect traffic to this offer using the campaign below.</div>
+			<div class="form-group">
+				<textarea id="example_url" rows="5" name="example_url" class="form-control"></textarea>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane fade in" id="tracking_pixel">
+			<div class="help-block">Use this tracking pixel on remote thank you pages to track clicks or conversions on this offer using the campaign below.</div>
+			<div class="form-group">
+				<textarea id="example_pixel" rows="5" name="example_pixel" class="form-control"></textarea>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane fade in" id="analytic_pixel">
+			<div class="help-block">Place this code at the bottom of all your offer pages to enable offer page tracking.</div>
+			<pre id="example_analytic_pixel">&lt;!-- Place this pixel at the bottom of all your pages for tracking --&gt;
+	&lt;script type="text/javascript"&gt;
+		var _op = _op || [];
+		_op.push(['_trackPageView']);
+		(function() {
+		var op = document.createElement('script');
+		op.type = 'text/javascript';
+		op.async = 'true';
+		op.src = ('https:' == document.location.protocal ? 'https://www' : 'http://www') + '.<?php echo defined('MO_ANALYTIC_DOMAIN') ? MO_ANALYTIC_DOMAIN : substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1) ?>/op.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(op, s);
+		})();
+	&lt;/script&gt;</pre>
+		</div>
+	</div>
+	<hr />
+	<div class="help-block">Use the form controls below to create an example Posting URL</div>
+	<div class="form-group">
+		<select id="posting_url_campaign" name="posting_url_campaign" placeholder="create a new url from another campaign associated with this offer" class="form-control">
+			<?php
+				/* @var $campaign \Flux\Campaign */ 
+				foreach ($campaigns AS $campaign) { 
+			?>
+				<option value="<?php echo $campaign->getKey() ?>" data-data="<?php echo htmlentities(json_encode(array('campaign_key' => $campaign->getKey(), 'description' => $campaign->getDescription(), 'client_name' => $campaign->getClient()->getClientName()))) ?>"><?php echo $campaign->getKey() ?></option>
+			<?php } ?>
+		</select>
+	</div>
+	<div class="form-group">
+		<div class="btn-group" data-toggle="buttons">
+			<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
+			<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
+			<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
+		</div>
+	</div>
+	<div id="data_field_posting_url_container"></div>
+	<div class="clearfix"></div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-success btn-add-dataField"><span class="glyphicon glyphicon-plus"></span> Add Data Field</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+
+<div class="form-group" style="display:none;" id="dummy_posting_url_data_field">
+	<div class="col-sm-6">
+		<select name="posting_url_data_field_name" class="form-control posting_url_change">
 			<optgroup label="Events">
-			<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-				<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-					<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
+			<?php foreach($data_fields AS $data_field) { ?>
+				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
 				<?php  } ?>
 			<?php } ?>
 			</optgroup>
 			<optgroup label="Data Fields">
-				<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-					<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-						<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
+				<?php foreach($data_fields AS $data_field) { ?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
+					<?php } ?>
+				<?php } ?>
+			</optgroup>
+			<optgroup label="Derived Fields">
+				<?php foreach($data_fields AS $data_field) { ?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
 					<?php } ?>
 				<?php } ?>
 			</optgroup>
 			<optgroup label="Tracking">
-				<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
-					<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-						<option value="<?php echo $dataField->getKeyName() ?>"><?php echo $dataField->getName() ?> (<?php echo $dataField->getKeyName() ?>, <?php echo implode(", ", $dataField->getRequestName()) ?>)</option>
+				<?php foreach($data_fields AS $data_field) { ?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
 					<?php } ?>
 				<?php } ?>
 			</optgroup>
 		</select>
 	</div>
 	<div class="col-sm-5">
-		<input type="text" name="posting_url_dataField_value" class="form-control posting_url_change" placeholder="Value" />
+		<input type="text" name="posting_url_data_field_value" class="form-control posting_url_change" placeholder="Value" />
 	</div>
-	<div class="col-sm-2">
-		<button type="button" class="btn btn-danger btn-remove-dataField">
-			<span class="glyphicon glyphicon-minus"></span> Remove
-		</button>
+	<div class="col-sm-1">
+		<button type="button" class="btn btn-danger btn-remove-data_field"><span class="glyphicon glyphicon-minus"></span></button>
 	</div>
+	<div class="clearfix"></div>
 </div>
 
-<br/>
-<form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">
-	<div class="form-group">
-		<label class="col-sm-2 control-label" for="example_url">Example Posting URL</label>
-		<div class="col-sm-10">
-			<textarea id="example_url" rows="5" name="example_url" class="form-control"></textarea>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label" for="example_pixel">Example Tracking Pixel</label>
-		<div class="col-sm-10">
-			<textarea id="example_pixel" rows="5" name="example_pixel" class="form-control"></textarea>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label" for="example_pixel">Example Analytic Pixel</label>
-		<div class="col-sm-10">
-			<pre id="example_analytic_pixel">&lt;!-- Place this pixel at the bottom of all your pages for tracking --&gt;
-&lt;script type="text/javascript"&gt;
-	var _op = _op || [];
-	_op.push(['_trackPageView']);
-	(function() {
-	var op = document.createElement('script');
-	op.type = 'text/javascript';
-	op.async = 'true';
-	op.src = ('https:' == document.location.protocal ? 'https://www' : 'http://www') + '.<?php echo defined('MO_ANALYTIC_DOMAIN') ? MO_ANALYTIC_DOMAIN : substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1) ?>/op.js';
-	var s = document.getElementsByTagName('script')[0];
-	s.parentNode.insertBefore(op, s);
-	})();
-&lt;/script&gt;</pre>
-		</div>
-	</div>
-	<div class="row">
-		<label class="col-sm-2 control-label"></label>
-		<div class="col-sm-10">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="help-block">
-						Use the form controls below to create an example Posting URL
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-12">
-					<select name="posting_url_client" class="form-control posting_url_change">
-					<?php
-						/* @var $campaign \Flux\Campaign */ 
-						foreach($campaigns AS $campaign) { 
-					?>
-						<option value="<?php echo $campaign->getOfferId() ?>,<?php echo $campaign->getClientId() ?>,<?php echo $campaign->getId() ?>"><?php echo $campaign->getClient()->getName() . ' &ndash; ' . $offer->getName() ?></option>
-					<?php } ?>
-					</select>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-12">
-					<div class="btn-group" data-toggle="buttons">
-						<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
-						<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
-						<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
-					</div>
-					<button type="button" class="btn btn-success btn-add-dataField">
-						<span class="glyphicon glyphicon-plus"></span> Add Data Field
-					</button>
-				</div>
-			</div>
-			<div id="dataField_posting_url_container">
-			</div>
-		</div>
-	</div>
-</form>
 <script>
 //<!--
+var $selectize_options = {
+	valueField: 'key_name',
+	labelField: 'name',
+	searchField: ['name', 'description', 'request_names'],
+	dropdownWidthOffset: 150,
+	render: {
+		item: function(item, escape) {
+			var label = item.name || item.key;
+            var caption = item.description ? item.description : null;
+            var keyname = item.key_name ? item.key_name : null;
+            var tags = item.tags ? item.tags : null;
+            var tag_span = '';
+			$.each(tags, function(j, tag_item) {
+				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+			});	            
+            return '<div style="width:100%;padding-right:25px;">' +
+                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+                '<div>' + tag_span + '</div>' +   
+            '</div>';
+		},
+		option: function(item, escape) {
+			var label = item.name || item.key;
+            var caption = item.description ? item.description : null;
+            var keyname = item.key_name ? item.key_name : null;
+            var tags = item.tags ? item.tags : null;
+            var tag_span = '';
+			$.each(tags, function(j, tag_item) {
+				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+			});	            
+            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+                '<div>' + tag_span + '</div>' +
+            '</div>';
+		}
+	},
+	onChange: function(value) {
+		buildPostingUrl();
+	}
+};
+
 $(document).ready(function() {
 	$('.posting_url_change').on('change', function(e) {
 		e.preventDefault();
@@ -121,14 +167,39 @@ $(document).ready(function() {
 		buildPostingUrl();
 	});
 
+	$('#posting_url_campaign').selectize({
+		valueField: 'campaign_key',
+		labelField: 'description',
+		searchField: ['client_name', 'description', 'campaign_key'],
+		dropdownWidthOffset: 150,
+		render: {
+			item: function(item, escape) {
+	            return '<div style="padding-right:25px;">' +
+	                '<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
+	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+	            '</div>';
+			},
+			option: function(item, escape) {
+				return '<div style="padding-right:25px;">' +
+	                '<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
+	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+	            '</div>';
+			}
+		}
+	}).on('change', function(e) {
+		buildPostingUrl();
+	});
+
 	$('.btn-add-dataField').on('click', function() {
-		var $dataFieldRow = $('#dummy_posting_url_dataField').clone(true);
-		$('#dataField_posting_url_container').append($dataFieldRow);
+		var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
+		$dataFieldRow.removeAttr('id');
+		$dataFieldRow.find('select').selectize($selectize_options);
+		$('#data_field_posting_url_container').append($dataFieldRow);
 		$dataFieldRow.show();
 		buildPostingUrl();
 	});
 
-	$('.btn-remove-dataField').on('click', function() {
+	$('.btn-remove-data_field').on('click', function() {
 		$(this).closest('.form-group').remove();
 		buildPostingUrl();
 	});
@@ -140,15 +211,9 @@ $(document).ready(function() {
 function buildPostingUrl() {
 	var posting_params = {};
 
-	if($('[name=posting_url_pixel]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_AGG_CKID); ?>] = 'REPLACE_WITH_TRACKING_ID';
-	} else {
-		var offer_client_campaign_pair = $('[name=posting_url_client]').val().split(",");
-		//posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_OFFER_ID); ?>] = offer_client_campaign_pair[0];
-		//posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CLIENT_ID); ?>] = offer_client_campaign_pair[1];
-		posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = offer_client_campaign_pair[2];
-	}
-
+	var campaign_key = $('[name=posting_url_campaign]').val();
+	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = campaign_key;
+	
 	if($('[name=posting_url_save]').is(':checked')) {
 		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_SAVE_FLAG); ?>] = 1;
 	}
@@ -157,9 +222,9 @@ function buildPostingUrl() {
 		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
 	}
 
-	$('#dataField_posting_url_container .form-group').each(function() {
-		var dataFieldName = $(this).find('[name=posting_url_dataField_name]').val();
-		var dataFieldValue = $(this).find('[name=posting_url_dataField_value]').val();
+	$('#data_field_posting_url_container .form-group').each(function() {
+		var dataFieldName = $(this).find('[name=posting_url_data_field_name]').val();
+		var dataFieldValue = $(this).find('[name=posting_url_data_field_value]').val();
 		posting_params[dataFieldName] = dataFieldValue;
 	});
 

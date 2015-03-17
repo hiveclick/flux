@@ -4,7 +4,7 @@
 	$domain_groups = $this->getContext()->getRequest()->getAttribute("domain_groups", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right"><a class="btn btn-success" href="/export/split-pane-position-wizard?split_id=<?php echo $split->getId() ?>&position=1" data-toggle="modal" data-target="#split_position_modal"><span class="glyphicon glyphicon-plus"></span> Add New Feed</a></div>
 	<h2><a href="/export/split-search">Splits</a> <small><?php echo $split->getName() ?></small></h2>
 </div>

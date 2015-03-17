@@ -1,151 +1,149 @@
 <?php
 	/* @var $export \Flux\Export */
 	$export = $this->getContext()->getRequest()->getAttribute("export", array());
-	$client_exports = $this->getContext()->getRequest()->getAttribute("client_exports", array());
+	$fulfillments = $this->getContext()->getRequest()->getAttribute("fulfillments", array());
 	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
 ?>
-<div id="header">
-   <h2>Exports</h2>
+<div class="page-header">
+   <h1>Exports</h1>
 </div>
 <div class="help-block">Exports define how a client can receive data from a split</div>
-<br/>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default" style="overflow:visible;">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Search Filters</a>
-			</h4>
-		</div>
-		<div id="collapseOne" class="panel-collapse collapse in">
-			<div class="panel-body">
-				<form id="export_search_form" method="GET" action="/api">
-					<input type="hidden" name="items_per_page" value="100">
-					<input type="hidden" name="func" value="/export/export">
-					<input type="hidden" name="sord" value="desc">
-					<input type="hidden" name="sort" value="export_date">
-					<div class="form-group">
-						<div class="">
-							<input type="text" class="form-control" name="description" id="description" placeholder="Search by name" value="<?php echo $export->getName() ?>" />
-						</div>
-					</div>
-					<div style="display:none;" id="advanced_search_div">
-						<fieldset>
-							<legend>Advanced Search</legend>
-							<div class="form-group col-sm-12">
-								<label class="control-label hidden-xs" for="name">Export Type</label>
-								<div class="">
-									<select class="form-control selectize" name="export_type_array[]" id="export_type" multiple placeholder="Filter by Export Type">
-										<?php foreach (\Flux\Export::retrieveExportTypes() as $export_type_id => $export_type_name) { ?>
-											<option value="<?php echo $export_type_id ?>" selected><?php echo $export_type_name ?></option>
-										<?php } ?>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label class="control-label hidden-xs" for="name">Split</label>
-									<div class="">
-										<select class="form-control selectize" name="split_id_array[]" id="split_id" multiple placeholder="All Splits">
-											<?php foreach($splits as $split) { ?>
-												<option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $export->getSplitIdArray()) ? 'selected' : '' ?>><?php echo $split->getName() ?></option>
-											<?php } ?>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label class="control-label hidden-xs" for="name">Client</label>
-									<div class="">
-										<select class="form-control selectize" name="client_export_id_array[]" id="client_export_id" multiple placeholder="All Exports">
-											<?php foreach($client_exports as $client_export) { ?>
-												<option value="<?php echo $client_export->getId() ?>" <?php echo in_array($client_export->getId(), $export->getClientExportIdArray()) ? 'selected' : '' ?>><?php echo $client_export->getName() ?></option>
-											<?php } ?>
-										</select>
-									</div>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-					<div class="text-center">
-						<input type="button" class="btn btn-warning" id="show_advanced" name="show_advanced" value="show advanced filters" />
-						<input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
-					</div>
-				</form>
+<div class="panel panel-primary">
+	<div id='export-header' class='grid-header panel-heading clearfix'>
+		<form id="export_search_form" method="GET" class="form-inline" action="/api">
+			<input type="hidden" name="func" value="/export/export">
+			<input type="hidden" name="format" value="json" />
+			<input type="hidden" id="page" name="page" value="1" />
+			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+			<input type="hidden" id="sort" name="sort" value="export_date" />
+			<input type="hidden" id="sord" name="sord" value="desc" />
+			<div class="text-right">
+				<div class="form-group text-left">
+					<select class="form-control" name="export_type_array[]" id="export_type" multiple placeholder="Filter by Export Type">
+						<option value="<?php echo \Flux\Export::EXPORT_TYPE_BATCH ?>" <?php echo in_array(\Flux\Export::EXPORT_TYPE_BATCH, $export->getExportTypeArray()) ? 'selected' : '' ?>>Batch Exports</option>
+						<option value="<?php echo \Flux\Export::EXPORT_TYPE_REALTIME ?>" <?php echo in_array(\Flux\Export::EXPORT_TYPE_REALTIME, $export->getExportTypeArray()) ? 'selected' : '' ?>>Realtime Exports</option>
+						<option value="<?php echo \Flux\Export::EXPORT_TYPE_EMAIL_BATCH ?>" <?php echo in_array(\Flux\Export::EXPORT_TYPE_EMAIL_BATCH, $export->getExportTypeArray()) ? 'selected' : '' ?>>Batch Email Exports</option>
+						<option value="<?php echo \Flux\Export::EXPORT_TYPE_EMAIL_REALTIME ?>" <?php echo in_array(\Flux\Export::EXPORT_TYPE_EMAIL_REALTIME, $export->getExportTypeArray()) ? 'selected' : '' ?>>Realtime Email Exports</option>
+						<option value="<?php echo \Flux\Export::EXPORT_TYPE_TEST ?>" <?php echo in_array(\Flux\Export::EXPORT_TYPE_TEST, $export->getExportTypeArray()) ? 'selected' : '' ?>>Test Exports</option>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<select class="form-control" name="fulfillment_id_array[]" id="fulfillment_id" multiple placeholder="All Exports">
+						<?php
+							/* @var $fulfillment \Flux\Fulfillment */ 
+							foreach ($fulfillments as $fulfillment) { 
+						?>
+							<option value="<?php echo $fulfillment->getId() ?>" <?php echo in_array($fulfillment->getId(), $export->getFulfillmentIdArray()) ? 'selected' : '' ?>><?php echo $fulfillment->getName() ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<select class="form-control" name="split_id_array[]" id="split_id" multiple placeholder="All Splits">
+						<?php
+							/* @var $split \Flux\Split */ 
+							foreach($splits as $split) { 
+						?>
+							<option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $export->getSplitIdArray()) ? 'selected' : '' ?>><?php echo $split->getName() ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
+	<div id="export-grid"></div>
+	<div id="export-pager" class="panel-footer"></div>
 </div>
-<table id="export_table" class="table table-hover table-bordered table-striped table-responsive table-condensed">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Split</th>
-			<th>Export</th>
-			<th>Progress</th>
-			<th>Date</th>
-			<th># Records</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
+
 <script>
 //<!--
 $(document).ready(function() {
-	$('#split_id,#client_export_id,#export_type').selectize();
 
-	$('#show_advanced').click(function() {
-		$('#advanced_search_div').slideToggle();
-	});
-	
-	$('#export_search_form').on('submit', function(e) {
-		$('#export_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
-	
-	$('#export_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#export_search_form').serializeObject();
+	var columns = [
+		{id:'_id', name:'id', field:'_id', sort_field:'_id', def_value: ' ', sortable:true, type: 'string', hidden:true, formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a href="/export/export?_id=' + dataContext._id + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">Started on ' + moment.unix(dataContext.start_time.sec).calendar() + '.  Completed on ' + moment.unix(dataContext.end_time.sec).calendar() + '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'export_type', name:'type', field:'export_type', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '<?php echo \Flux\Export::EXPORT_TYPE_BATCH ?>') {
+				return 'Batch Export';
+			} else if (value == '<?php echo \Flux\Export::EXPORT_TYPE_REALTIME ?>') {
+				return 'Realtime Export';
+			} else if (value == '<?php echo \Flux\Export::EXPORT_TYPE_EMAIL_BATCH ?>') {
+				return 'Email Batch Export';
+			} else if (value == '<?php echo \Flux\Export::EXPORT_TYPE_EMAIL_REALTIME ?>') {
+				return 'Email Realtime Export';
+			} else if (value == '<?php echo \Flux\Export::EXPORT_TYPE_TEST ?>') {
+				return 'Test';
 			}
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-			{ name: "id", data: "_id", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/export/export?_id=' + rowData._id + '">' + cellData + '</a>');
-			}},
-			{ name: "name", data: "name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/export/export?_id=' + rowData._id + '">' + cellData + '</a>');
-			}},
-			{ name: "_split_name", data: "_split_name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/export/split?_id=' + rowData.split_id + '">' + cellData + '</a>');
-			}},
-			{ name: "_client_export_name", data: "_client_export_name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a href="/client/client?_id=' + rowData._client_id + '">' + cellData + ' (' + rowData._client_name + ')</a>');
-			}},
-			{ name: "percent_complete", data: "percent_complete", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				if (cellData == 100) {
-					var div = '<div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" style="width: ' + ((rowData.num_records_successful/rowData.num_records)*100) + '%;"></div><div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' + ((rowData.num_records_error/rowData.num_records)*100) + '%;"></div></div>';
-				} else {
-					var div = '<div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="' + cellData + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + cellData + '%;"></div></div>';
-				}
-				$(td).html(div);
-			}},
-			{ name: "export_date", data: "export_date", defaultContent: '', sClass: 'text-center', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html(moment.unix(cellData.sec).calendar());
-			}},
-			{ name: "num_records", data: "num_records", defaultContent: '', sClass: 'text-right', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html($.number(cellData));
-			}}
-	  	]
+			return value;
+		}},
+		{id:'fulfillment', name:'fulfillment', field:'fulfillment.fulfillment_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'split_id', name:'split', field:'split.split_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'percent_complete', name:'% complete', field:'percent_complete', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == 100) {
+				var div = '<div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" style="width: ' + ((dataContext.num_records_successful/dataContext.num_records)*100) + '%;"></div><div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' + ((dataContext.num_records_error/dataContext.num_records)*100) + '%;"></div></div>';
+			} else {
+				var div = '<div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + value + '%;"></div></div>';
+			}
+			return div;
+		}},
+		{id:'export_date', name:'export_date', field:'export_date', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return moment.unix(value.sec).calendar();
+		}},
+		{id:'num_records', name:'# records', field:'num_records', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return $.number(value);
+		}}
+
+	];
+
+  	slick_grid = $('#export-grid').slickGrid({
+		pager: $('#export-pager'),
+		form: $('#export_search_form'),
+		columns: columns,
+		useFilter: false,
+		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
+		pagingOptions: {
+			pageSize: 25,
+			pageNum: 1
+		},
+		slickOptions: {
+			defaultColumnWidth: 150,
+			forceFitColumns: true,
+			enableCellNavigation: false,
+			width: 800,
+			rowHeight: 48
+		}
+	});
+
+  	$("#txtSearch").keyup(function(e) {
+   		// clear on Esc
+   		if (e.which == 27) {
+   			this.value = "";
+   		} else if (e.which == 13) {
+   			$('#export_search_form').trigger('submit');
+   		}
+   	});
+		  	
+   	$('#export_search_form').trigger('submit');
+	
+	$('#split_id,#fulfillment_id,#export_type').selectize({
+		dropdownWidthOffset: 150,
+		allowEmptyOption: true
+	}).on('change', function(e) {
+		$('#export_search_form').trigger('submit');
 	});
 });
 //-->

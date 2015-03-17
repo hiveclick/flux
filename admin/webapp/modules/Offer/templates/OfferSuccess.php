@@ -2,121 +2,109 @@
 	/* @var $offer Flux\Offer */
 	$offer = $this->getContext()->getRequest()->getAttribute("offer", array());
 ?>
- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<div id="header">
-	<div class="pull-right visible-xs">
-		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-	</div>
-	<h2><a href="/offer/offer-search">Offers</a> <small> <?php echo $offer->getName() ?></small></h2>
-</div>
-<div id="tabs" class="navbar-collapse collapse">
-	<ul class="nav nav-pills" id="offer_tabs">
-		<li class="active"><a id="tabs-a-main" href="#tabs-main" data-toggle="tab">Dashboard</a></li>
-		<li><a id="tabs-a-edit" href="#tabs-edit" data-toggle="tab" data-url="/offer/offer-pane-edit?_id=<?php echo $offer->getId() ?>">Edit</a></li>
-		<li><a id="tabs-a-events" href="#tabs-events" data-toggle="tab" data-url="/offer/offer-pane-event?_id=<?php echo $offer->getId() ?>">Events</a></li>
-		<li><a id="tabs-a-pages" href="#tabs-pages" data-toggle="tab" data-url="/offer/offer-pane-pages?_id=<?php echo $offer->getId() ?>">Pages</a></li>
-		<li>
-			<a type="button" class="dropdown-toggle" data-toggle="dropdown">
-				Assets <span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu" role="menu">
-				<li><a id="tabs-a-assets" href="#tabs-assets" data-toggle="tab" data-url="/offer/offer-pane-assets?_id=<?php echo $offer->getId() ?>">Assets</a></li>
-				<li><a href="/offer/offer-asset-wizard?offer_id=<?php echo $offer->getId() ?>">Add New Asset</a></li>
-			</ul>
-		</li>
-		<!--
-		<li class="dropdown">
-			<a type="button" class="dropdown-toggle" data-toggle="dropdown">
-				Campaigns <span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu" role="menu">
-				<li><a id="tabs-a-campaigns" href="#tabs-campaigns" data-toggle="tab" data-url="/offer/offer-pane-campaign?_id=<?php echo $offer->getId() ?>">View Campaigns</a></li>
-				<li><a href="/campaign/campaign-wizard?offer_id=<?php echo $offer->getId() ?>">Add New Campaign</a></li>
-			</ul>
-		</li>
-		-->
-		<li><a id="tabs-a-report" href="#tabs-report" data-toggle="tab" data-url="/offer/offer-pane-report?_id=<?php echo $offer->getId() ?>">Report</a></li>
-		<li><a id="tabs-a-spy" href="#tabs-spy" data-toggle="tab" data-url="/offer/offer-pane-spy?_id=<?php echo $offer->getId() ?>">Spy</a></li>
-		<li><a id="tabs-a-instructions" href="#tabs-instructions" data-toggle="tab" data-url="/offer/offer-pane-instruction?_id=<?php echo $offer->getId() ?>">Instructions</a></li>
-	</ul>
-</div>
-
-<div id="tab-content-container" class="tab-content">
-	<div id="tabs-main" class="tab-pane active">
-		<div class="help-block">Get a bird's eye view of this offer and how it is performing below.</div>
-		<br/>
-		<!-- content -->
-		<div class="row">
-			<!-- main col right -->
-			<div class="col-sm-8">
-				<div class="panel panel-default">
-					<div class="panel-heading"><h4>Click Traffic</h4></div>
-					<div class="panel-body">
-						<div id="click_by_hour_chart_div" style="width:100%;height:250px"><i>Loading report data...</i></div>
-					</div>
-				</div>
-	
-				<div class="panel panel-default">
-					<div class="panel-heading"><h4>Conversion Traffic</h4></div>
-					<div class="panel-body">
-						<div id="conversion_by_hour_chart_div" style="width:100%;height:250px"><i>Loading report data...</i></div>
-					</div>
-				</div>
-			</div>
-			
-			<!-- main col right -->
-			<div class="col-sm-4">
-				<div class="panel panel-default text-center">
-					<?php foreach ($offer->getOfferPages() as $offer_page) { ?>	
-						<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer_page->getPreviewUrl()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer_page->getPreviewUrl() ?>" />
-					<?php 
-							break;
-						} 
-					?>
-					<p />
-					<div>
-						<a class="btn btn-info" href="<?php echo $offer->getPreviewUrl() ?>" target="_blank">Preview Landing Page</a>
-						<br /><small><?php echo $offer->getPreviewUrl() ?></small>
-					</div>
-				</div>
-				<p />
-				<div class="panel panel-default text-center">
-					<div class="panel-heading">
-						<h4>Today's Stats</h4>
-					</div>
-					<div class="panel-body">
-					<h4><?php echo number_format($offer->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
-					<h4><?php echo number_format($offer->getDailyConversions(), 0, null, ',') ?> Conversions</h4>
-					</div>
-				</div>
-				<p />
-				<div class="panel panel-default">
-					<div class="panel-heading"><h4>Quick Links</h4></div>
-					<div class="panel">
-						<div class="list-group">
-							<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-spy" class="list-group-item">Spy Report</a>
-							<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-pages" class="list-group-item">Pages</a>
-							<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-events" class="list-group-item">Events</a>
-						</div>
-					</div>
-				</div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<div class="page-header">
+	<!-- Actions -->
+	<div class="pull-right">
+		<div class="visible-sm visible-xs">
+			<div class="btn-group">
+  				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li><a data-toggle="modal" data-target="#edit_modal" href="/offer/offer-pane-edit?_id=<?php echo $offer->getId() ?>">edit offer</a></li>
+					<li class="divider"></li>
+					<li><a href="/offer/offer-page-search?_id=<?php echo $offer->getId() ?>">view pages</a></li>
+					<li><a href="/offer/offer-event-search?_id=<?php echo $offer->getId() ?>">view events</a></li>
+					<li class="divider"></li>
+					<li><a data-toggle="modal" data-target="#instruction_modal" href="/offer-pane-instruction?_id=<?php echo $offer->getId() ?>">view instructions</a></li>
+					<li class="divider"></li>
+					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+				</ul>
 			</div>
 		</div>
-		
+		<div class="hidden-sm hidden-xs">
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" data-toggle="modal" data-target="#edit_modal" href="/offer/offer-pane-edit?_id=<?php echo $offer->getId() ?>">edit offer</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="/offer/offer-page-search?_id=<?php echo $offer->getId() ?>">view pages</a>
+				<a class="btn btn-info" href="/offer/offer-event-search?_id=<?php echo $offer->getId() ?>">view events</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" data-toggle="modal" data-target="#instruction_modal" href="/offer/offer-pane-instruction?_id=<?php echo $offer->getId() ?>">view instructions</a>
+			</div>
+			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
+		</div>
 	</div>
-	<div id="tabs-edit" class="tab-pane"></div>
-	<div id="tabs-events" class="tab-pane"></div>
-	<div id="tabs-report" class="tab-pane"></div>
-	<div id="tabs-pages" class="tab-pane"></div>
-	<div id="tabs-assets" class="tab-pane"></div>
-	<div id="tabs-spy" class="tab-pane"></div>
-	<div id="tabs-instructions" class="tab-pane"></div>
+	<h1><?php echo $offer->getName() ?></h1>
 </div>
+<ol class="breadcrumb">
+	<li><a href="/offer/offer-search">Offers</a></li>
+	<li class="active"><?php echo $offer->getName() ?></li>
+</ol>
+<div class="help-block">Get a bird's eye view of this offer and how it is performing below.</div>
+
+<!-- main col right -->
+<div class="col-sm-8">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Click Traffic</h4></div>
+		<div class="panel-body">
+			<div id="click_by_hour_chart_div" style="width:100%;height:250px"><i>Loading report data...</i></div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Conversion Traffic</h4></div>
+		<div class="panel-body">
+			<div id="conversion_by_hour_chart_div" style="width:100%;height:250px"><i>Loading report data...</i></div>
+		</div>
+	</div>
+</div>
+
+<!-- main col right -->
+<div class="col-sm-4">
+	<div class="panel panel-default text-center">
+		<?php foreach ($offer->getOfferPages() as $offer_page) { ?>	
+			<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer_page->getPreviewUrl()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer_page->getPreviewUrl() ?>" />
+		<?php 
+				break;
+			} 
+		?>
+		<p />
+		<div>
+			<a class="btn btn-info" href="<?php echo $offer->getPreviewUrl() ?>" target="_blank">Preview Landing Page</a>
+			<br /><small><?php echo $offer->getPreviewUrl() ?></small>
+		</div>
+	</div>
+	<p />
+	<div class="panel panel-default text-center">
+		<div class="panel-heading">
+			<h4>Today's Stats</h4>
+		</div>
+		<div class="panel-body">
+		<h4><?php echo number_format($offer->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
+		<h4><?php echo number_format($offer->getDailyConversions(), 0, null, ',') ?> Conversions</h4>
+		</div>
+	</div>
+	<p />
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Quick Links</h4></div>
+		<div class="panel">
+			<div class="list-group">
+				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-spy" class="list-group-item">Spy Report</a>
+				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-pages" class="list-group-item">Pages</a>
+				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-events" class="list-group-item">Events</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- edit modal -->
+<div class="modal fade" id="edit_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- instruction modal -->
+<div class="modal fade" id="instruction_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- Push offer to server modal -->
+<div class="modal fade" id="pushToServerModal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
+
 <script>
 //<!--
 google.load("visualization", "1", {packages:["corechart"]});
@@ -127,39 +115,6 @@ $(window).on('debouncedresize', function() {
 });
 
 $(document).ready(function() {
-
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		e.preventDefault();
-		var hash = this.hash;
-		if ($(this).attr("data-url")) {
-			// only load the page the first time
-			if ($(hash).html() == '') {
-				// ajax load from data-url
-				$(hash).load($(this).attr("data-url"));
-			}
-		}
-	}).on('show.bs.tab', function (e) {
-		try {
-			sessionStorage.setItem(localTabStorageName, $(e.target).attr('href'));
-		} catch (err) { }
-	});
-
-	// Store the last clicked tab so it can be loaded on page refreshes
-	var localTabStorageName = <?php echo json_encode('offer_tab_' . $offer->getId()); ?>;
-	var lastTab = sessionStorage.getItem(localTabStorageName);
-	if (location.hash) {
-		var hash = location.hash, hashPieces = hash.split('?'), activeTab = $('[href=' + hashPieces[0] + ']');
-	}
-	if (activeTab) {
-		activeTab.tab('show');
-	} else {
-		if (lastTab) {
-			$('a[href='+lastTab+']').tab('show');
-		} else {
-			$('ul.nav-pills a:first').tab('show');
-		}
-	}
-
    	drawClickByHourChart();
    	drawConversionByHourChart();
 });

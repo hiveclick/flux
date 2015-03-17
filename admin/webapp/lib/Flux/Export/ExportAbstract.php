@@ -5,7 +5,7 @@ use Flux\Export;
 use Mojavi\Form\MongoForm;
 use Flux\Split;
 use Flux\SplitPosition;
-use Flux\ClientExport;
+use Flux\Fulfillment;
 
 /**
  * Abstract export class used by all export classes
@@ -13,22 +13,22 @@ use Flux\ClientExport;
  */
 abstract class ExportAbstract extends MongoForm {
 	
-	const CLIENT_EXPORT_TYPE_NONE = 0;
-	const CLIENT_EXPORT_TYPE_POST = 1;
-	const CLIENT_EXPORT_TYPE_FTP = 2;
-	const CLIENT_EXPORT_TYPE_EMAIL = 3;
-	const CLIENT_EXPORT_TYPE_INFUSIONSOFT = 4;
+	const FULFILLMENT_TYPE_NONE = 0;
+	const FULFILLMENT_TYPE_POST = 1;
+	const FULFILLMENT_TYPE_FTP = 2;
+	const FULFILLMENT_TYPE_EMAIL = 3;
+	const FULFILLMENT_TYPE_INFUSIONSOFT = 4;
 	
 	protected $name;
 	protected $description;
-	protected $client_export_type;
+	protected $fulfillment_type;
 	private $split_id;
 	private $split_position_id;
 	private $export_id;
-	private $client_export_id;
+	private $fulfillment_id;
 	
 	private $export;
-	private $client_export;
+	private $fulfillment;
 	private $split;
 	private $split_position;
 	
@@ -75,23 +75,23 @@ abstract class ExportAbstract extends MongoForm {
 	}
 	
 	/**
-	 * Returns the client_export_type
+	 * Returns the fulfillment_type
 	 * @return integer
 	 */
-	function getClientExportType() {
-		if (is_null($this->client_export_type)) {
-			$this->client_export_type = self::CLIENT_EXPORT_TYPE_NONE;
+	function getFulfillmentType() {
+		if (is_null($this->fulfillment_type)) {
+			$this->fulfillment_type = self::FULFILLMENT_TYPE_NONE;
 		}
-		return $this->client_export_type;
+		return $this->fulfillment_type;
 	}
 	
 	/**
-	 * Sets the client_export_type
+	 * Sets the fulfillment_type
 	 * @var integer
 	 */
-	function setClientExportType($arg0) {
-		$this->client_export_type = $arg0;
-		$this->addModifiedColumn("client_export_type");
+	function setFulfillmentType($arg0) {
+		$this->fulfillment_type = $arg0;
+		$this->addModifiedColumn("fulfillment_type");
 		return $this;
 	}
 	
@@ -138,23 +138,23 @@ abstract class ExportAbstract extends MongoForm {
 	}
 	
 	/**
-	 * Returns the client_export_id
+	 * Returns the fulfillment_id
 	 * @return integer
 	 */
-	function getClientExportId() {
-		if (is_null($this->client_export_id)) {
-			$this->client_export_id = 0;
+	function getFulfillmentId() {
+		if (is_null($this->fulfillment_id)) {
+			$this->fulfillment_id = 0;
 		}
-		return $this->client_export_id;
+		return $this->fulfillment_id;
 	}
 	
 	/**
-	 * Sets the client_export_id
+	 * Sets the fulfillment_id
 	 * @var integer
 	 */
-	function setClientExportId($arg0) {
-		$this->client_export_id = $arg0;
-		$this->addModifiedColumn("client_export_id");
+	function setFulfillmentId($arg0) {
+		$this->fulfillment_id = $arg0;
+		$this->addModifiedColumn("fulfillment_id");
 		return $this;
 	}
 	
@@ -185,7 +185,7 @@ abstract class ExportAbstract extends MongoForm {
 	 */
 	function getExport() {
 		if (is_null($this->export)) {
-			$this->export = new Export();
+			$this->export = new \Flux\Export();
 			$this->export->setId($this->getExportId());
 			$this->export->query();
 		}
@@ -193,16 +193,16 @@ abstract class ExportAbstract extends MongoForm {
 	}
 	
 	/**
-	 * Returns the client_export
-	 * @return \Flux\ClientExport
+	 * Returns the fulfillment
+	 * @return \Flux\Fulfillment
 	 */
-	function getClientExport() {
-		if (is_null($this->client_export)) {
-			$this->client_export = new ClientExport();
-			$this->client_export->setId($this->getClientExportId());
-			$this->client_export->query();
+	function getFulfillment() {
+		if (is_null($this->fulfillment)) {
+			$this->fulfillment = new \Flux\Fulfillment();
+			$this->fulfillment->setId($this->getFulfillmentId());
+			$this->fulfillment->query();
 		}
-		return $this->client_export;
+		return $this->fulfillment;
 	}
 	
 	/**
@@ -211,7 +211,7 @@ abstract class ExportAbstract extends MongoForm {
 	 */
 	function getSplit() {
 		if (is_null($this->split)) {
-			$this->split = new Split();
+			$this->split = new \Flux\Split();
 			$this->split->setId($this->getSplitId());
 			$this->split->query();
 		}
@@ -224,7 +224,7 @@ abstract class ExportAbstract extends MongoForm {
 	 */
 	function getSplitPosition() {
 		if (is_null($this->split_position)) {
-			$this->split_position = new SplitPosition();
+			$this->split_position = new \Flux\SplitPosition();
 			$this->split_position->setId($this->getSplitPositionId());
 			$this->split_position->query();
 		}

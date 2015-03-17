@@ -1,151 +1,44 @@
 <?php
 namespace Flux;
 
-use Mojavi\Form\MongoForm;
+class User extends Base\User {
 
-class User extends MongoForm {
-
-	const USER_STATUS_ACTIVE = 1;
-	const USER_STATUS_INACTIVE = 2;
-	const USER_STATUS_DELETED = 3;
-
-	const USER_TYPE_ADMIN = 1;
-	const USER_TYPE_REPORT = 2;
-	const USER_TYPE_MOBILE_ONLY = 3;
-
-	protected $name;
-	protected $email;
-	protected $password; // Private so it won't show in the API JSON
-	protected $status;
-	protected $user_type;
-	protected $timezone;
-	protected $client_id;
-	protected $image_data;
-
-	protected $_user_type_name;
-	protected $_status_name;
-	protected $_client_name;
-
-	private $client;
-
+	private $client_id_array;
+	
 	/**
-	 * Constructs new user
-	 * @return void
+	 * Returns the client_id_array
+	 * @return array
 	 */
-	function __construct() {
-		$this->setCollectionName('user');
-		$this->setDbName('admin');
-	}
-
-	/**
-	 * Returns the name
-	 * @return string
-	 */
-	function getName() {
-		if (is_null($this->name)) {
-			$this->name = "";
+	function getClientIdArray() {
+		if (is_null($this->client_id_array)) {
+			$this->client_id_array = array();
 		}
-		return $this->name;
-	}
-
-	/**
-	 * Sets the name
-	 * @var string
-	 */
-	function setName($arg0) {
-		$this->name = $arg0;
-		$this->addModifiedColumn('name');
-		return $this;
-	}
-
-	/**
-	 * Returns the email
-	 * @return string
-	 */
-	function getEmail() {
-		if (is_null($this->email)) {
-			$this->email = "";
-		}
-		return $this->email;
-	}
-
-	/**
-	 * Sets the email
-	 * @var string
-	 */
-	function setEmail($arg0) {
-		$this->email = $arg0;
-		$this->addModifiedColumn('email');
-		return $this;
+		return $this->client_id_array;
 	}
 	
 	/**
-	 * Returns the username
-	 * @return string
+	 * Sets the client_id_array
+	 * @var array
 	 */
-	function getUsername() {
-		return $this->getEmail();
-	}
-	
-	/**
-	 * Sets the username
-	 * @param string
-	 */
-	function setUsername($arg0) {
-		return $this->setEmail($arg0);
-	}
-
-	/**
-	 * Returns the password
-	 * @return string
-	 */
-	function getPassword() {
-		if (is_null($this->password)) {
-			$this->password = "";
-		}
-		return $this->password;
-	}
-
-	/**
-	 * Sets the password
-	 * @var string
-	 */
-	function setPassword($arg0) {
-		$this->password = $arg0;
-		$this->addModifiedColumn('password');
+	function setClientIdArray($arg0) {
+		$this->client_id_array = $arg0;
 		return $this;
 	}
-
+	
 	/**
 	 * Returns the _status_name
 	 * @return string
 	 */
 	function getStatusName() {
-		if (is_null($this->_status_name)) {
-			$this->_status_name = self::retrieveStatuses()[$this->getStatus()];
+		if ($this->getStatus() == self::USER_STATUS_ACTIVE) {
+			return "Active";
+		} else if ($this->getStatus() == self::USER_STATUS_INACTIVE) {
+			return "Inactive";
+		} else if ($this->getStatus() == self::USER_STATUS_DELETED) {
+			return "Deleted";
+		} else {
+			return "Unknown Status";
 		}
-		return $this->_status_name;
-	}
-
-	/**
-	 * Returns the status
-	 * @return integer
-	 */
-	function getStatus() {
-		if (is_null($this->status)) {
-			$this->status = self::USER_STATUS_ACTIVE;
-		}
-		return $this->status;
-	}
-
-	/**
-	 * Sets the status
-	 * @var integer
-	 */
-	function setStatus($arg0) {
-		$this->status = (int)$arg0;
-		$this->addModifiedColumn('status');
-		return $this;
 	}
 
 	/**
@@ -157,122 +50,19 @@ class User extends MongoForm {
 	}
 
 	/**
-	 * Returns the image_data
-	 * @return string
-	 */
-	function getImageData() {
-		if (is_null($this->image_data)) {
-			$this->image_data = "";
-		}
-		return $this->image_data;
-	}
-
-	/**
-	 * Sets the image_data
-	 * @var string
-	 */
-	function setImageData($arg0) {
-		$this->image_data = $arg0;
-		$this->addModifiedColumn('image_data');
-		return $this;
-	}
-
-	/**
 	 * Returns the _user_type_name
 	 * @return string
 	 */
 	function getUserTypeName() {
-		if (is_null($this->_user_type_name)) {
-			$this->_user_type_name = self::retrieveUserTypes()[$this->getUserType()];
+		if ($this->getUserType() == self::USER_TYPE_ADMIN) {
+			return "Administrator";
+		} else if ($this->getUserType() == self::USER_TYPE_REPORT) {
+			return "Report User";
+		} else if ($this->getUserType() == self::USER_TYPE_MOBILE_ONLY) {
+			return "Mobile Only";
+		} else {
+			return "Unknown Type";
 		}
-		return $this->_user_type_name;
-	}
-
-	/**
-	 * Returns the user_type
-	 * @return integer
-	 */
-	function getUserType() {
-		if (is_null($this->user_type)) {
-			$this->user_type = self::USER_TYPE_ADMIN;
-		}
-		return $this->user_type;
-	}
-
-	/**
-	 * Sets the user_type
-	 * @var integer
-	 */
-	function setUserType($arg0) {
-		$this->user_type = (int)$arg0;
-		$this->addModifiedColumn('user_type');
-		return $this;
-	}
-
-	/**
-	 * Returns the timezone
-	 * @return string
-	 */
-	function getTimezone() {
-		if (is_null($this->timezone)) {
-			$this->timezone = "US/Pacific";
-		}
-		return $this->timezone;
-	}
-
-	/**
-	 * Sets the timezone
-	 * @var string
-	 */
-	function setTimezone($arg0) {
-		$this->timezone = $arg0;
-		$this->addModifiedColumn('timezone');
-		return $this;
-	}
-
-	/**
-	 * Returns the this
-	 * @return integer
-	 */
-	function getClientId() {
-		if (is_null($this->client_id)) {
-			$this->client_id = 0;
-		}
-		return $this->client_id;
-	}
-
-	/**
-	 * Sets the this
-	 * @var integer
-	 */
-	function setClientId($arg0) {
-		$this->client_id = intval($arg0);
-		$this->addModifiedColumn('client_id');
-		return $this;
-	}
-
-	/**
-	 * Returns the _client_name
-	 * @return string
-	 */
-	function getClientName() {
-		if (is_null($this->_client_name)) {
-			$this->_client_name = $this->getClient()->getName();
-		}
-		return $this->_client_name;
-	}
-
-	/**
-	 * Returns the client
-	 * @return integer
-	 */
-	function getClient() {
-		if (is_null($this->client)) {
-			$this->client = new \Flux\Client();
-			$this->client->setId($this->getClientId());
-			$this->client->query();
-		}
-		return $this->client;
 	}
 
 	// +------------------------------------------------------------------------+
@@ -284,8 +74,14 @@ class User extends MongoForm {
 	 * @return Flux\User
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
-		if ($this->getClientId() > 0) {
-			$criteria['client_id'] = $this->getClientId();
+		if ($this->getClient()->getClientId() > 0) {
+			$criteria['client.client_id'] = $this->getClient()->getClientId();
+		}
+		if (count($this->getClientIdArray()) > 0) {
+			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+		}
+		if (trim($this->getName()) != '') {
+			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
 		return parent::queryAll($criteria, $hydrate);
 	}
@@ -295,7 +91,7 @@ class User extends MongoForm {
 	 * @return Flux\User
 	 */
 	function queryAllByClient() {
-		return $this->queryAll(array('client_id' => $this->getClientId()));
+		return $this->queryAll(array('client.client_id' => $this->getClient()->getClientId()));
 	}
 
 	/**
@@ -304,34 +100,13 @@ class User extends MongoForm {
 	 */
 	function tryLogin() {
 		$user = $this->query(array('email' => $this->getEmail(), 'password' => $this->getPassword(), 'status' => self::USER_STATUS_ACTIVE), false);
+		if ($user === false) {
+			throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
+		}
 		if (!is_null($user) && $user->getId() > 0) {
 			$this->populate($user);
 		}
 		return $this;
-	}
-
-	/**
-	 * Returns an array of statuses
-	 * @return multitype:string
-	 */
-	public static function retrieveStatuses() {
-		return array(
-				self::USER_STATUS_ACTIVE => 'Active',
-				self::USER_STATUS_INACTIVE => 'Inactive',
-				self::USER_STATUS_DELETED => 'Deleted'
-		);
-	}
-
-	/**
-	 * Returns an array of user types
-	 * @return multitype:string
-	 */
-	public static function retrieveUserTypes() {
-		return array(
-				self::USER_TYPE_ADMIN => 'Admin',
-				self::USER_TYPE_REPORT => 'Report',
-				self::USER_TYPE_MOBILE_ONLY => 'Mobile'
-		);
 	}
 
 	/**

@@ -5,7 +5,7 @@ use Mojavi\Request\Request;
 
 use Flux\Split;
 use Flux\Offer;
-use Flux\Vertical;
+use Flux\Fulfillment;
 use Flux\DomainGroup;
 use Flux\DataField;
 // +----------------------------------------------------------------------------+
@@ -31,30 +31,20 @@ class SplitWizardAction extends BasicAction
 		/* @var $split Flux\Split */
 		$split = new Split();
 		$split->populate($_GET);
-		if ($split->getId() > 0) {
-			$split->query();
-		}
 
 		/* @var $offer Flux\Offer */
 		$offer = new Offer();
 		$offer->setSort('name');
-		$offer->setSord('ASC');
+		$offer->setSord('asc');
 		$offer->setIgnorePagination(true);
 		$offers = $offer->queryAll();
-
-		/* @var $vertical Flux\Vertical */
-		$vertical = new Vertical();
-		$vertical->setSort('name');
-		$vertical->setSord('ASC');
-		$vertical->setIgnorePagination(true);
-		$verticals = $vertical->queryAll();
-
-		/* @var $domain_group Flux\DomainGroup */
-		$domain_group = new DomainGroup();
-		$domain_group->setSort('name');
-		$domain_group->setSord('ASC');
-		$domain_group->setIgnorePagination(true);
-		$domain_groups = $domain_group->queryAll();
+		
+		/* @var $offer Flux\Fulfillment */
+		$fulfillment = new Fulfillment();
+		$fulfillment->setSort('name');
+		$fulfillment->setSord('asc');
+		$fulfillment->setIgnorePagination(true);
+		$fulfillments = $fulfillment->queryAll();
 
 		/* @var $data_field Flux\DataField */
 		$data_field = new DataField();
@@ -65,8 +55,7 @@ class SplitWizardAction extends BasicAction
 
 		$this->getContext()->getRequest()->setAttribute("split", $split);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
-		$this->getContext()->getRequest()->setAttribute("domain_groups", $domain_groups);
+		$this->getContext()->getRequest()->setAttribute("fulfillments", $fulfillments);
 		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);
 		
 		return View::SUCCESS;

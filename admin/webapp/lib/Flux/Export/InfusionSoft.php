@@ -15,7 +15,7 @@ class InfusionSoft extends ExportAbstract {
 	 * @return void
 	 */
 	function __construct() {
-		$this->setClientExportType(parent::CLIENT_EXPORT_TYPE_INFUSIONSOFT);
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_INFUSIONSOFT);
 		$this->setName('InfusionSoft Post Export');
 		$this->setDescription('Send leads to an InfusionSoft API server');
 	}
@@ -65,7 +65,7 @@ class InfusionSoft extends ExportAbstract {
 					}
 				}
 			}
-			\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getExport()->getClientExport()->getInfusionsoftHost(), $this->getExport()->getClientExport()->getInfusionsoftApiKey(), 443));			
+			\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getExport()->getFulfillment()->getInfusionsoftHost(), $this->getExport()->getFulfillment()->getInfusionsoftApiKey(), 443));			
 			$contact_id = \Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
 			
 			// Now add tags to the contact

@@ -107,7 +107,7 @@ class ExportQueueExporter extends CommonForm {
 			// Handle realtime emails differently
 			/* @var $export_class \Flux\Export\ExportAbstract */
 			StringTools::consoleWrite('  Creating export handler', 'Creating', StringTools::CONSOLE_COLOR_RED);
-			$export_class = $this->getExport()->getClientExport()->getExportClass();
+			$export_class = $this->getExport()->getFulfillment()->getFulfillment()->getExportClass();
 			$export_class->setExportId($this->getExportId());
 			StringTools::consoleWrite('  Creating export handler', 'Created', StringTools::CONSOLE_COLOR_GREEN, true);
 			
@@ -131,11 +131,11 @@ class ExportQueueExporter extends CommonForm {
 			/* @var $export_queue_item \Flux\ExportQueue */
 			foreach ($results as $export_queue_item) {
 				if (!$export_queue_item->getIsError()) {
-					$lead = $export_queue_item->getLead();
+					$lead = $export_queue_item->getLead()->getLead();
 					$lead->addNote('Lead Successfully fulfilled to ' . $this->getExport()->getName());
 					$lead->update();
 				} else {
-					$lead = $export_queue_item->getLead();
+					$lead = $export_queue_item->getLead()->getLead();
 					$lead->addNote('Lead UNSUCCESSFULLY fulfilled to ' . $this->getExport()->getName() . ' (' . htmlentities($export_queue_item->getResponse()) . ')');
 					$lead->update();
 				}

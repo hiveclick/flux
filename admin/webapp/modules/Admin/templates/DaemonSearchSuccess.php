@@ -2,93 +2,108 @@
 	/* @var $daemon \Flux\Daemon */
 	$daemon = $this->getContext()->getRequest()->getAttribute("daemon", array());
 ?>
-<div id="header">
+<div class="page-header">
 	<div class="pull-right">
 		<a data-toggle="modal" data-target="#edit_daemon_modal" href="/admin/daemon-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Daemon</a>
 	</div>
-   <h2>Daemons</h2>
+   <h1>Daemons</h1>
 </div>
 <div class="help-block">Daemons are scripts that run constantly in the background checking leads, splits and exports</div>
-<br/>
-<div class="panel-group" id="accordion">
-	<div class="panel panel-default" style="overflow:visible;">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Search Filters</a>
-			</h4>
-		</div>
-		<div id="collapseOne" class="panel-collapse collapse in">
-			<div class="panel-body">
-				<form id="daemon_search_form" method="GET" action="/api">
-					<input type="hidden" name="func" value="/admin/daemon">
-					<div class="col-sm-12">
-						<div class="form-group">
-							<input type="text" name="keywords" class="form-control" placeholder="search by name, request name, or tags" value="<?php echo $daemon->getKeywords() ?>" />
-						</div>
-					</div>
-					<div class="text-center">
-						<input type="submit" class="btn btn-info" name="btn_submit" value="filter results" />
-					</div>
-				</form>
+<div class="panel panel-primary">
+	<div id='daemon-header' class='grid-header panel-heading clearfix'>
+		<form id="daemon_search_form" method="GET" action="/api">
+			<input type="hidden" name="func" value="/admin/daemon">
+			<input type="hidden" name="format" value="json" />
+			<input type="hidden" id="page" name="page" value="1" />
+			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+			<input type="hidden" id="sort" name="sort" value="name" />
+			<input type="hidden" id="sord" name="sord" value="asc" />
+			<div class="pull-right">
+				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
 			</div>
-		</div>
+		</form>
 	</div>
+	<div id="daemon-grid"></div>
+	<div id="daemon-pager" class="panel-footer"></div>
 </div>
-<table id="daemon_table" class="table table-hover table-bordered table-striped table-responsive">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Type</th>
-			<th>Class Name</th>
-			<th># Threads</th>
-			<th>PID</th>
-			<th>Last Run</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
+
 <!-- edit daemon modal -->
 <div class="modal fade" id="edit_daemon_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
+
 <script>
 //<!--
 $(document).ready(function() {
-
-	$('#daemon_search_form').on('submit', function(e) {
-		$('#daemon_table').DataTable().clearPipeline().draw();
-		e.preventDefault();
-	});
-
-	$('#daemon_table').DataTable({
-		autoWidth: false,
-		serverSide: true,
-		pageLength: 15,
-		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
-			data: function() {
-				return $('#daemon_search_form').serializeObject();
+	var columns = [
+		{id:'_id', name:'id', field:'_id', sort_field:'_id', def_value: ' ', sortable:true, type: 'string', hidden:true, formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a data-toggle="modal" data-target="#edit_daemon_modal" href="/admin/daemon-wizard?_id=' + dataContext._id + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">' + dataContext.description + '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'type', name:'type', field:'type', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'class_name', name:'class', field:'class_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'threads', name:'# threads', field:'threads', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'pid', name:'pid', field:'pid', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value;
+		}},
+		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value == '<?php echo \Flux\Daemon::DAEMON_STATUS_ACTIVE ?>') {
+				return '<span class="text-success">Active</span>';
+			} else if (value == '<?php echo \Flux\Daemon::DAEMON_STATUS_INACTIVE ?>') {
+				return '<span class="text-danger">Inactive</span>';
 			}
-		}),
-		searching: false,
-		paging: true,
-		dom: 'Rfrtpi',
-		columns: [
-			{ name: "name", data: "name", defaultContent: '', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html('<a data-toggle="modal" data-target="#edit_daemon_modal" href="/admin/daemon-wizard?_id=' + rowData._id + '">' + cellData + '<div class="small text-muted">' + rowData.description + '</div></a>');
-			}},
-			{ name: "type", data: "type", defaultContent: '', className: "text-center" },
-			{ name: "class_name", data: "class_name", defaultContent: '', className: "text-center" },
-			{ name: "threads", data: "threads", defaultContent: '', className: "text-center" },
-			{ name: "pid", data: "pid", defaultContent: '', className: "text-center" },
-			{ name: "start_time", data: "start_time", defaultContent: '', sClass: 'text-center', createdCell: function (td, cellData, rowData, row, col) {
-				$(td).html(moment.unix(cellData.sec).calendar());
-			}}
-	  	]
-	});
+		}},
+		{id:'start_time', name:'last started', field:'start_time', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value !== null && value.sec) {		
+				return moment.unix(value.sec).calendar();
+			}
+			return "";
+		}}
+	];
+
+  	slick_grid = $('#daemon-grid').slickGrid({
+		pager: $('#daemon-pager'),
+		form: $('#daemon_search_form'),
+		columns: columns,
+		useFilter: false,
+		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
+			pagingOptions: {
+				pageSize: 25,
+				pageNum: 1
+			},
+			slickOptions: {
+				defaultColumnWidth: 150,
+				forceFitColumns: true,
+				enableCellNavigation: false,
+				width: 800,
+				rowHeight: 48
+			}
+		});
+
+	  	$("#txtSearch").keyup(function(e) {
+   		// clear on Esc
+   		if (e.which == 27) {
+   			this.value = "";
+   		} else if (e.which == 13) {
+   			$('#daemon_search_form').trigger('submit');
+   		}
+   	});
+	  	
+   	$('#daemon_search_form').trigger('submit');
 
 	$('#edit_daemon_modal').on('hide.bs.modal', function(e) {
-    	$(this).removeData('bs.modal');
-    });
+		$(this).removeData('bs.modal');
+	});
 });
 //-->
 </script>

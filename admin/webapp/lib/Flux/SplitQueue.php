@@ -1,49 +1,19 @@
 <?php
 namespace Flux;
 
-class SplitQueue extends Lead {
+class SplitQueue extends Base\SplitQueue {
 
-	protected $split_id;
-	
 	/**
-	 * Constructs new user
-	 * @return void
+	 * Queries all records from a queue
+	 * @return array
 	 */
-	function __construct($split_id = 0) {
-		$this->setSplitId($split_id);
-		$this->setDbName('queue');
-		$this->setIdType(self::ID_TYPE_MONGO);
-	}
-	
-	/**
-	 * Returns the split_id
-	 * @return integer
-	 */
-	function getSplitId() {
-		if (is_null($this->split_id)) {
-			$this->split_id = 0;
+	function queryAll(array $criteria = array(), $hydrate = true) {
+		if ($this->getSplit()->getSplitId() > 0) {
+			$criteria['split.split_id'] = (int)$this->getSplit()->getSplitId();
 		}
-		return $this->split_id;
-	}
-	
-	/**
-	 * Sets the split_id
-	 * @var integer
-	 */
-	function setSplitId($arg0) {
-		$this->split_id = $arg0;
-		$this->setCollectionName('split_queue_' . $this->split_id);
-		$this->addModifiedColumn('split_id');
-		return $this;
-	}
-	
-	/**
-	 * Ensures that the mongo indexes are set (should be called once)
-	 * @return boolean
-	 */
-	public static function ensureIndexes() {
-		$split_queue = new self();
-		$split_queue->getCollection()->ensureIndex(array('split_id' => 1), array('background' => true));
-		return true;
+		if (trim($this->getLead()->getLeadName()) != '') {
+			$criteria['lead.lead_name'] = new \MongoRegex('/' . trim($this->getLead()->getLeadName()) . '/');
+		}
+		return parent::queryAll($criteria, $hydrate);
 	}
 }

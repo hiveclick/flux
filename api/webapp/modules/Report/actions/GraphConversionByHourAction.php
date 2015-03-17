@@ -28,7 +28,7 @@ class GraphConversionByHourAction extends BasicRestAction
      * @return \Flux\SpyReport
      */
     function getInputForm() {
-        return new \Flux\GraphConversionByHour();
+        return new \Flux\Report\GraphConversionByHour();
     }
 
     /**

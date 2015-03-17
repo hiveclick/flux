@@ -30,52 +30,38 @@ class OfferPaneEditAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-			/* @var $offer Flux\Offer */
-			$offer = new Offer();
-			$offer->populate($_POST);
-			$offer->update();
+		/* @var $offer Flux\Offer */
+		$offer = new Offer();
+		$offer->populate($_GET);
+		$offer->query();
+		
+		/* @var $client Flux\Client */
+		$client = new Client();
+		$client->setSort('name');
+		$client->setSord('asc');
+		$client->setIgnorePagination(true);
+		$clients = $client->queryAll();
+		
+		/* @var $vertical Flux\Vertical */
+		$vertical = new Vertical();
+		$vertical->setSort('name');
+		$vertical->setSord('ASC');
+		$vertical->setIgnorePagination(true);
+		$verticals = $vertical->queryAll();
+		
+		/* @var $vertical Flux\Campaign */
+		$campaign = new Campaign();
+		$campaign->setSort('name');
+		$campaign->setSord('ASC');
+		$campaign->setOfferIdArray(array($offer->getId()));
+		$campaign->setIgnorePagination(true);
+		$campaigns = $campaign->queryAll();
+		
+		$this->getContext()->getRequest()->setAttribute("offer", $offer);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
+		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
+		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
 			
-			$this->getContext()->getController()->redirect('/offer/offer?_id=' . $offer->getId());
-		} else {
-			/* @var $offer Flux\Offer */
-			$offer = new Offer();
-			$offer->populate($_GET);
-			$offer->query();
-			
-			/* @var $client Flux\Client */
-			$client = new Client();
-			$client->setSort('name');
-			$client->setIgnorePagination(true);
-			$clients = $client->queryAll();
-			
-			/* @var $flow Flux\Flow */
-			$flow = new Flow();
-			$flow->setSort('name');
-			$flow->setIgnorePagination(true);
-			$flows = $flow->queryAll();
-			
-			/* @var $vertical Flux\Vertical */
-			$vertical = new Vertical();
-			$vertical->setSort('name');
-			$vertical->setSord('ASC');
-			$vertical->setIgnorePagination(true);
-			$verticals = $vertical->queryAll();
-			
-			/* @var $vertical Flux\Campaign */
-			$campaign = new Campaign();
-			$campaign->setSort('name');
-			$campaign->setSord('ASC');
-			$campaign->setOfferId($offer->getId());
-			$campaign->setIgnorePagination(true);
-			$campaigns = $campaign->queryAll();
-			
-			$this->getContext()->getRequest()->setAttribute("offer", $offer);
-			$this->getContext()->getRequest()->setAttribute("clients", $clients);
-			$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
-			$this->getContext()->getRequest()->setAttribute("flows", $flows);
-			$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
-		}
 		return View::SUCCESS;
 	}
 }

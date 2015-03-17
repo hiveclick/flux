@@ -6,24 +6,30 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>Flux</title>
 <link rel="icon" type="image/png" href="favicon.png" />
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" media="screen" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/scripts/smartadmin-production.min.css">
-<link rel="stylesheet" type="text/css" media="screen" href="/scripts/smartadmin-skins.min.css">
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
-
+<!-- Jquery files -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!--  Bootstrap files -->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script src="/scripts/jquery.validate.min.js"></script>
+
+<!-- Font awesome files -->
+<link rel="stylesheet" type="text/css" media="screen" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+<!-- Local CSS -->
+<link rel="stylesheet" type="text/css" media="screen" href="/css/login.css">
 </head>
-<body class="animated fadeInDown">
+<body>
     <div class="container">
         <br />
-        <div class="hidden-xs hidden-sm">
+        <div class="hidden-xs">
             <br /><br /><br /><br /><br />
         </div>
-        <div class="well col-sm-7 col-sm-offset-3">
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <?php echo $template["content"] ?>
+        </div>
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <div class="text-center small" style="color:white;">flux lead management &copy;2015</div>
         </div>
     </div>
 </body>

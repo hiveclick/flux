@@ -116,7 +116,7 @@ try
     define('MO_TEMPLATE_DIR', MO_WEBAPP_DIR . '/templates');
     
     // Try the composer autoloader
-    require_once(MO_WEBAPP_DIR . '/vendor/autoload.php');
+    //require_once(MO_WEBAPP_DIR . '/vendor/autoload.php');
     
     spl_autoload_register(function($className) {
         __autoload($className);

@@ -27,10 +27,15 @@ class DataFieldSearchAction extends BasicAction
 		/* @var $datafield Flux\DataField */
 		$datafield = new DataField();
 		$datafield->populate($_REQUEST);
+		
 		if (count($datafield->getStorageTypeArray()) == 0) {
 			$datafield->setStorageTypeArray(array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT, \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED));
 		}
+		
+		// Pull in the list of unique tag names
+		$tags = $datafield->queryUniqueTagNames();
 
+		$this->getContext()->getRequest()->setAttribute("tags", $tags);
 		$this->getContext()->getRequest()->setAttribute("datafield", $datafield);
 		return View::SUCCESS;
 	}

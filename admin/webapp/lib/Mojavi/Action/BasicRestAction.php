@@ -55,7 +55,7 @@ class BasicRestAction extends BasicAction {
     function executeGet($input_form) {
         // Handle GET Requests
         $ajax_form = new BasicAjaxForm();
-           if ($input_form->getId() > 0) {
+           if ($input_form->getId() != '') {
                $input_form->query();
                $ajax_form->setRecord($input_form);
            } else {
