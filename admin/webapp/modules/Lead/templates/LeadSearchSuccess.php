@@ -4,7 +4,11 @@
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
-	$selected_columns = array(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
+	if (trim($lead->getKeywords()) == '') {
+        $selected_columns = array(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
+	} else {
+	    $selected_columns = array();
+	}
 ?>
 <div class="page-header">
    <h2>Search Leads</h2>
@@ -19,8 +23,8 @@
 			<input type="hidden" name="format" value="json" />
 			<input type="hidden" id="page" name="page" value="1" />
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
+			<input type="hidden" id="sort" name="sort" value="_id" />
+			<input type="hidden" id="sord" name="sord" value="desc" />
 			<div class="form-group text-left col-md-6">
 				<label>Search by lead name or id: </label>
 				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="<?php echo $lead->getKeywords() ?>" />

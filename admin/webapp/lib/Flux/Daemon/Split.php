@@ -69,7 +69,7 @@ class Split extends BaseDaemon
 				/* @var $split_queue \Flux\SplitQueue */
 				$split_queue = new \Flux\SplitQueue($split->getId());
 				while ($matched_leads->hasNext()) {
-					$lead_doc = $matched_leads->next();
+					$lead_doc = $matched_leads->getNext();
 					
 					/* @var $lead \Flux\Lead */
 					$lead = new \Flux\Lead();

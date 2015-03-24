@@ -58,8 +58,6 @@ class Lead extends MongoForm {
 			foreach ($arg0 as $key => $value) {
 				$this->setValue($key, $value);
 			}
-		} else {
-			$this->setValue($key, $value);
 		}
 	}
 	

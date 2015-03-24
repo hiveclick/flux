@@ -3,15 +3,18 @@
     ServerName www.flux.local
 
     RewriteEngine On
+    RewriteRule ^/css/(.*) /css/$1 [QSA,L]
+    RewriteRule ^/scripts/(.*) /scripts/$1 [QSA,L]
+    RewriteRule ^/images/(.*) /images/$1 [QSA,L]
+    RewriteRule ^/img/(.*) /img/$1 [QSA,L]
+    RewriteRule ^/opcache\.php$ /opcache.php [QSA,L]
+    
     RewriteCond %{REQUEST_URI} !/$
+    RewriteRule ^/([^.]+)/([^.]+)/([a-z0-9]+)$ /index.php?module=$1&action=$2&_id=$3 [L,QSA]
     RewriteRule ^/([^.]+)/([^.]+)\.(.*)$ /index.php?module=$1&action=$2 [L,QSA]
     RewriteRule ^/([^.]+)/([^.]+)$ /index.php?module=$1&action=$2 [L,QSA]
     RewriteRule ^/([^.]+)\.(.*)$ /index.php?module=Default&action=$1 [L,QSA]
     RewriteRule ^/([^.]+)$ /index.php?module=Default&action=$1 [L,QSA]
-
-    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" flux
-    CustomLog /var/log/httpd/flux.access.log flux
-    ErrorLog /var/log/httpd/flux.error.log
 
     <Directory "/home/flux/admin/docroot/">
         Options FollowSymLinks
@@ -28,12 +31,9 @@
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !/$
+    RewriteRule ^/([^.]+)/([^.]+)/([a-z0-9]+)$ /index.php?module=$1&action=$2&_id=$3 [L,QSA]
     RewriteRule ^/([^.]+)/([^.]+)$ /index.php?module=$1&action=$2 [L,QSA]
     RewriteRule ^/([^.]+)$ /index.php?module=Default&action=$1 [L,QSA]
-
-    LogFormat "%a %v %l %u %t %D \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" flux
-    CustomLog /var/log/httpd/api.flux.access.log flux
-    ErrorLog /var/log/httpd/api.flux.error.log
 
     <Directory /home/flux/api/docroot>
         Options FollowSymLinks

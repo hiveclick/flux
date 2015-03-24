@@ -34,8 +34,7 @@ class InfusionSoft extends ExportAbstract {
 		// Include the Novak Solutions infusionsoft library
 		require_once(MO_WEBAPP_DIR . '/vendor/novaksolutions/infusionsoft-php-sdk/Infusionsoft/infusionsoft.php');
 		
-		while ($split_queue_attempts->hasNext()) {
-			$cursor_item = $split_queue_attempts->getNext();
+		foreach ($split_queue_attempts as $cursor_item) {
 			/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
 			$split_queue_attempt = new \Flux\SplitQueueAttempt();
 			$split_queue_attempt->populate($cursor_item);
@@ -70,9 +69,8 @@ class InfusionSoft extends ExportAbstract {
     			\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getFulfillment()->getFulfillment()->getInfusionsoftHost(), $this->getFulfillment()->getFulfillment()->getInfusionsoftApiKey(), 443));			
     			$contact_id = \Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
     			
-    			$split_queue_attempt->setRequest(http_build_query($contact->toArray()));
+    			$split_queue_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
     			$split_queue_attempt->setResponse('SUCCESS: ' . $contact_id);
-        		$split_queue_attempt->setLastSentTime(new \MongoDate());
         		$split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
         		$split_queue_attempt->setIsError(false);
 			
@@ -85,9 +83,8 @@ class InfusionSoft extends ExportAbstract {
     			
     			\Infusionsoft_AppPool::clearApps();
 			} else {
-			    $split_queue_attempt->setRequest(http_build_query($contact->toArray(), null, '&'));
+			    $split_queue_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
 			    $split_queue_attempt->setResponse('SUCCESSFUL TEST');
-			    $split_queue_attempt->setLastSentTime(new \MongoDate());
 			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
 			    $split_queue_attempt->setIsError(false);
 			}
