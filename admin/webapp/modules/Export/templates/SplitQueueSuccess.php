@@ -53,25 +53,25 @@
 		<div class="panel-body">
             <dl class="dl-horizontal">
 			<?php if ($split_queue->getLead()->getLead()->getValue('fn') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('fn') ?>&nbsp;</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('fn') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('ln') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ln')->getId() ?>">Lastname:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('ln') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/name/<?php echo $split_queue->getLead()->getLead()->getValue('ln') ?>/<?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>">address lookup</a>)</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ln')->getId() ?>">Lastname:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('ln') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/name/<?php echo $split_queue->getLead()->getLead()->getValue('ln') ?>/<?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>">address lookup</a>)</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('em') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('em')->getId() ?>">Email:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('em') ?>&nbsp;</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('em')->getId() ?>">Email:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('em') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('a1') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('a1')->getId() ?>">Address:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('a1') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $split_queue->getLead()->getLead()->getValue('a1') ?>&where=<?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>">address lookup</a>)</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('a1')->getId() ?>">Address:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('a1') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $split_queue->getLead()->getLead()->getValue('a1') ?>&where=<?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>">address lookup</a>)</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('cy') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('cy')->getId() ?>">City:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('cy') ?>&nbsp;</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('cy')->getId() ?>">City:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('cy') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('st') != '') { ?>
-				<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('st')->getId() ?>">State:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('st') ?>&nbsp;</dd>
+				<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('st')->getId() ?>">State:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('st') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('zi') != '') { ?>
-				<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('zi')->getId() ?>">Zip:</a></dt>
+				<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('zi')->getId() ?>">Zip:</a></dt>
 				<dd><?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>&nbsp;
 					<?php if ($split_queue->getLead()->getLead()->getValue('a1') != '') { ?>
 						(<a class="small" target="_blank" href="http://www.whitepages.com/search/FindNearby?street=<?php echo $split_queue->getLead()->getLead()->getValue('a1') ?>&where=<?php echo $split_queue->getLead()->getLead()->getValue('zi') ?>">address lookup</a>)
@@ -81,7 +81,7 @@
 				</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('ph') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ph')->getId() ?>">Phone:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('ph') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/phone/<?php echo $split_queue->getLead()->getLead()->getValue('ph') ?>">phone lookup</a>)</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('ph')->getId() ?>">Phone:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('ph') ?>&nbsp;(<a class="small" target="_blank" href="http://www.whitepages.com/phone/<?php echo $split_queue->getLead()->getLead()->getValue('ph') ?>">phone lookup</a>)</dd>
 			<?php } ?>
 		</dl>
 		<hr />
@@ -96,19 +96,19 @@
 						 if (!is_null($data_field)) {
 					?>
 						<?php if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_BIRTHDATE) { ?>
-							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y', $value->sec) ?>&nbsp;</dd>
+							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y', $value->sec) ?>&nbsp;</dd>
 						<?php } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
-							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y g:i:s a', $value->sec) ?>&nbsp;</dd>
+							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo date('m/d/Y g:i:s a', $value->sec) ?>&nbsp;</dd>
 						<?php } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY) { ?>
 							<?php if (is_array($value)) { ?>
-							   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
+							   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
 							<?php } else if (is_string($value)) { ?>
-							   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
+							   <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
 							<?php } ?>
 						<?php } else if (is_array($value)) { ?>
-							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
+							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo implode(', ', $value) ?>&nbsp;</dd>
 						<?php } else { ?>
-							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
+							<dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>:</dt><dd><?php echo $value ?>&nbsp;</dd>
 						<?php } ?>
 					<?php } else { ?>
 						 <dt><i><?php echo $key ?></i>:</dt><dd><?php echo is_array($value) ? implode(", ", $value) : $value ?>&nbsp;</dd>

@@ -124,7 +124,13 @@
 									<option value="<?php echo $data_field_set['value'] ?>" data-data="<?php echo htmlentities(json_encode($data_field_set)) ?>" <?php echo ((is_array($selected_data_field['posting_url_data_field_value']) && in_array($data_field_set['value'], $selected_data_field['posting_url_data_field_value'])) || (is_string($selected_data_field['posting_url_data_field_value']) && $selected_data_field['posting_url_data_field_value'] == $data_field_set['value'])) ? 'selected' : '' ?>><?php echo $data_field_set['name'] ?></option>
 								<?php } ?>
 							<?php } else { ?>
-								<option value="<?php echo $selected_data_field['posting_url_data_field_value'] ?>" selected><?php echo $selected_data_field['posting_url_data_field_value'] ?></option>
+							    <?php if (is_array($selected_data_field['posting_url_data_field_value'])) { ?>
+							        <?php foreach ($selected_data_field['posting_url_data_field_value'] as $value) { ?>
+							            <option value="<?php echo $value ?>" selected><?php echo $value ?></option>
+							        <?php } ?>
+							    <?php } else { ?>
+								    <option value="<?php echo $selected_data_field['posting_url_data_field_value'] ?>" selected><?php echo $selected_data_field['posting_url_data_field_value'] ?></option>
+								<?php } ?>
 							<?php } ?>
 						</select>
 					</div>
