@@ -29,6 +29,10 @@ class Split extends MongoForm {
 	protected $scheduling;
 	
 	protected $queue_count;
+	protected $daily_leads;
+	protected $hourly_leads;
+	protected $yesterday_leads;
+	protected $last_queue_time;
 	protected $last_run_time;
 
 	/**
@@ -320,6 +324,53 @@ class Split extends MongoForm {
 		$this->last_run_time = $arg0;
 		$this->addModifiedColumn('last_run_time');
 		return $this;
+	}
+	
+	/**
+	 * Returns the last_queue_time
+	 * @return MongoDate
+	 */
+	function getLastQueueTime() {
+	    if (is_null($this->last_queue_time)) {
+	        $this->last_queue_time = null;
+	    }
+	    return $this->last_queue_time;
+	}
+	
+	/**
+	 * Sets the last_queue_time
+	 * @var MongoDate
+	 */
+	function setLastQueueTime($arg0) {
+	    $this->last_queue_time = $arg0;
+	    return $this;
+	}
+	
+	/**
+	 * Returns the queue_count
+	 * @return integer
+	 */
+	function getYesterdayCount() {
+	    $split_queue = new \Flux\SplitQueue($this->getId());
+	    return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime('yesterday')))), '$lt' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime('yesterday')))))));
+	}
+	
+	/**
+	 * Returns the queue_count
+	 * @return integer
+	 */
+	function getDailyCount() {
+	   $split_queue = new \Flux\SplitQueue($this->getId());
+	   return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00'))))));
+	}
+	
+	/**
+	 * Returns the queue_count
+	 * @return integer
+	 */
+	function getHourlyCount() {
+	    $split_queue = new \Flux\SplitQueue($this->getId());
+	    return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y h:00:00'))))));
 	}
 	
 	/**

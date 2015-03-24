@@ -14,6 +14,9 @@ class LeadTracking extends MojaviForm {
     protected $_uav;
     protected $_uap;
     
+    protected $keywords;
+    protected $source_url;
+    
     protected $s1;
     protected $s2;
     protected $s3;
@@ -56,6 +59,46 @@ class LeadTracking extends MojaviForm {
     	$this->_ip = $arg0;
     	$this->addModifiedColumn("_ip");
     	return $this;
+    }
+    
+    /**
+     * Returns the source_url
+     * @return string
+     */
+    function getSourceUrl() {
+        if (is_null($this->source_url)) {
+            $this->source_url = "";
+        }
+        return $this->source_url;
+    }
+    
+    /**
+     * Sets the source_url
+     * @var string
+     */
+    function setSourceUrl($arg0) {
+        $this->source_url = $arg0;
+        return $this;
+    }
+    
+    /**
+     * Returns the keywords
+     * @return string
+     */
+    function getKeywords() {
+        if (is_null($this->keywords)) {
+            $this->keywords = "";
+        }
+        return $this->keywords;
+    }
+    
+    /**
+     * Sets the keywords
+     * @var string
+     */
+    function setKeywords($arg0) {
+        $this->keywords = $arg0;
+        return $this;
     }
     
     /**
@@ -104,8 +147,59 @@ class LeadTracking extends MojaviForm {
      */
     function setRef($arg0) {
     	$this->_ref = $arg0;
+    	$this->parseReferrer();
     	$this->addModifiedColumn("_ref");
     	return $this;
+    }
+    
+    /**
+     * Parses the ref for the keywords
+     * @return void
+     */
+    function parseReferrer($referrer = null) {
+        if (is_null($referrer)) {
+            $referrer = $this->getRef();
+        }
+        if (trim($this->getKeywords()) == '' && trim($referrer) != '') {
+            $host = parse_url($referrer, PHP_URL_HOST);
+            $path = parse_url($referrer, PHP_URL_PATH);
+            $query = parse_url($referrer, PHP_URL_QUERY);
+            $params = array();
+            parse_str($query, $params);
+            if ($host == 'googleads.g.doubleclick.net') {
+                if (isset($params['url']) && trim($params['url']) != '') {
+                    $this->parseReferrer(urldecode($params['url']));
+                } else if (isset($params['ref']) && trim($params['ref']) != '') {
+                    $this->parseReferrer(urldecode($params['ref']));
+                }
+            } else {
+                if (isset($params['q']) && trim($params['q']) != '') {
+                    $this->setKeywords($params['q']);
+                } else if (isset($params['query']) && trim($params['query']) != '') {
+                    $this->setKeywords($params['query']);
+                } else if (isset($params['dqi']) && trim($params['dqi']) != '') {
+                    $this->setKeywords($params['dqi']);
+                } else if (isset($params['utm_term']) && trim($params['utm_term']) != '') {
+                    $this->setKeywords($params['utm_term']);
+                } else if (isset($params['kw']) && trim($params['kw']) != '') {
+                    $this->setKeywords($params['kw']);
+                } else if (isset($params['pq']) && trim($params['pq']) != '') {
+                    $this->setKeywords($params['pq']);
+                } else if (isset($params['p']) && trim($params['p']) != '') {
+                    $this->setKeywords($params['p']);
+                } else if (isset($params['term']) && trim($params['term']) != '') {
+                    $this->setKeywords($params['term']);
+                }
+                
+                if (isset($params['url']) && trim($params['url']) != '') {
+                    $this->setSourceUrl($params['url']);
+                } else if (isset($params['rurl']) && trim($params['rurl']) != '') {
+                    $this->setSourceUrl($params['rurl']);
+                } else {
+                    $this->setSourceUrl($this->getRef());
+                }
+            }
+        }
     }
     
     /**
@@ -401,7 +495,7 @@ class LeadTracking extends MojaviForm {
      * $param array
      */
     function setO($arg0) {
-        return $this->getOffer();
+        return $this->setOffer($arg0);
     }
     
     /**
@@ -477,6 +571,7 @@ class LeadTracking extends MojaviForm {
 			$this->campaign = $campaign;
 		}
 		$this->addModifiedColumn('campaign');
+
 		$this->setOffer($this->getCampaign()->getCampaign()->getOffer()->getOfferId());
 		$this->setClient($this->getCampaign()->getCampaign()->getClient()->getClientId());
 		return $this;

@@ -1,14 +1,13 @@
 <?php
 use Mojavi\Action\BasicRestAction;
 use Mojavi\Form\BasicAjaxForm;
-use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.                                      |
 // |                                                                            |
 // | For the full copyright and license information, please view the LICENSE    |
 // | file that was distributed with this source code.                           |
 // +----------------------------------------------------------------------------+
-class SplitAction extends BasicRestAction
+class LeadSplitAction extends BasicRestAction
 {
 
     // +-----------------------------------------------------------------------+
@@ -29,7 +28,7 @@ class SplitAction extends BasicRestAction
      * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Flux\Split();
+        return new \Flux\SplitQueue();
     }
 }
 

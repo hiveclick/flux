@@ -11,7 +11,7 @@ use Flux\Lead;
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class LeadPaneFulfillAction extends BasicAction
+class SplitQueuePaneFulfillAction extends BasicAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -25,19 +25,19 @@ class LeadPaneFulfillAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\Lead */
-		$lead = new Lead();
-		$lead->populate($_REQUEST);
-		$lead->query();
+		/* @var $offer Flux\SplitQueue */
+		$split_queue = new \Flux\SplitQueue();
+		$split_queue->populate($_REQUEST);
+		$split_queue->query();
 		
-		$split = new \Flux\Split();
-		$split->setSort('name');
-		$split->setSord('ASC');
-		$split->setIgnorePagination(true);
-		$splits = $split->queryAll();
+		$client = new \Flux\Client();
+		$client->setSort('name');
+		$client->setSord('asc');
+		$client->setIgnorePagination(true);
+		$clients = $client->queryAll();
 
-		$this->getContext()->getRequest()->setAttribute("lead", $lead);
-		$this->getContext()->getRequest()->setAttribute("splits", $splits);
+		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		return View::SUCCESS;
 	}
 }

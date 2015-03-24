@@ -22,36 +22,36 @@ class GenericSingleEmail extends ExportAbstract {
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array $leads
+	 * @param array $split_queue_attempts
 	 * @return boolean
 	 */
-	function send($export_queue_items) {
+	function send($split_queue_attempts, $is_test = false) {
 		/*
 		 * Here we will handle realtime emails, where each lead is sent out in an individual email
 		*/
-		$start_time = microtime(true);
-		StringTools::consoleWrite('  Sending as single emails', 'Sending', StringTools::CONSOLE_COLOR_RED);
-		foreach ($export_queue_items as $key => $export_queue_item) {
-			StringTools::consoleWrite('  Sending as single emails', 'Sending ' . number_format($key, 0, null, ',') . ' (' . number_format((microtime(true) - $start_time), 3) . 's)', StringTools::CONSOLE_COLOR_GREEN, true);
+
+		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+		foreach ($split_queue_attempts as $key => $split_queue_attempt) {
+		    $split_queue_attempt->setStartTime(microtime(true));
+		    		    
 			$buffer = array();
-		
 			$buffer[] = 'Please review the following lead:';
 			$buffer[] = '';
 		
-			$qs = $export_queue_item->getQs();
-			foreach ($this->getExport()->getFulfillment()->getMapping() as $mapping) {
-				$data_field = \Flux\DataField::retrieveDataFieldFromId($mapping['datafield_id']);
-		
-				$line = '<b>' . $data_field->getDescription() . '</b>: ';
-				if (isset($qs[$data_field->getKeyName()])) {
-					$line .= '&nbsp;&nbsp;&nbsp;' . $qs[$data_field->getKeyName()] . '';
-				}
-				$buffer[] = $line;
+			$params = $split_queue_attempt->mergeLead();
+			/* @var $mapping \Flux\FulfillmentMap */
+			foreach ($params as $key => $value) {
+		        $line = '<b>' . $key . '</b>: ';
+			    $line .= ' ' . $value;
+			    $buffer[] = $line;
 			}
+			
 			$buffer[] = '';
 			$buffer[] = '';
 			$buffer[] = '';
 		
+			$split_queue_attempt->setRequest(implode("\n", $buffer));
+			
 			// Format the email and send it out
 			$options = array(
 					'name'	  => defined('MO_MAIL_HOSTNAME') ? MO_MAIL_HOSTNAME : '127.0.0.1',
@@ -79,28 +79,30 @@ class GenericSingleEmail extends ExportAbstract {
 			$message->setFrom(MO_MAIL_USERNAME, 'Leads');
 			$message->getHeaders()->addHeaderLine('Content-Type', 'multipart/alternative');
 		
-			foreach ($this->getExport()->getFulfillment()->getEmailAddress() as $email_address) {
+			foreach ($split_queue_attempt->getFulfillment()->getFulfillment()->getEmailAddress() as $email_address) {
 				$message->addTo($email_address);
 			}
-			$message->setSubject('Leads for ' . $this->getExport()->getName());
+			$message->setSubject('Leads for ' . date('m/d/Y'));
 		
-			try {
-				$transport->send($message);
-				$export_queue_item->setResponse('Sent');
-				$export_queue_item->setIsError(false);
-				$export_queue_item->update();
-			} catch (\Exception $e) {
-				$export_queue_item->setResponse($e->getMessage());
-				$export_queue_item->setIsError(true);
-				$export_queue_item->update();
+			if (!$is_test) {
+    			try {
+    				$transport->send($message);
+                    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
+    				$split_queue_attempt->setResponse('Sent');
+    				$split_queue_attempt->setIsError(false);
+    			} catch (\Exception $e) {
+    			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
+    				$split_queue_attempt->setResponse($e->getMessage());
+    				$split_queue_attempt->setErrorMessage($e->getMessage());
+    				$split_queue_attempt->setIsError(false);
+    			}
+			} else {
+			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
+			    $split_queue_attempt->setResponse('Sent');
+			    $split_queue_attempt->setIsError(false);
 			}
-		
-			// Update the percentage done
-			$this->getExport()->setPercentComplete((($key / count($leads)) * 40) + 50);
-			$this->getExport()->update();
 		}
-		$this->getExport()->setSendingRecordsTime((microtime(true) - $start_time));
-		StringTools::consoleWrite('  Sending as single emails', 'Sent (' . number_format((microtime(true) - $start_time), 3) . 's)', StringTools::CONSOLE_COLOR_GREEN, true);
+		return $split_queue_attempts;
 	}
 	
 }

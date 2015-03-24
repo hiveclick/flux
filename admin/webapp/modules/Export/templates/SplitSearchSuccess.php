@@ -45,6 +45,17 @@ $(document).ready(function() {
  			ret_val += '<div class="small text-muted">' + dataContext.description + '</div>';
  			ret_val += '</div>';
  			return ret_val;
+ 		}},
+ 		{id:'queue_count', name:'# Queued', field:'queue_count', def_value: ' ', cssClass:'text-center', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+ 			var ret_val = '<div style="line-height:16pt;">'
+ 	 			ret_val += $.number(value, 0);
+ 		        if (dataContext.last_queue_time == null) {
+ 		        	ret_val += '<div class="small text-muted">nothing queued yet</div>';
+ 		        } else {
+  		            ret_val += '<div class="small text-muted">' + moment.unix(dataContext.last_queue_time.sec).calendar(); + '</div>';
+ 		        }
+ 	 			ret_val += '</div>';
+ 	 			return ret_val;
  		}}
 
  	];

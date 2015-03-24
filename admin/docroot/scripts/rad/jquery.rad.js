@@ -94,9 +94,9 @@
 				}
 				
 				if(options['type'] == 'DELETE') {
-					options['url'] += '?' + options['data'];
+					options['url'] += ('?' + options['data']);
 				}
-				
+
 				var xhr = null;
 				try {
 					xhr = $.ajax(options);
@@ -117,7 +117,6 @@
 					var message = typeof(e) == 'object' ? e.message : e;
 					$.rad.notify.error(title, message);
 				}
-				
 				return xhr;
 			},
 			get: function(url, data, callback, dataType) {

@@ -89,20 +89,15 @@
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="advanced">
-				<div class="help-block">Advanced options allow you to further customize this data field with custom mapping functions and field names</div>
+			    <div class="help-block">Define a custom function that you can use to convert this field to a value that the API accepts</div>
 				<div class="form-group">
-					<?php if (trim($data_field->getCustomCode()) == '') { ?>
-						<div class="btn btn-warning text-center" id="show_advanced_options_div_<?php echo $data_field->getId() ?>">Show Advanced Options</div>
-					<?php } ?>
-					<div class="<?php echo (trim($data_field->getCustomCode()) == '') ? 'hidden' : '' ?>" id="advanced_options_div_<?php echo $data_field->getId() ?>">
-						<div class="help-block">Define a custom function that you can use to convert this field to a value that the API accepts</div>
-				        <p />
-				        <div class="help-text">
+					<div id="advanced_options_div_<?php echo $data_field->getId() ?>">
+						<div class="help-text">
 				            <span class="text-success">
 				            /**<br />
 				            &nbsp;* Custom mapping function<br />
 				            &nbsp;* $value - Value from mapping<br />
-				            &nbsp;* $record - \Flux\Lead object<br />
+				            &nbsp;* $lead - \Flux\Lead object<br />
 				            &nbsp;*/<br />
 				            </span>
 				            <strong>
@@ -128,6 +123,8 @@
 						<div class="text-center">
 							<button type="button" class="btn btn-success" id="btn_validate">Validate Custom Code</button>
 						</div>
+						<p />
+						<div id="validation_result_<?php echo $data_field->getId() ?>" style="display:none;" class="alert alert-danger"></div>
 					</div>
 				</div>
 			</div>
@@ -326,10 +323,17 @@
 $(document).ready(function() {	
 	/* Validate the mapping function */
 	$('#btn_validate').click(function() {
+		$('#validation_result_<?php echo $data_field->getId() ?>').removeClass('alert-danger').removeClass('alert-success').html('').hide();
 		var params = $('#data_field_form_<?php echo $data_field->getId() ?>').serialize();
 		params += "&func=/admin/data-field-validate";
 		$.rad.post('/api', params, function(data) {
-			$.rad.notify('Function validated', 'Validation was successful for this function');
+			if (data.record.validation_result == '') {
+			    $.rad.notify('Function validated', 'Validation was successful for this function');
+			    $('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-success').html('Validation successful').show();
+			} else {
+				$.rad.notify.error('Function incorrect', 'Validation failed for this function');
+				$('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-danger').html(data.record.validation_result).show();
+			}
 		});
 	});
 	

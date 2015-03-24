@@ -45,7 +45,7 @@ use Mojavi\Core\MojaviObject as MojaviObject;
                 $i >>= IntegerTableEncoder::$bitDepth;
                 $retVal .= IntegerTableEncoder::$table[$k][$l];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             print "error: " . $e;
         }
         return $retVal;
@@ -93,7 +93,7 @@ use Mojavi\Core\MojaviObject as MojaviObject;
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             print "error: " . $e;
         }
         return $retVal;

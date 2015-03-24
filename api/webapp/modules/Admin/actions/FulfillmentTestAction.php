@@ -29,19 +29,46 @@ class FulfillmentTestAction extends BasicRestAction
      * @return \Flux\Offer
      */
     function getInputForm() {
-        return new \Flux\Fulfillment();
+        return new \Flux\SplitQueue();
     }
     
     /**
      * Executes a POST request
      */
     function executePost($input_form) {
-    	/* @var $fulfillment \Flux\Fulfillment */
-    	$fulfillment = new \Flux\Fulfillment();
-    	$fulfillment->setId($input_form->getId());
-    	$fulfillment->testFulfillment();
-    
-    	return parent::executePut($input_form);
+        /* @var $ajax_form \Mojavi\Form\BasicAjaxForm */
+        $ajax_form = new \Mojavi\Form\BasicAjaxForm();
+    	
+    	/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+    	$split_queue_attempt = new \Flux\SplitQueueAttempt();
+    	$split_queue_attempt->setLead($input_form->getLead()->getLeadId());
+    	$split_queue_attempt->setFulfillment($input_form->getFulfillment()->getFulfillmentId());
+    	$split_queue_attempt->setAttemptTime(new \MongoDate());
+    	
+    	$results = $split_queue_attempt->getFulfillment()->getFulfillment()->queueLead($split_queue_attempt, true);
+    	/* @var $result \Flux\SplitQueueAttempt */
+    	foreach ($results as $key => $result) {
+    	    // Save the split queue attempts back to the split queue item
+    	    $input_form->setDebug($result->getRequest());
+    	    $input_form->setLastAttemptTime(new \MongoDate());
+    	    $input_form->setAttemptCount(1);
+    	    $input_form->setIsProcessing(false);
+    	     
+    	    if ($result->getIsError()) {
+    	        $input_form->setIsError(true);
+    	        $input_form->setErrorMessage($result->getResponse());
+    	    } else {
+    	        $input_form->setIsError(false);
+    	        $input_form->setErrorMessage('');
+    	    }
+    	}
+    	
+        $input_form->setId(1);
+        $ajax_form->setInsertId(1);
+        $ajax_form->setRowsAffected(1);
+        $ajax_form->setRecord($input_form);
+        
+        return $ajax_form;
     }
 }
 

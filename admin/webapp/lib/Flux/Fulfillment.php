@@ -42,7 +42,11 @@ class Fulfillment extends Base\Fulfillment {
 	 * @var array
 	 */
 	function setClientIdArray($arg0) {
-		$this->client_id_array = $arg0;
+	    if (is_array($arg0)) {
+            $this->client_id_array = $arg0;
+	    } else if (is_string($arg0) || is_int($arg0)) {
+	        $this->client_id_array = array($arg0);
+	    }
 		array_walk($this->client_id_array, function(&$val) { $val = intval(trim($val)); });
 		return $this;
 	}
@@ -57,8 +61,11 @@ class Fulfillment extends Base\Fulfillment {
 				array('name' => new \MongoRegex("/" . $this->getKeywords() . "/i"))
 			);
 		}
+		if (trim($this->getName()) != '') {
+		    $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
+		}
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client.client_id'] = $this->getClientIdArray();
+			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
 		}
 		return parent::queryAll($criteria, $hydrate);
 	}
@@ -95,7 +102,7 @@ class Fulfillment extends Base\Fulfillment {
 	 * Tests the fulfillment mapping
 	 * @return Flux\Fulfillment
 	 */
-	function testFulfillment() {
+	function testFulfillment(\Flux\Lead $lead) {
 		/* @var $export_class \Flux\Export\ExportAbstract */
 		$export_class = $this->getExportClass();
 		
@@ -139,16 +146,12 @@ class Fulfillment extends Base\Fulfillment {
 	}
 	
 	/**
-	 * Sends a lead (either to ftp or post url)
-	 * @param $lead \Flux\Lead
+	 * Helper function to queue a single lead
+	 * @param $split_queue_attempt \Flux\SplitQueueAttempt
 	 * @return boolean
 	 */
-	function queueLead(\Flux\Lead $lead) {
-		ob_start();
-		\Mojavi\Util\StringTools::consoleWrite('Fulfilling Lead (' . $lead->getId() . ')', 'Finding', \Mojavi\Util\StringTools::CONSOLE_COLOR_RED);
-		$this->sendLeads(array($lead));
-		$ob_contents = ob_get_clean();
-		return $ob_contents;
+	function queueLead(\Flux\SplitQueueAttempt $split_queue_attempt, $is_test = false) {
+		return $this->queueLeads(array($split_queue_attempt), $is_test);
 	}
 	
 	/**
@@ -156,8 +159,8 @@ class Fulfillment extends Base\Fulfillment {
 	 * @param $lead array
 	 * @return boolean
 	 */
-	function sendLeads(array $leads) {
-		return $this->getExportClass()->send($leads);
+	function queueLeads(array $split_queue_attempts, $is_test = false) {
+		return $this->getExportClass()->send($split_queue_attempts, $is_test);
 	}
 	
 	/**

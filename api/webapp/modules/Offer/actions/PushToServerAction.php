@@ -57,7 +57,8 @@ class PushToServerAction extends BasicRestAction
             if ($server->getId() > 0) {
             	if ($input_form->getFlushOfferCache()) {
             		// SSH to the server and clear the APC cache
-            		$server->clearOfferCache($offer);
+            	    $server->clearConfigCache($offer);
+            	    $server->clearOfferCache($offer);
             	}
                 if ($input_form->getCreateSkeletonFolder()) {
                     // SSH to the server and setup the basic folder path

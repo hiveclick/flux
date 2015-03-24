@@ -14,7 +14,7 @@ class Fulfill extends BaseDaemon
 				// Create the fulfillment handler
 				/* @var $fulfillment \Flux\Fulfillment */
 				$fulfillment = $queue_item->getSplit()->getSplit()->getFulfillment()->getFulfillment();
-				$results = $fulfillment->sendLeads(array($split_queue->getLead()->getLead()));
+				$results = $fulfillment->sendLeads(array($queue_item->getLead()->getLead()));
 				
 				/* @var $result \Flux\ExportQueue */
 				foreach ($results as $result) {

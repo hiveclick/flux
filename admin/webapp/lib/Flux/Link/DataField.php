@@ -86,7 +86,7 @@ class DataField extends CommonForm {
 	 */
 	function getDataFieldValue() {
 		if (is_null($this->data_field_value)) {
-			$this->data_field_value = "";
+			$this->data_field_value = array();
 		}
 		return $this->data_field_value;
 	}
@@ -96,7 +96,17 @@ class DataField extends CommonForm {
 	 * @var string
 	 */
 	function setDataFieldValue($arg0) {
-		$this->data_field_value = $arg0;
+	    if (is_array($arg0)) {
+	        $this->data_field_value = $arg0;
+	        array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
+	    } else if (is_string($arg0)) {
+	        if (strpos($arg0, ',') !== false) {
+	            $this->data_field_value = implode(",", $arg0);
+	        } else {
+	            $this->data_field_value = array($arg0);
+	        }
+	        array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
+	    }
 		return $this;
 	}
 	

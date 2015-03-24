@@ -141,10 +141,10 @@
 									</optgroup>
 									<optgroup label="Data Fields">
 										<?php
-											/* @var $datafield \Flux\DataField */ 
-											foreach($data_fields AS $datafield) { 
+											/* @var $data_field \Flux\DataField */ 
+											foreach($data_fields AS $data_field) { 
 										?>
-											<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataField()->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+											<option value="<?php echo $data_field->getId() ?>"<?php echo $data_field->getId() == $fulfillment_map->getDataField()->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
 										<?php } ?>
 									</optgroup>
 								</select>
@@ -227,10 +227,10 @@
 			</optgroup>
 			<optgroup label="Data Fields">
 				<?php
-					/* @var $datafield \Flux\DataField */ 
-					foreach($data_fields AS $datafield) { 
+					/* @var $data_field \Flux\DataField */ 
+					foreach($data_fields AS $data_field) { 
 				?>
-					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+					<option value="<?php echo $data_field->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
 				<?php } ?>
 			</optgroup>
 		</select>
@@ -267,28 +267,40 @@ $(document).ready(function() {
 	});
 
 	var $selectize_options = {
-		valueField: '_id',
+		valueField: 'key_name',
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
-				return '<div>' +
-					'<span class="title">' + 
-					'<span class="name">' + escape(item.name ? item.name : 'No Name') + '</span>' + 
-					'</span>' +
-					'<span class="description">' + escape(item.description ? item.description : 'no description') + '</span>' +
-					'<ul class="meta"><li class="language">Tags:</li><li><span>' + escape(item.request_names ? item.request_names : '') + '</span></li></ul>' +
-				'</div>';
+				var label = item.name || item.key;
+	            var caption = item.description ? item.description : null;
+	            var keyname = item.key_name ? item.key_name : null;
+	            var tags = item.tags ? item.tags : new Array();
+	            var tag_span = '';
+				$.each(tags, function(j, tag_item) {
+					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+				});
+	            return '<div style="width:99%;padding-right:25px;">' +
+	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+	                '<div>' + tag_span + '</div>' +   
+	            '</div>';
 			},
 			option: function(item, escape) {
-				return '<div>' +
-					'<span class="title">' + 
-					'<span class="name">' + escape(item.name ? item.name : 'No Name') + '</span>' + 
-					'</span>' +
-					'<span class="description">' + escape(item.description ? item.description : 'no description') + '</span>' +
-					'<ul class="meta"><li class="language">Tags:</li><li><span>' + escape(item.request_names ? item.request_names : '') + '</span></li></ul>' +
-				'</div>';
+				var label = item.name || item.key;
+	            var caption = item.description ? item.description : null;
+	            var keyname = item.key_name ? item.key_name : null;
+	            var tags = item.tags ? item.tags : new Array();
+	            var tag_span = '';
+				$.each(tags, function(j, tag_item) {
+					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
+				});           
+	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+	                '<div>' + tag_span + '</div>' +
+	            '</div>';
 			}
 		}
 	};

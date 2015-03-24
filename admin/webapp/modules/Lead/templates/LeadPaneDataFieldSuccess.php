@@ -189,7 +189,6 @@ $(document).ready(function() {
 		},
 		onChange: function(value) {
 			if (!value.length) return;
-			console.log('assigning options');
 			var select_text = $(this.$dropdown).closest('.form-group').find('.selectize-text')[0].selectize;
 			var data = this.options[value];
 			select_text.clearOptions();

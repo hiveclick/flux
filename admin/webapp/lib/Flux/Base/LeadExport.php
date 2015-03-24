@@ -34,9 +34,9 @@ class LeadExport extends MojaviForm {
      */
     function setLeadId($arg0) {
     	if (is_string($arg0)) {
-    		$this->lead_id = new MongoId((string)$arg0);
+    		$this->lead_id = new \MongoId((string)$arg0);
     		$this->addModifiedColumn("lead_id");
-    	} else if ($arg0 instanceof MongoId) {
+    	} else if ($arg0 instanceof \MongoId) {
     		$this->lead_id = $arg0;
     		$this->addModifiedColumn("lead_id");
     	}

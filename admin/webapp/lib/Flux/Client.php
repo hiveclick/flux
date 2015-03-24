@@ -6,7 +6,7 @@ class Client extends Base\Client {
 	private $users;
 	private $advertiser_offers;
 	private $publisher_campaigns;
-	private $client_exports;
+	private $fulfillments;
 
 	/**
 	 * Returns the _status_name
@@ -68,12 +68,15 @@ class Client extends Base\Client {
 	 * @return array
 	 */
 	function getFulfillments() {
-		if (is_null($this->client_exports)) {
-			$client_export = new \Flux\Fulfillment();
-			$client_export->getClient()->setClientId($this->getId());
-			$this->client_exports = $client_export->queryAllByClient();
+		if (is_null($this->fulfillments)) {
+			$fulfillment = new \Flux\Fulfillment();
+			$fulfillment->setClientIdArray(array($this->getId()));
+			$fulfillment->setSort('name');
+			$fulfillment->setSord('asc');
+			$fulfillment->setIgnorePagination(true);
+			$this->fulfillments = $fulfillment->queryAll();
 		}
-		return $this->client_exports;
+		return $this->fulfillments;
 	}
 
 	// +------------------------------------------------------------------------+

@@ -98,7 +98,7 @@ class Zipwise extends CommonForm {
 	 * @return boolean
 	 */
 	private function lookup() {
-		$response_obj = \Mojavi\Util\Ajax::sendAjax('https://www.zipwise.com/webservices/zipinfo.php', array('key' => self::API_KEY, 'zip' => $this->getZipcode(), 'format' => 'json'));
+		$response_obj = \Mojavi\Util\Ajax::sendAjax('/webservices/zipinfo.php', array('key' => self::API_KEY, 'zip' => $this->getZipcode(), 'format' => 'json'), \Mojavi\Request\Request::GET, 'https://www.zipwise.com/');
 		if (isset($response_obj['results'])) {
 			if (isset($response_obj['results']['cities']) && is_array($response_obj['results']['cities'])) {
 				$primary_city = array_shift($response_obj['results']['cities']);

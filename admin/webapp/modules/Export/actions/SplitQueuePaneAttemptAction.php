@@ -1,15 +1,17 @@
 <?php
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
+use Mojavi\Request\Request;
 
-use Flux\Split;
+use Flux\Offer;
+use Flux\Lead;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class SplitPaneSpyAction extends BasicAction
+class SplitQueuePaneAttemptAction extends BasicAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -23,24 +25,24 @@ class SplitPaneSpyAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $split Flux\Split */
-		$split = new Split();
-		$split->populate($_REQUEST);
-		$split->query();
+	    
+		/* @var $offer Flux\SplitQueue */
+		$split_queue = new \Flux\SplitQueue();
+		$split_queue->populate($_REQUEST);
+		$split_queue->query();
 		
-		$datafield = new \Flux\DataField();
-		$datafield->setIgnorePagination(true);
-		$datafields = $datafield->queryAll();
+		$attempts = $split_queue->getAttempts();
+		$index = $this->getContext()->getRequest()->getParameter('index');
 		
-		$offer = new \Flux\Offer();
-		$offer->setSort('name');
-		$offer->setIgnorePagination(true);
-		$offers = $offer->queryAll();
+		/* @var $offer Flux\SplitQueue */
+		$split_queue_attempt = new \Flux\SplitQueueAttempt();
 		
-		$this->getContext()->getRequest()->setAttribute("split", $split);
-		$this->getContext()->getRequest()->setAttribute("datafields", $datafields);
-		$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		 
+		if (isset($attempts[$index])) {
+		    $split_queue_attempt->populate($attempts[$index]);
+		}
+		$split_queue_attempt->setAttemptIndex($index);
+
+		$this->getContext()->getRequest()->setAttribute("split_queue_attempt", $split_queue_attempt);
 		return View::SUCCESS;
 	}
 }

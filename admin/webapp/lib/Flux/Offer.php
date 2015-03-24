@@ -178,6 +178,9 @@ class Offer extends Base\Offer {
 				array('verticals' =>  new \MongoRegex("/" . $this->getKeywords() . "/i"))
 			);
 		}
+		if (trim($this->getName()) != '') {
+		   $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
+		}
 		if (count($this->getClientIdArray()) > 0) {
 			$criteria['client_id'] = array('$in' => $this->getClientIdArray());
 		}

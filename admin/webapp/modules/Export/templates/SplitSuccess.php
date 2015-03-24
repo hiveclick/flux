@@ -15,7 +15,7 @@
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a data-toggle="modal" data-target="#edit_split_modal" href="/export/split-pane-edit?_id=<?php echo $split->getId() ?>">edit split</a></li>
 					<li class="divider"></li>
-					<li><a href="/export/split-pane-spy?_id=<?php echo $split->getId() ?>">view leads</a></li>
+					<li><a href="/export/split-queue-search?split[split_id]=<?php echo $split->getId() ?>&split_id_array[]=<?php echo $split->getId() ?>">view leads</a></li>
 					<li class="divider"></li>
 					<li><a href="#" id="clear_pid_sm">clear pid</a></li>
 					<li class="divider"></li>
@@ -28,7 +28,7 @@
 				<a class="btn btn-info" data-toggle="modal" data-target="#edit_split_modal" href="/export/split-pane-edit?_id=<?php echo $split->getId() ?>">edit split</a>
 			</div>
 			<div class="btn-group" role="group">
-				<a class="btn btn-info" href="/export/split-pane-spy?_id=<?php echo $split->getId() ?>">view leads</a>
+				<a class="btn btn-info" href="/export/split-queue-search?split[split_id]=<?php echo $split->getId() ?>&split_id_array[]=<?php echo $split->getId() ?>">view leads</a>
 			</div>
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" href="#" id="clear_pid">clear pid</a>
@@ -102,15 +102,15 @@
 	<ul class="list-group">
 		<li class="list-group-item active">Split Statistics</li>
 		<li class="list-group-item">
-			<span class="badge">0</span>
+			<span class="badge"><?php echo number_format($split->getHourlyCount(), 0, null, ',') ?></span>
 			Leads this hour
 		</li>
 		<li class="list-group-item">
-			<span class="badge">0</span>
+			<span class="badge"><?php echo number_format($split->getDailyCount(), 0, null, ',') ?></span>
 			Leads today
 		</li>
 		<li class="list-group-item">
-			<span class="badge">0</span>
+			<span class="badge"><?php echo number_format($split->getYesterdayCount(), 0, null, ',') ?></span>
 			Leads yesterday
 		</li>
 	</ul>
@@ -144,6 +144,15 @@ $(document).ready(function() {
 	$('#edit_split_modal').on('hide.bs.modal', function(e) {
     	$(this).removeData('bs.modal');
     });
+
+	$('#btn_delete,#btn_delete_sm').click(function() {
+		if (confirm('Are you sure you want to delete this split and completely remove it from the system?')) {
+			$.rad.del('/api', { func: '/export/split', _id: '<?php echo $split->getId() ?>' }, function(data) {
+				$.rad.notify('Split Removed', 'This split has been removed from the system.');
+				window.location.href = '/export/split-search';
+			});
+		}
+	});
 });
 //-->
 </script>

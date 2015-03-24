@@ -8,12 +8,6 @@
  */
 namespace Mojavi\Action;
 
-use Mojavi\Request\Request;
-use Mojavi\Form\BasicAjaxForm;
-use Mojavi\Form\CommonForm;
-use Mojavi\Logging\LoggerManager;
-
-
 class BasicRestAction extends BasicAction {
 
     // +-----------------------------------------------------------------------+
@@ -33,11 +27,11 @@ class BasicRestAction extends BasicAction {
     {
         $input_form = $this->getInputForm();
         $input_form->populate($this->getContext()->getRequest()->getParameters());
-        if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
+        if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::POST) {
             $ajax_form = $this->executePost($input_form);
-        } else if ($this->getContext()->getRequest()->getMethod() == Request::PUT) {
+        } else if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::PUT) {
             $ajax_form = $this->executePut($input_form);
-        } else if ($this->getContext()->getRequest()->getMethod() == Request::DELETE) {
+        } else if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::DELETE) {
             $ajax_form = $this->executeDelete($input_form);
         } else {
             $ajax_form = $this->executeGet($input_form);
@@ -54,7 +48,7 @@ class BasicRestAction extends BasicAction {
      */
     function executeGet($input_form) {
         // Handle GET Requests
-        $ajax_form = new BasicAjaxForm();
+        $ajax_form = new \Mojavi\Form\BasicAjaxForm();
            if ($input_form->getId() != '') {
                $input_form->query();
                $ajax_form->setRecord($input_form);
@@ -74,7 +68,7 @@ class BasicRestAction extends BasicAction {
      */
     function executePut($input_form) {
         // Handle PUT Requests
-        $ajax_form = new BasicAjaxForm();
+        $ajax_form = new \Mojavi\Form\BasicAjaxForm();
            $rows_affected = $input_form->update();
            if (isset($rows_affected['n'])) {
                $ajax_form->setRowsAffected($rows_affected['n']);
@@ -89,7 +83,7 @@ class BasicRestAction extends BasicAction {
      */
     function executePost($input_form) {
         // Handle POST Requests
-        $ajax_form = new BasicAjaxForm();
+        $ajax_form = new \Mojavi\Form\BasicAjaxForm();
         if (isset($_REQUEST['is_bulk_request']) && ($_REQUEST['is_bulk_request'] == '1') && isset($_REQUEST['bulk_items'])) {
             $rows_affected = 0;
             $entries = array();
@@ -109,7 +103,7 @@ class BasicRestAction extends BasicAction {
                $ajax_form->setRowsAffected(1);
                $ajax_form->setRecord($input_form);
         }
-           return $ajax_form;
+        return $ajax_form;
     }
 
     /**
@@ -118,7 +112,7 @@ class BasicRestAction extends BasicAction {
      */
     function executeDelete($input_form) {
         // Handle DELETE Requests
-        $ajax_form = new BasicAjaxForm();
+        $ajax_form = new \Mojavi\Form\BasicAjaxForm();
         $rows_affected = $input_form->delete();
         if (isset($rows_affected['n'])) {
             $ajax_form->setRowsAffected($rows_affected['n']);
@@ -133,7 +127,7 @@ class BasicRestAction extends BasicAction {
      * @return \Mojavi\Form\CommonForm
      */
     public function getInputForm() {
-        return new CommonForm();
+        return new \Mojavi\Form\CommonForm();
     }
 
     /**
@@ -148,7 +142,7 @@ class BasicRestAction extends BasicAction {
      */
     public function getRequestMethods ()
     {
-        return Request::GET | Request::POST | Request::PUT | Request::DELETE;
+        return \Mojavi\Request\Request::GET | \Mojavi\Request\Request::POST | \Mojavi\Request\Request::PUT | \Mojavi\Request\Request::DELETE;
     }
     
     /**

@@ -23,7 +23,7 @@
 			<input type="hidden" id="sord" name="sord" value="asc" />
 			<div class="form-group text-left col-md-6">
 				<label>Search by lead name or id: </label>
-				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="" />
+				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="<?php echo $lead->getKeywords() ?>" />
 			</div>
 			<div class="form-group text-left col-md-6">
 				<label>Only show leads with the following fields set: </label>
@@ -137,13 +137,18 @@ $(document).ready(function() {
 					{id:'<?php echo $data_field->getKeyName() ?>', name:'<?php echo ucfirst(strtolower(preg_replace("/[^a-zA-Z0-9 ]/", "", $data_field->getName()))) ?>', field:'_e.<?php echo $data_field->getKeyName() ?>', hidden: true, def_value: ' ', sortable:false, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 						var ret_val;
 						$.each(dataContext._e, function(i, item) {
-							if (item.data_field.data_field_id == '<?php echo $data_field->getId() ?>') {
+							if (item.data_field.data_field_id == <?php echo $data_field->getId() ?>) {
 								// This is our event
-								<?php if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_DATETIME) { ?>
-									ret_val = moment.unix(item.t.sec).calendar();
-								<?php } else { ?>
-									ret_val = item.v;
-								<?php } ?>
+							        ret_val = '<div style="line-height:16pt;">'
+								    if (item.v == '1') {
+								        ret_val += 'Yes';
+								    } else {
+								    	ret_val += 'No';
+								    }
+									ret_val += '<div class="small text-muted">';
+									ret_val += ' (Fired ' + moment.unix(item.t.sec).calendar() + ')';
+									ret_val += '</div>';
+									ret_val += '</div>';
 							}
 						});
 						return ret_val;
@@ -235,6 +240,10 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	<?php if (trim($lead->getKeywords()) != '') { ?>
+	   $('#lead_search_form').trigger('submit');
+	<?php } ?>
 });
 //-->
 </script>

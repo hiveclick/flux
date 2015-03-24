@@ -118,7 +118,7 @@ class FulfillmentMap extends CommonForm {
      * @return string
      */
     function getMappedValue($lead) {
-    	if ($this->getDataFieldId() > 0) {
+    	if ($this->getDataField()->getDataFieldId() > 0) {
     		$ret_val = $lead->getValue($this->getDataField()->getDataField()->getKeyName());
     		if (is_string($ret_val)) {
     			if (trim($ret_val) == '') {
@@ -131,6 +131,15 @@ class FulfillmentMap extends CommonForm {
     		}    		
     	} else {
     		$ret_val = $this->getDefaultValue();
+    	}
+    	if ($this->getDataField()->getDataField()->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && !is_array($ret_val)) {
+    	    $ret_val = array($ret_val);
+    	} else if ($this->getDataField()->getDataField()->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && !is_string($ret_val)) {
+    	    if (is_array($ret_val)) {
+    	        $ret_val = implode(",", $ret_val);
+    	    } else {
+    	        $ret_val = (string)$ret_val;
+    	    }
     	}
     	
     	return $this->callMappingFunc($ret_val, $lead);
@@ -149,7 +158,9 @@ class FulfillmentMap extends CommonForm {
             	$errors = '';
 	            // Now overwrite the default mapping function with the one from the data field
 	            @ob_start();
+	            
 	            eval('$datafield_mapping_func = function ($value, $lead) {' . $this->getDataField()->getDataField()->getCustomCode() . '};');
+	            
 	            if (ob_get_length() > 0) {
 	            	$errors = ob_get_contents();
 	            }
@@ -163,7 +174,10 @@ class FulfillmentMap extends CommonForm {
 	            $errors = '';
 	            // Now overwrite the default mapping function with the one from the export mapping
 	            @ob_start();
+	            
 	            eval('$mapping_func = function ($value, $lead) {' . $this->getMappingFunc() . '};');
+	            
+	            
 	            if (ob_get_length() > 0) {
 	            	$errors = ob_get_contents();
 	            }
@@ -172,9 +186,20 @@ class FulfillmentMap extends CommonForm {
 	            	throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errors);
 	            }
             }
+            
+            // setup custom error handling
+            set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
+                throw new \Exception("Error evaluating mapping " . $this->getFieldName() . ": ". $errstr);
+            });
+            
             // Finally call the mapping function and return the result
             $value = $datafield_mapping_func($value, $lead);
-            return $mapping_func($value, $lead);
+            
+            $value = $mapping_func($value, $lead);
+            // Restore the original error handling to mojavi
+            restore_error_handler();
+            
+            return $value;
         } catch (\Exception $e) {
             \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
             return $value;

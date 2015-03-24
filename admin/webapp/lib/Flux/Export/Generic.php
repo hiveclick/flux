@@ -2,8 +2,6 @@
 namespace Flux\Export;
 
 use \Flux\Export\ExportAbstract;
-use Mojavi\Util\StringTools;
-use Flux\ExportQueue;
 
 /**
  * Processes leads by sending them via email in an attachment
@@ -23,11 +21,20 @@ class Generic extends ExportAbstract {
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array|MongoCursor $export_queue_items
+	 * @param array|MongoCursor $split_queue_attempts
 	 * @return boolean
 	 */
-	function send($export_queue_items) {
-		return false;
+	function send($split_queue_attempts, $is_test = false) {
+	    foreach ($split_queue_attempts as $split_queue_attempt) {
+	        $params = $split_queue_attempt->mergeLead();
+	        $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getUrl();
+	        
+	        $url = $url . '?' . http_build_query($params, null, '&');
+	        $split_queue_attempt->setRequest($url);
+	        $split_queue_attempt->setResponse('SUCCESSFUL TEST');
+	        $split_queue_attempt->setIsError(false);
+	    }
+		return $split_queue_attempts;
 	}
 }
 ?>

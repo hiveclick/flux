@@ -50,14 +50,11 @@ class DataFieldValidateAction extends BasicRestAction
     			$value = array();
     		}
     		
-    		ob_start();
-    		$input_form->callMappingFunc($value, $lead);
-    		$errors = ob_get_clean();
-    		if ($errors != '') {
-    			throw new \Exception($errors);
-    		}
+    		$input_form->validateMappingFunc($value, $lead);
+
     	} catch (\Exception $e) {
-    		$this->getErrors()->addError("error", $e->getMessage());
+    	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Exception: " . $e->getMessage());
+    	    $input_form->setValidationResult($e->getMessage());
     	}
     	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Validated value for " . $input_form->getName());
     	$ajax_form->setRecord($input_form);

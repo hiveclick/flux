@@ -1,6 +1,5 @@
 <?php
 namespace Mojavi\Util;
-use Mojavi\Logging\LoggerManager;
 // +---------------------------------------------------------------------------+
 // | This file is part of the Mojavi package.                                  |
 // |                                                                           |

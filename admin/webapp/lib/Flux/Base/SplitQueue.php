@@ -15,6 +15,10 @@ class SplitQueue extends MongoForm {
 	protected $last_attempt_time;
 	protected $next_attempt_time;
 	protected $attempt_count;
+	protected $debug;
+	protected $queue_time;
+	
+	protected $attempts;
 	
 	/**
 	 * Constructs new user
@@ -175,6 +179,50 @@ class SplitQueue extends MongoForm {
 	}
 	
 	/**
+	 * Returns the queue_time
+	 * @return \MongoDate
+	 */
+	function getQueueTime() {
+	    if (is_null($this->queue_time)) {
+	        $this->queue_time = new \MongoDate();
+	    }
+	    return $this->queue_time;
+	}
+	
+	/**
+	 * Sets the queue_time
+	 * @var \MongoDate
+	 */
+	function setQueueTime($arg0) {
+	    $this->queue_time = $arg0;
+	    $this->addModifiedColumn('queue_time');
+	    return $this;
+	}
+	
+	/**
+	 * Returns the debug
+	 * @return string
+	 */
+	function getDebug() {
+	    if (is_null($this->debug)) {
+	        $this->debug = new \Flux\Link\SplitQueueDebug();
+	    }
+	    return $this->debug;
+	}
+	
+	/**
+	 * Sets the debug
+	 * @var string
+	 */
+	function setDebug($arg0) {
+	    if (is_string($arg0)) {
+	        $this->debug = new \Flux\Link\SplitQueueDebug();
+	        $this->debug->setRequest($arg0);
+	    }
+	    return $this;
+	}
+	
+	/**
 	 * Returns the split
 	 * @return \Flux\Link\Split
 	 */
@@ -207,6 +255,71 @@ class SplitQueue extends MongoForm {
 		}
 		$this->addModifiedColumn('split');
 		return $this;
+	}
+	
+	/**
+	 * Returns the attempts
+	 * @return array
+	 */
+	function getAttempts() {
+	    if (is_null($this->attempts)) {
+	        $this->attempts = array();
+	    }
+	    return $this->attempts;
+	}
+	
+	/**
+	 * Sets the attempts
+	 * @var array
+	 */
+	function setAttempts($arg0) {
+	    if (is_array($arg0)) {
+	        $this->attempts = array();
+	        foreach ($arg0 as $attempt) {
+    			$split_queue_attempt = new \Flux\SplitQueueAttempt();
+    			$split_queue_attempt->populate($attempt);
+    			array_push($this->attempts, $split_queue_attempt);
+	        }
+	        
+	        // Sort the attempts from latest to earliest
+	        uasort($this->attempts, function($a, $b) {
+	            if ($a->getAttemptTime()->sec > $b->getAttemptTime()->sec) {
+	                return -1;
+	            } else {
+	                return 1;
+	            }
+	        });
+	        
+	        // Only allow the last 10 attempts
+	        $this->attempts = array_slice($this->attempts, 0, 5);
+		}
+		$this->addModifiedColumn('attempts');
+	    return $this;
+	}
+	
+	/**
+	 * Sets the attempts
+	 * @var array
+	 */
+	function addAttempt($arg0) {
+	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Adding attempt: " . var_export($arg0, true));
+	    if (is_array($arg0)) {
+	        /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+            $split_queue_attempt = new \Flux\SplitQueueAttempt();
+            $split_queue_attempt->populate($arg0);
+            
+            // Add the attempt to the array
+            $attempts = $this->getAttempts();
+            array_push($attempts, $split_queue_attempt);
+            $this->setAttempts($attempts);
+	    } else if ($arg0 instanceof \Flux\SplitQueueAttempt) {
+	        // Add the attempt to the array
+	        $attempts = $this->getAttempts();
+	        array_push($attempts, $arg0);
+	        $this->setAttempts($attempts);
+	    }
+	    $this->addModifiedColumn('attempts');
+	    return $this;
 	}
 	
 	/**

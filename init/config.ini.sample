@@ -47,3 +47,8 @@ analytic_domain=localhost
 
 ; Set the location of the version file
 version_file=%MO_WEBAPP_DIR%/meta/version
+
+; Set the outgoing mail username, password, and host
+mail_username=
+mail_password=
+mail_hostname=

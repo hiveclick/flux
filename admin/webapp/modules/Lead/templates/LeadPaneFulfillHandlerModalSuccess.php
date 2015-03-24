@@ -9,32 +9,29 @@
 </div>
 <form id="lead_fulfill_manual_form" action="/api" method="POST">
 	<input type="hidden" name="func" value="/lead/manual-fulfill-custom" />
+	<input type="hidden" name="test" value="1" />
 	<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 	<div class="modal-body">
 		<div class="help-block">You can test fulfillment using the data on this lead.</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="type">Export</label>
-			<div class="col-sm-10">
-				<select id="fulfillment_id" name="fulfillment_id" class="form-control selectize">
-					<?php
-						/* @var $client \Flux\Client */ 
-						foreach ($clients as $client) { 
-					?>
-						<?php if (count($client->getFulfillments()) > 0) { ?>
-							<optgroup label="<?php echo $client->getName() ?>">
-								<?php 
-									/* @var $client \Flux\Fulfillment */
-									foreach ($client->getFulfillments() AS $fulfillment) { 
-								?>
-									<option value="<?php echo $fulfillment->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
-								<?php } ?>
-							</optgroup>
-						<?php } ?>
+			<select id="fulfillment_id" name="fulfillment_id" class="form-control selectize">
+				<?php
+					/* @var $client \Flux\Client */ 
+					foreach ($clients as $client) { 
+				?>
+					<?php if (count($client->getFulfillments()) > 0) { ?>
+						<optgroup label="<?php echo $client->getName() ?>">
+							<?php 
+								/* @var $client \Flux\Fulfillment */
+								foreach ($client->getFulfillments() AS $fulfillment) { 
+							?>
+								<option value="<?php echo $fulfillment->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
+							<?php } ?>
+						</optgroup>
 					<?php } ?>
-				</select>
-			</div>
+				<?php } ?>
+			</select>
 		</div>
-		<div class="clearfix" />
 		<p />
 		<div style="display:none;" id="fulfillment_log_div">
 			<div class="help-block">A log of the fulfillment test will appear here</div>

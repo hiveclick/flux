@@ -58,7 +58,8 @@ class LeadDataFieldAction extends BasicRestAction
     	    foreach ($params as $key => $value) {
     	        $lead->setValue($key, $value);
     	    }
-    	    
+    	    $lead->update();
+    	    /*
     	    $update_array = array();
     	    if (in_array('_t', $lead->getModifiedColumns())) {
         	    foreach ($lead->getD() as $key => $value) {
@@ -77,6 +78,7 @@ class LeadDataFieldAction extends BasicRestAction
     	    }
     	    
     	    $lead->update(array(), $update_array);
+    	    */
     	}
     	$ret_val->setRecord($lead);
     	return $ret_val;

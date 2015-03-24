@@ -97,6 +97,12 @@
 				<a class="navbar-brand" href="#">flux</a>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="main-navbar">
+                    <form class="navbar-form navbar-left hidden-xs hidden-sm" role="search" method="GET" action="/lead/lead-search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="keywords" size="35" placeholder="search leads" value="">
+                        </div>
+                    </form>
+			    
 					<?php if ($this->getMenu() !== null) { ?>
 						<ul class="nav navbar-nav navbar-right">
 						<?php

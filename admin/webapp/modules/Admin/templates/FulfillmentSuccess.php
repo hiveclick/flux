@@ -11,9 +11,9 @@
   				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a data-toggle="modal" data-target="#edit_modal" href="/admin/fulfillment-pane-edit?_id=<?php echo $fulfillment->getId() ?>">edit fulfillment</a></li>
-					<li><a data-toggle="modal" data-target="#test_modal" href="/admin/fulfillment-pane-test?_id=<?php echo $fulfillment->getId() ?>">text fulfillment</a></li>
 					<li class="divider"></li>
-					<li><a href="/export/export-search?fulfillment_id_array[]=<?php echo $fulfillment->getId() ?>">view exports</a></li>
+					<li><a data-toggle="modal" data-target="#clone_modal" href="/admin/fulfillment-pane-clone?_id=<?php echo $fulfillment->getId() ?>">clone</a></li>
+					<li><a data-toggle="modal" data-target="#test_modal" href="/admin/fulfillment-pane-test?_id=<?php echo $fulfillment->getId() ?>">test</a></li>
 					<li class="divider"></li>
 					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
 				</ul>
@@ -22,10 +22,10 @@
 		<div class="hidden-sm hidden-xs">
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" data-toggle="modal" data-target="#edit_modal" href="/admin/fulfillment-pane-edit?_id=<?php echo $fulfillment->getId() ?>">edit fulfillment</a>
-				<a class="btn btn-info" data-toggle="modal" data-target="#test_modal" href="/admin/fulfillment-pane-test?_id=<?php echo $fulfillment->getId() ?>">test fulfillment</a>
 			</div>
 			<div class="btn-group" role="group">
-				<a class="btn btn-info" href="/export/export-search?fulfillment_id_array[]=<?php echo $fulfillment->getId() ?>">view exports</a>
+				<a class="btn btn-info" data-toggle="modal" data-target="#clone_modal" href="/admin/fulfillment-pane-clone?_id=<?php echo $fulfillment->getId() ?>">clone</a>
+				<a class="btn btn-info" data-toggle="modal" data-target="#test_modal" href="/admin/fulfillment-pane-test?_id=<?php echo $fulfillment->getId() ?>">test fulfillment</a>
 			</div>
 			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
 		</div>
@@ -72,14 +72,14 @@
 			<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
 				<select name="mapping[<?php echo $counter;?>][datafield]" class="form-control selectize">
 					<optgroup label="Custom Field">
-						<option value="0"<?php echo $fulfillment_map->getDataField()->getDataFieldId() == 0 ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('key_name' => 'custom', 'name' => 'Custom Field', 'description' => 'Custom field such as an API Token', 'request_names' => '', 'tags' => array(0 => 'custom')))) ?>">Custom Field</option>
+						<option value="0" <?php echo $fulfillment_map->getDataField()->getDataFieldId() == 0 ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('key_name' => 'custom', 'name' => 'Custom Field', 'description' => 'Custom field such as an API Token', 'request_names' => '', 'tags' => array(0 => 'custom')))) ?>">Custom Field</option>
 					</optgroup>
 					<optgroup label="Data Fields">
 						<?php
 							/* @var $data_field \Flux\DataField */ 
 							foreach($data_fields AS $data_field) { 
 						?>
-							<option value="<?php echo $data_field->getId() ?>" <?php echo ($fulfillment_map->getDataField()->getDataFieldId() == $data_field->getId()) ? 'selected' : '' ?>  data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
+							<option value="<?php echo $data_field->getId() ?>" <?php echo ($fulfillment_map->getDataField()->getDataFieldId() == $data_field->getId()) ? 'selected' : '' ?>  data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName()), $data_field->getRequestName())))) ?>"><?php echo $data_field->getName() ?></option>
 						<?php } ?>
 					</optgroup>
 				</select>
@@ -155,19 +155,21 @@
 <!-- Fulfillment Test modal -->
 <div class="modal fade" id="test_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 
+<!-- Fulfillment Clone modal -->
+<div class="modal fade" id="clone_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+
 <script>
 //<!--
 $(document).ready(function() {
 
 	// Define our data field options
 	var $selectize_options = {
-		valueField: 'key_name',
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
-		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
-				var label = item.name || item.key;
+				console.log(item);
+				var label = item.name || item.key_name;
 	            var caption = item.description ? item.description : null;
 	            var keyname = item.key_name ? item.key_name : null;
 	            var tags = item.tags ? item.tags : new Array();
@@ -176,8 +178,8 @@ $(document).ready(function() {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
 				});
 	            return '<div style="width:99%;padding-right:25px;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+	                '<b>' + escape(item.name) + '</b> <span class="pull-right label label-success">' + escape(item.key_name) + '</span><br />' +
+	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
 	                '<div>' + tag_span + '</div>' +   
 	            '</div>';
 			},
@@ -189,7 +191,7 @@ $(document).ready(function() {
 	            var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});           
+				});   
 	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
 	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
 	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +

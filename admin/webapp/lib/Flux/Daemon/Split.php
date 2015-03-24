@@ -6,14 +6,13 @@ class Split extends BaseDaemon
 	public function action() {
 		$split = $this->getNextSplit();
 		if ($split instanceof \Flux\Split) {
-			$max_event_time = strtotime('now - 1 minute');
-			$max_event_mongo_date = new \MongoDate($max_event_time);
+			$max_event_time = $split->getLastRunTime();
 			// Based on the split parameters, find leads that match and place them into the split collection
 			$criteria = array();
-			$this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec) . ' and ' . date('m/d/Y g:i:s', $max_event_mongo_date->sec), array($this->pid, $split->getId()));
+			$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
 			
 			// Always add a time constraint to the offers
-			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER] = array('$elemMatch' => array('t' => array('$gte' => $split->getLastRunTime(), '$lt' => $max_event_mongo_date)));
+			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
 			
 			// Add the offers to the criteria
 			if (count($split->getOffers()) > 0) {
@@ -65,7 +64,7 @@ class Split extends BaseDaemon
 				$this->log('Found ' . $matched_leads->count() . ' leads, processing...', array($this->pid, $split->getId()));
 				
 				// Save the # of leads to the split for accounting reasons
-				$split->update(array('_id' => $split->getId()), array('$inc' => array('queue_count' => $matched_leads->count())), array());
+				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $matched_leads->count())), array());
 			
 				/* @var $split_queue \Flux\SplitQueue */
 				$split_queue = new \Flux\SplitQueue($split->getId());
@@ -76,6 +75,16 @@ class Split extends BaseDaemon
 					$lead = new \Flux\Lead();
 					$lead->populate($lead_doc);
 					$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId(), array($this->pid, $split->getId()));
+					
+					// Find the max event time
+					/* @var $lead_event \Flux\LeadEvent */
+					foreach ($lead->getE() as $lead_event) {
+                        if ($lead_event->getT() instanceof \MongoDate) {
+                            if ($lead_event->getT()->sec > $max_event_time->sec) {
+					            $max_event_time = $lead_event->getT();
+                            }
+					   }   	
+					}
 					
 					$split_queue->setLead($lead->getId());
 					$split_queue->setIsFulfilled(false);
@@ -100,7 +109,7 @@ class Split extends BaseDaemon
 			}
 			sleep(10);
 			
-			$split->update(array('_id' => $split->getId()), array('$unset' => array('__pid_split' => 1), '$set' => array('last_run_time' => $max_event_mongo_date)), array());
+			$split->update(array('_id' => $split->getId()), array('$unset' => array('__pid_split' => 1), '$set' => array('last_run_time' => $max_event_time)), array());
 
 
 			//$this->log('Done Processing Split: ' . $split_record->getName(), array($this->pid, $split_record->getId()));
@@ -154,8 +163,7 @@ class Split extends BaseDaemon
 		$split_record = $split->findAndModify(
 			array(
 				'status' => \Flux\Split::SPLIT_STATUS_ACTIVE,
-				'pid_split' => array('$exists' => false),
-				'last_run_time' => array('$lt' => new \MongoDate(strtotime('now - 2 minutes')))
+				'pid_split' => array('$exists' => false)
 			),
 			array('$set' => array(
 				'pid_split' => $this->pid,

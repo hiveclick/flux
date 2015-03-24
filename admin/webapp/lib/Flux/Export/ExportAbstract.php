@@ -1,11 +1,7 @@
 <?php
 namespace Flux\Export;
 
-use Flux\Export;
 use Mojavi\Form\MongoForm;
-use Flux\Split;
-use Flux\SplitPosition;
-use Flux\Fulfillment;
 
 /**
  * Abstract export class used by all export classes
@@ -22,15 +18,8 @@ abstract class ExportAbstract extends MongoForm {
 	protected $name;
 	protected $description;
 	protected $fulfillment_type;
-	private $split_id;
-	private $split_position_id;
-	private $export_id;
-	private $fulfillment_id;
-	
-	private $export;
-	private $fulfillment;
-	private $split;
-	private $split_position;
+
+	protected $fulfillment;
 	
 	/**
 	 * Returns the name
@@ -96,147 +85,46 @@ abstract class ExportAbstract extends MongoForm {
 	}
 	
 	/**
-	 * Returns the split_id
-	 * @return integer
-	 */
-	function getSplitId() {
-		if (is_null($this->split_id)) {
-			$this->split_id = 0;
-		}
-		return $this->split_id;
-	}
-	
-	/**
-	 * Sets the split_id
-	 * @var integer
-	 */
-	function setSplitId($arg0) {
-		$this->split_id = $arg0;
-		$this->addModifiedColumn("split_id");
-		return $this;
-	}
-	
-	/**
-	 * Returns the split_position_id
-	 * @return integer
-	 */
-	function getSplitPositionId() {
-		if (is_null($this->split_position_id)) {
-			$this->split_position_id = 0;
-		}
-		return $this->split_position_id;
-	}
-	
-	/**
-	 * Sets the split_position_id
-	 * @var integet
-	 */
-	function setSplitPositionId($arg0) {
-		$this->split_position_id = $arg0;
-		$this->addModifiedColumn("split_position_id");
-		return $this;
-	}
-	
-	/**
-	 * Returns the fulfillment_id
-	 * @return integer
-	 */
-	function getFulfillmentId() {
-		if (is_null($this->fulfillment_id)) {
-			$this->fulfillment_id = 0;
-		}
-		return $this->fulfillment_id;
-	}
-	
-	/**
-	 * Sets the fulfillment_id
-	 * @var integer
-	 */
-	function setFulfillmentId($arg0) {
-		$this->fulfillment_id = $arg0;
-		$this->addModifiedColumn("fulfillment_id");
-		return $this;
-	}
-	
-	/**
-	 * Returns the export_id
-	 * @return integer
-	 */
-	function getExportId() {
-		if (is_null($this->export_id)) {
-			$this->export_id = 0;
-		}
-		return $this->export_id;
-	}
-	
-	/**
-	 * Sets the export_id
-	 * @var integer
-	 */
-	function setExportId($arg0) {
-		$this->export_id = $arg0;
-		$this->addModifiedColumn("export_id");
-		return $this;
-	}
-	
-	/**
-	 * Returns the export
-	 * @return \Flux\Export
-	 */
-	function getExport() {
-		if (is_null($this->export)) {
-			$this->export = new \Flux\Export();
-			$this->export->setId($this->getExportId());
-			$this->export->query();
-		}
-		return $this->export;
-	}
-	
-	/**
 	 * Returns the fulfillment
-	 * @return \Flux\Fulfillment
+	 * @return \Flux\Link\Fulfillment
 	 */
 	function getFulfillment() {
 		if (is_null($this->fulfillment)) {
-			$this->fulfillment = new \Flux\Fulfillment();
-			$this->fulfillment->setId($this->getFulfillmentId());
-			$this->fulfillment->query();
+			$this->fulfillment = new \Flux\Link\Fulfillment();
 		}
 		return $this->fulfillment;
 	}
 	
 	/**
-	 * Returns the split
-	 * @return \Flux\Split
+	 * Sets the fulfillment
+	 * @var \Flux\Link\Fulfillment
 	 */
-	function getSplit() {
-		if (is_null($this->split)) {
-			$this->split = new \Flux\Split();
-			$this->split->setId($this->getSplitId());
-			$this->split->query();
-		}
-		return $this->split;
-	}
-	
-	/**
-	 * Returns the split_position
-	 * @return \Flux\SplitPosition
-	 */
-	function getSplitPosition() {
-		if (is_null($this->split_position)) {
-			$this->split_position = new \Flux\SplitPosition();
-			$this->split_position->setId($this->getSplitPositionId());
-			$this->split_position->query();
-		}
-		return $this->split_position;
+	function setFulfillment($arg0) {
+	    if (is_array($arg0)) {
+	        $fulfillment = new \Flux\Link\Fulfillment();
+	        $fulfillment->populate($arg0);
+	        if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+	        }
+	        $this->fulfillment = $fulfillment;
+	    } else if (is_string($arg0) || is_int($arg0)) {
+	        $fulfillment = new \Flux\Link\Fulfillment();
+	        $fulfillment->setFulfillmentId($arg0);
+	        if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+	        }
+	        $this->fulfillment = $fulfillment;
+	    }
+		$this->addModifiedColumn("fulfillment");
+		return $this;
 	}
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array|MongoCursor $export_queue_items
+	 * @param array|MongoCursor $split_queue_attempts
 	 * @return boolean
 	 */
-	abstract function send($export_queue_items);
+	abstract function send($split_queue_attempts, $is_test = false);
 	
 	/**
 	 * Determines if this person can accept the lead or not
@@ -244,47 +132,6 @@ abstract class ExportAbstract extends MongoForm {
 	 * @return boolean
 	 */
 	function canReceiveLead($lead) {
-		// Make sure we have not met our cap
-		if ($this->getSplitPosition()->getDailyCapCount() >= $this->getSplitPosition()->getCap()) { return false; }
-		
-		// Check if we have any required fields
-		if (count($this->getSplitPosition()->getDataFieldId()) > 0) {
-			foreach ($this->getSplitPosition()->getDataFieldId() as $data_field_id) {
-				$data_field = new \Flux\DataField();
-				$data_field->setId($data_field_id);
-				$data_field->query();
-				if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) {
-					if (!isset($lead->getD()->{$data_field->getKeyName()})) { return false; }
-					if (isset($lead->getD()->{$data_field->getKeyName()}) && trim($lead->getD()->{$data_field->getKeyName()}) == '') { return false; }
-				} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
-					if (!isset($lead->getT()->{$data_field->getKeyName()})) { return false; }
-					if (isset($lead->getT()->{$data_field->getKeyName()}) && trim($lead->getT()->{$data_field->getKeyName()}) == '') { return false; }
-				}
-				/* @TODO Add event check - possible a foreach */
-			}
-		}
-		 
-		// Check if we have any required domains
-		if (count($this->getSplitPosition()->getDomainGroupId()) > 0) {
-			$domains = array();
-			foreach ($this->getSplitPosition()->getDomainGroupId() as $domain_group_id) {
-				$domain_group = new \Flux\DomainGroup();
-				$domain_group->setId($domain_group_id);
-				$domain_group->query();
-				foreach ($domain_group->getDomains() as $domain_name) {
-					$domains[] = '@' . $domain_name;
-				}
-			}
-			$domain_match = false;
-			foreach ($domains as $domain) {
-				if (strpos($lead->getD()->{\Flux\DataField::retrieveDataFieldFromName('email')->getKeyName()}, $domain) !== false) {
-					$domain_match = true;
-					break;
-				}
-			}
-			if (!$domain_match) { return false; }
-		}
-		
 		// If we get this far, then return true
 		return true;
 	}

@@ -2,18 +2,13 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
-
-use Flux\Split;
-use Flux\Offer;
-use Flux\Vertical;
-use Flux\Client;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class SplitPaneEditAction extends BasicAction
+class FulfillmentPaneCloneAction extends BasicAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -27,37 +22,35 @@ class SplitPaneEditAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $split Flux\Split */
-		$split = new Split();
-		$split->populate($_GET);
-		$split->query();
+		/* @var $fulfillment \Flux\Fulfillment */
+		$fulfillment = new \Flux\Fulfillment();
+		$fulfillment->populate($_GET);
+		$fulfillment->query();
 		
-		/* @var $offer Flux\Offer */
-		$offer = new \Flux\Offer();
-		$offer->setSort('name');
-		$offer->setSord('asc');
-		$offer->setIgnorePagination(true);
-		$offers = $offer->queryAll();
-		
-		/* @var $offer Flux\Client */
+		/* @var $client \Flux\Client */
 		$client = new \Flux\Client();
+		$client->setIgnorePagination(true);
 		$client->setSort('name');
 		$client->setSord('asc');
-		$client->setIgnorePagination(true);
 		$clients = $client->queryAll();
-
-		/* @var $data_field Flux\DataField */
-		$data_field = new \Flux\DataField();
-		$data_field->setSort('name');
-		$data_field->setSord('ASC');
-		$data_field->setIgnorePagination(true);
-		$data_fields = $data_field->queryAll();
-
-		$this->getContext()->getRequest()->setAttribute("split", $split);
-		$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		$this->getContext()->getRequest()->setAttribute("clients", $clients);
-		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);	
 		
+		// Scan for export handlers
+		$export_handlers = array();
+		$files = scandir(MO_LIB_DIR . "/Flux/Export/");
+		foreach ($files as $file) {
+			if (strpos($file, '.') === 0) { continue; }
+			if (strpos($file, 'Abstract') !== false) { continue; }
+			if (trim($file) == 'Generic.php') { continue; }
+			if (trim($file) == '') { continue; }
+			$class_name = substr($file, 0, strpos($file, '.php'));
+			$full_class_name = '\\Flux\\Export\\' . $class_name;
+			$class_instance = new $full_class_name();
+			$export_handlers[$class_name] = $class_instance;
+		}
+
+		$this->getContext()->getRequest()->setAttribute("fulfillment", $fulfillment);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
+		$this->getContext()->getRequest()->setAttribute("export_handlers", $export_handlers);
 		return View::SUCCESS;
 	}
 }

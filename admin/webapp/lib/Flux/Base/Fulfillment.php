@@ -2,7 +2,6 @@
 namespace Flux\Base;
 
 use Mojavi\Form\MongoForm;
-use Mojavi\Form\CommonForm;
 
 class Fulfillment extends MongoForm {
 
@@ -125,11 +124,16 @@ class Fulfillment extends MongoForm {
 		$class_name = $this->getExportClassName();
 		if (trim($class_name) != '') {
 			$class_name = '\\Flux\\Export\\' . $class_name;
-			$ret_val = new $class_name();
-			$ret_val->setFulfillmentId($this->getId());
+			if (class_exists($class_name)) {
+    			$ret_val = new $class_name();
+    			$ret_val->setFulfillment($this->getId());
+			} else {
+			    $ret_val = new \Flux\Export\Generic();
+			    $ret_val->setFulfillment($this->getId());
+			}
 		} else {
 			$ret_val = new \Flux\Export\Generic();
-			$ret_val->setFulfillmentId($this->getId());
+			$ret_val->setFulfillment($this->getId());
 		}
 		return $ret_val;
 	}
@@ -349,7 +353,7 @@ class Fulfillment extends MongoForm {
 	function setEmailAddress($arg0) {
 		if (is_array($arg0)) {
 			asort($arg0);
-			$this->email_address = $arg0;
+			$this->email_address = array_values($arg0);
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',')) {
 				$this->email_address = explode(",", $arg0);

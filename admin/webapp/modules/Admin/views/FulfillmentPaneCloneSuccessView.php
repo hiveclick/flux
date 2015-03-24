@@ -5,9 +5,9 @@
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ExportIndexView.php');
+require_once(MO_MODULE_DIR . '/Default/views/IndexBlankView.php');
 
-class SplitPanePositionSuccessView extends ExportIndexView
+class FulfillmentPaneCloneSuccessView extends IndexBlankView
 {
 
 	// +-----------------------------------------------------------------------+
@@ -22,7 +22,7 @@ class SplitPanePositionSuccessView extends ExportIndexView
 	public function execute ()
 	{
 		parent::execute();
-		$this->setTitle('Split');
+		$this->setTitle('Clients');
 	}
 
 }

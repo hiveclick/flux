@@ -78,6 +78,21 @@ class Split extends Base\Split {
 		return $this;
 	}
 	
+	// +------------------------------------------------------------------------+
+	// | HELPER METHODS															|
+	// +------------------------------------------------------------------------+
+	
+	/**
+	 * Returns the user based on the criteria
+	 * @return Flux\User
+	 */
+	function queryAll(array $criteria = array(), $hydrate = true) {
+	    if (trim($this->getName()) != '') {
+	        $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
+	    }
+	    return parent::queryAll($criteria, $hydrate);
+	}
+	
 	/**
 	 * Clears the pid status on the split to kickstart it
 	 * @return boolean

@@ -4,7 +4,6 @@ namespace Mojavi\Form;
 use Mojavi\Controller\Controller;
 use MongoId;
 use Exception;
-use Mojavi\Logging\LoggerManager;
 
 abstract class MongoForm extends PageListForm {
 

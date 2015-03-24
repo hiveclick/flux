@@ -4,8 +4,6 @@ namespace Mojavi\Util;
 use Mojavi\Request\Request;
 use Exception;
 use Mojavi\Core\MojaviObject;
-use Zend\Http\Client\Adapter\Curl;
-use Mojavi\Logging\LoggerManager;
 
 /**
  * Ajax is used to encapsulate ajax calls to an api server
@@ -339,11 +337,11 @@ class Ajax extends MojaviObject {
             $url = $orig_url . $this->getFunc();
 
             if ($method == Request::DELETE || $method == Request::PUT) {
-                if(isset($params['id'])) {
+                if(isset($params['_id'])) {
                     $url .= '/' . ( isset($params['_id']) ? (int) $params['_id'] : 0 );
                 }
             }
-
+            
             // remove any routing to prevent overwritting the url
             if ($remove_unsafe_params) {
                 if (isset($params['module'])) {    unset($params['module']); }
@@ -360,7 +358,7 @@ class Ajax extends MojaviObject {
                 $curl_adapter->setCurlOption(CURLOPT_CONNECTTIMEOUT, $this->getTimeout());
             }
 
-            $curl_adapter->setCurlOption(CURLOPT_ENCODING , "gzip");
+            //$curl_adapter->setCurlOption(CURLOPT_ENCODING , "gzip");
             $curl_adapter->setCurlOption(CURLOPT_SSL_VERIFYPEER, false);
             $curl_adapter->setCurlOption(CURLOPT_USERAGENT, 'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10');
             $http_client = new \Zend\Http\Client();

@@ -316,7 +316,7 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function runRemoteCommand($cmd) {
-		if (($stream = @ssh2_exec($this->getSshSession(), $cmd, 'xterm')) !== false) {
+		if (($stream = ssh2_exec($this->getSshSession(), $cmd, 'xterm')) !== false) {
 			stream_set_blocking($stream, true);
 			$cmd_response = stream_get_contents($stream);
 			@fclose($stream);
@@ -349,6 +349,7 @@ class Server extends Base\Server {
 	function writeRemoteFile($src_contents, $dest, $permissions = 0664) {
 		$temporary_name = tempnam("/tmp/", "remote");
 		file_put_contents($temporary_name, $src_contents);
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending local file " . $temporary_name . " to " . $dest);
 		if (!ssh2_scp_send($this->getSshSession(), $temporary_name, $dest, $permissions)) {
 			throw new \Exception("Could not copy to " . $dest . " on remote server.  Check that scp is installed with <code>yum install openssh-clients</code>");
 		}
@@ -415,7 +416,7 @@ class Server extends Base\Server {
 	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
-	if (!file_exists(\$docroot_folder . '/.cache/)) {
+	if (!file_exists(\$docroot_folder . '/.cache/')) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
 	}
 	if (!file_exists(\$docroot_folder . '/img') && file_exists(\$root_folder . '/docroot/img')) {
@@ -480,6 +481,9 @@ EOL;
 	if (!file_exists(\$root_folder . "/docroot/img")) {
 		mkdir(\$root_folder . "/docroot/img");
 	}
+    if (!file_exists(\$root_folder . "/docroot/v1")) {
+		mkdir(\$root_folder . "/docroot/v1");
+	}
 	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
@@ -521,6 +525,20 @@ EOL;
 			$this->writeRemoteFile(file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/v1_first_page.php"), $this->getRootDir() . "/docroot/v1/index.php");
 		}
 		return true;
+	}
+	
+	/**
+	 * Clears cache entries for this offer
+	 * @param $offer \Flux\Offer
+	 * @return boolean
+	 */
+	function clearConfigCache($offer) {
+	    $cmd = 'if [ -f ' . $this->getDocrootDir() . '/.cache/config.php ];then rm ' . $this->getDocrootDir() . '/.cache/config.php;fi';
+	    
+	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending request to " . $this->getHostname() . ': ' . $cmd);
+        $this->runRemoteCommand($cmd);	
+	    
+        return true;
 	}
 	
 	/**

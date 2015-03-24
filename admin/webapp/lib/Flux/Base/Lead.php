@@ -266,31 +266,53 @@ class Lead extends MongoForm {
 	 */
 	function getValue($data_name, $default_value = '', $assign_if_not_set = true) {
 		$data_field = \Flux\DataField::retrieveDataFieldFromName($data_name);
+		$ret_val = null;
 		if (!is_null($data_field)) {
 			if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) {
 				// First check if the value exists in the dirty array
 				if (isset($this->getD()->{$data_field->getKeyName()})) {
-					return $this->getD()->{$data_field->getKeyName()};
+					$ret_val = ($this->getD()->{$data_field->getKeyName()});
 				}
-				// Assign the default value if the data is not found
-				return $default_value;
 			} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
 				// Next check if the value exists in the main data array
 				foreach ($this->getE() as $key => $event) {
 					if ($event->getDataField()->getDataFieldId() == $data_field->getId()) {
-						return $event->getValue();   
+						$ret_val = $event->getValue();   
 					}
 				}
-				return $default_value;
 			} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
 				// First check if the value exists in the array
 				$entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($data_field->getKeyName()));
 				$callableName = null;
 				if (is_callable(array($this->getTracking(), 'get' . ucfirst($entry)), false, $callableName)) {
-					return $this->getTracking()->{'get' . ucfirst($entry)}();
+					$ret_val = $this->getTracking()->{'get' . ucfirst($entry)}();
 				}
-				// Assign the default value if the data is not found
-				return $default_value;
+			}
+			
+			// Cast the return value if we need to
+			if (!is_null($ret_val)) {		
+    			// Assign the default value if the data is not found
+    			if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && !is_array($ret_val)) {
+    			    if (is_string($ret_val)) {
+    			        return array($ret_val);
+    			    } else if (is_object($ret_val)) {
+    			        return json_decode(json_encode($ret_val));
+    			    }
+    			} else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && !is_string($ret_val)) {
+    			    if (is_array($ret_val)) {
+    			        return implode(",", $ret_val);
+    			    } else if (is_object($ret_val)) {
+    			        return json_encode($ret_val);
+    			    }
+    			} else {
+    			    return $ret_val;
+    			}
+			} else {
+			    if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && is_string($default_value)) {
+			        $default_value = array($default_value);
+			    } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && is_array($default_value)) {
+			        $default_value = implode(", ", $default_value);
+			    }
 			}
 		}
 		return $default_value;
@@ -353,60 +375,85 @@ class Lead extends MongoForm {
 	}
 	
 	/**
+	 * Updates the lead by first saving the lead, then saving the _d, _e, and _t variables into the lead
+	 * @return boolean
+	 */
+	public function update($criteria_array = array(), $update_array = array(), $options_array = array('upsert' => true), $use_set_notation = false) {
+  
+	    // First update the data array
+	    $data_criteria = array('_id' => $this->getId());
+	    $data_update = array();
+	    foreach ($this->getD() as $key => $value) {
+	        $data_update[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $key] = $value;
+	    }
+	    if (!empty($data_update)) {
+	        $this->getCollection()->update($data_criteria, array('$set' => $data_update), array('upsert' => true));
+	    }
+	    
+	    // Now update events
+	    foreach ($this->getE() as $lead_event) {
+	        try {
+	            $event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => $lead_event->getDataField()->getDataFieldId());
+	            $event_update = array('$set' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.v' => $lead_event->getValue(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.t' => $lead_event->getT()));
+	            $ret_val = $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
+	            if ($ret_val == 0) {
+	                throw new \Exception('The positional operator did not find the match needed from the query');
+	            }
+	        } catch (\Exception $e) {
+	            if (strpos($e->getMessage(), 'The positional operator did not find the match needed from the query') !== false) {
+	                // The domain group was not found, so push it
+	                $event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => array('$ne' => $lead_event->getDataField()->getDataFieldId()));
+	                $event_update = array('$addToSet' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => $lead_event->toArray()));
+	                $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
+	            } else {
+	                
+	            }
+	        }
+	    }
+	    
+	    // Now save the tracking data
+	    $tracking_criteria = array('_id' => $this->getId());
+	    $tracking_update = array('$set' => array('_t' => $this->getTracking()->toArray()));
+	    $this->getCollection()->update($tracking_criteria, $tracking_update, array('upsert' => true));
+	    
+	    return true;
+	}
+	
+	/**
 	 * Adds an event to this lead
 	 * @param string $event_key
 	 * @return \Flux\LocalLead
 	 */
 	protected function addEvent($event_key, $value = 1) {
-		if (is_array($event_key)) {
-			$lead_event = new \Flux\LeadEvent();
-			$lead_event->populate($event_key);
-			foreach ($this->getE() as $event) {
-				if ($event->getDataField()->getDataFieldId() == $lead_event->getDataField()->getDataFieldId()) {
-					// Event already exists, so skip it
-				    LoggerManager::error(__METHOD__ . " :: " . "EVENT ALREADY EXISTS: " . $lead_event->getDataField()->getDataFieldName());
-					return $this;
-				}
-			}
-			$events = $this->getE();
-			$events[] = $lead_event;
-			$this->setE($events);
-		} else if (is_string($event_key)) {
-		    foreach ($this->getE() as $event) {
-		    	if ($event->getDataField()->getDataFieldName() == trim($event_key)) {
-		    		// Event already exists, so skip it
-		    		LoggerManager::error(__METHOD__ . " :: " . "EVENT ALREADY EXISTS: " . $event_key);
-		    		return $this;
-		    	}
+		if (is_string($event_key)) {
+		    $lead_event = new \Flux\LeadEvent();
+		    $lead_event->setDataField($event_key);
+		    $lead_event->setValue($value);
+		    $lead_event->setT(new \MongoDate());
+		    $lead_event->setClient($this->getTracking()->getClient()->getClientId());
+		    $lead_event->setOffer($this->getTracking()->getOffer()->getOfferId());
+		    
+		    // Find the payout and revenue
+		    /* @todo change this from an array to an object */
+		    /*
+		    $offer_events = $this->getTracking()->getOffer()->getOffer()->getEvents();
+		    $payout = 0.00;
+		    $revenue = 0.00;
+		    foreach ($offer_events as $offer_event) {
+		        if ($offer_event['event_id'] == $event_key) {
+		            if (isset($offer_event['field']) && $offer_event['field'] == 'payout' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
+		                $payout = $offer_event['value'];
+		            }
+		            if (isset($offer_event['field']) && $offer_event['field'] == 'revenue' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
+		                $revenue = $offer_event['value'];
+		            }
+		        }
 		    }
-			$data_field = $event_key;
-			if (!is_null($data_field)) {
-				// Find the payout and revenue
-				$offer_events = $this->getTracking()->getOffer()->getOffer()->getEvents();
-				$payout = 0.00;
-				$revenue = 0.00;
-				foreach ($offer_events as $offer_event) {
-					if ($offer_event['event_id'] == $event_key) {
-						if (isset($offer_event['field']) && $offer_event['field'] == 'payout' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
-							$payout = $offer_event['value'];
-						}
-						if (isset($offer_event['field']) && $offer_event['field'] == 'revenue' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
-							$revenue = $offer_event['value'];
-						}
-					}
-				}
-				$lead_event = new \Flux\Base\LeadEvent();
-				$lead_event->setClient($this->getTracking()->getClient()->getClientId());
-				$lead_event->setOffer($this->getTracking()->getOffer()->getOfferId());
-				$lead_event->setDataField($event_key);
-				$lead_event->setValue($value);
-				$lead_event->setPayout($payout);
-				$lead_event->setRevenue($revenue);
-	
-				$events = $this->getE();
-				$events[] = $lead_event;
-				$this->setE($events);
-			}
+		    */
+		    
+		    $events = $this->getE();
+		    $events[] = $lead_event;
+		    $this->setE($events);
 		}
 		return $this;
 	}

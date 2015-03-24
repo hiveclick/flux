@@ -15,7 +15,8 @@
 					<li><a data-toggle="modal" data-target="#debug_modal" href="/lead/lead-pane-debug?_id=<?php echo $lead->getId() ?>">view debug</a></li>
 					<li class="divider"></li>
 					<li><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>">add/change data</a></li>
-					<li><a data-toggle="modal" data-target="#fulfillment_modal" href="/lead/lead-pane-fulfill-handler-modal?_id=<?php echo $lead->getId() ?>">fulfill lead</a></li>
+					<li class="divider"></li>
+					<li><a data-toggle="modal" data-target="#fulfillment_modal" href="/lead/lead-pane-fulfill?_id=<?php echo $lead->getId() ?>">add to split</a></li>
 					<li class="divider"></li>
 					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
 				</ul>
@@ -29,12 +30,14 @@
 			</div>
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>">add/change data</a>
-				<a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/lead/lead-pane-fulfill-handler-modal?_id=<?php echo $lead->getId() ?>">fulfill lead</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/lead/lead-pane-fulfill?_id=<?php echo $lead->getId() ?>">add to split</a>
 			</div>
 			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
 		</div>
 	</div>
-	<h1>View Lead <small><?php echo $lead->getId() ?></small></h1>
+	<h1>View Raw Lead <small><?php echo $lead->getId() ?></small></h1>
 </div>
 <!-- Add breadcrumbs -->
 <ol class="breadcrumb">
@@ -49,7 +52,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Data Information</div>
 		<div class="panel-body">
-		  <dl class="dl-horizontal">
+            <dl class="dl-horizontal">
 			<?php if ($lead->getValue('fn') != '') { ?>
 				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $lead->getValue('fn') ?>&nbsp;</dd>
 			<?php } ?>
@@ -85,7 +88,7 @@
 		<hr />
 		<dl class="dl-horizontal">
 			<?php
-				 $known_fields = array('fn', 'ln', 'a1', 'cy', 'st', 'zi', 'em', 'full_name', 'name'); 
+				 $known_fields = array('fn', 'ln', 'a1', 'cy', 'st', 'zi', 'em'); 
 				 foreach ($lead->getD() as $key => $value) { 
 			?>
 				<?php if (!in_array($key, $known_fields)) { ?>
@@ -127,6 +130,7 @@
 					<tr>
 						<th>Event</th>
 						<th>Time</th>
+						<th class="text-center">Value</th>
 						<th>Payout</th>
 						<th>Revenue</th>
 					</tr>
@@ -145,6 +149,7 @@
 									 &nbsp;
 								 <?php } ?>
 							</td>
+							<td class="text-center"><?php echo $lead_event->getValue() ?></td>
 							<td>$<?php echo number_format($lead_event->getPayout(), 2, null, ',') ?></td>
 							<td>$<?php echo number_format($lead_event->getRevenue(), 2, null, ',') ?></td>
 						</tr>
@@ -173,6 +178,11 @@
 				<dd><a href="/client/client?_id=<?php echo $lead->getTracking()->getClient()->getClientId() ?>"><?php echo $lead->getTracking()->getClient()->getClientName() ?></a></dd>
 				<dt>Campaign:</dt>
 				<dd><a href="/campaign/campaign?_id=<?php echo $lead->getTracking()->getCampaign()->getCampaignId() ?>"><?php echo $lead->getTracking()->getCampaign()->getCampaignId() ?></a></dd>
+			</dl>
+			<hr />
+			<dl class="dl-horizontal">
+				<dt>Keywords:</dt><dd><?php echo $lead->getTracking()->getKeywords() ?></dd>
+				<dt>Source:</dt><dd><?php echo $lead->getTracking()->getSourceUrl() ?></dd>
 			</dl>
 			<hr />
 			<dl class="dl-horizontal">

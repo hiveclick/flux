@@ -65,25 +65,31 @@
         <class>nav-primary</class>
         <pages>
             <leadsearch>
-                <label>Search Leads</label>
+                <label>Search All Leads</label>
                 <module>lead</module>
                 <controller>lead-search</controller>
                 <class>nav-secondary</class>
             </leadsearch>
+            <spacer>
+				<label></label>
+				<module></module>
+				<controller></controller>
+				<class>nav-secondary</class>
+			</spacer>
+			<splitqueuesearch>
+                <label>View Queued Leads</label>
+                <module>export</module>
+                <controller>split-queue-search</controller>
+                <class>nav-secondary</class>
+            </splitqueuesearch>
        </pages>
 	</leads>
 	<export>
-        <label>Exports</label>
+        <label>Splits</label>
         <module>export</module>
         <controller>export-search</controller>
         <class>nav-primary</class>
         <pages>
-            <exportsearch>
-                <label>Exports</label>
-                <module>export</module>
-                <controller>export-search</controller>
-                <class>nav-secondary</class>
-            </exportsearch>
             <splitsearch>
                 <label>Splits</label>
                 <module>export</module>
@@ -92,10 +98,22 @@
             </splitsearch>
             <spacer2>
 				<label></label>
-				<module>export</module>
-				<controller>export-search</controller>
+				<module></module>
+				<controller></controller>
 				<class>nav-secondary</class>
 			</spacer2>
+			<exportsearch>
+                <label>Exports</label>
+                <module>export</module>
+                <controller>export-search</controller>
+                <class>nav-secondary</class>
+            </exportsearch>
+            <spacer>
+				<label></label>
+				<module></module>
+				<controller></controller>
+				<class>nav-secondary</class>
+			</spacer>
             <fulfillmentsearch>
                 <label>Fulfillment Handlers</label>
                 <module>admin</module>

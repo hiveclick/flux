@@ -2,13 +2,11 @@
 namespace Mojavi\Form;
 
 use Mojavi\Core\MojaviObject as MojaviObject;
-use Mojavi\Util\IntegerTableEncoder as IntegerTableEncoder;
 use Mojavi\Util\StringTools as StringTools;
 use Mojavi\Controller\Controller as Controller;
 use Mojavi\Database\DatabaseResultResource as DatabaseResultResource;
 use ReflectionClass;
 use ReflectionProperty;
-use Mojavi\Logging\LoggerManager;
 
 /**
  * BasicForm is the base class for ALL forms used.  It has a single function set (Id).  Every
