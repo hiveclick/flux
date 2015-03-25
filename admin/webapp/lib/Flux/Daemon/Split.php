@@ -3,6 +3,8 @@ namespace Flux\Daemon;
 
 class Split extends BaseDaemon
 {
+    const DEBUG = false;
+    
 	public function action() {
 		$split = $this->getNextSplit();
 		if ($split instanceof \Flux\Split) {
@@ -52,7 +54,9 @@ class Split extends BaseDaemon
 				}
 			}
 			
-			$this->log(json_encode($criteria), array($this->pid, $split->getId()));		
+			if (self::DEBUG) { 
+                $this->log(json_encode($criteria), array($this->pid, $split->getId()));
+			}		
 			
 			/* @var $lead \Flux\Lead */
 			$lead = new \Flux\Lead();
@@ -60,9 +64,7 @@ class Split extends BaseDaemon
 			$lead->setIgnorePagination(true);
 			$matched_leads = $lead->queryAll($criteria, false);
 						
-			if ($matched_leads->hasNext()) {
-				$this->log('Found ' . $matched_leads->count() . ' leads, processing...', array($this->pid, $split->getId()));
-				
+			if ($matched_leads->hasNext()) {				
 				// Save the # of leads to the split for accounting reasons
 				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $matched_leads->count())), array());
 			
@@ -74,7 +76,6 @@ class Split extends BaseDaemon
 					/* @var $lead \Flux\Lead */
 					$lead = new \Flux\Lead();
 					$lead->populate($lead_doc);
-					$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId(), array($this->pid, $split->getId()));
 					
 					// Find the max event time
 					/* @var $lead_event \Flux\LeadEvent */
@@ -103,7 +104,8 @@ class Split extends BaseDaemon
 					
 					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
 					if (is_null($existing_lead)) {
-                        $split_queue->insert();
+					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+					    $split_queue->insert();
 					} else {
 					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
 					}
