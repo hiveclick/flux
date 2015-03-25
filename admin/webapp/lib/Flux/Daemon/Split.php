@@ -109,7 +109,7 @@ class Split extends BaseDaemon
 			}
 			sleep(10);
 			
-			$split->update(array('_id' => $split->getId()), array('$unset' => array('__pid_split' => 1), '$set' => array('last_run_time' => $max_event_time)), array());
+			$split->update(array('_id' => $split->getId()), array('$unset' => array('pid_split' => 1), '$set' => array('last_run_time' => $max_event_time)), array());
 
 
 			//$this->log('Done Processing Split: ' . $split_record->getName(), array($this->pid, $split_record->getId()));
