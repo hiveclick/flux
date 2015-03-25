@@ -73,32 +73,46 @@ class ManualFulfillCustomAction extends BasicRestAction
         	        }
         	    }
         	} else {
-                $results = $fulfillment->queueLead($split_queue_attempt);
+        	    if ($split_queue->getIsFulfilled()) {
+        	        // The lead has already been fulfilled, so don't allow it to be fulfilled again
+        	        /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+        	        $split_queue_attempt = new \Flux\SplitQueueAttempt();
+        	        $split_queue_attempt->setSplitQueue($split_queue->getId());
+        	        $split_queue_attempt->setFulfillment($fulfillment->getId());
+        	        $split_queue_attempt->setAttemptTime(new \MongoDate());
+        	        $split_queue_attempt->setIsError(false);
+        	        $split_queue_attempt->setResponse('Already Fulfilled');
+        	        $split_queue->addAttempt($split_queue_attempt);
+        	        
+        	        $split_queue->setErrorMessage('Already Fulfilled');
+        	    } else {
+                    $results = $fulfillment->queueLead($split_queue_attempt);
+            	
+            	
+                	/* @var $result \Flux\SplitQueueAttempt */
+                	foreach ($results as $key => $result) {
+                	    // Save the split queue attempts back to the split queue item
+                	    $split_queue->addAttempt($result);
+                	    
+                	    $split_queue->setDebug($result->getRequest());
+                	    $split_queue->setLastAttemptTime(new \MongoDate());
+                	    $split_queue->setIsProcessing(false);
+                	    
+                	    if ($result->getIsError()) {
+                	        $split_queue->setIsError(true);
+                	        $split_queue->setErrorMessage($result->getResponse());
+                	        $split_queue->setIsFulfilled(false);
+                	        $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
+                	        $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
+                	    } else {
+                	        $split_queue->setIsFulfilled(true);            	        
+                	        $split_queue->setIsError(false);
+                	        $split_queue->setErrorMessage('');
+                	    }
+                	}
+        	    }
         	
-        	
-            	/* @var $result \Flux\SplitQueueAttempt */
-            	foreach ($results as $key => $result) {
-            	    // Save the split queue attempts back to the split queue item
-            	    $split_queue->addAttempt($result);
-            	    
-            	    $split_queue->setDebug($result->getRequest());
-            	    $split_queue->setLastAttemptTime(new \MongoDate());
-            	    $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
-            	    $split_queue->setIsProcessing(false);
-            	    
-            	    if ($result->getIsError()) {
-            	        $split_queue->setIsError(true);
-            	        $split_queue->setErrorMessage($result->getResponse());
-            	        $split_queue->setIsFulfilled(false);
-            	        $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
-            	    } else {
-            	        $split_queue->setIsFulfilled(true);            	        
-            	        $split_queue->setIsError(false);
-            	        $split_queue->setErrorMessage('');
-            	    }
-            	}
-        	
-        	   $split_queue->update();
+                $split_queue->update();
         	}
             	
             $ajax_form->setRecord($split_queue);
