@@ -37,7 +37,7 @@
 		</div>
 		<div style="display:none;" id="fulfillment_log_div">
 		    <hr />
-			<div id="fulfillment_result_debug" style="display:none;">
+			<div id="fulfillment_result_debug">
 			    <div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
 			    <div role="tabpanel">
 
@@ -66,11 +66,11 @@
                     </div>
                 </div>
             </div>
-            <div id="fulfillment_result_error" style="display:none;">
+            <div id="fulfillment_result_error">
                 <div class="help-block">The results of your fulfillment request are below</div>
                 <div class="alert alert-danger alert-dismissible" role="alert"></div>
             </div>
-            <div id="fulfillment_result_success" style="display:none;">
+            <div id="fulfillment_result_success">
                 <div class="help-block">The results of your fulfillment request are below</div>
                 <div class="alert alert-success alert-dismissible" role="alert">
                     Fulfillment was sent successfully

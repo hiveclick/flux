@@ -99,6 +99,9 @@ class GenericPost extends ExportAbstract {
 		$params = $split_queue_attempt->mergeLead();
 		$url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
 
+		$curl_request = $url . '?' . http_build_query($params, null, '&');
+		$split_queue_attempt->setRequest($curl_request);
+		
 		// Setup Curl for this request
 		$ch = curl_init();
 		
