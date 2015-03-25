@@ -2,7 +2,7 @@
 	/* @var $split Flux\Split */
 	$split = $this->getContext()->getRequest()->getAttribute("split", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
-	$fulfillments = $this->getContext()->getRequest()->getAttribute("fulfillments", array());
+	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 ?>
 <div class="modal-header">
@@ -56,12 +56,21 @@
 					<input type="hidden" name="fulfillment[fulfillment_id]" value="" />
 					<label class="control-label" for="fulfillment_id">Fulfillment</label>
 					<select class="form-control" name="fulfillment[fulfillment_id]" id="fulfillment_id" placeholder="choose a fulfillment to run when the lead matches the criteria">
-						<?php 
-							/* @var $fulfillment \Flux\Fulfillment */
-							foreach ($fulfillments AS $fulfillment) { 
-						?>
-							<option value="<?php echo $fulfillment->getId(); ?>"><?php echo $fulfillment->getName() ?></option>
-						<?php } ?>
+						<?php
+        					/* @var $client \Flux\Client */ 
+        					foreach ($clients as $client) { 
+        				?>
+        					<?php if (count($client->getFulfillments()) > 0) { ?>
+        						<optgroup label="<?php echo $client->getName() ?>">
+        							<?php 
+        								/* @var $client \Flux\Fulfillment */
+        								foreach ($client->getFulfillments() AS $fulfillment) { 
+        							?>
+        								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
+        							<?php } ?>
+        						</optgroup>
+        					<?php } ?>
+        				<?php } ?>
 					</select>
 				</div>
 				<hr />

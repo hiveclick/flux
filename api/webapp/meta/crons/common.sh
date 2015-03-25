@@ -13,7 +13,7 @@ WEBAPP_DIR=`/usr/bin/dirname $META_DIR`
 BASE_DIR=`/usr/bin/dirname $WEBAPP_DIR`
 DOCROOT_DIR="$BASE_DIR/docroot"
 SCRIPT_NAME=`/bin/basename $0`
-LOG_FILE="/var/log/gun/${SCRIPT_NAME}${1:+_}${1:-}.log"
+LOG_FILE="/var/log/flux/${SCRIPT_NAME}${1:+_}${1:-}.log"
 DISABLE_LOGGING="0"
 
 function execute() {

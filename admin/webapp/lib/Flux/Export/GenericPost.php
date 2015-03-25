@@ -164,8 +164,7 @@ class GenericPost extends ExportAbstract {
 		// Now setup multi curl
 		$mh = curl_multi_init();
 		
-		while ($split_queue_attempts->hasNext()) {
-			$cursor_item = $split_queue_attempts->getNext();
+		foreach ($split_queue_attempts as $cursor_item) {
 			$split_queue_attempt = new \Flux\SplitQueueAttempt();
 			$split_queue_attempt->populate($cursor_item);
 			$split_queue_attempt->setStartTime(microtime(true));
@@ -174,7 +173,6 @@ class GenericPost extends ExportAbstract {
 			$key = (string)$ch;
 			$this->addRequest($key, $split_queue_attempt);
 			curl_multi_add_handle($mh, $ch);
-			if ($key >= self::WINDOW_SIZE) { break; }
 		}
 
 		if (count($this->getRequests()) > 0) {
@@ -197,18 +195,6 @@ class GenericPost extends ExportAbstract {
 							$ret_val[] = $split_queue_attempt;
 						}
 						$this->removeRequest($resource);
-					}
-					
-					while ($split_queue_attempts->hasNext()) {
-						$cursor_item = $split_queue_attempts->getNext();
-						$split_queue_attempt = new \Flux\SplitQueueAttempt();
-                        $split_queue_attempt->populate($cursor_item);
-                        $split_queue_attempt->setStartTime(microtime(true));
-						// Prepare the cURL request
-						$ch = $this->prepareCurlRequest($split_queue_attempt);
-						$key = (string)$ch;
-						$this->addRequest($key, $split_queue_attempt);
-						curl_multi_add_handle($mh, $ch);
 					}
 					
 					// remove the curl handle that just completed

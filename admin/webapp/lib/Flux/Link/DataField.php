@@ -101,7 +101,7 @@ class DataField extends CommonForm {
 	        array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
 	    } else if (is_string($arg0)) {
 	        if (strpos($arg0, ',') !== false) {
-	            $this->data_field_value = implode(",", $arg0);
+	            $this->data_field_value = explode(",", $arg0);
 	        } else {
 	            $this->data_field_value = array($arg0);
 	        }

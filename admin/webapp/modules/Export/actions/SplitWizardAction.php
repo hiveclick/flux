@@ -39,12 +39,12 @@ class SplitWizardAction extends BasicAction
 		$offer->setIgnorePagination(true);
 		$offers = $offer->queryAll();
 		
-		/* @var $offer Flux\Fulfillment */
-		$fulfillment = new Fulfillment();
-		$fulfillment->setSort('name');
-		$fulfillment->setSord('asc');
-		$fulfillment->setIgnorePagination(true);
-		$fulfillments = $fulfillment->queryAll();
+		/* @var $offer Flux\Client */
+		$client = new \Flux\Client();
+		$client->setSort('name');
+		$client->setSord('asc');
+		$client->setIgnorePagination(true);
+		$clients = $client->queryAll();
 
 		/* @var $data_field Flux\DataField */
 		$data_field = new DataField();
@@ -55,7 +55,7 @@ class SplitWizardAction extends BasicAction
 
 		$this->getContext()->getRequest()->setAttribute("split", $split);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		$this->getContext()->getRequest()->setAttribute("fulfillments", $fulfillments);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);
 		
 		return View::SUCCESS;
