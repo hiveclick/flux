@@ -41,28 +41,29 @@
 			    <div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
 			    <div role="tabpanel">
 
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
-                    <li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="qs">
-                        <div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
-                        <div style="height:400px;overflow:auto;">
-                            <table class="table">
-                                <thead>
-                                    <th>Parameter</th>
-                                    <th>Value</th>
-                                </thead>
-                                <tbody id="debug_qs"></tbody>
-                            </table>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
+                        <li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="qs">
+                            <div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
+                            <div style="height:400px;overflow:auto;">
+                                <table class="table">
+                                    <thead>
+                                        <th>Parameter</th>
+                                        <th>Value</th>
+                                    </thead>
+                                    <tbody id="debug_qs"></tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="request">
-                        <div class="help-block">This is the raw post url that will be sent to the advertiser</div>
-                        <textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
+                        <div role="tabpanel" class="tab-pane" id="request">
+                            <div class="help-block">This is the raw post url that will be sent to the advertiser</div>
+                            <textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
