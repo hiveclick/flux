@@ -114,7 +114,7 @@ class GraphLeadByHour extends GoogleChart {
 		$ops[] = array(
 				'$match' => array(
 						\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => array('$elemMatch' =>
-								array('n' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME)
+								array('data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME)
 						)
 				)
 		);
@@ -128,7 +128,7 @@ class GraphLeadByHour extends GoogleChart {
 		if (count($this->getCampaignIdArray()) > 0) {
 			$ops[] = array(
 					'$match' => array(
-							\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '._ck._id' => array('$in' => $this->getCampaignIdArray())
+							\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign.campaign_id' => array('$in' => $this->getCampaignIdArray())
 					)
 			);
 		}
@@ -136,7 +136,7 @@ class GraphLeadByHour extends GoogleChart {
 		if (count($this->getOfferIdArray()) > 0) {
 		    $ops[] = array(
 		    		'$match' => array(
-		    				\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.o' => array('$in' => $this->getOfferIdArray())
+		    				\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => array('$in' => $this->getOfferIdArray())
 		    		)
 		    );
 		}
@@ -151,9 +151,9 @@ class GraphLeadByHour extends GoogleChart {
 			'event_date' => array('$substr' => 
 								array('$_e.t', 0, 13)
 							),
-			'event_offer' => '$_e.o',
-			'event_name' => '$_e.n',
-			'offer_name' => '$_t._o.name',
+			'event_offer' => '$_e.offer.offer_id',
+			'event_name' => '$_e.data_field.data_field_key_name',
+			'offer_name' => '$_t.offer.offer_name',
 			'subid' => '$_t.s1',
 			'clicks' => 1
 		));
@@ -184,6 +184,22 @@ class GraphLeadByHour extends GoogleChart {
 				)
 			);
 		}
+		
+		/*
+		$op_query = json_encode($ops);
+		$op_query = str_replace('"$group"', '$group', $op_query);
+		$op_query = str_replace('"$max"', '$max', $op_query);
+		$op_query = str_replace('"$sum"', '$sum', $op_query);
+		$op_query = str_replace('"$unwind"', '$unwind', $op_query);
+		$op_query = str_replace('"$match"', '$match', $op_query);
+		$op_query = str_replace('"$gte"', '$gte', $op_query);
+		$op_query = str_replace('"$lt"', '$lt', $op_query);
+		$op_query = str_replace('"$substr"', '$substr', $op_query);
+		$op_query = str_replace('"$exists"', '$exists', $op_query);
+		$op_query = str_replace('"$elemMatch"', '$elemMatch', $op_query);
+		$op_query = str_replace('"$project"', '$project', $op_query);
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
+        */
 
 		return $lead->getCollection()->aggregate($ops);
 	}	

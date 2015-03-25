@@ -126,9 +126,10 @@ class GenericPost extends ExportAbstract {
 		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
 		$split_queue_attempt->setResponse($response);
 		$split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-		if (strpos($response, $this->getFulfillment()->getSuccessMsg()) !== false) {
+		if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 			$split_queue_attempt->setIsError(false);
 		} else {
+		    $split_queue_attempt->setErrorMessage(str_replace("<", "&gt;", $response));
 			$split_queue_attempt->setIsError(true);
 		}
 		return $split_queue_attempt;

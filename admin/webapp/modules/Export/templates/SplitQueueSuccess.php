@@ -279,7 +279,7 @@ function loadAttempts() {
 		    td = $('<td />').appendTo(tr);
 		    $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '">' + item.fulfillment.fulfillment_name + '</a>').appendTo(td);
 		    $('<div class="small">' + moment.unix(item.attempt_time.sec).calendar() + '</div>').appendTo(td);
-		    td = $('<td class="text-center small ' + (item.is_error ? "text-danger" : "text-success") + '">' + item.error_message + '</td>').appendTo(tr);
+		    td = $('<td class="text-center small ' + (item.is_error ? "text-danger" : "text-success") + '">' + (item.is_error ? item.error_message : 'no errors') + '</td>').appendTo(tr);
 		    tr.appendTo($('#attempt_tbody'));
 	    });
 	});

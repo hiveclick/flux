@@ -160,7 +160,7 @@ class SplitQueueAttempt extends CommonForm {
      */
     function getRequest() {
         if (is_null($this->request)) {
-            $this->request = array();
+            $this->request = "";
         }
         return $this->request;
     }
@@ -170,7 +170,11 @@ class SplitQueueAttempt extends CommonForm {
      * @var array
      */
     function setRequest($arg0) {
-        $this->request = $arg0;
+        if (is_string($arg0)) {
+            $this->request = $arg0;
+        } else if (is_array($arg0)) {
+            $this->request = implode(", ", $arg0);
+        }
         return $this;
     }
     
