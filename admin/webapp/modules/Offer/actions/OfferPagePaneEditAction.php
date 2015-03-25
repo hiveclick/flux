@@ -35,13 +35,7 @@ class OfferPagePaneEditAction extends BasicAction
 		$offer_page->populate($_GET);
 		$offer_page->query();
 		
-		/* @var $server Flux\Server */
-		$server = new Server();
-		$server->setIgnorePagination(true);
-		$servers = $server->queryAll();
-
 		$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-		$this->getContext()->getRequest()->setAttribute("servers", $servers);
 
 		return View::SUCCESS;
 	}

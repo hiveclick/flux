@@ -1,10 +1,9 @@
 <?php
 namespace Flux;
 
-use Mojavi\Form\MongoForm;
-use Mojavi\Util\StringTools;
+use Mojavi\Form\CommonForm;
 
-class Pixel extends MongoForm {
+class Pixel extends CommonForm {
 
     protected $page;
     protected $domain;
@@ -15,6 +14,29 @@ class Pixel extends MongoForm {
     private $offer;
     private $lead;
     private $offer_page;
+    
+    /**
+     * Returns the lead
+     * @return \Flux\Link\Lead
+     */
+    function getLead() {
+        if (is_null($this->lead)) {
+            $this->lead = new \Flux\Link\Lead();
+        }
+        return $this->lead;
+    }
+    
+    /**
+     * Sets the lead
+     * @var \Flux\Link\Lead
+     */
+    function setLead($arg0) {
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+            $this->lead = new \Flux\Link\Lead();
+            $this->lead->setLeadId($arg0);
+        }
+        return $this;
+    }
     
     /**
      * Returns the page
@@ -96,7 +118,7 @@ class Pixel extends MongoForm {
      */
     function setCookie($arg0) {
         $tmp = base64_decode($arg0);
-        $tmp = StringTools::LzwDecompress($tmp);
+        $tmp = \Mojavi\Util\StringTools::LzwDecompress($tmp);
         $tmp = urldecode($tmp);
         $this->cookie = $tmp;
     	$this->addModifiedColumn("cookie");
@@ -126,66 +148,57 @@ class Pixel extends MongoForm {
     
     /**
      * Returns the offer
-     * @return \Flux\Offer
+     * @return \Flux\Link\Offer
      */
     function getOffer() {
         if (is_null($this->offer)) {
-            $this->offer = new \Flux\Offer();
+            $this->offer = new \Flux\Link\Offer();
             $offer_found = false;
-            $json_cookie = array();
-            // Try to match the offer from the cookie
-            $cookies = http_parse_cookie($this->getCookie());            
-            foreach ($cookies->cookies as $key => $cookie) {
-                if (strpos($cookie, '{') !== false) {
-                    $json_cookie = json_decode($cookie, true);
+            
+            // Try finding the offer from the lead
+            if (\MongoId::isValid($this->getLead()->getLeadId()) && $this->getLead()->getLead()->getTracking()->getOffer()->getOfferId() > 0) {
+                $this->offer->setOfferId($this->getLead()->getLead()->getTracking()->getOffer()->getOfferId());
+                if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                    $this->offer->setOfferName($this->offer->getOffer()->getName());
                 }
+                $offer_found = true;
             }
             
-            if (!empty($json_cookie)) {
-                if (isset($json_cookie['_t']) && isset($json_cookie['_t']['_o']) && isset($json_cookie['_t']['_o']['_id']) && trim($json_cookie['_t']['_o']['_id']) != '' && intval(trim($json_cookie['_t']['_o']['_id'])) > 0) {
-                	$this->offer = new \Flux\Offer();
-                	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from _t._o._id: " . $json_cookie['_t']['_o']['_id']);
-                	$this->offer->setId((int)$json_cookie['_t']['_o']['_id']);
-                	$this->offer->query();
-                	if ($this->offer->getId() > 0) {
-                		$offer_found = true;
-                	}
-                }
-                if (!$offer_found && isset($json_cookie['_t']) && isset($json_cookie['_t']['_offer_id']) && trim($json_cookie['_t']['_offer_id']) != '' && intval(trim($json_cookie['_t']['_offer_id'])) > 0) {
-                	$this->offer = new \Flux\Offer();
-                	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from _t._offer_id: " . $json_cookie['_t']['_offer_id']);
-                	$this->offer->setId((int)$json_cookie['_t']['_offer_id']);
-                	$this->offer->query();
-                	if ($this->offer->getId() > 0) {
-                		$offer_found = true;
-                	}
-                }
-            }
             // Try to find the offer using the domain name and folder name
             if (!$offer_found) {
                 if ($this->getDomain() != '') {
                 	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from domain: " . $this->getDomain() . '/' . $this->getFolder());
-                    $this->offer->setFolderName($this->getFolder());
-                    $this->offer->setDomainName($this->getDomain());
-                    $offers = $this->offer->queryAll();
+                	$offer = new \Flux\Offer();
+                    $offer->setFolderName($this->getFolder());
+                    $offer->setDomainName($this->getDomain());
+                    $offers = $offer->queryAll();
                     if (count($offers) == 0) {
                     	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Searching for offer from domain: " . $this->getDomain() . '/*');
-                    	$this->offer->setFolderName('');
-                    	$this->offer->setDomainName($this->getDomain());
-                    	$offers = $this->offer->queryAll();
+                    	$offer->setFolderName('');
+                    	$offer->setDomainName($this->getDomain());
+                    	$offers = $offer->queryAll();
                     }
                     if (count($offers) == 0) {
                     	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Cannot find offer from " . $this->getDomain() . '/' . $this->getFolder() . ' or ' . $this->getDomain() . '/*');
                     	$offer_found = false;
                     } else if (count($offers) == 1) {
                         // We found only one offer, so use that one
-                    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found 1 offer, using it");
-                        $this->offer = array_shift($offers);
+                        $offer = array_shift($offers);
+                        $this->offer->setOfferId($offer->getId());
+                        if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                            $this->offer->setOfferName($this->offer->getOffer()->getName());
+                        }
+                        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found 1 offer (" . $this->offer->getOfferName() . "), using it");
+                        
                         $offer_found = true;
                     } else {
                     	// We found more than one offer, so use the first one
-                    	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found " . count($offers) . ", using the first one");
-                    	$this->offer = array_shift($offers);
+                        $offer = array_shift($offers);
+                        $this->offer->setOfferId($offer->getId());
+                        if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                            $this->offer->setOfferName($this->offer->getOffer()->getName());
+                        }
+                        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found " . count($offers) . ", using the first one (" . $this->offer->getOfferName() . ")");
                     	$offer_found = true;
                     }
                 } else {
@@ -195,40 +208,4 @@ class Pixel extends MongoForm {
         }
         return $this->offer;
     }
-    
-    /**
-     * Returns the lead
-     * @return \Flux\Lead
-     */
-    function getLead() {
-    	if (is_null($this->lead)) {
-    		$this->lead = new \Flux\Lead();
-    		$lead_found = false;
-    		// Try to match the offer from the cookie
-    		$cookies = http_parse_cookie($this->getCookie());            
-            foreach ($cookies->cookies as $key => $cookie) {
-                if (strpos($cookie, '{') !== false) {
-                    $json_cookie = json_decode($cookie, true);
-                }
-            }
-            if (!empty($json_cookie)) {
-        		if (isset($json_cookie['_id']) && trim($json_cookie['_id']) != '') {
-        			$this->lead = new \Flux\Lead();
-        			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "FINDING LEAD BY ID: " . $json_cookie['_id']);
-        			$this->lead->setId($json_cookie['_id']);
-        			$this->lead->query();
-        			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Lead found by id: " . var_export($this->lead->getId(), true));
-        			$lead_found = true;
-        		} else {
-        		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Cannot find lead by cookie: " . var_export($cookies, true));
-        		}
-            } else {
-    		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Cannot find lead by cookie: " . var_export($cookies, true));
-    		}
-    	}
-    	return $this->lead;
-    }
-    
-    
-    
 }

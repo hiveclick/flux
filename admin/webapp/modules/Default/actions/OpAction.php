@@ -23,23 +23,25 @@ class OpAction extends BasicAction
 	public function execute ()
 	{
 		// Send the cached op.js if it exists
-		if (!file_exists(MO_DOCROOT_DIR . '/scripts/op.js')) {
-			$op_contents = file_get_contents(MO_WEBAPP_DIR . '/meta/tracking/op.js');
-			if (defined('MO_ANALYTIC_DOMAIN')) {
-				$op_contents = str_replace('%api_domain%', MO_ANALYTIC_DOMAIN, $op_contents);
-			} else {
-				$op_contents = str_replace('%api_domain%', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1), $op_contents);
-			}
-			if (is_writeable(MO_DOCROOT_DIR . '/scripts/op.js')) {
-				file_put_contents(MO_DOCROOT_DIR . '/scripts/op.js', $op_contents);
-			} else {
-				header('Content-Type: text/javascript');
-				echo $op_contents;
-			}
+		$op_contents = file_get_contents(MO_WEBAPP_DIR . '/meta/tracking/op.js');
+		if (defined('MO_ANALYTIC_DOMAIN')) {
+			$op_contents = str_replace('%api_domain%', MO_ANALYTIC_DOMAIN, $op_contents);
+		} else {
+			$op_contents = str_replace('%api_domain%', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1), $op_contents);
 		}
-		if (file_exists(MO_DOCROOT_DIR . '/scripts/op.js')) {
-			header('Location: /scripts/op.js');
+		if (isset($_REQUEST['l'])) {
+		    $op_contents = str_replace('%lead_id%', $_REQUEST['l'], $op_contents);
+		} else {
+		    $op_contents = str_replace('%lead_id%', '', $op_contents);
 		}
+		if (isset($_REQUEST['c'])) {
+		    $op_contents = str_replace('%cookie_name%', $_REQUEST['c'], $op_contents);
+		} else {
+		    $op_contents = str_replace('%cookie_name%', 'flux_data', $op_contents);
+		}
+		
+		header('Content-Type: text/javascript');
+		echo $op_contents;
 		return View::NONE;
 	}
 	

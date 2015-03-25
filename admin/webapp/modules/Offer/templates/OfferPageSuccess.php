@@ -1,144 +1,138 @@
 <?php
 	/* @var $offer_page Flux\OfferPage */
 	$offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
+	$servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 ?>
-<!-- Include this script here, instead of the preview pane because the preview pane is loaded via javascript and the websnapr won't load correctly -->
 <div class="page-header">
-	<div class="pull-right visible-xs">
-		<button class="navbar-toggle collapsed visible-xs" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
+	<!-- Actions -->
+	<div class="pull-right">
+		<div class="visible-sm visible-xs">
+			<div class="btn-group">
+  				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li><a href="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_edit_modal">edit page</a></li>
+					<li class="divider"></li>
+					<li><a href="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_flow_modal">manage flow</a></li>
+					<li class="divider"></li>
+					<li><a href="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_preview_modal">preview</a></li>
+					<li class="divider"></li>
+					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+				</ul>				
+			</div>
+		</div>
+		<div class="hidden-sm hidden-xs">
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_edit_modal">edit page</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="/offer/offer-page-pane-flow?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_flow_modal">manage flow</a>
+			</div>
+			<div class="btn-group" role="group">
+				<a class="btn btn-info" href="/offer/offer-page-pane-preview?_id=<?php echo $offer_page->getId() ?>" data-toggle="modal" data-target="#offer_page_preview_modal">preview</a>
+			</div>
+			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
+		</div>
 	</div>
-	<h2><a href="/offer/offer?_id=<?php echo $offer_page->getOfferId() ?>"><?php echo $offer_page->getOffer()->getName() ?></a> <small><?php echo $offer_page->getName() ?> (<?php echo $offer_page->getPageName() ?>)</small></h2>
+	<h1><a href="/offer/offer?_id=<?php echo $offer_page->getOffer()->getOfferId() ?>"><?php echo $offer_page->getOffer()->getOfferName() ?></a> <small><?php echo $offer_page->getPageName() ?></small></h1>
 </div>
-<div id="tabs" class="navbar-collapse collapse">
-	<ul class="nav nav-pills" id="offer_tabs">
-		<li class="active"><a id="tabs-a-main" href="#tabs-main" data-toggle="tab">Main</a></li>
-		<li><a id="tabs-a-flow" href="#tabs-flow" data-toggle="tab" data-url="/offer/offer-page-pane-flow?_id=<?php echo $offer_page->getId() ?>">Flow</a></li>
-		<li><a id="tabs-a-path" href="#tabs-path" data-toggle="tab" data-url="/offer/offer-page-pane-path?_id=<?php echo $offer_page->getId() ?>">Path</a></li>
-		<li><a id="tabs-a-edit" href="#tabs-edit" data-toggle="tab" data-url="/offer/offer-page-pane-edit?_id=<?php echo $offer_page->getId() ?>">Edit HTML</a></li>
-		<li><a id="tabs-a-preview" href="#tabs-preview" data-toggle="tab" data-url="/offer/offer-page-pane-preview?_id=<?php echo $offer_page->getId() ?>">Preview</a></li>
-	</ul>
-</div>
+<ol class="breadcrumb">
+	<li><a href="/offer/offer-search">Offers</a></li>
+	<li><a href="/offer/offer?_id=<?php echo $offer_page->getOffer()->getOfferId() ?>"><?php echo $offer_page->getOffer()->getOfferName() ?></a></li>
+	<li><a href="/offer/offer-page-search?_id=<?php echo $offer_page->getOffer()->getOfferId() ?>">Offer Pages</a></li>
+	<li class="active"><?php echo $offer_page->getPageName() ?></li>
+</ol>
 
-<div id="tab-content-container" class="tab-content">
-	<div id="tabs-main" class="tab-pane active">
-		<div class="help-block">These are the main settings for this offer page.</div>
-		<br/>
-		<form class="form-horizontal" name="offer_form" method="POST" action="" autocomplete="off">
-			<input type="hidden" name="_id" value="<?php echo $offer_page->getId() ?>" />
-			<input type="hidden" name="offer_id" value="<?php echo $offer_page->getOfferId() ?>" />
-			<input type="hidden" name="preview_url" value="<?php echo $offer_page->getPreviewUrl() ?>" />
-			<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
-			<input type="hidden" name="priority" value="<?php echo $offer_page->getPriority() ?>" />
-			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
-				<div class="col-sm-10">
-					<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $offer_page->getName() ?>" />
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="page_name">Description</label>
-				<div class="col-sm-10">
-					<textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter brief description about this page..."><?php echo $offer_page->getDescription() ?></textarea>
-				</div>
-			</div>
-
-			<hr />
-			<div class="help-block">Enter filename of this page located on the server.  This is how we can associate clicks to this page.</div>
-			<p />
-			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="page_name">Page Name</label>
-				<div class="col-sm-10">
-					<input type="text" id="page_name" name="page_name" class="form-control" placeholder="Page Filename" value="<?php echo $offer_page->getPageName() ?>" />
-				</div>
-			</div>
-			<div id="advanced_settings_div" style="display:none;">
-				<hr />
-				<div class="help-block">These are advanced settings that should only be changed if you know what you are doing.</div>
-				<p />
-				<div class="form-group">
-					<label class="col-sm-2 control-label hidden-xs" for="page_name">File path</label>
-					<div class="col-sm-10">
-						<input type="text" id="file_path" name="file_path" class="form-control" placeholder="Full Page path" value="<?php echo $offer_page->getFilePath() ?>" />
-					</div>
-				</div>
-				<p />
-			
-				<div class="form-group">
-					<label class="col-sm-2 control-label hidden-xs" for="page_name">Preview Url</label>
-					<div class="col-sm-10">
-						<input type="text" id="preview_url" name="preview_url" class="form-control" placeholder="Preview Url" value="<?php echo $offer_page->getPreviewUrl() ?>" />
-					</div>
-				</div>
-			</div>
-			<p />
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<input type="submit" name="__save" class="btn btn-success" value="Save" />
-					<input type="button" id="btn_advanced" name="btn_advanced" class="btn btn-warning" value="Advanced Settings" />
-					<input type="button" id="btn_delete" name="__delete" class="btn btn-danger" value="Delete Page" />
-				</div>
-			</div>
-		</form>
+<div class="help-block">Edit the HTML source for this page and push your changes back to the server</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+    	<form role="form" method="GET" action="/api" id="load_page_from_server_form" name="load_page_from_server_form">
+    		<input type="hidden" name="func" value="/offer/offer-page-source" />
+    		<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
+    		<div class="form-group">
+                <label class="control-label" for="server_id">Choose the server from where you want to load the page contents:</label>
+    			<select name="server_id" id="server_id" class="form-control">
+    				<?php foreach ($servers as $server) { ?>
+    					<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
+    				<?php } ?>
+    			</select>
+            </div>
+    		<div class="form-group">
+    		    <input type="submit" name="__submit" value="load page" class="btn btn-success" />
+    		</div>
+    	</form>
 	</div>
-	<div id="tabs-preview" class="tab-pane"></div>
-	<div id="tabs-flow" class="tab-pane"></div>
-	<div id="tabs-path" class="tab-pane"></div>
-	<div id="tabs-edit" class="tab-pane"></div>
 </div>
+<div id="base_tag_warning" class="alert small alert-warning">
+	If images do not load, you may need to add <code>&lt;base href="http://<?php echo $offer_page->getOffer()->getOffer()->getDomainName() ?>/<?php echo $offer_page->getOffer()->getOffer()->getFolderName() != '' ? $offer_page->getOffer()->getOffer()->getFolderName() . '/' : '' ?>" /&gt;</code> to the top of your template
+</div>
+<form class="form-inline" role="form" method="POST" action="/api" id="push_page_to_server_form" name="push_page_to_server_form">
+	<input type="hidden" name="func" value="/offer/offer-page-source" />
+	<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
+	<input type="hidden" id="push_server_id" name="server_id" value="" />
+	<div class="panel panel-default">
+		<textarea name="page_source" id="page_source"></textarea>
+	</div>
+	<div class="text-center">
+		<input type="submit" name="__submit" value="save page" class="btn btn-success" />
+		<a href="<?php echo $offer_page->getPreviewUrl() ?>" class="btn btn-info" target="preview_page">preview page</a>
+	</div>
+</form>
+
+<!-- edit modal -->
+<div class="modal fade" id="offer_page_edit_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- flow modal -->
+<div class="modal fade" id="offer_page_flow_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- path modal -->
+<div class="modal fade" id="offer_page_path_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- preview page modal -->
+<div class="modal fade" id="offer_page_preview_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+
+<!-- Push offer to server modal -->
+<div class="modal fade" id="flow_filter_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
+<!-- Push offer to server modal -->
+<div class="modal fade" id="flow_setter_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
+<!-- Push offer to server modal -->
+<div class="modal fade" id="flow_navigation_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
+
 <script>
 //<!--
 $(document).ready(function() {
-	$('#btn_advanced').click(function() {
-		$('#advanced_settings_div').slideToggle();
+	$('#server_id').selectize().change(function() {
+		$('#push_server_id').val($('#server_id').val());
 	});
-
 	
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		e.preventDefault();
-		var hash = this.hash;
-		if ($(this).attr("data-url")) {
-			// only load the page the first time
-			if ($(hash).html() == '') {
-				// ajax load from data-url
-				$(hash).load($(this).attr("data-url"));
-			}
+	$('#load_page_from_server_form').form(function(data) {
+		if (data.record) {
+			CKEDITOR.instances.page_source.setData(data.record.page_source);
 		}
-	}).on('show.bs.tab', function (e) {
-		try {
-			sessionStorage.setItem(localTabStorageName, $(e.target).attr('href'));
-		} catch (err) { }
 	});
 
-	$('#btn_delete').click(function() {
+	$('#push_page_to_server_form').form(function(data) {
+		$.rad.notify('Page Saved', 'The page has been saved to the server');
+	},{
+		keep_form: 1,
+		prepare: function() {
+			$('#push_server_id').val($('#server_id').val());
+			CKEDITOR.instances.page_source.updateElement();
+			return true;
+		}
+	});
+
+	CKEDITOR.replace('page_source', {
+		startupMode: 'source',
+		allowedContent: true,
+		height: 450,
+	});
+	CKEDITOR.config.protectedSource.push(/<\?[\s\S]*?\?>/g);
+
+	$('#btn_delete,#btn_delete_sm').click(function() {
 		if (confirm('Are you sure you want to delete this page and completely remove it from the system?')) {
 			$.rad.del('/api', { func: '/offer/offer-page/<?php echo $offer_page->getId() ?>' }, function(data) {
 				$.rad.notify('Page Removed', 'This page has been removed from the system.');
-				location.replace('/offer/offer?_id=<?php echo $offer_page->getOfferId() ?>#tabs-pages')
+				location.replace('/offer/offer-page-search?_id=<?php echo $offer_page->getOffer()->getOfferId() ?>')
 			});
 		}
 	});
-
-	// Store the last clicked tab so it can be loaded on page refreshes
-	var localTabStorageName = <?php echo json_encode('offer_page_tab_' . $offer_page->getId()); ?>;
-	var lastTab = sessionStorage.getItem(localTabStorageName);
-	if (location.hash) {
-		var hash = location.hash, hashPieces = hash.split('?'), activeTab = $('[href=' + hashPieces[0] + ']');
-	}
-	if (activeTab) {
-		activeTab.tab('show');
-	} else {
-		if (lastTab) {
-			$('a[href='+lastTab+']').tab('show');
-		} else {
-			$('ul.nav-pills a:first').tab('show');
-		}
-	}
 });
 //-->
 </script>

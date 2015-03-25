@@ -2,8 +2,7 @@
 namespace Mojavi\Database;
 
 use Mojavi\Exception\DatabaseException;
-use MongoClient;
-use MongoException;
+
 // +---------------------------------------------------------------------------+
 // | This file is part of the Agavi package.                                   |
 // | Copyright (c) 2005-2010 the Agavi Project.                                |

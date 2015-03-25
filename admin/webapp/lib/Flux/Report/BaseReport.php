@@ -1,10 +1,6 @@
 <?php
 namespace Flux;
 
-use Flux\Campaign;
-use Flux\DataField;
-use Flux\Offer;
-use Flux\ReportColumn;
 use \Mojavi\Form\MongoForm;
 
 class BaseReport extends MongoForm {

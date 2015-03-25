@@ -5,11 +5,12 @@
 	
 	var api_domain = '%api_domain%';
 	var pixel = ('https:' == document.location.protocal ? 'https://api' : 'http://api') + '.' + api_domain + '/lead/pxl';
-	
+		
 	var params = new Array();
 	params['page'] = location.pathname.split("/").pop();
 	params['domain'] = location.hostname;
-	params['cookie'] = Base64.encode(LZString.compress(document.cookie));
+	params['lead'] = "%lead_id%";
+	params['cookie'] = Base64.encode(LZString.compress(localStorage.getItem("%cookie_name%")));
 	var folder_parts = location.pathname.split("/");
 	if (folder_parts[1]) {
 		params['folder'] = folder_parts[1];

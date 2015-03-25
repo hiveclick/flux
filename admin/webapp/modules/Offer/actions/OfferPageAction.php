@@ -2,13 +2,6 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
-
-use Flux\Offer;
-use Flux\Client;
-use Flux\Flow;
-use Flux\Vertical;
-use Mojavi\Logging\LoggerManager;
-use Flux\OfferPage;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -29,21 +22,20 @@ class OfferPageAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-			/* @var $offer_page Flux\OfferPage */
-			$offer_page = new OfferPage();
-			$offer_page->populate($_POST);
-			$offer_page->update();
 
-			$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-		} else {
-			/* @var $offer_page Flux\OfferPage */
-			$offer_page = new OfferPage();
-			$offer_page->populate($_GET);
-			$offer_page->query();
+		/* @var $offer_page Flux\OfferPage */
+		$offer_page = new \Flux\OfferPage();
+		$offer_page->populate($_GET);
+		$offer_page->query();
+		
+		/* @var $server Flux\Server */
+		$server = new \Flux\Server();
+		$server->setIgnorePagination(true);
+		$servers = $server->queryAll();
 
-			$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
-		}
+		$this->getContext()->getRequest()->setAttribute("offer_page", $offer_page);
+		$this->getContext()->getRequest()->setAttribute("servers", $servers);
+		
 		return View::SUCCESS;
 	}
 }

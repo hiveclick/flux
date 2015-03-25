@@ -22,7 +22,6 @@ class Migrate extends Migration {
 		\Flux\Export::ensureIndexes();
 		\Flux\ExportQueue::ensureIndexes();
 		\Flux\Flow::ensureIndexes();
-		\Flux\Gender::ensureIndexes();
 		\Flux\Lead::ensureIndexes();
 		\Flux\LeadPage::ensureIndexes();
 		\Flux\Offer::ensureIndexes();

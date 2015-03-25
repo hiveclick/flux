@@ -30,19 +30,21 @@
 		</div>
 		<div role="tabpanel" class="tab-pane fade in" id="analytic_pixel">
 			<div class="help-block">Place this code at the bottom of all your offer pages to enable offer page tracking.</div>
-			<pre id="example_analytic_pixel">&lt;!-- Place this pixel at the bottom of all your pages for tracking --&gt;
-	&lt;script type="text/javascript"&gt;
-		var _op = _op || [];
-		_op.push(['_trackPageView']);
-		(function() {
-		var op = document.createElement('script');
-		op.type = 'text/javascript';
-		op.async = 'true';
-		op.src = ('https:' == document.location.protocal ? 'https://www' : 'http://www') + '.<?php echo defined('MO_ANALYTIC_DOMAIN') ? MO_ANALYTIC_DOMAIN : substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1) ?>/op.js';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(op, s);
-		})();
-	&lt;/script&gt;</pre>
+			<pre id="example_analytic_pixel">&lt;!-- Place this pixel at the bottom of all your pages for tracking --&gt;	
+&lt;script type="text/javascript"&gt;
+	var _op = _op || [];
+	_op.push(['_trackPageView']);
+	(function() {
+	// Save the lead to the localStorage
+	localStorage.setItem('flux_data', '&lt;?php echo json_encode(\FluxFE\Lead::getInstance()->getD()) ?&gt;');
+	var op = document.createElement('script');
+	op.type = 'text/javascript';
+	op.async = 'true';
+	op.src = ('https:' == document.location.protocal ? 'https://www' : 'http://www') + '.<?php echo defined('MO_ANALYTIC_DOMAIN') ? MO_ANALYTIC_DOMAIN : substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1) ?>/op.js?l=&lt;?php echo \FluxFE\Lead::getInstance()->getId() ?&gt;';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(op, s);
+	})();
+&lt;/script&gt;</pre>
 		</div>
 	</div>
 	<hr />

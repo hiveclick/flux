@@ -2,8 +2,6 @@
 namespace Flux\Report;
 
 use Mojavi\Form\GoogleChart;
-use Mojavi\Logging\Logger;
-use Mojavi\Logging\LoggerManager;
 
 class GraphConversionByHour extends GoogleChart {
 	
@@ -281,7 +279,7 @@ class GraphConversionByHour extends GoogleChart {
 				$this->campaign_id_array = array($arg0);
 			}
 		}
-		array_walk($this->campaign_id_array, function(&$value, $key) { $value = $value; });
+		array_walk($this->campaign_id_array, function(&$value, $key) { $value = trim($value); });
 		$this->addModifiedColumn("campaign_id_array");
 		return $this;
 	}

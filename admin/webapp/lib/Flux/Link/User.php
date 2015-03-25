@@ -1,6 +1,8 @@
 <?php
 namespace Flux\Link;
 
+use Mojavi\Form\CommonForm;
+
 class User extends CommonForm {
 	
 	protected $user_id;

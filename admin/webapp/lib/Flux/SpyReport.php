@@ -1,10 +1,6 @@
 <?php
 namespace Flux;
 
-use Flux\DataField;
-use Flux\Lead;
-use Mojavi\Logging\LoggerManager;
-
 class SpyReport extends BaseReport {
 
 	protected static $columns;

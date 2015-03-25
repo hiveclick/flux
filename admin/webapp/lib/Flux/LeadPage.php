@@ -6,7 +6,7 @@ class LeadPage extends Base\LeadPage {
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|
 	// +------------------------------------------------------------------------+
-	
+    
     /**
      * Returns the pages based on the criteria
      * @return Flux\LeadPage

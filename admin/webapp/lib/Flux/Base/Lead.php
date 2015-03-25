@@ -2,7 +2,6 @@
 namespace Flux\Base;
 
 use Mojavi\Form\MongoForm;
-use Mojavi\Logging\LoggerManager;
 
 class Lead extends MongoForm {
 

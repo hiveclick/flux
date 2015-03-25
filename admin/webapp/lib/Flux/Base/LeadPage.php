@@ -11,7 +11,7 @@ class LeadPage extends MongoForm {
     protected $page;
     protected $domain;
     protected $folder;
-    protected $cookie;
+    protected $cookies;
     protected $href;
     protected $entrance_time;
     protected $time_on_page;
@@ -92,23 +92,23 @@ class LeadPage extends MongoForm {
     }
     
     /**
-     * Returns the cookie
+     * Returns the cookies
      * @return array
      */
-    function getCookie() {
-    	if (is_null($this->cookie)) {
-    		$this->cookie = array();
+    function getCookies() {
+    	if (is_null($this->cookies)) {
+    		$this->cookies = array();
     	}
-    	return $this->cookie;
+    	return $this->cookies;
     }
     
     /**
-     * Sets the cookie
+     * Sets the cookies
      * @var array
      */
-    function setCookie($arg0) {
-        $this->cookie = $arg0;
-    	$this->addModifiedColumn("cookie");
+    function setCookies($arg0) {
+        $this->cookies = $arg0;
+    	$this->addModifiedColumn("cookies");
     	return $this;
     }
     
@@ -307,7 +307,7 @@ class LeadPage extends MongoForm {
 			$lead = $this->getLead();
 			$lead->populate($arg0);
 			$this->lead = $lead;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
 			$lead = $this->getLead();
 			$lead->setLeadId($arg0);
 			$this->lead = $lead;

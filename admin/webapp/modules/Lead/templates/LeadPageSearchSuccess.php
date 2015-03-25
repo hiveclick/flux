@@ -21,7 +21,7 @@
 			<input type="hidden" name="format" value="json" />
 			<input type="hidden" id="page" name="page" value="1" />
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" name="lead_id" value="<?php echo $lead->getId() ?>">
+			<input type="hidden" name="lead[lead_id]" value="<?php echo $lead->getId() ?>">
 			<input type="hidden" id="sort" name="sort" value="name" />
 			<input type="hidden" id="sord" name="sord" value="asc" />
 			<div class="pull-right">
@@ -34,7 +34,7 @@
 </div>
 
 <!-- View lead page preview modal -->
-<div class="modal fade" id="lead_page_view_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
+<div class="modal fade" id="lead_page_view_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
@@ -44,6 +44,15 @@ $(document).ready(function() {
 			return value;
 		}},
 		{id:'page', name:'page', field:'page', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var offer_page_name = (dataContext.offer_page.offer_page_name == '') ? '' : ('<a href="/offer/offer-page?_id=' + dataContext.offer_page.offer_page_id + '">' + dataContext.offer_page.offer_page_name + '</a>');
+			var offer_name = (dataContext.offer.offer_name == '') ? '' : ' on <a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + dataContext.offer.offer_name + '</a>';
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += value;
+				ret_val += '<div class="small text-muted">';
+				ret_val += ' (' + offer_page_name + offer_name + ')';
+				ret_val += '</div>';
+				ret_val += '</div>';
+				return ret_val;
 			return value;
 		}},
 		{id:'domain', name:'domain', field:'domain', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -51,6 +60,26 @@ $(document).ready(function() {
 		}},
 		{id:'entrance_time', name:'enter time', field:'entrance_time', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return moment.unix(value.sec).calendar();
+		}},
+		{id:'exit_time', name:'exit time', field:'exit_time', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return moment.unix(value.sec).calendar();
+		}},
+		{id:'lead', name:'lead', field:'lead.lead_id', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var email = (dataContext.lead.email == '') ? '' : 'E: ' + dataContext.lead.email;
+			var phone = (dataContext.lead.phone == '') ? '' : ', P: ' + dataContext.lead.phone;
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '">' + dataContext.lead.lead_id + '</a>';
+				ret_val += '<div class="small text-muted">';
+				ret_val += ' (' + email + phone + ')';
+				ret_val += '</div>';
+				ret_val += '</div>';
+				return ret_val;
+		}},
+		{id:'offer', name:'offer', field:'offer.offer_id', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + dataContext.offer.offer_name + '</a>';
+				ret_val += '</div>';
+				return ret_val;
 		}},
 		{id:'load_count', name:'load #', field:'load_count', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
