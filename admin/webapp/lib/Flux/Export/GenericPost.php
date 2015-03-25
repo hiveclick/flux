@@ -132,7 +132,7 @@ class GenericPost extends ExportAbstract {
 		if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 			$split_queue_attempt->setIsError(false);
 		} else {
-		    $split_queue_attempt->setErrorMessage(str_replace("<", "&gt;", $response));
+		    $split_queue_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
 			$split_queue_attempt->setIsError(true);
 		}
 		return $split_queue_attempt;

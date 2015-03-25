@@ -101,7 +101,12 @@ class Split extends BaseDaemon
 					$lead_array['is_processing'] = false;
 					*/
 					
-					$split_queue->insert();
+					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
+					if (is_null($existing_lead)) {
+                        $split_queue->insert();
+					} else {
+					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+					}
 					
 					// Add the lead to the queue
 					#$split_queue->getCollection()->save($lead_array);
@@ -111,8 +116,6 @@ class Split extends BaseDaemon
 			
 			$split->update(array('_id' => $split->getId()), array('$unset' => array('pid_split' => 1), '$set' => array('last_run_time' => $max_event_time)), array());
 
-
-			//$this->log('Done Processing Split: ' . $split_record->getName(), array($this->pid, $split_record->getId()));
 			return true;
 		} else {
 			$this->clearExpiredPids();
@@ -172,7 +175,7 @@ class Split extends BaseDaemon
 			null,
 			array(
 				'new' => true,
-				'sort' => array('__pid_time_split' => 1)
+				'sort' => array('pid_time_split' => 1)
 			)
 		);
 		return $split_record;
