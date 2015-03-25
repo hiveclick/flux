@@ -36,7 +36,7 @@ class BasicAction extends Action {
      */
     public function execute ()
     {
-        return parent::execute();
+        return View::SUCCESS;
     }
 
     /**

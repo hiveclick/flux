@@ -46,8 +46,8 @@ class PxlAction extends BasicRestAction
             	$offer_page->setPriority(100);
             	$offer_page->setName($pixel->getPage());
             	$offer_page->insert();
-            } else {
-                \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . 'Page ' . $pixel->getPage() . ' already exists on offer ' . $pixel->getOffer()->getOfferName());
+            	
+            	\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . 'Adding Page ' . $pixel->getPage() . ' to offer ' . $pixel->getOffer()->getOfferName());
             }
             
             // Increment the click count on the offer page
@@ -66,7 +66,6 @@ class PxlAction extends BasicRestAction
                 $lead_page->setCookies(array($pixel->getCookie()));
                 
                 $criteria_array = array('lead.lead_id' => (string)$lead_page->getLead()->getLeadId(), 'offer_page.offer_page_id' => $lead_page->getOfferPage()->getOfferPageId());
-                \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($criteria_array, true));
                 $insert_array = $lead_page->toArray();
                 $upsert_array = array('exit_time' => new \MongoDate());
                 $push_array = array('cookies' => array('t' => new \MongoDate(), 'data' => $pixel->getCookie()));
