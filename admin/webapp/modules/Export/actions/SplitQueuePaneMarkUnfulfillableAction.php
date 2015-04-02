@@ -2,13 +2,16 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
+
+use Flux\Offer;
+use Flux\Lead;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class RevenueReportAction extends BasicAction
+class SplitQueuePaneMarkUnfulfillableAction extends BasicAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -22,13 +25,12 @@ class RevenueReportAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $revenue_report Flux\ReportClient */
-		$report_client = new \Flux\ReportClient();
-		$report_client->setReportDate(new \MongoDate(strtotime(date('m/01/Y'))));
-		$report_client->populate($_GET);
+		/* @var $offer Flux\SplitQueue */
+		$split_queue = new \Flux\SplitQueue();
+		$split_queue->populate($_REQUEST);
+		$split_queue->query();
 
-		$this->getContext()->getRequest()->setAttribute("revenue_report", $report_client);
-		
+		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
 		return View::SUCCESS;
 	}
 }

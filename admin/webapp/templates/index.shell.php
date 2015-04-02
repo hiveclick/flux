@@ -52,7 +52,7 @@
         
         <!-- Selectize plugin for select boxes and comma-delimited fields -->
         <link href="/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" type="text/css" />
-        <script src="/scripts/selectize/js/standalone/selectize.min.js" type="text/javascript" ></script>
+        <script src="/scripts/selectize/js/standalone/selectize.min.js" type="text/javascript"></script>
         
         <!-- CKeditor WYSIWYG editor -->
         <script src="/scripts/ckeditor/ckeditor.js"></script>

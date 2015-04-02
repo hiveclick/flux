@@ -82,6 +82,12 @@
                 <controller>split-queue-search</controller>
                 <class>nav-secondary</class>
             </splitqueuesearch>
+            <splitqueuecatchallsearch>
+                <label>View Catch-All Leads</label>
+                <module>export</module>
+                <controller>split-queue-catch-all-search</controller>
+                <class>nav-secondary</class>
+            </splitqueuecatchallsearch>
        </pages>
 	</leads>
 	<export>
@@ -125,7 +131,7 @@
 	<reports>
         <label>Reporting</label>
         <module>report</module>
-        <controller>report-search</controller>
+        <controller>revenue-report</controller>
         <class>nav-primary</class>
         <pages>
             <dashboard>
@@ -134,36 +140,24 @@
                 <controller>index</controller>
                 <class>nav-secondary</class>
             </dashboard>
-            <revenue>
-                <label>Revenue Report</label>
-                <module>report</module>
-                <controller>revenue-report</controller>
-                <class>nav-secondary</class>
-            </revenue>
-            <spy>
-                <label>Spy Report</label>
-                <module>report</module>
-                <controller>spy-report</controller>
-                <class>nav-secondary</class>
-            </spy>
             <spacer>
 				<label></label>
 				<module></module>
 				<controller></controller>
 				<class>nav-secondary</class>
 			</spacer>
-            <reportcolumns>
-                <label>Report Columns</label>
-                <module>admin</module>
-                <controller>report-column-search</controller>
+            <revenue>
+                <label>Revenue Report</label>
+                <module>report</module>
+                <controller>revenue-report</controller>
                 <class>nav-secondary</class>
-            </reportcolumns>
+            </revenue>
        </pages>
 	</reports>
 	<admin>
         <label>Admin</label>
         <module>admin</module>
-        <controller>admin</controller>
+        <controller>data-field-search</controller>
         <class>nav-primary</class>
         <pages>
             <datafield>

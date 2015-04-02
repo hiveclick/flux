@@ -17,6 +17,8 @@ class SplitQueue extends MongoForm {
 	protected $attempt_count;
 	protected $debug;
 	protected $queue_time;
+	protected $is_catch_all;
+	protected $is_unfulfillable;
 	
 	protected $attempts;
 	
@@ -71,6 +73,48 @@ class SplitQueue extends MongoForm {
 		$this->is_processing = $arg0;
 		$this->addModifiedColumn('is_processing');
 		return $this;
+	}
+	
+	/**
+	 * Returns the is_catch_all
+	 * @return boolean
+	 */
+	function getIsCatchAll() {
+	    if (is_null($this->is_catch_all)) {
+	        $this->is_catch_all = false;
+	    }
+	    return $this->is_catch_all;
+	}
+	
+	/**
+	 * Sets the is_catch_all
+	 * @var boolean
+	 */
+	function setIsCatchAll($arg0) {
+	    $this->is_catch_all = (boolean)$arg0;
+	    $this->addModifiedColumn("is_catch_all");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the is_unfulfillable
+	 * @return boolean
+	 */
+	function getIsUnfulfillable() {
+	    if (is_null($this->is_unfulfillable)) {
+	        $this->is_unfulfillable = false;
+	    }
+	    return $this->is_unfulfillable;
+	}
+	
+	/**
+	 * Sets the is_unfulfillable
+	 * @var boolean
+	 */
+	function setIsUnfulfillable($arg0) {
+	    $this->is_unfulfillable = $arg0;
+	    $this->addModifiedColumn("is_unfulfillable");
+	    return $this;
 	}
 	
 	/**

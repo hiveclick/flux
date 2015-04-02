@@ -87,6 +87,9 @@ class Split extends Base\Split {
 	 * @return Flux\User
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
+	    if ($this->getSplitType() > 0) {
+	        $criteria['split_type'] = $this->getSplitType();
+	    }
 	    if (trim($this->getName()) != '') {
 	        $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 	    }

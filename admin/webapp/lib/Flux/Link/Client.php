@@ -7,6 +7,7 @@ class Client extends CommonForm {
 	
 	protected $client_id;
 	protected $client_name;
+	protected $client_color;
 	
 	private $client;
 	
@@ -27,6 +28,7 @@ class Client extends CommonForm {
 	 */
 	function setClientId($arg0) {
 		$this->client_id = (int)$arg0;
+		$this->setClientColor($this->getClient()->getColor());
 		return $this;
 	}
 	
@@ -48,6 +50,27 @@ class Client extends CommonForm {
 	function setClientName($arg0) {
 		$this->client_name = $arg0;
 		return $this;
+	}
+	
+	/**
+	 * Returns the client_color
+	 * @return string
+	 */
+	function getClientColor() {
+	    if (is_null($this->client_color)) {
+	        $this->client_color = "#000000";
+	    }
+	    return $this->client_color;
+	}
+	
+	/**
+	 * Sets the client_color
+	 * @var string
+	 */
+	function setClientColor($arg0) {
+	    $this->client_color = $arg0;
+	    $this->addModifiedColumn("client_color");
+	    return $this;
 	}
 	
 	/**

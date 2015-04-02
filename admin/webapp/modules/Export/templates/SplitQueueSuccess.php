@@ -15,9 +15,17 @@
 					<li class="divider"></li>
 					<li><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>">add/change data</a></li>
 					<li class="divider"></li>
-					<li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a></li>
+					<?php if ($split_queue->getIsCatchAll()) { ?>
+                        <li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a></li>
+                    <?php } else { ?>
+                        <li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a></li>
+                    <?php } ?>
 					<li class="divider"></li>
-					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+					<?php if ($split_queue->getIsCatchAll()) { ?>
+					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">delete</span></a></li>
+					<?php } else { ?>
+					    <li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+					<?php } ?>   
 				</ul>
 			</div>
 		</div>
@@ -30,9 +38,17 @@
 				<a class="btn btn-info" data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>">add/change data</a>
 			</div>
 			<div class="btn-group" role="group">
-				<a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a>
+			    <?php if ($split_queue->getIsCatchAll()) { ?>
+				    <a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a>
+				<?php } else { ?>
+				    <a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a>
+				<?php } ?>
 			</div>
-			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
+			<?php if ($split_queue->getIsCatchAll()) { ?>
+                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger" href="#">delete</a>
+            <?php } else { ?>
+                <a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
+            <?php } ?>
 		</div>
 	</div>
 	<h1>View Queue Item <small><?php echo $split_queue->getId() ?></small></h1>
@@ -247,6 +263,8 @@
 <div class="modal fade" id="fulfillment_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <!-- Attempt modal -->
 <div class="modal fade" id="attempt_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- Unfulfillable modal -->
+<div class="modal fade" id="unfulfillable_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--

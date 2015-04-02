@@ -31,6 +31,17 @@
 				<div class="form-group">
 					<textarea name="description" id="description" class="form-control" placeholder="Enter Description..." rows="4" required><?php echo $split->getDescription() ?></textarea>
 				</div>
+				
+				<hr />
+				<div class="help-block">Select what type of split this is</div>
+				
+				<div class="form-group">
+					<select name="split_type" id="split_type">
+                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL ? 'selected' : '' ?>>This is a normal split that will receive leads that match the filters</option>
+                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL ? 'selected' : '' ?>>This is a catch-all split and will only receive leads if no other splits match</option>
+					</select>
+				</div>
+				
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="filters">
 				<div class="help-block">Select which offers should have this split applied to them</div>
@@ -261,7 +272,7 @@ $(document).ready(function() {
 		}
 	})
 	
-	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour').selectize();
+	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type').selectize();
 
 	$('#split_form').form(function(data) {
 		$.rad.notify('Split Added', 'The split has been added into the system');

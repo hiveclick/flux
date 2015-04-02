@@ -108,6 +108,11 @@ class ManualFulfillCustomAction extends BasicRestAction
                 	        $split_queue->setIsFulfilled(true);            	        
                 	        $split_queue->setIsError(false);
                 	        $split_queue->setErrorMessage('');
+                	        
+                	        // Add a fulfilled event to the lead
+                	        $lead = $split_queue->getLead()->getLead();
+                	        $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
+                	        $lead->update();
                 	    }
                 	}
         	    }

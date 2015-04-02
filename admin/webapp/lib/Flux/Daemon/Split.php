@@ -11,10 +11,17 @@ class Split extends BaseDaemon
 			$max_event_time = $split->getLastRunTime();
 			// Based on the split parameters, find leads that match and place them into the split collection
 			$criteria = array();
-			$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
 			
-			// Always add a time constraint to the offers
-			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
+			
+			if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
+			    $this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
+    			// Normal splits should find leads created since the last time they were run
+    			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
+			} else {
+			    // Catch-all splits should be delayed for 1 hour to give the other splits time to accept the leads
+			    $this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', ($split->getLastRunTime()->sec - (2 * 60 * 60))) . ' and ' . date('m/d/Y g:i:s', strtotime('now - 1 hour')), array($this->pid, $split->getId()));
+			    $criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
+			}
 			
 			// Add the offers to the criteria
 			if (count($split->getOffers()) > 0) {
@@ -32,9 +39,9 @@ class Split extends BaseDaemon
 					if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) {
 						$filter_criteria = array('$in' => $filter->getDataFieldValue());
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) {
-						$filter_criteria = array('$nin' => $filter->getDataFieldValue());
+						$filter_criteria = array('$exists' => true, '$nin' => $filter->getDataFieldValue());
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) {
-						$filter_criteria = array('$ne' => '');
+						$filter_criteria = array('$exists' => true, '$ne' => '');
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET) {
 						$filter_criteria = array('$exists' => true);
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
@@ -66,7 +73,7 @@ class Split extends BaseDaemon
 						
 			if ($matched_leads->hasNext()) {				
 				// Save the # of leads to the split for accounting reasons
-				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $matched_leads->count())), array());
+				$added_leads = 0;
 			
 				/* @var $split_queue \Flux\SplitQueue */
 				$split_queue = new \Flux\SplitQueue($split->getId());
@@ -101,18 +108,30 @@ class Split extends BaseDaemon
 					$lead_array['is_error'] = false;
 					$lead_array['is_processing'] = false;
 					*/
-					
-					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
-					if (is_null($existing_lead)) {
-					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-					    $split_queue->insert();
+					// If this split is normal, then we can add a lead to multiple splits
+					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
+    					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
+    					if (is_null($existing_lead)) {
+    					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+    					    $split_queue->insert();
+    					    $added_leads++;
+    					} else {
+    					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+    					}
 					} else {
-					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+					    // If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
+					    $existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId()));
+					    if (is_null($existing_lead)) {
+					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+					        $split_queue->setIsCatchAll(true);
+					        $split_queue->insert();
+					        $added_leads++;
+					    } else {
+					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+					    }  
 					}
-					
-					// Add the lead to the queue
-					#$split_queue->getCollection()->save($lead_array);
 				}
+				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $added_leads)), array());
 			}
 			sleep(10);
 			

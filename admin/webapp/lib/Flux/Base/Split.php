@@ -5,6 +5,9 @@ use Mojavi\Form\MongoForm;
 
 class Split extends MongoForm {
 
+    const SPLIT_TYPE_NORMAL = 1;
+    const SPLIT_TYPE_CATCH_ALL = 2;
+    
 	const SPLIT_STATUS_ACTIVE = 1;
 	const SPLIT_STATUS_INACTIVE = 2;
 	const SPLIT_STATUS_DELETED = 3;
@@ -19,6 +22,7 @@ class Split extends MongoForm {
 	protected $name;
 	protected $description;
 	protected $status;
+	protected $split_type;
 
 	protected $send_type;
 	protected $offers;
@@ -64,7 +68,28 @@ class Split extends MongoForm {
 		$this->addModifiedColumn('name');
 		return $this;
 	}
-
+	
+	/**
+	 * Returns the split_type
+	 * @return integer
+	 */
+	function getSplitType() {
+	    if (is_null($this->split_type)) {
+	        $this->split_type = self::SPLIT_TYPE_NORMAL;
+	    }
+	    return $this->split_type;
+	}
+	
+	/**
+	 * Sets the split_type
+	 * @var integer
+	 */
+	function setSplitType($arg0) {
+	    $this->split_type = (int)$arg0;
+	    $this->addModifiedColumn("split_type");
+	    return $this;
+	}
+	
 	/**
 	 * Returns the description
 	 * @return string

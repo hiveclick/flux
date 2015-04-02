@@ -5,7 +5,7 @@
 	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
 ?>
 <div class="page-header">
-   <h1>Queued Leads</h1>
+   <h1>Pending Catch-All Leads</h1>
 </div>
 	
 <!-- Add breadcrumbs -->
@@ -14,7 +14,7 @@
 	<?php if ($split_queue->getSplit()->getSplitId() > 0) { ?>
 	<li><a href="/export/split?_id=<?php echo $split_queue->getSplit()->getSplitId() ?>"><?php echo $split_queue->getSplit()->getSplitName() ?></a></li>
 	<?php } ?>
-	<li class="active">View Queued Leads</li>
+	<li class="active">View Catch-All Leads</li>
 </ol>
 <div class="panel panel-primary">
 	<div id='split-header' class='grid-header panel-heading clearfix'>
@@ -25,8 +25,7 @@
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
 			<input type="hidden" id="sort" name="sort" value="_id" />
 			<input type="hidden" id="sord" name="sord" value="desc" />
-			<input type="hidden" id="sord" name="hide_catch_all" value="1" />
-			<input type="hidden" id="sord" name="hide_unfulfillable" value="1" />
+			<input type="hidden" id="sord" name="is_catch_all" value="1" />
 			<div class="text-right">
 			    <div class="form-group text-left">
 					<select class="form-control selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
@@ -52,8 +51,8 @@
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
 				</div>
 				<div class="form-group text-left">
-				    <input type="hidden" name="hide_unfulfilled" value="0" />
-					<input type="checkbox" class="form-control" placeholder="show all leads" id="hide_fulfilled_1" name="hide_fulfilled" checked value="1" />
+				    <input type="hidden" name="hide_unfulfillable" value="0" />
+					<input type="checkbox" class="form-control" placeholder="show all leads" id="hide_unfulfillable_1" name="hide_unfulfillable" checked value="1" />
 				</div>
 			</div>
 		</form>
@@ -65,10 +64,10 @@
 //<!--
 $(document).ready(function() {
 
-    $('#hide_fulfilled_1').bootstrapSwitch({
-    	onText: 'unfulfilled&nbsp;leads',
+    $('#hide_unfulfillable_1').bootstrapSwitch({
+    	onText: 'pending&nbsp;leads',
     	offText: 'all&nbsp;leads',
-    	handleWidth: 110,
+    	handleWidth: 100,
     	labelWidth: 25,
     	onSwitchChange: function() {
     		$('#split_search_form').trigger('submit');
@@ -133,17 +132,21 @@ $(document).ready(function() {
 			}
 		}},
 		{id:'last_attempt_time', name:'Last Attempt', field:'last_attempt_time', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var ret_val = '<div style="line-height:16pt;">'
-				if (value != null) {
-					ret_val += moment.unix(value.sec).calendar() + ' (' + dataContext.attempt_count + ' attempts)';
-				} else {
-					ret_val += '<i class="text-muted">Not Attempted Yet</i>';
-				}
-				ret_val += '<div class="small text-muted">';
-				ret_val += (' Next Attempt: ' + moment.unix(dataContext.next_attempt_time.sec).calendar());
-				ret_val += '</div>';
-				ret_val += '</div>';
-				return ret_val;
+			if (dataContext.is_unfulfillable) {
+				return '<i class="text-danger">Marked Unfulfillable</i>';
+			} else {
+    			var ret_val = '<div style="line-height:16pt;">'
+    				if (value != null) {
+    					ret_val += moment.unix(value.sec).calendar() + ' (' + dataContext.attempt_count + ' attempts)';
+    				} else {
+    					ret_val += '<i class="text-muted">Not Attempted Yet</i>';
+    				}
+    				ret_val += '<div class="small text-muted">';
+    				ret_val += (' Next Attempt: ' + moment.unix(dataContext.next_attempt_time.sec).calendar());
+    				ret_val += '</div>';
+    				ret_val += '</div>';
+    				return ret_val;
+			}
 		}}
 	];
 

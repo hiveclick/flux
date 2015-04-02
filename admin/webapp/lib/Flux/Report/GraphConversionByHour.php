@@ -103,18 +103,11 @@ class GraphConversionByHour extends GoogleChart {
 						array(
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
-						)
+						),
+					    'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME
 					)
 				)
 			)
-		);
-		
-		$ops[] = array(
-				'$match' => array(
-						\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => array('$elemMatch' =>
-								array('data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME)
-						)
-				)
 		);
 		
 		$ops[] = array(
@@ -143,6 +136,15 @@ class GraphConversionByHour extends GoogleChart {
 				'$unwind' => '$' . \Flux\DataField::DATA_FIELD_EVENT_CONTAINER 
 		);
 		
+		$ops[] = array('$match' => array(
+		    '_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME,
+		    '_e.t' =>
+		    array(
+		        '$gte' => new \MongoDate($this->getStartDate()),
+		        '$lt' => new \MongoDate($this->getEndDate())
+		    )
+		));
+		
 		
 		$ops[] = array('$project' => array(
 			'_id' => '$_id',
@@ -155,7 +157,6 @@ class GraphConversionByHour extends GoogleChart {
 			'subid' => '$_t.s1',
 			'clicks' => 1
 		));
-		
 		
 		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
 			$ops[] = array('$group' => array( 

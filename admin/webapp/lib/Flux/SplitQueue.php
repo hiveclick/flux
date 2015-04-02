@@ -6,8 +6,71 @@ class SplitQueue extends Base\SplitQueue {
     private $offer_id_array;
     private $split_id_array;
     private $fulfillment;
+    private $hide_unfulfillable;
+    private $hide_fulfilled;
+    private $hide_catch_all;
     
     protected $test;
+    
+    /**
+     * Returns the hide_catch_all
+     * @return boolean
+     */
+    function getHideCatchAll() {
+        if (is_null($this->hide_catch_all)) {
+            $this->hide_catch_all = false;
+        }
+        return $this->hide_catch_all;
+    }
+    
+    /**
+     * Sets the hide_catch_all
+     * @var boolean
+     */
+    function setHideCatchAll($arg0) {
+        $this->hide_catch_all = (boolean)$arg0;
+        return $this;
+    }
+    
+    /**
+     * Returns the hide_unfulfillable
+     * @return boolean
+     */
+    function getHideUnfulfillable() {
+        if (is_null($this->hide_unfulfillable)) {
+            $this->hide_unfulfillable = false;
+        }
+        return $this->hide_unfulfillable;
+    }
+    
+    /**
+     * Sets the hide_unfulfillable
+     * @var boolean
+     */
+    function setHideUnfulfillable($arg0) {
+        $this->hide_unfulfillable = (boolean)$arg0;
+        return $this;
+    }
+    
+    /**
+     * Returns the hide_fulfilled
+     * @return boolean
+     */
+    function getHideFulfilled() {
+        if (is_null($this->hide_fulfilled)) {
+            $this->hide_fulfilled = false;
+        }
+        return $this->hide_fulfilled;
+    }
+    
+    /**
+     * Sets the hide_fulfilled
+     * @var boolean
+     */
+    function setHideFulfilled($arg0) {
+        $this->hide_fulfilled = (boolean)$arg0;
+        return $this;
+    }
     
     /**
      * Returns the test
@@ -136,12 +199,24 @@ class SplitQueue extends Base\SplitQueue {
 		if (count($this->getOfferIdArray()) > 0) {
 		    $criteria['lead.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
 		}
+		if ($this->getHideUnfulfillable()) {
+		    $criteria['is_unfulfillable'] = false;
+		}
+		if ($this->getHideFulfilled()) {
+		    $criteria['is_fulfilled'] = false;
+		}
+		if ($this->getHideCatchAll()) {
+		    $criteria['is_catch_all'] = false;
+		} else {
+		    $criteria['is_catch_all'] = true;
+		}
 		if (trim($this->getKeywords()) != '') {
 		    $criteria['$or'] = array(
                 array('lead.lead_id' => new \MongoRegex('/' . trim($this->getKeywords()) . '/')),
 		        array('lead.lead_name' =>  new \MongoRegex('/' . trim($this->getKeywords()) . '/i'))
 		    );
 		}
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($criteria, true));
 		return parent::queryAll($criteria, $hydrate);
 	}
 }

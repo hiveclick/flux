@@ -78,6 +78,25 @@ class Client extends Base\Client {
 		}
 		return $this->fulfillments;
 	}
+	
+	/**
+	 * Returns the reporting api class instance
+	 * @return \Flux\Network\BaseNetwork
+	 */
+	function getReportingApiClassInstance() {
+	    $api_class_name = "\\" . $this->getReportingApiClass();
+	    if (class_exists($api_class_name)) {
+            $api_class = new $api_class_name();
+	    } else {
+	        $api_class = new \Flux\Network\BaseNetwork();
+	    }
+	    $api_class->setClient($this->getId());
+	    $api_class->setApiToken($this->getReportingApiToken());
+	    $api_class->setApiUrl($this->getReportingApiUrl());
+	    $api_class->setNetworkUsername($this->getNetworkUsername());
+	    $api_class->setNetworkPassword($this->getNetworkPassword());
+	    return $api_class;
+	}
 
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|

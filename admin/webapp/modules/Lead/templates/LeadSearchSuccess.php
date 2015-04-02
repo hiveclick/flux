@@ -150,7 +150,7 @@ $(document).ready(function() {
 								    	ret_val += 'No';
 								    }
 									ret_val += '<div class="small text-muted">';
-									ret_val += ' (Fired ' + moment.unix(item.t.sec).calendar() + ')';
+									ret_val += ' (' + moment.unix(item.t.sec).fromNow() + ')';
 									ret_val += '</div>';
 									ret_val += '</div>';
 							}

@@ -22,6 +22,17 @@
 				<div class="form-group text-left">
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
 				</div>
+				<div class="form-group text-left">
+					<select name="split_type" id="split_type">
+					   <optgroup label="Show All Split Types">
+					       <option value="0">Show all split types&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+					   </optgroup>
+					   <optgroup label="Show Selected Split Type">
+    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>">Show normal splits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>">Show catch-all splits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+					   </optgroup>
+					</select>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -86,6 +97,10 @@ $(document).ready(function() {
 		} else if (e.which == 13) {
 			$('#split_search_form').trigger('submit');
 		}
+	});
+
+	$('#split_type').selectize().on('change', function() {
+		$('#split_search_form').trigger('submit');
 	});
  		  	
 	$('#split_search_form').trigger('submit');
