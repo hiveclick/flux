@@ -50,7 +50,7 @@ class ReportClientAction extends BasicConsoleAction
                         $reporting_api_class->setEndDate($end_date);
                         
                         // Sync revenue by network first
-                        //$reporting_api_class->syncNetworkRevenue($start_date, $end_date);
+                        $reporting_api_class->syncNetworkRevenue($start_date, $end_date);
                         
                         // Sync revenue by network first
                         $reporting_api_class->syncLeadRevenue($start_date, $end_date);
