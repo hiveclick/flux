@@ -267,7 +267,6 @@ $(document).ready(function() {
 	});
 
 	var $selectize_options = {
-		valueField: 'key_name',
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,

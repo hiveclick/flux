@@ -75,8 +75,6 @@ class Split extends BaseDaemon
 				// Save the # of leads to the split for accounting reasons
 				$added_leads = 0;
 			
-				/* @var $split_queue \Flux\SplitQueue */
-				$split_queue = new \Flux\SplitQueue($split->getId());
 				while ($matched_leads->hasNext()) {
 					$lead_doc = $matched_leads->getNext();
 					
@@ -94,6 +92,8 @@ class Split extends BaseDaemon
 					   }   	
 					}
 					
+					/* @var $split_queue \Flux\SplitQueue */
+					$split_queue = new \Flux\SplitQueue($split->getId());
 					$split_queue->setLead($lead->getId());
 					$split_queue->setIsFulfilled(false);
 					$split_queue->setIsProcessing(false);
@@ -101,13 +101,6 @@ class Split extends BaseDaemon
 					$split_queue->setErrorMessage('');
 					$split_queue->setNextAttemptTime(new \MongoDate());
 					
-					/*
-					$lead_array = $lead->toArray();
-					$lead_array['split'] = $split_queue->getSplit()->toArray();
-					$lead_array['is_fulfilled'] = false;
-					$lead_array['is_error'] = false;
-					$lead_array['is_processing'] = false;
-					*/
 					// If this split is normal, then we can add a lead to multiple splits
 					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
     					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));

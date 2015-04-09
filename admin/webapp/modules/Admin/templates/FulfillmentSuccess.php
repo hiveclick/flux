@@ -240,7 +240,7 @@ $(document).ready(function() {
 	});
 
 	$('#map_groups').on('click', '.btn-remove-map', function() {
-		$(this).closest('.form-group').remove();
+		$(this).closest('.map-group-item').remove();
 	});
 
 	$('#btn_delete,#btn_delete_sm').click(function() {
