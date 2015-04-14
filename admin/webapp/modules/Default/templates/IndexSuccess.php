@@ -184,7 +184,7 @@ function drawConversionByHourChart() {
 			
 			// Create a pie chart, passing some options
 	        var chart = new google.visualization.ChartWrapper({
-	          chartType: 'ColumnChart',
+	          chartType: 'LineChart',
 	          containerId: 'conversion_by_hour_chart_div',
 	          options: $options
 	        });
