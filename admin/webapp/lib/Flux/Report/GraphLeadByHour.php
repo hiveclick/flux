@@ -18,7 +18,7 @@ class GraphLeadByHour extends GoogleChart {
 	 */
 	function compileReport() {
 		$results = $this->queryLeads();
-		$this->addColumn('', 'Date', 'string');
+		$this->addColumn('', 'Hour', 'date');
 		
 		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
 			// Add columns for each offer
@@ -65,7 +65,7 @@ class GraphLeadByHour extends GoogleChart {
 			$col_counter = 0;
 			foreach ($this->getCols() as $key => $column) {
 				if ($col_counter == 0) {
-					$row_data[0] = array('v' => $tmp_start_date->format('m/d/Y H:00:00'), 'f' => $tmp_start_date->format('H'));
+					$row_data[0] = array('v' => 'Date(' . $tmp_start_date->format('Y') . ',' . ($tmp_start_date->format('m') - 1) . ',' . $tmp_start_date->format('d,H') . ')', 'f' => $tmp_start_date->format('H'));
 				} else {
 					$row_data[$col_counter] = array('v' => 0, 'f' => "0");
 				}
