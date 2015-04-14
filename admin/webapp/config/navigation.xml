@@ -184,6 +184,12 @@
                 <controller>server-search</controller>
                 <class>nav-secondary</class>
             </servers>
+            <zipcodes>
+                <label>Zipcodes</label>
+                <module>admin</module>
+                <controller>zip-search</controller>
+                <class>nav-secondary</class>
+            </zipcodes>
             <spacer>
 				<label></label>
 				<module></module>

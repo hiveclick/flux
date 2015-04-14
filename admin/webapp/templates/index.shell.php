@@ -81,6 +81,9 @@
         <!-- Smart resize plugin used for chart redrawing -->
         <script src="/scripts/jquery.smartresize.js" type="text/javascript" ></script>
 
+        <!-- Timers used for firing events -->
+        <script src="/scripts/timers/jquery.timers-1.2.js" type="text/javascript" ></script>
+        
         <!-- Default site css -->
         <link href="/css/main.css" rel="stylesheet">
     </head>
@@ -94,12 +97,12 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">flux</a>
+				<a class="navbar-brand" href="/index"><img class="visible-xs" alt="Brand" src="/images/logo-brand.png" /> <span class="hidden-xs">flux</span></a>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="main-navbar">
                     <form class="navbar-form navbar-left hidden-xs hidden-sm" role="search" method="GET" action="/lead/lead-search">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="keywords" size="35" placeholder="search leads" value="">
+                            <input type="text" class="form-control selectize" id="nav_search" name="keywords" style="width:300px;" size="35" placeholder="search leads" value="">
                         </div>
                     </form>
 			    
@@ -148,3 +151,64 @@
 		</div>
     </body>
 </html>
+<script>
+//<!--
+$(document).ready(function() {
+    $('#nav_search').selectize({
+    	valueField: 'url',
+        labelField: 'name',
+        searchField: ['description','name'],
+        options: [],
+        dropdownWidthOffset: 100,
+        optgroupField: 'optgroup',
+        optgroups: [
+            { label: 'leads', value: 'leads' },
+            { label: 'offers', value: 'offers' },
+            { label: 'campaigns', value: 'campaigns'},
+            { label: 'fulfillments', value: 'fulfillments'}
+        ],
+        create: false,
+        render: {
+        	optgroup_header: function(item, escape) {
+                return '<b class="optgroup-header">' +
+                    escape(item.label) +
+                   '</b>';
+              },
+            option: function(item, escape) {
+                return '<div>' +
+                    '<a href="' + escape(item.url) + '">' +
+                    '<span class="title">' +
+                        '<span class="name">' + escape(item.name) + '</span>' +
+                    '</span>' +
+                    '<span class="description">' + escape(item.description) + '</span>' +
+                    '<span class="description">' + escape(item.meta) + '</span>' +
+                    '</a>' +
+                '</div>';
+            }
+        },
+        load: function(query, callback) {
+            if (!query.length) return callback();
+            $.ajax({
+                url: '/api',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    func: '/search',
+                    keywords: query
+                },
+                error: function() {
+                    callback();
+                },
+                success: function(res) {
+                    callback(res.entries);
+                }
+            });
+        },
+        onItemAdd: function(value,item) {
+            // Redirect to whatever was selected
+            location.replace(value);
+        }
+    });
+});
+//-->
+</script>

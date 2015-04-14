@@ -22,8 +22,31 @@ class IndexAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		// we don't need any data here because this action doesn't serve
-		// any request methods, so the processing skips directly to the view
+	    $today_rev = 0;
+	    $yesterday_rev = 0;
+	    $monthly_rev = 0;
+	    
+	    /* @var $revenue_report Flux\ReportClient */
+	    $report_client = new \Flux\ReportClient();
+	    $report_client->setStartDate(date('m/01/Y'));
+	    $report_client->setEndDate(date('m/t/Y'));
+	    $daily_rev_items = $report_client->queryAll(array(), true);
+	    
+	    /* @var $daily_rev_item \Flux\ReportClient */
+	    foreach ($daily_rev_items as $daily_rev_item) {	        
+	        $monthly_rev += $daily_rev_item->getRevenue();
+	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
+	            $today_rev = $daily_rev_item->getRevenue();
+	        }
+	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y', strtotime('yesterday'))) {
+	            $yesterday_rev = $daily_rev_item->getRevenue();
+	        }
+	    }
+	    
+	    $this->getContext()->getRequest()->setAttribute("today_revenue", $today_rev);
+	    $this->getContext()->getRequest()->setAttribute("yesterday_revenue", $yesterday_rev);
+	    $this->getContext()->getRequest()->setAttribute("monthly_revenue", $monthly_rev);
+
 		return View::SUCCESS;
 	}
 	

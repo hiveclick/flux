@@ -14,6 +14,7 @@
 			</div>
 		<?php } ?>
 		<form name="login_form" method="POST" action="/login" class="form-horizontal">
+		    <input type="hidden" name="forward" value="/<?php echo isset($_REQUEST['module']) ? $_REQUEST['module'] : 'index' ?><?php echo isset($_REQUEST['action']) ? ('/' . $_REQUEST['action']) : '' ?>" />
 			<div class="form-group">
 				<label class="col-sm-2 control-label hidden-xs" for="name">Email</label>
 				<div class="col-sm-10">

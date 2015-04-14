@@ -78,7 +78,7 @@ class Context extends MojaviObject
     /**
      * Retrieve the controller.
      *
-     * @return Controller The current Controller implementation instance.
+     * @return \Mojavi\Controller\Controller
      */
     public function getController ()
     {

@@ -150,7 +150,11 @@ $(document).ready(function() {
 								    	ret_val += 'No';
 								    }
 									ret_val += '<div class="small text-muted">';
-									ret_val += ' (' + moment.unix(item.t.sec).fromNow() + ')';
+									if (moment.unix(item.t.sec).isBefore(moment().startOf('day'), 'day')) {
+										ret_val += ' (' + moment.unix(item.t.sec).format("MMM Do [at] LT") + ')';
+									} else {
+									    ret_val += ' (' + moment.unix(item.t.sec).format("LT") + ')';
+									}
 									ret_val += '</div>';
 									ret_val += '</div>';
 							}

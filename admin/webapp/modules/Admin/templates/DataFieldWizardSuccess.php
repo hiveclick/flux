@@ -490,18 +490,20 @@ $(document).ready(function() {
 			custom_code += '    return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>");' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    $zipwise = new \Flux\Zipwise($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
-			custom_code += '    return $zipwise->getCity();' + "\n";
+			custom_code += '    // do a lookup based on the zipcode' + "\n";
+			custom_code += '    $city = \\Flux\\Zip::lookupCity($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
+			custom_code += '    return $city;' + "\n";
 			custom_code += '}' + "\n";			
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
 		} else if ($(this).val() == '5') {
 			// Find the state based on the zipcode
-			var custom_code = 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>");' + "\n";
+			var custom_code = 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("state")->getKeyname() ?>") != "") {' + "\n";
+			custom_code += '    return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("state")->getKeyname() ?>");' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    $zipwise = new \Flux\Zipwise($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
-			custom_code += '    return $zipwise->getState();' + "\n";
+			custom_code += '    // do a lookup based on the zipcode' + "\n";
+			custom_code += '    $state = \\Flux\\Zip::lookupState($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
+			custom_code += '    return $state;' + "\n";
 			custom_code += '}' + "\n";			
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
 		}

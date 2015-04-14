@@ -17,7 +17,30 @@
    <h2>Revenue Report</h2>
 </div>
 <div class="help-block">Easily track your revenue by client month over month</div>
-<div class="col-md-9">
+<div class="col-xs-12 col-sm-12 visible-xs visible-sm">
+    <ul class="list-group" id="revenue_mtd">
+        <li class="list-group-item active">
+            <span class="badge" id="mtd_total_revenue_top">$0.00</span>
+            Revenue
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item active">Stats</li>
+        <li class="list-group-item">
+            <span class="badge" id="highest_day_top"></span>
+            Highest Day
+        </li>
+        <li class="list-group-item">
+            <span class="badge" id="average_day_top"></span>
+            Average Day
+        </li>
+        <li class="list-group-item">
+            <span class="badge" id="lowest_day_top"></span>
+            Lowest Day
+        </li>
+    </ul>
+</div>
+<div class="col-md-9 col-sm-12 col-xs-12">
     <table class="table table-bordered table-condensed table-responsive">
     	<thead>
     		<tr>
@@ -73,7 +96,7 @@
     	</tbody>
     </table>
 </div>
-<div class="col-md-3">
+<div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
     <ul class="list-group" id="revenue_mtd">
         <li class="list-group-item active">
             <span class="badge" id="mtd_total_revenue">$0.00</span>
@@ -85,6 +108,10 @@
         <li class="list-group-item">
             <span class="badge" id="highest_day"></span>
             Highest Day
+        </li>
+        <li class="list-group-item">
+            <span class="badge" id="average_day"></span>
+            Average Day
         </li>
         <li class="list-group-item">
             <span class="badge" id="lowest_day"></span>
@@ -109,7 +136,6 @@ $(document).ready(function() {
 
 function loadRevenue() {
 	$.rad.get('/api', {func: '/report/report-client', start_date: '<?php echo date('m/1/Y', $revenue_report->getReportDate()->sec) ?>', end_date: '<?php echo date('m/t/Y', $revenue_report->getReportDate()->sec) ?>', ignore_pagination: '1' }, function(data) {
-		console.log(data);
 		var revenue_array = new Array();
 		var revenue_total_array = new Array();
 		if (data.entries) {
@@ -161,17 +187,21 @@ function loadRevenue() {
 		// Add the revenue to the right side
 		var total_revenue = 0.00;
 		$.each(revenue_array, function(i, item) {
-			var li = $('<li />').addClass('list-group-item').html(item.name).appendTo($('#revenue_mtd'));
+			var li = $('<li />').addClass('list-group-item').html(item.name).appendTo($('#revenue_mtd,#revenue_mtd_top'));
 			$('<span class="badge" />').css('background-color', item.color).html('$' + $.formatNumber(item.revenue, {format:"#,##0.00", locale:"us"})).prependTo(li);
 			total_revenue += item.revenue;
 		});
-		$('#mtd_total_revenue').html('$' + $.formatNumber(total_revenue, {format:"#,##0.00", locale:"us"}));
+		$('#mtd_total_revenue,#mtd_total_revenue_top').html('$' + $.formatNumber(total_revenue, {format:"#,##0.00", locale:"us"}));
 
 		// Add the stats to the right
 		var low_day_item = {'day_of_year' : 0, 'revenue': 0.00 };
 		var high_day_item = {'day_of_year' : 0, 'revenue': 0.00 };
+		var avg_day_item = {'days' : 0, 'revenue': 0.00, 'total': 0.00 };
 		
 		$.each(revenue_total_array, function(i, item) {
+			avg_day_item.days++;
+			avg_day_item.total += item.revenue;
+			
 			if (item.revenue > high_day_item.revenue) {
 				high_day_item = item;
 			}
@@ -181,8 +211,13 @@ function loadRevenue() {
 				low_day_item = item;
 			}
 		});
-		$('#highest_day').html('$' + $.formatNumber(high_day_item.revenue, {format:"#,##0.00", locale:"us"}));
-		$('#lowest_day').html('$' + $.formatNumber(low_day_item.revenue, {format:"#,##0.00", locale:"us"}));
+	    if (avg_day_item.days > 0) {
+	    	avg_day_item.revenue = (avg_day_item.total / avg_day_item.days);
+	    }
+		
+		$('#highest_day,#highest_day_top').html('$' + $.formatNumber(high_day_item.revenue, {format:"#,##0.00", locale:"us"}));
+		$('#lowest_day,#lowest_day_top').html('$' + $.formatNumber(low_day_item.revenue, {format:"#,##0.00", locale:"us"}));
+		$('#average_day,#average_day_top').html('$' + $.formatNumber(avg_day_item.revenue, {format:"#,##0.00", locale:"us"}));
 	});
 }
 //-->

@@ -1,18 +1,15 @@
 <?php
 namespace Flux\Migrations\rev20140101;
 
-use Mojavi\Migration\Migration;
-use Mojavi\Util\StringTools as StringTools;
-
-class Migrate extends Migration {
-
+class Migrate extends \Mojavi\Migration\Migration {
+    
 	/**
 	 * Upgrades to this version
 	 * @return boolean
 	 */
 	function up() {
 		// Ensure that all the tables are built correctly
-		StringTools::consoleWrite('   - Index Initialization', 'Building', StringTools::CONSOLE_COLOR_YELLOW);
+		\Mojavi\Util\StringTools::consoleWrite('   - Index Initialization', 'Building', \Mojavi\Util\StringTools::CONSOLE_COLOR_YELLOW);
 		\Flux\Campaign::ensureIndexes();
 		\Flux\Client::ensureIndexes();
 		\Flux\Fulfillment::ensureIndexes();
@@ -33,7 +30,7 @@ class Migrate extends Migration {
 		\Flux\User::ensureIndexes();
 		\Flux\Vertical::ensureIndexes();
 		\Flux\Zip::ensureIndexes();
-		StringTools::consoleWrite('   - Index Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
+		\Mojavi\Util\StringTools::consoleWrite('   - Index Initialization', 'Done', \Mojavi\Util\StringTools::CONSOLE_COLOR_GREEN, true);
 	}
 
 	/**

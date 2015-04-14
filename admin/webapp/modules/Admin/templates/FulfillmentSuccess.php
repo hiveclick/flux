@@ -168,7 +168,6 @@ $(document).ready(function() {
 		searchField: ['name', 'description', 'request_names'],
 		render: {
 			item: function(item, escape) {
-				console.log(item);
 				var label = item.name || item.key_name;
 	            var caption = item.description ? item.description : null;
 	            var keyname = item.key_name ? item.key_name : null;

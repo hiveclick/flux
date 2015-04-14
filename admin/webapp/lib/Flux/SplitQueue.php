@@ -216,7 +216,6 @@ class SplitQueue extends Base\SplitQueue {
 		        array('lead.lead_name' =>  new \MongoRegex('/' . trim($this->getKeywords()) . '/i'))
 		    );
 		}
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($criteria, true));
 		return parent::queryAll($criteria, $hydrate);
 	}
 }

@@ -25,6 +25,22 @@ abstract class Migration extends MojaviObject {
     private static $databaseManager = null;
     
     /**
+     * Installs code that should be done once
+     * @return boolean
+     */
+    function schemaUp() {
+        return true;
+    }
+    
+    /**
+     * Installs code that should be done once
+     * @return boolean
+     */
+    function schemaDown() {
+        return true;
+    }
+    
+    /**
      * Pushes a version up one version
      * @return boolean
      */
