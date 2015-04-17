@@ -346,7 +346,6 @@ class SplitQueue extends MongoForm {
 	 * @var array
 	 */
 	function addAttempt($arg0) {
-	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Adding attempt: " . var_export($arg0, true));
 	    if (is_array($arg0)) {
 	        /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
             $split_queue_attempt = new \Flux\SplitQueueAttempt();

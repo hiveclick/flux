@@ -7,6 +7,7 @@ class Split extends MongoForm {
 
     const SPLIT_TYPE_NORMAL = 1;
     const SPLIT_TYPE_CATCH_ALL = 2;
+    const SPLIT_TYPE_HOST_POST = 3;
     
 	const SPLIT_STATUS_ACTIVE = 1;
 	const SPLIT_STATUS_INACTIVE = 2;
@@ -28,6 +29,7 @@ class Split extends MongoForm {
 	protected $offers;
 	protected $fulfillment;
 	protected $filters;
+	protected $validators;
 	protected $email_notification;
 	
 	protected $scheduling;
@@ -328,6 +330,73 @@ class Split extends MongoForm {
 		}
 		$this->addModifiedColumn('filters');
 		return $this;
+	}
+	
+	/**
+	 * Returns the validators
+	 * @return array
+	 */
+	function getValidators() {
+	    if (is_null($this->validators)) {
+	        $this->validators = array();
+	    }
+	    return $this->validators;
+	}
+	
+	/**
+	 * Sets the validators
+	 * @var array
+	 */
+	function setValidators($arg0) {
+	    if (is_array($arg0)) {
+	        $this->validators = $arg0;
+	        array_walk($this->validators, function(&$val, $key) {
+	            $validator = new \Flux\Link\DataField();
+	            $validator->populate($val);
+	            if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
+	                $validator->setDataFieldId($validator->getDataField()->getId());
+	            }
+	            if ($validator->getDataFieldId() > 0 && $validator->getDataFieldKeyName() == '') {
+	                $validator->setDataFieldKeyName($validator->getDataField()->getKeyName());
+	            }
+	            if ($validator->getDataFieldId() > 0 && $validator->getDataFieldName() == '') {
+	                $validator->setDataFieldName($validator->getDataField()->getName());
+	            }
+	            $val = $validator;
+	        });
+	    } else if (is_string($arg0)) {
+	        if (trim($arg0) == '') {
+	            $this->validators = array();
+	        } else if (is_int($arg0)) {
+	            $this->validators = array((int)$arg0);
+	            array_walk($this->$validators, function(&$val, $key) {
+	                $validator = new \Flux\Link\DataField();
+	                $validator->setDataFieldKeyName($val);
+	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
+	                    $validator->setDataFieldId($validator->getDataField()->getId());
+	                }
+	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldName() == '') {
+	                    $validator->setDataFieldName($validator->getDataField()->getName());
+	                }
+	                $val = $validator;
+	            });
+	        } else if (is_string($arg0)) {
+	            $this->validators = implode(',', $arg0);
+	            array_walk($this->validators, function(&$val, $key) {
+	                $validator = new \Flux\Link\DataField();
+	                $validator->setDataFieldKeyName($val);
+	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
+	                    $validator->setDataFieldId($validator->getDataField()->getId());
+	                }
+	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldName() == '') {
+	                    $validator->setDataFieldName($validator->getDataField()->getName());
+	                }
+	                $val = $validator;
+	            });
+	        }
+	    }
+	    $this->addModifiedColumn('validators');
+	    return $this;
 	}
 	
 	/**

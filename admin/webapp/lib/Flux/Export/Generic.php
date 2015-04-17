@@ -27,7 +27,7 @@ class Generic extends ExportAbstract {
 	function send($split_queue_attempts, $is_test = false) {
 	    foreach ($split_queue_attempts as $split_queue_attempt) {
 	        $params = $split_queue_attempt->mergeLead();
-	        $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getUrl();
+	        $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
 	        
 	        $url = $url . '?' . http_build_query($params, null, '&');
 	        $split_queue_attempt->setRequest($url);

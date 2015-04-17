@@ -46,6 +46,19 @@ class IndexAction extends BasicAction
 	    $this->getContext()->getRequest()->setAttribute("today_revenue", $today_rev);
 	    $this->getContext()->getRequest()->setAttribute("yesterday_revenue", $yesterday_rev);
 	    $this->getContext()->getRequest()->setAttribute("monthly_revenue", $monthly_rev);
+	    
+	    /* @var $graph_click_by_hour \Flux\Report\GraphLeadByHour */
+	    $graph_click_by_hour = new \Flux\Report\GraphLeadByHour();
+	    $graph_click_by_hour->setDateRange(\Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS);
+	    $graph_click_by_hour->compileReport();
+	    
+	    /* @var $graph_conversion_by_hour \Flux\Report\GraphConversionByHour */
+	    $graph_conversion_by_hour = new \Flux\Report\GraphConversionByHour();
+	    $graph_conversion_by_hour->setDateRange(\Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS);
+	    $graph_conversion_by_hour->compileReport();
+	    
+	    $this->getContext()->getRequest()->setAttribute("graph_click_by_hour", $graph_click_by_hour);
+	    $this->getContext()->getRequest()->setAttribute("graph_conversion_by_hour", $graph_conversion_by_hour);
 
 		return View::SUCCESS;
 	}

@@ -18,7 +18,7 @@ class GraphLeadByHour extends GoogleChart {
 	 */
 	function compileReport() {
 		$results = $this->queryLeads();
-		$this->addColumn('', 'Hour', 'date');
+		$this->addColumn('col_1', 'Hour', 'datetime');
 		
 		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
 			// Add columns for each offer
@@ -30,7 +30,7 @@ class GraphLeadByHour extends GoogleChart {
 			}
 			foreach ($header_col_names as $header_col_name) {
 			    if (trim($header_col_name) != '') {
-				     $this->addColumn('', $header_col_name, 'number');
+				     $this->addColumn(null, $header_col_name, 'number');
 			    }
 			}
 		} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
@@ -43,7 +43,7 @@ class GraphLeadByHour extends GoogleChart {
 			}
 			foreach ($header_col_names as $header_col_name) {
 				if (trim($header_col_name) != '') {
-					$this->addColumn('', $header_col_name, 'number');
+					$this->addColumn(null, $header_col_name, 'number');
 				}
 			}
 		}
@@ -65,7 +65,7 @@ class GraphLeadByHour extends GoogleChart {
 			$col_counter = 0;
 			foreach ($this->getCols() as $key => $column) {
 				if ($col_counter == 0) {
-					$row_data[0] = array('v' => 'Date(' . $tmp_start_date->format('Y') . ',' . ($tmp_start_date->format('m') - 1) . ',' . $tmp_start_date->format('d,H') . ')', 'f' => $tmp_start_date->format('H'));
+					$row_data[0] = array('v' => 'Date(' . $tmp_start_date->format('Y') . ',' . ($tmp_start_date->format('m') - 1) . ',' . $tmp_start_date->format('d,H,0') . ')', 'f' => $tmp_start_date->format('M j g:00 a'));
 				} else {
 					$row_data[$col_counter] = array('v' => 0, 'f' => "0");
 				}
@@ -80,12 +80,16 @@ class GraphLeadByHour extends GoogleChart {
 				$result_date = new \DateTime($item['event_date'] . ":00:00", new \DateTimeZone('UTC'));
 				$result_date->setTimezone($this->getTimezone());
 				if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
-					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+					$this->addData($result_date, (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), (string)intval($item['clicks']));
 				} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
-					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['subid']) != '' ? $item['subid'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+					$this->addData($result_date, (trim($item['subid']) != '' ? $item['subid'] : 'Unknown'), intval($item['clicks']), (string)intval($item['clicks']));
 				}
 			}
 		}
+		
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getCols(), true));
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export(json_encode($this->getRows()), true));
+		
 	}
 	
 	/**

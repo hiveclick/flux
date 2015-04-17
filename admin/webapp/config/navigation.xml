@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nav>
-	<home>
-		<label>Dashboard</label>
-		<module>default</module>
-		<controller>index</controller>
-		<class>nav-primary</class>
-	</home>
 	<offer>
         <label>Offers</label>
         <module>offer</module>

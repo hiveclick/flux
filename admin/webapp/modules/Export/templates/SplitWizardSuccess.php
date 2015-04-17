@@ -17,6 +17,7 @@
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
 			<li role="presentation" class=""><a href="#filters" role="tab" data-toggle="tab">Filters</a></li>
+			<li role="presentation" class=""><a href="#validators" role="tab" data-toggle="tab">Validation</a></li>
 			<li role="presentation" class=""><a href="#fulfillment" role="tab" data-toggle="tab">Fulfillment</a></li>
 		</ul>
 		<!-- Tab panes -->
@@ -37,11 +38,11 @@
 				
 				<div class="form-group">
 					<select name="split_type" id="split_type">
-                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL ? 'selected' : '' ?>>This is a normal split that will receive leads that match the filters</option>
+                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL ? 'selected' : '' ?>>This is a normal split that will find leads that match the filters</option>
                         <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL ? 'selected' : '' ?>>This is a catch-all split and will only receive leads if no other splits match</option>
+                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST ? 'selected' : '' ?>>This is a host & post split that will immediately fulfill leads through a POST</option>
 					</select>
 				</div>
-				
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="filters">
 				<div class="help-block">Select which offers should have this split applied to them</div>
@@ -67,6 +68,7 @@
 					<input type="hidden" name="fulfillment[fulfillment_id]" value="" />
 					<label class="control-label" for="fulfillment_id">Fulfillment</label>
 					<select class="form-control" name="fulfillment[fulfillment_id]" id="fulfillment_id" placeholder="choose a fulfillment to run when the lead matches the criteria">
+						<option value=""></option>
 						<?php
         					/* @var $client \Flux\Client */ 
         					foreach ($clients as $client) { 
@@ -95,20 +97,20 @@
 				<div class="form-group col-md-8">
 					<label class="control-label" for="days">Days</label>
 					<select id="days" name="scheduling[days][]" class="form-control" multiple placeholder="select one or more days when leads can be accepted">
-						<option value="0">Sunday</option>
-						<option value="1">Monday</option>
-						<option value="2">Tuesday</option>
-						<option value="3">Wednesday</option>
-						<option value="4">Thursday</option>
-						<option value="5">Friday</option>
-						<option value="6">Saturday</option>
+						<option value="0" <?php echo in_array(0, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Sunday</option>
+						<option value="1" <?php echo in_array(1, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Monday</option>
+						<option value="2" <?php echo in_array(2, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Tuesday</option>
+						<option value="3" <?php echo in_array(3, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Wednesday</option>
+						<option value="4" <?php echo in_array(4, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Thursday</option>
+						<option value="5" <?php echo in_array(5, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Friday</option>
+						<option value="6" <?php echo in_array(6, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Saturday</option>
 					</select>
 				</div>
 				<div class="form-group col-md-2">
 					<label class="control-label" for="start_hour">Hours</label>
 					<select id="start_hour" name="scheduling[start_hour]" class="form-control" placeholder="enter starting hour">
 						<?php for ($i=0;$i<24;$i++) { ?>
-							<option value="<?php echo $i ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+							<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getStartHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
 						<?php } ?>
 					</select>
 				</div>
@@ -116,11 +118,15 @@
 					<label class="control-label" for="end_hour">&nbsp;</label>
 					<select id="end_hour" name="scheduling[end_hour]" class="form-control" placeholder="enter ending hour">
 						<?php for ($i=0;$i<24;$i++) { ?>
-							<option value="<?php echo $i ?>"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+							<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getEndHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
 						<?php } ?>
 					</select>
 				</div>
 				<div class="clearfix"></div>
+			</div>
+			<div role="tabpanel" class="tab-pane fade" id="validators">
+				<div class="help-block">Add one or more validation checks that will be verified before the lead is fulfilled</div>
+				<div id="validator_container"></div>
 			</div>
 		</div>
 	</div>
@@ -131,6 +137,7 @@
 	</div>
 </form>
 
+<!-- Dummy Filter Row -->
 <div class="form-group" style="display:none;" id="dummy_filter_data_field">
 	<div class="col-sm-5">
 		<select name="filters[dummy-dummy_id][data_field_key_name]" class="form-control selectize">
@@ -158,6 +165,41 @@
 	</div>
 	<div class="col-sm-4">
 		<textarea name="filters[dummy-dummy_id][data_field_value]" class="form-control selectize-text" placeholder="Select one or more filter values" rows="3"></textarea>
+	</div>
+	<div class="col-sm-1">
+		<button type="button" class="btn btn-sm btn-danger btn-remove-dataField"><span class="glyphicon glyphicon-minus"></span></button>
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<!-- Dummy Validator Row -->
+<div class="form-group" style="display:none;" id="dummy_validator_data_field">
+	<div class="col-sm-5">
+		<select name="validators[dummy-dummy_id][data_field_key_name]" class="form-control selectize">
+			<optgroup label="Data Fields">
+				<?php 
+					/* @var $data_field \Flux\DataField */
+					foreach ($data_fields AS $data_field) { 
+						$data_field_set = $data_field->getDataFieldSet();
+						array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+				?>
+					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+				<?php } ?>
+			</optgroup>
+		</select>
+	</div>
+	<div class="col-sm-2">
+		<select name="validators[dummy-dummy_id][data_field_condition]" class="form-control selectize-cond">
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS ?>">is</option>
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT ?>">is not</option>
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK ?>">is not blank</option>
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET ?>">is set</option>
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT ?>">is greater than</option>
+			<option value="<?php echo \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT ?>">is less than</option>
+		</select>
+	</div>
+	<div class="col-sm-4">
+		<textarea name="validators[dummy-dummy_id][data_field_value]" class="form-control selectize-text" placeholder="Select one or more validator values" rows="3"></textarea>
 	</div>
 	<div class="col-sm-1">
 		<button type="button" class="btn btn-sm btn-danger btn-remove-dataField"><span class="glyphicon glyphicon-minus"></span></button>
@@ -236,37 +278,68 @@ $(document).ready(function() {
 	
 	// Add new data fields and set them up along with value textboxes
 	$('.btn-add-dataField').on('click', function() {
-		var index_number = $('#filter_container > .form-group').length;
-		var $dataFieldRow = $('#dummy_filter_data_field').clone(true);
-		$dataFieldRow.removeAttr('id');
-		$dataFieldRow.html(function(i, oldHTML) {
-			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
-			return oldHTML;
-		});
+		if ($('#filters').is(':hidden')) {
+    		var index_number = $('#validator_container > .form-group').length;
+    		var $dataFieldRow = $('#dummy_validator_data_field').clone(true);
+    		$dataFieldRow.removeAttr('id');
+    		$dataFieldRow.html(function(i, oldHTML) {
+    			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+    			return oldHTML;
+    		});
+    		
+    		$('#validator_container').append($dataFieldRow);
+    		$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
+    			$(this).closest('.form-group').remove();
+    		});
+    		$dataFieldRow.find('.selectize').selectize($selectize_options);
+    		$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
+    		$dataFieldRow.find('.selectize-text').selectize({
+    			valueField: 'value',
+    			labelField: 'name',
+    			searchField: ['name'],
+    			sortField: 'name',
+    			sortDirection: 'ASC',
+    			diacritics:true,
+    			create: true,
+    			createOnBlur: true
+    		});
 		
-		$('#filter_container').append($dataFieldRow);
-		$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
-			$(this).closest('.form-group').remove();
-		});
-		$dataFieldRow.find('.selectize').selectize($selectize_options);
-		$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
-		$dataFieldRow.find('.selectize-text').selectize({
-			valueField: 'value',
-			labelField: 'name',
-			searchField: ['name'],
-			sortField: 'name',
-			sortDirection: 'ASC',
-			diacritics:true,
-			create: true,
-			createOnBlur: true
-		});
+    	    $dataFieldRow.show();
+		} else {
+			var index_number = $('#filter_container > .form-group').length;
+    		var $dataFieldRow = $('#dummy_filter_data_field').clone(true);
+    		$dataFieldRow.removeAttr('id');
+    		$dataFieldRow.html(function(i, oldHTML) {
+    			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+    			return oldHTML;
+    		});
+    		
+    		$('#filter_container').append($dataFieldRow);
+    		$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
+    			$(this).closest('.form-group').remove();
+    		});
+    		$dataFieldRow.find('.selectize').selectize($selectize_options);
+    		$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
+    		$dataFieldRow.find('.selectize-text').selectize({
+    			valueField: 'value',
+    			labelField: 'name',
+    			searchField: ['name'],
+    			sortField: 'name',
+    			sortDirection: 'ASC',
+    			diacritics:true,
+    			create: true,
+    			createOnBlur: true
+    		});
 		
-		$dataFieldRow.show();
+    	    $dataFieldRow.show();
+		}
 	});
 
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		if ($(e.target).attr('href') == '#filters') {
-			$('.btn-add-dataField').show();
+			$('.btn-add-dataField').html('<span class="glyphicon glyphicon-plus"></span> Add Filter').show();
+		} else if ($(e.target).attr('href') == '#validators') {
+		   $('.btn-add-dataField').html('<span class="glyphicon glyphicon-plus"></span> Add Validator').show();
 		} else {
 			$('.btn-add-dataField').hide();
 		}

@@ -150,11 +150,13 @@ class DataField extends Base\DataField {
 	 */
 	function callMappingFunc($value, $lead) {
 		try {
+		    
 			// Define a default mapping function
 			$mapping_func = function($value, $lead) { return $value; };
 	
-			if ($this->getCustomCode() != self::getDefaultMappingFunc()) {
+			if (($this->getCustomCode() != '') && ($this->getCustomCode() != self::getDefaultMappingFunc())) {
 				$errors = '';
+				
 				// Now overwrite the default mapping function with the one from the export mapping
 				@ob_start();
 				
@@ -181,15 +183,14 @@ class DataField extends Base\DataField {
 			set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
 			    throw new \Exception($errstr);
 			}, E_ALL | E_STRICT);
-			
 			$value = $mapping_func($value, $lead);
 			
 			// restore the old error handler
 			restore_error_handler();
 		} catch (\Exception $e) {
             \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
-			return $value;
 		}
+		return $value;
 	}
 	
 	/**
@@ -201,7 +202,7 @@ class DataField extends Base\DataField {
 	        // Define a default mapping function
 	        $mapping_func = function($value, $lead) { return $value; };
 	
-	        if ($this->getCustomCode() != self::getDefaultMappingFunc()) {
+	        if (($this->getCustomCode() != '') && ($this->getCustomCode() != self::getDefaultMappingFunc())) {
 	            $errors = '';
 	            // Now overwrite the default mapping function with the one from the export mapping
 	            @ob_start();
@@ -237,6 +238,7 @@ class DataField extends Base\DataField {
 	    } catch (\Exception $e) {
 	        throw $e;
 	    }
+	    return $value;
 	}
 	
 	/**

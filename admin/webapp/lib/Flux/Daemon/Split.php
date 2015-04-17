@@ -82,6 +82,64 @@ class Split extends BaseDaemon
 					$lead = new \Flux\Lead();
 					$lead->populate($lead_doc);
 					
+					try {
+    					// Validate the lead before we proceed
+    					if (count($split->getValidators()) > 0) {
+    					    /* @var $validator \Flux\Link\DataField */
+    					    $data_field = new \Flux\DataField();
+        					foreach ($split->getValidators() as $validator) {
+            			        $value = $lead->getValue($validator->getDataField()->getKeyName());
+            			        $value = $validator->getDataField()->callMappingFunc($value, $lead);
+            			        if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) {
+            			            if (is_array($value) && empty(array_intersect($value, $validator->getDataFieldValue()))) {
+            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
+            		                } else if (is_string($value) && !in_array($value, $validator->getDataFieldValue())) {
+            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
+            		                }   
+            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) {
+            		                if (is_array($value) && !empty(array_intersect($value, $validator->getDataFieldValue()))) {
+            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
+            		                } else if (is_string($value) && in_array($value, $validator->getDataFieldValue())) {
+            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
+            		                }
+            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) {
+            			            if (is_string($value) && trim($value) == '') {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
+            			            } else if (is_array($value) && empty($value)) {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
+            			            }
+            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
+            			            if (is_array($validator->getDataFieldValue())) {
+            			                $values = $validator->getDataFieldValue();
+            			                $check_value = intval(array_shift($values));
+            			            } else {
+            			                $check_value = intval($validator->getDataFieldValue());
+            			            }
+            			            if (is_string($value) && intval($value) < $check_value) {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
+            			            } else if (is_array($value)) {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
+            			            }
+            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) {
+            			            if (is_array($validator->getDataFieldValue())) {
+            			                $values = $validator->getDataFieldValue();
+            			                $check_value = intval(array_shift($values));
+            			            } else {
+            			                $check_value = intval($validator->getDataFieldValue());
+            			            }
+            			            if (is_string($value) && intval($value) > $check_value) {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
+            			            } else if (is_array($value)) {
+            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
+            			            }
+            			        }
+            			    }
+    					}	
+					} catch (\Exception $e) {
+					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
+					    continue;
+					}				
+					
 					// Find the max event time
 					/* @var $lead_event \Flux\LeadEvent */
 					foreach ($lead->getE() as $lead_event) {

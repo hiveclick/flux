@@ -4,6 +4,7 @@
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$flows = $this->getContext()->getRequest()->getAttribute("flows", array());
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
+	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
 
 	$conversion_data_field = \Flux\DataField::retrieveDataFieldFromKeyName(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
 ?>
@@ -19,7 +20,8 @@
 <!-- Page Content -->
 <div class="help-block">Use this form to add a new offer to the system assigned to an advertiser</div>
 <br/>
-<form class="form-horizontal" name="offer_form" method="POST" action="" autocomplete="off">
+<form class="form-horizontal" id="offer_form" name="offer_form" method="POST" action="/api" autocomplete="off">
+	<input type="hidden" name="func" value="/offer/offer" />
 	<input type="hidden" name="status" value="<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>" />
 
 	<div class="form-group">
@@ -80,12 +82,12 @@
 	<div class="help-block">Choose if you want to direct traffic to a flow or to an external url</div>
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="redirect_type">Redirect Type</label>
+		<label class="col-sm-2 control-label hidden-xs" for="redirect_type">Offer Type</label>
 		<div class="col-sm-10">
 			<select class="form-control" name="redirect_type" id="redirect_type" placeholder="Redirect Type">
-				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?>>Hosted</option>
-				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?>>Redirect</option>
-				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_POST ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? ' selected' : ''; ?>>Incoming Post</option>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Hosted', 'value' => \Flux\Offer::REDIRECT_TYPE_HOSTED, 'description' => 'Send traffic to a landing page you own that uses FluxFE'))) ?>">Hosted</option>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Redirect', 'value' => \Flux\Offer::REDIRECT_TYPE_REDIRECT, 'description' => 'Send traffic to another site and fire events with placed pixels'))) ?>">Redirect</option>
+				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_POST ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Host & Post', 'value' => \Flux\Offer::REDIRECT_TYPE_POST, 'description' => 'Fulfill traffic received through an API and respond with JSON'))) ?>">Incoming Post</option>
 			</select>
 		</div>
 	</div>
@@ -100,16 +102,22 @@
 	</div>
 	
 	<div id="post_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? '': 'display:none;' ?>">
-		<div class="alert alert-info">
-			Use these settings to setup this offer as a Host &amp; Post offer.
+		<div class="form-group" id="domain_name_form_group">
+			<label class="col-sm-2 control-label hidden-xs" for="split_id">Host &amp; Post Split</label>
+			<div class="col-sm-10">
+				<select id="split_id" name="split[split_id]" class="form-control" placeholder="select a split to use for fulfillment...">
+				    <?php 
+				        /* @var $split \Flux\Split */
+				        foreach ($splits as $split) {
+				    ?>
+				        <option value="<?php echo $split->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription()))) ?>"><?php echo $split->getName() ?></option>
+				    <?php } ?>
+				</select>
+			</div>
 		</div>
 	</div>
 
-	<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">
-		<div class="alert alert-info">
-			Use these settings to setup this offer on the remote server.  These settings should be unique for this offer so that tracking works
-		</div>
-		
+	<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">		
 		<div class="form-group" id="domain_name_form_group">
 			<label class="col-sm-2 control-label hidden-xs" for="folder_name">Domain Name</label>
 			<div class="col-sm-10">
@@ -142,7 +150,29 @@
 <script>
 //<!--
 $(document).ready(function() {
-	$('#verticals,#client_id,#redirect_type').selectize();
+    $('#split_id').selectize();
+
+    $('#redirect_type').selectize({
+    	valueField: 'value',
+		labelField: 'name',
+		searchField: ['name', 'description'],
+		render: {
+			option: function(item, escape) {           
+	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+	                '<b>' + escape(item.name) + '</b><br />' +
+	                '<span class="text-muted small">' + escape(item.description) + ' </span>' +
+	            '</div>';
+			},
+			item: function(item, escape) {           
+    	            return '<div>' +
+                    '<b>' + escape(item.name) + '</b><br />' +
+                    '<span class="text-muted small">' + escape(item.description) + ' </span>' +
+                '</div>';
+    		}
+		}
+    });
+	
+	$('#verticals,#client_id').selectize();
 
 	$('#redirect_type').on('change', function() {
 		$('#redirect_form_group').hide();
@@ -156,6 +186,13 @@ $(document).ready(function() {
 			$('#post_form_group').show();
 		}
 	}).trigger('change');
+
+	$('#offer_form').form(function(data) {
+		if (data.meta.insert_id) {
+    	    $.rad.notify('Offer Added', 'The new offer has been added to the system');
+    	    location.href = '/offer/offer?_id=' + data.meta.insert_id;
+		}
+	});
 });
 //-->
 </script>

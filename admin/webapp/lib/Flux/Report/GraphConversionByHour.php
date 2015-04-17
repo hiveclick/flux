@@ -18,7 +18,7 @@ class GraphConversionByHour extends GoogleChart {
 	 */
 	function compileReport() {
 		$results = $this->queryLeads();				
-		$this->addColumn('', 'Hour', 'date');
+		$this->addColumn('', 'Hour', 'datetime');
 		
 		if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
 			// Add columns for each offer
@@ -65,7 +65,7 @@ class GraphConversionByHour extends GoogleChart {
 			$col_counter = 0;
 			foreach ($this->getCols() as $key => $column) {
 				if ($col_counter == 0) {
-					$row_data[0] = array('v' => 'Date(' . $tmp_start_date->format('Y') . ',' . ($tmp_start_date->format('m') - 1) . ',' . $tmp_start_date->format('d,H') . ')', 'f' => $tmp_start_date->format('H'));
+					$row_data[0] = array('v' => 'Date(' . $tmp_start_date->format('Y') . ',' . ($tmp_start_date->format('m') - 1) . ',' . $tmp_start_date->format('d,H,0') . ')', 'f' => $tmp_start_date->format('M j g:00 a'));
 				} else {
 					$row_data[$col_counter] = array('v' => 0, 'f' => "0");
 				}
@@ -80,9 +80,9 @@ class GraphConversionByHour extends GoogleChart {
 				$result_date = new \DateTime($item['event_date'] . ":00:00", new \DateTimeZone('UTC'));
 				$result_date->setTimezone($this->getTimezone());
 				if ($this->getGroupType() == self::GROUP_TYPE_OFFER) {
-					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['offer_name']) != '' ? $item['offer_name'] : 'Unknown'), intval($item['clicks']), (string)intval($item['clicks']));
 				} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
-					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['subid']) != '' ? $item['subid'] : 'Unknown'), intval($item['clicks']), intval($item['clicks']));
+					$this->addData($result_date->format('m/d/Y H:00:00'), (trim($item['subid']) != '' ? $item['subid'] : 'Unknown'), intval($item['clicks']), (string)intval($item['clicks']));
 				}
 			}
 		}
@@ -185,7 +185,7 @@ class GraphConversionByHour extends GoogleChart {
 			);
 		}
 		
-		/*
+		
 		 $op_query = json_encode($ops);
 		 $op_query = str_replace('"$group"', '$group', $op_query);
 		 $op_query = str_replace('"$max"', '$max', $op_query);
@@ -199,7 +199,7 @@ class GraphConversionByHour extends GoogleChart {
 		 $op_query = str_replace('"$elemMatch"', '$elemMatch', $op_query);
 		 $op_query = str_replace('"$project"', '$project', $op_query);
 		 \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
-		 */
+		 
 		
 		return $lead->getCollection()->aggregate($ops);
 	}	

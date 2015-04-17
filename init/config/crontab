@@ -4,6 +4,11 @@
 MAILTO=""
 
 #
+# Sync report data from networks 
+# 
+0,15,30,45 * * * * root /home/flux/api/webapp/meta/crons/report_client.sh
+
+#
 # Compile the number of clicks and conversions by offer and campaign
 # 
 0,15,30,45 * * * * root /home/flux/api/webapp/meta/crons/compile_daily_clicks.sh

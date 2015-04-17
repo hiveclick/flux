@@ -48,8 +48,42 @@
 
 <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
 	<div class="help-block"><?php echo $split->getDescription() ?></div>
-	<h3>Filters</h3>
 	<hr />
+	<h3>Validation</h3>
+	<div class="help-block">This split will use the following validation before fulfilling leads</div>
+	<ul>
+		<?php if (count($split->getValidators()) > 0) { ?>
+			<?php
+				/* @var $filter \Flux\Link\DataField */ 
+				foreach ($split->getValidators() as $validator) {
+			?>
+				<li>
+					<?php echo $validator->getDataFieldName() ?>
+					<?php if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) { ?>
+						<i>is</i>
+						<?php echo implode(", ", $validator->getDataFieldValue()) ?>
+					<?php } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) { ?>
+						<i>is not</i>
+						<?php echo implode(", ", $validator->getDataFieldValue()) ?>
+					<?php } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) { ?>
+						<i>is not blank</i>
+					<?php } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET) { ?>
+						<i>is set</i>
+					<?php } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) { ?>
+						<i>is greater than</i>
+						<?php echo implode(", ", $validator->getDataFieldValue()) ?>
+					<?php } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) { ?>
+						<i>is less than</i>
+						<?php echo implode(", ", $validator->getDataFieldValue()) ?>
+					<?php } ?>
+				</li>
+			<?php } ?>
+		<?php } else { ?>
+			<li class="help-block"><i>No Validation</i></li>
+		<?php } ?>
+	</ul>
+	<hr />
+	<h3>Filtering</h3>
 	<div class="help-block">This split will use the following filters when finding and fulfilling leads</div>
 	<b>Offers</b>
 	<ul>
@@ -96,6 +130,39 @@
 		<?php } else { ?>
 			<li class="help-block"><i>No Filters</i></li>
 		<?php } ?>
+	</ul>
+	<hr />
+	<h3>Fulfillment</h3>
+	<div class="help-block">This split will use the following fulfillment and schedule when fulfilling leads</div>
+	<b>Fulfillment Script</b>
+	<ul>
+	   <li class="help-block">
+	       <a href="/admin/fulfillment?_id=<?php echo $split->getFulfillment()->getFulfillmentId() ?>"><?php echo $split->getFulfillment()->getFulfillmentName() ?></a>
+	       <div class="small"><?php echo $split->getFulfillment()->getFulfillment()->getDescription() ?></div>
+	   </li>
+	</ul>
+	<b>Schedule</b>
+	<ul>
+	   <?php if (count($split->getScheduling()->getDays()) > 0) { ?>
+	       <li class="help-block">
+    	   <?php
+    	       $days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'); 
+    	       foreach ($split->getScheduling()->getDays() as $day) { 
+    	   ?>
+    	       <?php echo isset($days[$day]) ? $days[$day] : '' ?>
+    	   <?php } ?>
+    	   </li>
+        <?php } else { ?>
+            <li class="help-block"><i>Every day</i></li>
+        <?php } ?>
+	</ul>
+	<b>Hours</b>
+	<ul>
+	   <?php if (!($split->getScheduling()->getStartHour() == 0 && $split->getScheduling()->getEndHour() == 23)) { ?>
+    	    <li class="help-block">Only between <?php echo $split->getScheduling()->getStartHour() > 12 ? ($split->getScheduling()->getStartHour() - 12) : $split->getScheduling()->getStartHour() ?> <?php echo $split->getScheduling()->getStartHour() < 12 ? 'AM' : 'PM' ?> and <?php echo $split->getScheduling()->getEndHour() > 12 ? ($split->getScheduling()->getEndHour() - 12) : $split->getScheduling()->getEndHour() ?> <?php echo $split->getScheduling()->getEndHour() < 12 ? 'AM' : 'PM' ?></li> 
+        <?php } else { ?>
+            <li class="help-block"><i>All day</i></li>
+        <?php } ?>
 	</ul>
 </div>
 <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">

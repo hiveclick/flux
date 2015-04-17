@@ -62,6 +62,7 @@
 	
 	<!-- main col right -->
 	<div class="col-sm-4">
+	    <?php if ($campaign->getOffer()->getOffer()->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
 		<div class="panel panel-default text-center">
 			<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
 			<p />
@@ -71,6 +72,7 @@
 			</div>
 		</div>
 		<p />
+		<?php } ?>
 		<div class="panel panel-default text-center">
 			<div class="panel-heading">
 				<h4>Today's Stats</h4>

@@ -13,6 +13,7 @@
 		<li role="presentation" class="active"><a href="#posting_url" role="tab" data-toggle="tab">Example Posting Url</a></li>
 		<li role="presentation" class=""><a href="#tracking_pixel" role="tab" data-toggle="tab">Example Tracking Pixel</a></li>
 		<li role="presentation" class=""><a href="#analytic_pixel" role="tab" data-toggle="tab">Example Analytic Pixel</a></li>
+		<li role="presentation" class=""><a href="#hostnpost_url" role="tab" data-toggle="tab">Example Host &amp; Post Url</a></li>
 	</ul>
 	<!-- Tab panes -->
 	<div class="tab-content">
@@ -45,6 +46,12 @@
 	s.parentNode.insertBefore(op, s);
 	})();
 &lt;/script&gt;</pre>
+		</div>
+		<div role="tabpanel" class="tab-pane fade in" id="hostnpost_url">
+			<div class="help-block">Use this url on to have an affiliate POST data to you.</div>
+			<div class="form-group">
+				<textarea id="hostnpost_url" rows="5" name="hostnpost_url" class="form-control"></textarea>
+			</div>
 		</div>
 	</div>
 	<hr />
@@ -231,8 +238,10 @@ function buildPostingUrl() {
 	});
 
 	var query_string = $.param(posting_params);
+	var entire_post_url = '<?php echo (defined("MO_API_URL") ? MO_API_URL : "") . '/rt/post-lead?'; ?>';
 	var entire_url = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?'; ?>';
 	var entire_pixel = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/p?'; ?>';
+	$('[name=hostnpost_url]').val(entire_post_url + query_string);
 	$('[name=example_url]').val(entire_url + query_string);
 	$('[name=example_pixel]').val('<img src="' + entire_pixel + query_string + '" border="0" />');
 }

@@ -2,14 +2,6 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
-
-use Flux\Offer;
-use Flux\Client;
-use Flux\Flow;
-use Flux\Vertical;
-use Mojavi\Logging\LoggerManager;
-use Flux\Server;
-use Flux\Campaign;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -30,37 +22,46 @@ class OfferPaneEditAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\Offer */
-		$offer = new Offer();
+		/* @var $offer \Flux\Offer */
+		$offer = new \Flux\Offer();
 		$offer->populate($_GET);
 		$offer->query();
 		
-		/* @var $client Flux\Client */
-		$client = new Client();
+		/* @var $client \Flux\Client */
+		$client = new \Flux\Client();
 		$client->setSort('name');
 		$client->setSord('asc');
 		$client->setIgnorePagination(true);
 		$clients = $client->queryAll();
 		
-		/* @var $vertical Flux\Vertical */
-		$vertical = new Vertical();
+		/* @var $vertical \Flux\Vertical */
+		$vertical = new \Flux\Vertical();
 		$vertical->setSort('name');
 		$vertical->setSord('ASC');
 		$vertical->setIgnorePagination(true);
 		$verticals = $vertical->queryAll();
 		
-		/* @var $vertical Flux\Campaign */
-		$campaign = new Campaign();
+		/* @var $vertical \Flux\Campaign */
+		$campaign = new \Flux\Campaign();
 		$campaign->setSort('name');
 		$campaign->setSord('ASC');
 		$campaign->setOfferIdArray(array($offer->getId()));
 		$campaign->setIgnorePagination(true);
 		$campaigns = $campaign->queryAll();
 		
+		/* @var $split Flux\Split */
+		$split = new \Flux\Split();
+		$split->setSort('name');
+		$split->setSord('ASC');
+		$split->setSplitType(\Flux\Split::SPLIT_TYPE_HOST_POST);
+		$split->setIgnorePagination(true);
+		$splits = $split->queryAll();
+		
 		$this->getContext()->getRequest()->setAttribute("offer", $offer);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
 		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
+		$this->getContext()->getRequest()->setAttribute("splits", $splits);
 			
 		return View::SUCCESS;
 	}

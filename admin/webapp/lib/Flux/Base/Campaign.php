@@ -14,6 +14,7 @@ class Campaign extends MongoForm {
 	protected $offer;
 	protected $client;
 	protected $redirect_link;
+	protected $whitelist_ips;
 	
 	protected $daily_clicks;
 	protected $daily_conversions;
@@ -240,6 +241,38 @@ class Campaign extends MongoForm {
 		$this->addModifiedColumn('offer');
 		return $this;
 	}
+	
+	/**
+	 * Returns the whitelist_ips
+	 * @return array
+	 */
+	function getWhitelistIps() {
+	    if (is_null($this->whitelist_ips)) {
+	        $this->whitelist_ips = array();
+	    }
+	    return $this->whitelist_ips;
+	}
+	
+	/**
+	 * Sets the whitelist_ips
+	 * @var array
+	 */
+	function setWhitelistIps($arg0) {
+	    if (is_array($arg0)) {
+            $this->whitelist_ips = $arg0;
+	    } else if (is_string($arg0)) {
+	        if (strpos(",", $arg0) !== false) {
+	            $this->whitelist_ips = explode(",", $arg0);
+	        } else {
+	            $this->whitelist_ips = array($arg0);
+	        }
+	    }
+	    array_walk($this->whitelist_ips, function(&$value) { $value = trim($value); });
+	    $this->addModifiedColumn("whitelist_ips");
+	    return $this;
+	}
+	
+	
 
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|

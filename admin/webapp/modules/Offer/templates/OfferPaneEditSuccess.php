@@ -5,6 +5,7 @@
 	$flows = $this->getContext()->getRequest()->getAttribute("flows", array());
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
+	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -80,17 +81,14 @@
 				<div class="form-group">
 					<label class="control-label hidden-xs" for="redirect_type">Redirect Type</label>
 					<select class="form-control selectize" name="redirect_type" id="redirect_type" placeholder="Redirect Type">
-						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?>>Hosted</option>
-						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?>>Redirect</option>
-						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_POST ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? ' selected' : ''; ?>>Incoming Post</option>
+						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Hosted', 'value' => \Flux\Offer::REDIRECT_TYPE_HOSTED, 'description' => 'Send traffic to a landing page you own that uses FluxFE'))) ?>">Hosted</option>
+        				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Redirect', 'value' => \Flux\Offer::REDIRECT_TYPE_REDIRECT, 'description' => 'Send traffic to another site and fire events with placed pixels'))) ?>">Redirect</option>
+        				<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_POST ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Host & Post', 'value' => \Flux\Offer::REDIRECT_TYPE_POST, 'description' => 'Fulfill traffic received through an API and respond with JSON'))) ?>">Incoming Post</option>
 					</select>
 				</div>
 				<hr />
 				<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">
-					<div class="alert alert-info">
-						Use these settings to setup this offer on the remote server.  These settings should be unique for this offer so that tracking works
-					</div>
-					
+				
 					<div class="form-group" id="domain_name_form_group">
 						<label class="control-label hidden-xs" for="folder_name">Domain Name</label>
 						<input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to landing page (www.offer-domain.com)" value="<?php echo $offer->getDomainName() ?>" />
@@ -111,6 +109,20 @@
 						</div>
 					</div>
 				</div>
+				
+				<div id="post_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? '': 'display:none;' ?>">
+            		<div class="form-group" id="domain_name_form_group">
+            			<label class="control-label hidden-xs" for="split_id">Host &amp; Post Split</label>
+        				<select id="split_id" name="split[split_id]" class="form-control" placeholder="select a split to use for fulfillment...">
+        				    <?php 
+        				        /* @var $split \Flux\Split */
+        				        foreach ($splits as $split) {
+        				    ?>
+        				        <option value="<?php echo $split->getId() ?>" <?php echo $offer->getSplit()->getSplitId() == $split->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription()))) ?>"><?php echo $split->getName() ?></option>
+        				    <?php } ?>
+        				</select>
+            		</div>
+            	</div>
 	
 				<div id="redirect_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? '': 'display:none;' ?>">
 					 <div class="form-group">
@@ -130,7 +142,27 @@
 <script>
 //<!--
 $(document).ready(function() {
-	$('.selectize').selectize();
+	$('#split_id').selectize();
+
+    $('#redirect_type').selectize({
+    	valueField: 'value',
+		labelField: 'name',
+		searchField: ['name', 'description'],
+		render: {
+			option: function(item, escape) {           
+	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+	                '<b>' + escape(item.name) + '</b><br />' +
+	                '<span class="text-muted small">' + escape(item.description) + ' </span>' +
+	            '</div>';
+			},
+			item: function(item, escape) {           
+    	            return '<div>' +
+                    '<b>' + escape(item.name) + '</b><br />' +
+                    '<span class="text-muted small">' + escape(item.description) + ' </span>' +
+                '</div>';
+    		}
+		}
+    });
 
 	$('#default_campaign_id').selectize({
 		valueField: 'campaign_key',
@@ -153,6 +185,8 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#client_id,#status,#verticals').selectize();
+
 	$('#pushToServerModal').on('shown.bs.modal', function(e) {
 		$('#modal_domain_name').val($('#domain_name').val());
 		$('#modal_docroot_dir').val($('#docroot_dir').val());
@@ -160,12 +194,15 @@ $(document).ready(function() {
 	});
 
 	$('#redirect_type').on('change', function() {
+		$('#redirect_form_group').hide();
+		$('#hosted_form_group').hide();
+		$('#post_form_group').hide();
 		if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_HOSTED); ?>) {
 			$('#hosted_form_group').show();
-			$('#redirect_form_group').hide();
 		} else if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_REDIRECT); ?>) {
-			$('#hosted_form_group').hide();
 			$('#redirect_form_group').show();
+		} else if($(this).val() == <?php echo json_encode(\Flux\Offer::REDIRECT_TYPE_POST); ?>) {
+			$('#post_form_group').show();
 		}
 	}).trigger('change');
 

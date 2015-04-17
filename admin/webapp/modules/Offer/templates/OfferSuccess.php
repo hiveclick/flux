@@ -62,6 +62,7 @@
 
 <!-- main col right -->
 <div class="col-sm-4">
+    <?php if ($offer->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
 	<div class="panel panel-default text-center">
 		<?php foreach ($offer->getOfferPages() as $offer_page) { ?>	
 			<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer_page->getPreviewUrl()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer_page->getPreviewUrl() ?>" />
@@ -76,6 +77,7 @@
 		</div>
 	</div>
 	<p />
+	<?php } ?>
 	<div class="panel panel-default text-center">
 		<div class="panel-heading">
 			<h4>Today's Stats</h4>
@@ -83,17 +85,6 @@
 		<div class="panel-body">
 		<h4><?php echo number_format($offer->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
 		<h4><?php echo number_format($offer->getDailyConversions(), 0, null, ',') ?> Conversions</h4>
-		</div>
-	</div>
-	<p />
-	<div class="panel panel-default">
-		<div class="panel-heading"><h4>Quick Links</h4></div>
-		<div class="panel">
-			<div class="list-group">
-				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-spy" class="list-group-item">Spy Report</a>
-				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-pages" class="list-group-item">Pages</a>
-				<a href="/offer/offer?_id=<?php echo $offer->getId() ?>#tabs-events" class="list-group-item">Events</a>
-			</div>
 		</div>
 	</div>
 </div>

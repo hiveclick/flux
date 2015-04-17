@@ -26,6 +26,7 @@ class Offer extends MongoForm {
 	protected $timezone;
 	protected $notification_interval;
 	protected $events;
+	protected $split;
 	protected $flow_id;
 	protected $verticals;
 	protected $payout;
@@ -483,6 +484,41 @@ class Offer extends MongoForm {
 		}
 		$this->addModifiedColumn('client');
 		return $this;
+	}
+	
+	/**
+	 * Returns the split
+	 * @return \Flux\Link\Split
+	 */
+	function getSplit() {
+	    if (is_null($this->split)) {
+	        $this->split = new \Flux\Link\Split();
+	    }
+	    return $this->split;
+	}
+	
+	/**
+	 * Sets the split
+	 * @var \Flux\Link\Split
+	 */
+	function setSplit($arg0) {
+	    if (is_array($arg0)) {
+			$split = $this->getSplit();
+			$split->populate($arg0);
+			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->split = $split;
+		} else if (is_string($arg0)) {
+			$split = $this->getSplit();
+			$split->setSplitId($arg0);
+			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->split = $split;
+		}
+		$this->addModifiedColumn('split');
+	    return $this;
 	}
 
 	/**

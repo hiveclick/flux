@@ -34,10 +34,15 @@ class GoogleChart extends CommonForm {
 	function addData($date, $col_key, $value, $formatted_value = null) {
 		$tmp_array = $this->getRowData();
 		$header_cols = $this->getCols();
-		if (isset($tmp_array[$date])) {
+		if ($date instanceof \DateTime) {
+		    $date_key = $date->format('m/d/Y H:00:00');
+		} else {
+		    $date_key = $date;
+		}
+		if (isset($tmp_array[$date_key])) {
 			foreach ($header_cols as $key => $header_col) {
 				if ($header_col['label'] == $col_key) {
-					$tmp_array[$date]['c'][$key] = array('v' => $value, 'f' => $formatted_value);
+					$tmp_array[$date_key]['c'][$key] = array('v' => $value, 'f' => $formatted_value);
 				}
 			}
 			$this->setRowData($tmp_array);	
@@ -46,7 +51,11 @@ class GoogleChart extends CommonForm {
 			$col_counter = 0;
 			foreach ($this->getColumnData() as $key => $column) {
 				if ($col_counter == 0) {
-					$row_data[0] = array('v' => $date, 'f' => null);
+				    if ($date instanceof \DateTime) {
+					   $row_data[0] = array('v' => 'Date(' . $date->format('Y') . ',' . ($date->format('m') - 1) . ',' . $date->format('d,H,0,0,0') . ')');
+				    } else {
+				        $row_data[0] = array('v' => $date, 'f' => null);
+				    }
 				} else if ($col_key == $column['label']) {
 					$row_data[$col_counter] = array('v' => $value, 'f' => $formatted_value);
 				} else {
@@ -54,7 +63,7 @@ class GoogleChart extends CommonForm {
 				}
 				$col_counter++;
 			}
-			$this->addRow($date, $row_data);
+			$this->addRow($date_key, $row_data);
 		}
 	}
 	
