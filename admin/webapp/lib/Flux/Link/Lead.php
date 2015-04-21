@@ -35,7 +35,11 @@ class Lead extends CommonForm {
 	function setLeadId($arg0) {
 		$this->lead_id = $arg0;
 		// Try to set the other fields
-		$this->setLeadName($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
+		if (trim($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln')) != '') {
+            $this->setLeadName($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
+		} else {
+		    $this->setLeadName($this->getLead()->getValue('name'));
+		}
 		$this->setEmail($this->getLead()->getValue('em'));
 		$this->setPhone($this->getLead()->getValue('ph'));
 		if ($this->getLead()->getId() instanceof \MongoId) {

@@ -1,5 +1,5 @@
 <?php
-	/* @var $split \Flux\Export */
+	/* @var $split_queue \Flux\SplitQueue */
 	$split_queue = $this->getContext()->getRequest()->getAttribute("split_queue", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
@@ -52,8 +52,13 @@
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
 				</div>
 				<div class="form-group text-left">
-				    <input type="hidden" name="hide_unfulfilled" value="0" />
-					<input type="checkbox" class="form-control" placeholder="show all leads" id="hide_fulfilled_1" name="hide_fulfilled" checked value="1" />
+				    <select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLABLE, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
+					</select>
 				</div>
 			</div>
 		</form>
@@ -65,14 +70,8 @@
 //<!--
 $(document).ready(function() {
 
-    $('#hide_fulfilled_1').bootstrapSwitch({
-    	onText: 'unfulfilled&nbsp;leads',
-    	offText: 'all&nbsp;leads',
-    	handleWidth: 110,
-    	labelWidth: 25,
-    	onSwitchChange: function() {
-    		$('#split_search_form').trigger('submit');
-    	}
+    $('#disposition_array').selectize().on('change', function($val) {
+    	$('#split_search_form').trigger('submit');
     });
 	
 	var columns = [
@@ -118,14 +117,37 @@ $(document).ready(function() {
 				ret_val += '</div>';
 				return ret_val;
 		}},
-		{id:'is_fulfilled', name:'Fulfilled', field:'is_fulfilled', def_value: ' ', width:60, sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'is_fulfilled', name:'Fulfilled', field:'is_fulfilled', def_value: ' ', width:60, sortable:true, hidden: true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value) {
 				return '<span class="text-success">Yes</span>';
 			} else {
 				return '<span class="text-danger">No</span>';
 			}
 		}},
-		{id:'error_message', name:'Errors', field:'error_message', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'disposition', name:'Disposition', field:'disposition', def_value: ' ', width:60, sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+				if (value == 0) {
+					ret_val += '<div class="text-muted">Unfulfilled</div>';
+				} else if (value == 1) {
+					ret_val += '<div class="text-success">Fulfilled</div>';
+				} else if (value == 2) {
+					ret_val += '<div class="text-warning">Pending</div>';
+				} else if (value == 3) {
+					ret_val += '<div class="text-danger">Unfulfillable</div>';
+				} else if (value == 4) {
+					ret_val += '<div class="text-info">Already Fulfilled</div>';
+				} else {
+					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
+				}
+    			if (dataContext.error_message != '') {
+    				ret_val +=  '<div class="text-danger small">' + dataContext.error_message + '</div>';
+    			} else {
+    				ret_val +=  '<div class="text-muted small">no errors</div>';
+    			}
+				ret_val += '</div>';
+				return ret_val;
+		}},
+		{id:'error_message', name:'Errors', field:'error_message', def_value: ' ', sortable:true, hidden: true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value != '') {
 				return '<span class="text-danger">' + value + '</span>';
 			} else {

@@ -3,6 +3,7 @@ namespace Flux;
 
 class SplitQueue extends Base\SplitQueue {
 
+    private $disposition_array;
     private $offer_id_array;
     private $split_id_array;
     private $fulfillment;
@@ -89,6 +90,37 @@ class SplitQueue extends Base\SplitQueue {
      */
     function setTest($arg0) {
         $this->test = (boolean)$arg0;
+        return $this;
+    }
+    
+    /**
+     * Returns the disposition_array
+     * @return array
+     */
+    function getDispositionArray() {
+        if (is_null($this->disposition_array)) {
+            $this->disposition_array = array();
+        }
+        return $this->disposition_array;
+    }
+    
+    /**
+     * Sets the disposition_array
+     * @var array
+     */
+    function setDispositionArray($arg0) {
+        if (is_array($arg0)) {
+            $this->disposition_array = $arg0;
+        } else if (is_string($arg0)) {
+            if (strpos($arg0, ',') !== false) {
+                $this->disposition_array = explode(",", $arg0);
+            } else {
+                $this->disposition_array = array($arg0);
+            }
+        } else if (is_int($arg0)) {
+            $this->disposition_array = array($arg0);
+        }
+        array_walk($this->disposition_array, function(&$value) { $value = (int)trim($value); });
         return $this;
     }
     
@@ -199,11 +231,8 @@ class SplitQueue extends Base\SplitQueue {
 		if (count($this->getOfferIdArray()) > 0) {
 		    $criteria['lead.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
 		}
-		if ($this->getHideUnfulfillable()) {
-		    $criteria['is_unfulfillable'] = false;
-		}
-		if ($this->getHideFulfilled()) {
-		    $criteria['is_fulfilled'] = false;
+		if (count($this->getDispositionArray()) > 0) {
+		    $criteria['disposition'] = array('$in' => $this->getDispositionArray());
 		}
 		if ($this->getHideCatchAll()) {
 		    $criteria['is_catch_all'] = false;

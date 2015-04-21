@@ -22,9 +22,9 @@
                     <?php } ?>
 					<li class="divider"></li>
 					<?php if ($split_queue->getIsCatchAll()) { ?>
-					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">delete</span></a></li>
+					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
 					<?php } else { ?>
-					    <li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
+					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
 					<?php } ?>   
 				</ul>
 			</div>
@@ -45,9 +45,9 @@
 				<?php } ?>
 			</div>
 			<?php if ($split_queue->getIsCatchAll()) { ?>
-                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger" href="#">delete</a>
+                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
             <?php } else { ?>
-                <a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
+                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
             <?php } ?>
 		</div>
 	</div>
@@ -68,6 +68,9 @@
 		<div class="panel-heading">Data Information</div>
 		<div class="panel-body">
             <dl class="dl-horizontal">
+            <?php if ($split_queue->getLead()->getLead()->getValue('name') != '') { ?>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('name')->getId() ?>">Name:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('name') ?>&nbsp;</dd>
+			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('fn') != '') { ?>
 				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('fn') ?>&nbsp;</dd>
 			<?php } ?>
@@ -103,7 +106,7 @@
 		<hr />
 		<dl class="dl-horizontal">
 			<?php
-				 $known_fields = array('fn', 'ln', 'a1', 'cy', 'st', 'zi', 'em'); 
+				 $known_fields = array('fn', 'ln', 'a1', 'cy', 'st', 'zi', 'em', 'name', 'ph'); 
 				 foreach ($split_queue->getLead()->getLead()->getD() as $key => $value) { 
 			?>
 				<?php if (!in_array($key, $known_fields)) { ?>

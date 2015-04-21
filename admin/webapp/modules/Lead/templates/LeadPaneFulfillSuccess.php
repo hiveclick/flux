@@ -10,6 +10,7 @@
 <form action="/api" id="lead_split_form" method="POST">
 	<input type="hidden" name="func" value="/lead/lead-split" />
 	<input type="hidden" name="lead[lead_id]" value="<?php echo $lead->getId() ?>" />
+	<input type="hidden" name="disposition" value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" />
     <div class="modal-body">
         <div class="help-block">You can assign this lead to a split and then fulfill it on that split</div>
         <div class="form-group">

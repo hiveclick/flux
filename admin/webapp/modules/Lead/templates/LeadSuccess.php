@@ -54,7 +54,7 @@
 		<div class="panel-body">
             <dl class="dl-horizontal">
             <?php if ($lead->getValue('name') != '') { ?>
-				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('name')->getId() ?>">Firstname:</a></dt><dd><?php echo $lead->getValue('name') ?>&nbsp;</dd>
+				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('name')->getId() ?>">Name:</a></dt><dd><?php echo $lead->getValue('name') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($lead->getValue('fn') != '') { ?>
 				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('fn')->getId() ?>">Firstname:</a></dt><dd><?php echo $lead->getValue('fn') ?>&nbsp;</dd>

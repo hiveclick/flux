@@ -83,7 +83,7 @@ class ManualFulfillCustomAction extends BasicRestAction
         	        $split_queue_attempt->setIsError(false);
         	        $split_queue_attempt->setResponse('Already Fulfilled');
         	        $split_queue->addAttempt($split_queue_attempt);
-        	        
+        	        $split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED);
         	        $split_queue->setErrorMessage('Already Fulfilled');
         	    } else {
                     $results = $fulfillment->queueLead($split_queue_attempt);
@@ -104,10 +104,12 @@ class ManualFulfillCustomAction extends BasicRestAction
                 	        $split_queue->setIsFulfilled(false);
                 	        $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
                 	        $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
+                	        $split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_PENDING);
                 	    } else {
                 	        $split_queue->setIsFulfilled(true);            	        
                 	        $split_queue->setIsError(false);
                 	        $split_queue->setErrorMessage('');
+                	        $split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_FULFILLED);
                 	        
                 	        // Add a fulfilled event to the lead
                 	        $lead = $split_queue->getLead()->getLead();

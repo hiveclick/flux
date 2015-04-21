@@ -5,9 +5,16 @@ use Mojavi\Form\MongoForm;
 
 class SplitQueue extends MongoForm {
 
+    const DISPOSITION_UNFULFILLED = 0;
+    const DISPOSITION_FULFILLED = 1;
+    const DISPOSITION_PENDING = 2;
+    const DISPOSITION_UNFULFILLABLE = 3;
+    const DISPOSITION_ALREADY_FULFILLED = 4;
+    
 	protected $split;
 	protected $lead;
 	
+	protected $disposition;
 	protected $is_fulfilled;
 	protected $is_processing;
 	protected $error_message;
@@ -31,6 +38,27 @@ class SplitQueue extends MongoForm {
 		$this->setDbName('queue');
 		$this->setCollectionName('split_queue');
 		$this->setIdType(self::ID_TYPE_MONGO);
+	}
+	
+	/**
+	 * Returns the disposition
+	 * @return integer
+	 */
+	function getDisposition() {
+	    if (is_null($this->disposition)) {
+	        $this->disposition = self::DISPOSITION_UNFULFILLED;
+	    }
+	    return $this->disposition;
+	}
+	
+	/**
+	 * Sets the disposition
+	 * @var integer
+	 */
+	function setDisposition($arg0) {
+	    $this->disposition = (int)$arg0;
+	    $this->addModifiedColumn("disposition");
+	    return $this;
 	}
 	
 	/**

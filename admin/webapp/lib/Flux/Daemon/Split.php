@@ -158,6 +158,7 @@ class Split extends BaseDaemon
 					$split_queue->setIsError(false);
 					$split_queue->setErrorMessage('');
 					$split_queue->setNextAttemptTime(new \MongoDate());
+					$split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_UNFULFILLED);
 					
 					// If this split is normal, then we can add a lead to multiple splits
 					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
