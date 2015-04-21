@@ -30,6 +30,7 @@ class IndexAction extends BasicAction
 	    $report_client = new \Flux\ReportClient();
 	    $report_client->setStartDate(date('m/01/Y'));
 	    $report_client->setEndDate(date('m/t/Y'));
+	    $report_client->setIgnorePagination(true);
 	    $daily_rev_items = $report_client->queryAll(array(), true);
 	    
 	    /* @var $daily_rev_item \Flux\ReportClient */
