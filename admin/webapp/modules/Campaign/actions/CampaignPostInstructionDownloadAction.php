@@ -36,7 +36,7 @@ class CampaignPostInstructionDownloadAction extends BasicAction
 		header('Content-Type: application/pdf');
 		header('Content-Disposition: attachment; filename="campaign-post-instructions.pdf"');
 		
-		$pdf_contents = $snappy->getOutput('http://www.flux.dev/campaign/campaign-post-instruction?_id=' . $campaign->getId());		
+		$pdf_contents = $snappy->getOutput('http://' . str_replace("api.", "www.", MO_API_URL) . '/campaign/campaign-post-instruction?_id=' . $campaign->getId());		
 		echo $pdf_contents;
 		
 		return View::NONE;
