@@ -1,6 +1,13 @@
 <?php
 	$campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
+	$example_qs = array('_ck' => $campaign->getKey(), 'firstname' => 'john', 'lastname' => 'smith', 'email' => 'john@mctesterson.com', 'addr' => '123 Test Street', 'city' => 'Test City', 'state' => 'UT', 'zip' => '84057', 'phone' => '8015551212');
+	/* @var $filter \Flux\Link\DataField */
+	foreach ($campaign->getOffer()->getOffer()->getSplit()->getSplit()->getFilters() as $filter) {
+	    if (in_array($filter->getDatafield()->getKeyname(), array('fn','ln','em','ph','cty','st','zip','addr'))) { continue; }
+	    $values = $filter->getDataFieldValue();
+        $example_qs[$filter->getDatafield()->getKeyName()] = array_shift($values);
+	} 
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -111,7 +118,7 @@
         	                    <td><?php echo $filter->getDatafield()->getName() ?></td>
         	                    <td><?php echo $filter->getDatafield()->getKeyName() ?></td>
         	                    <td>Yes</td>
-        	                    <td><?php echo implode(",", $filter->getDataFieldValue()) ?></td>
+        	                    <td><?php echo implode(", ", $filter->getDataFieldValue()) ?></td>
         	                </tr>
     	                <?php } ?>
     	            </tbody>
@@ -126,7 +133,7 @@
     	            messages.  The lead id is also duplicated in the META record.  The META record is reserved for future use.    	             
     	        </div>
     	        <h4>Example Post Url</h4>
-    	        <pre><?php echo MO_API_URL ?>/rt/post-lead?_ck=<?php echo $campaign->getKey() ?>&amp;firstname=john&amp;lastname=smith&amp;addr=123%20Test%20Street&amp;city=Test%20City&amp;state=UT&amp;zip=84057&amp;email=john@mctesterson.com</pre>
+    	        <pre><?php echo MO_API_URL ?>/rt/post-lead?<?php echo http_build_query($example_qs, null, '&') ?></pre>
     	        <h4>Successful response</h4>
     	        <pre>{"result":"SUCCESS","errors":[],"meta":{"insert_id":"552f6fd4d9b868286a8dd08d","rows_affected":1},"record":{"lead":"552f6fd4d9b868286a8dd08d","response":"success","received_time":"04\/16\/2015 01:16:21","_id":0}}</pre>
     	        <h4>Failed response</h4>

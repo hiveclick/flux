@@ -171,7 +171,7 @@
 		</select>
 	</div>
 	<div class="col-sm-4">
-		<textarea name="filters[dummy-dummy_id][data_field_value]" class="form-control selectize-text" placeholder="Select one or more filter values" rows="3"></textarea>
+		<textarea name="filters[dummy-dummy_id][data_field_value][]" class="form-control selectize-text" placeholder="Select one or more filter values" rows="3"></textarea>
 	</div>
 	<div class="col-sm-1">
 		<button type="button" class="btn btn-sm btn-danger btn-remove-dataField"><span class="glyphicon glyphicon-minus"></span></button>
@@ -206,7 +206,7 @@
 		</select>
 	</div>
 	<div class="col-sm-4">
-		<textarea name="validators[dummy-dummy_id][data_field_value]" class="form-control selectize-text" placeholder="Select one or more validator values" rows="3"></textarea>
+		<textarea name="validators[dummy-dummy_id][data_field_value][]" class="form-control selectize-text" placeholder="Select one or more validator values" rows="3"></textarea>
 	</div>
 	<div class="col-sm-1">
 		<button type="button" class="btn btn-sm btn-danger btn-remove-dataField"><span class="glyphicon glyphicon-minus"></span></button>
