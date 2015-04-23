@@ -128,7 +128,7 @@ $(window).on('debouncedresize', function() {
 	if (!$('#main_graph_div').is(':hidden')) {
 		initialize();
 	}
-}
+});
 
 function initialize() {
 	var query1 = new google.visualization.Query('/chart/graph-click-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>');
