@@ -1,24 +1,87 @@
 [
     {
+        "name": "knplabs/knp-snappy",
+        "version": "0.3.3",
+        "version_normalized": "0.3.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/snappy.git",
+            "reference": "eda1b39cb06b3f9ac7b4423df4c115feccea1194"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/eda1b39cb06b3f9ac7b4423df4c115feccea1194",
+            "reference": "eda1b39cb06b3f9ac7b4423df4c115feccea1194",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "symfony/process": "~2.1"
+        },
+        "suggest": {
+            "h4cc/wkhtmltopdf-amd64": "Provide wkhtmltopdf-amd64 binary, use version `0.12.0` as dependency",
+            "h4cc/wkhtmltopdf-i386": "Provide wkhtmltopdf-i386 binary, use version `0.12.0` as dependency"
+        },
+        "time": "2015-03-11 12:24:42",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Knp\\Snappy": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "KnpLabs Team",
+                "homepage": "http://knplabs.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://github.com/KnpLabs/snappy/contributors"
+            }
+        ],
+        "description": "PHP5 library allowing thumbnail, snapshot or PDF generation from a url or a html page. Wrapper for wkhtmltopdf/wkhtmltoimage.",
+        "homepage": "http://github.com/KnpLabs/snappy",
+        "keywords": [
+            "knp",
+            "knplabs",
+            "pdf",
+            "snapshot",
+            "thumbnail",
+            "wkhtmltopdf"
+        ]
+    },
+    {
         "name": "novaksolutions/infusionsoft-php-sdk",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/novaksolutions/infusionsoft-php-sdk.git",
-            "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a"
+            "reference": "80afd1df6a953fb69ef5d45a0ac83ad78b9941b9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
-            "reference": "cdc6eff8fdbc6f33b654f32b904f799ed3776d9a",
+            "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/80afd1df6a953fb69ef5d45a0ac83ad78b9941b9",
+            "reference": "80afd1df6a953fb69ef5d45a0ac83ad78b9941b9",
             "shasum": ""
         },
         "require": {
             "ext-curl": "*",
             "php": ">=5.2.0"
         },
-        "time": "2015-01-09 00:55:49",
+        "time": "2015-04-07 19:01:53",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -45,6 +108,48 @@
             "infusionsoft-api",
             "marketing",
             "php-infusionsoft-api"
+        ]
+    },
+    {
+        "name": "ioki/wkhtmltopdf-amd64-centos6",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/IOKI/wkhtmltopdf-amd64-centos6.git",
+            "reference": "1fa493e38c24c20268118fc3976c93854ab1cb6b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/IOKI/wkhtmltopdf-amd64-centos6/zipball/1fa493e38c24c20268118fc3976c93854ab1cb6b",
+            "reference": "1fa493e38c24c20268118fc3976c93854ab1cb6b",
+            "shasum": ""
+        },
+        "time": "2015-04-15 14:19:57",
+        "bin": [
+            "bin/wkhtmltopdf-amd64-centos6"
+        ],
+        "type": "library",
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL Version 3"
+        ],
+        "authors": [
+            {
+                "name": "Terry Harmon",
+                "email": "terry@polymorphdev.com"
+            }
+        ],
+        "description": "All the wkhtmltopdf binaries for Centos6.",
+        "homepage": "https://github.com/ioki/wkhtmltopdf-amd64-centos6",
+        "keywords": [
+            "binary",
+            "convert",
+            "pdf",
+            "snapshot",
+            "thumbnail",
+            "wkhtmltopdf"
         ]
     }
 ]

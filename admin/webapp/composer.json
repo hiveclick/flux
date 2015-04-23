@@ -1,5 +1,8 @@
 {
+	"minimum-stability": "dev",
     "require": {
-	"novaksolutions/infusionsoft-php-sdk": "dev-master"
+		"novaksolutions/infusionsoft-php-sdk": "dev-master",
+        "knplabs/knp-snappy": "0.3.*",
+		"ioki/wkhtmltopdf-amd64-centos6": "dev-master"
     }
 }
