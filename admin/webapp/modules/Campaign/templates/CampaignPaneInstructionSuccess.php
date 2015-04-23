@@ -43,7 +43,7 @@
     	        <code class="text-center"><?php echo MO_API_URL ?>/rt/post-lead</code>
     	        <h3>Posting Fields</h3>
     	        <div class="help-block">
-    	            The available fields you can pass in are defined below.  Fields that accept more than one value need to be suffixed with square brackets - [].  
+    	            The available fields you can pass in are defined below.  Most fields and values are case-sensitive (i.e pass in YES instead of Yes or yes).  Fields that accept more than one value need to be suffixed with square brackets - [].  
     	        </div>
     	        <table class="table table-responsive">
     	            <thead>
@@ -116,7 +116,7 @@
     	                ?>   
         	                <tr>
         	                    <td><?php echo $filter->getDatafield()->getName() ?></td>
-        	                    <td><?php echo $filter->getDatafield()->getKeyName() ?></td>
+        	                    <td><?php echo $filter->getDatafield()->getKeyName() ?><?php echo ($filter->getDatafield()->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY) ? '[]' : '' ?></td>
         	                    <td>Yes</td>
         	                    <td><?php echo implode(", ", $filter->getDataFieldValue()) ?></td>
         	                </tr>
