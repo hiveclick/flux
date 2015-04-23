@@ -5,7 +5,7 @@
 	foreach ($campaign->getOffer()->getOffer()->getSplit()->getSplit()->getFilters() as $filter) {
 	    if (in_array($filter->getDatafield()->getKeyname(), array('fn','ln','em','ph','cty','st','zip','addr'))) { continue; }
 	    $values = $filter->getDataFieldValue();
-	    if (is_array($values)) {
+	    if (is_array($values) && count($values) > 0) {
             $example_qs[$filter->getDatafield()->getKeyName()] = array_shift($values);
 	    } else {
 	        $example_qs[$filter->getDatafield()->getKeyName()] = '';
