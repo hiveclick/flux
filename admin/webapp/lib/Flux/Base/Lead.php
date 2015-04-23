@@ -93,6 +93,7 @@ class Lead extends MongoForm {
 		$notes = $this->getNotes();
 		$notes[] = array('t' => new \MongoDate(), 'note' => $arg0);
 		$this->setNotes($notes);
+		return $this;
 	}
 	
 	/**
@@ -369,6 +370,14 @@ class Lead extends MongoForm {
 			}
 		}
 		return $this;
+	}
+	
+	/**
+	 * Updates just the notes on a lead
+	 * @return integer
+	 */
+	function updateNotes() {
+	    return parent::update(array(), array('$set' => array('notes' => $this->getNotes())));
 	}
 	
 	/**

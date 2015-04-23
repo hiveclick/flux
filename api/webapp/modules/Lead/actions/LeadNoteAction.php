@@ -40,7 +40,7 @@ class LeadNoteAction extends BasicRestAction
         $lead->setId($input_form->getId());
         if ($lead->query() !== false) {
         	$lead->addNote($input_form->getNote());
-        	$lead->update();
+        	$lead->updateNotes();
         }
     	$ret_val->setRecord($lead);
     	return $ret_val;    

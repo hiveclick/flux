@@ -33,16 +33,6 @@ class Lead extends Base\Lead {
 	}
 	
 	/**
-	 * Sets the notes
-	 * @var array
-	 */
-	function addNote($arg0) {
-		$notes = $this->getNotes();
-		$notes[] = array('t' => new \MongoDate(), 'note' => $arg0);
-		$this->setNotes($notes);
-	}
-	
-	/**
 	 * Returns the last open export
 	 * @return \Flux\LeadExport
 	 */
@@ -212,7 +202,7 @@ class Lead extends Base\Lead {
 		$ops = json_encode($criteria);
 		$ops = str_replace('"$or"', '$or', $ops);
 		$ops = str_replace('"$exists"', '$exists', $ops);
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
 						
 		return parent::queryAll($criteria, $hydrate);
 	}

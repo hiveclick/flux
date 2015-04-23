@@ -57,6 +57,7 @@ class PostLeadAction extends BasicRestAction
             $lead = new \Flux\Lead();
             $lead->populate($_REQUEST);
             $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME, '1');
+            $lead->addNote(json_encode($_REQUEST));
             // Attempt to insert the lead
             $insert_id = $lead->insert();
             $lead->setId($insert_id);
@@ -201,6 +202,10 @@ class PostLeadAction extends BasicRestAction
             $ajax_form->setInsertId((string)$insert_id);
             $ajax_form->setRowsAffected(1);
         } catch (\Exception $e) {
+            // Add the exception as a note to the lead so we can track it
+            $lead->addNote($e->getMessage());
+            $lead->updateNotes();
+            // Save the exception as an error so the ajax picks it up
             $this->getErrors()->addError('error', $e->getMessage());
             $post_response->setResponse($e->getMessage());
         }
