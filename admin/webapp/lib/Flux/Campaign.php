@@ -5,6 +5,7 @@ class Campaign extends Base\Campaign {
 
 	private $offer_id_array;
 	private $client_id_array;
+	private $traffic_source_id_array;
 	
 	/**
 	 * Returns the _status_name
@@ -21,6 +22,38 @@ class Campaign extends Base\Campaign {
 			return "Unknown Status";
 		}
 	}
+	
+	/**
+	 * Returns the traffic_source_id_array
+	 * @return array
+	 */
+	function getTrafficSourceIdArray() {
+	    if (is_null($this->traffic_source_id_array)) {
+	        $this->traffic_source_id_array = array();
+	    }
+	    return $this->traffic_source_id_array;
+	}
+	
+	/**
+	 * Sets the traffic_source_id_array
+	 * @var array
+	 */
+	function setTrafficSourceIdArray($arg0) {
+	    if (is_array($arg0)) {
+			$this->traffic_source_id_array = $arg0;
+			array_walk($this->traffic_source_id_array, function(&$val) { $val = (int)$val; });
+		} else if (is_string($arg0)) {
+			if (strpos($arg0, ',') !== false) {
+				$this->traffic_source_id_array = explode(",", $arg0);
+				array_walk($this->traffic_source_id_array, function(&$val) { $val = (int)$val; });
+			} else {
+				$this->traffic_source_id_array = array((int)$arg0);
+			}
+		}
+	    return $this;
+	}
+	
+	
 
 	/**
 	 * Returns the offer_id_array
@@ -108,6 +141,9 @@ class Campaign extends Base\Campaign {
 		}
 		if (count($this->getClientIdArray()) > 0) {
 			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+		}
+		if (count($this->getTrafficSourceIdArray()) > 0) {
+		    $criteria['traffic_source.traffic_source_id'] = array('$in' => $this->getTrafficSourceIdArray());
 		}
 		return parent::queryAll($criteria, $hydrate);
 	}

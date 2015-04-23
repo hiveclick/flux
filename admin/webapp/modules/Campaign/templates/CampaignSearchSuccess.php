@@ -3,6 +3,7 @@
 	$campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
+	$traffic_sources = $this->getContext()->getRequest()->getAttribute("traffic_sources", array());
 ?>
 <div class="page-header">
 	<div class="pull-right">
@@ -27,7 +28,7 @@
 							/* @var $offer \Flux\Offer */
 							foreach($offers as $offer) { 
 						?>
-							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
@@ -37,7 +38,17 @@
 							/* @var $client \Flux\Client */ 
 							foreach ($clients as $client) { 
 						?>
-							<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+							<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source">
+						<?php
+							/* @var $traffic_source \Flux\TrafficSource */ 
+							foreach ($traffic_sources as $traffic_source) { 
+						?>
+							<option value="<?php echo $traffic_source->getId() ?>" <?php echo in_array($traffic_source->getId(), $campaign->getTrafficSourceIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('name' => $traffic_source->getName(), 'description' => $traffic_source->getDescription(), 'icon' => $traffic_source->getIcon(), 'username' => $traffic_source->getUsername()))) ?>"><?php echo $traffic_source->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
@@ -62,11 +73,18 @@ $(document).ready(function() {
 			ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'traffic_source', name:'&nbsp;', field:'traffic_source.traffic_source_icon', sort_field:'traffic_source.name', def_value: ' ', maxWidth:64, width:64, minWidth:64, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+        	return '<img class="img-thumbnail" src="/images/traffic-sources/' + (value != '' ? value : 'unknown') + '_48.png" width="32" border="0" />';
+        }},
+		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', hidden: true, sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return '<a href="/client/client?_id=' + dataContext.client.client_id + '">' + value + '</a>';
 		}},
 		{id:'offer_name', name:'offer', field:'offer.offer_name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			return '<a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + value + '</a>';
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + value + '</a>';
+				ret_val += '<div class="small text-muted">' + dataContext.client.client_name + '</div>';
+				ret_val += '</div>';
+				return ret_val;
 		}},
 		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>') {
@@ -129,6 +147,29 @@ $(document).ready(function() {
 	}).on('change', function(e) {
 		$('#campaign_search_form').trigger('submit');
 	});
+
+	$('#traffic_source_id_array').selectize({
+    	allowEmptyOption: true,
+    	dropdownWidthOffset: 150,
+    	valueField: 'value',
+		labelField: 'name',
+		searchField: ['name', 'description'],
+		render: {
+			
+			option: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h4 class="media-heading small">' + escape(item.name) + '</h4>';
+				ret_val += '<div class="text-muted small">' + escape(item.description) + '</div>';
+				ret_val += '<div class="text-muted small">(' + escape(item.username) + ')</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
+    }).on('change', function(e) {
+    	$('#campaign_search_form').trigger('submit');
+    });
 });
 //-->
 </script>

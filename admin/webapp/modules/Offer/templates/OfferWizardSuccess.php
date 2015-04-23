@@ -46,9 +46,26 @@
 		<label class="col-sm-2 control-label hidden-xs" for="client_id">Advertising Client</label>
 		<div class="col-sm-10">
 			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Advertising Client">
-				<?php foreach($clients AS $client) { ?>
-					<option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
-				<?php } ?>
+				<optgroup label="Administrators">
+			        <?php
+    					/* @var $client \Flux\Client */
+    					foreach ($clients AS $client) { 
+    				?>
+    				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+    					    <option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+    					<?php } ?>
+    				<?php } ?>
+			    </optgroup>
+				<optgroup label="Advertisers">
+			        <?php
+    					/* @var $client \Flux\Client */
+    					foreach ($clients AS $client) { 
+    				?>
+    				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+    					    <option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+    					<?php } ?>
+    				<?php } ?>
+			    </optgroup>
 			</select>
 		</div>
 	</div>
@@ -56,10 +73,10 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label hidden-xs" for="payout">Payout</label>
 		<div class="col-sm-10">
+		    <input type="hidden" name="events[0][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
+			<input type="hidden" name="events[0][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
+			<input type="hidden" name="events[0][field]" value="payout" />
 			<div class="input-group">
-				<input type="hidden" name="events[0][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
-				<input type="hidden" name="events[0][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
-				<input type="hidden" name="events[0][field]" value="payout" />
 				<span class="input-group-addon">$</span>
 				<input type="text" name="events[0][value]" id="payout" class="form-control" value="<?php echo number_format($offer->getPayout(), 2) ?>">
 			</div>
@@ -69,10 +86,10 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label hidden-xs" for="revenue">Revenue</label>
 		<div class="col-sm-10">
+		    <input type="hidden" name="events[1][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
+			<input type="hidden" name="events[1][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
+			<input type="hidden" name="events[1][field]" value="revenue" />
 			<div class="input-group">
-				<input type="hidden" name="events[1][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
-				<input type="hidden" name="events[1][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
-				<input type="hidden" name="events[1][field]" value="revenue" />
 				<span class="input-group-addon">$</span>
 				<input type="text" name="events[1][value]" id="revenue" class="form-control" value="0.00">
 			</div>

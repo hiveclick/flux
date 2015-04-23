@@ -3,9 +3,6 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Flux\Offer;
-use Flux\Campaign;
-use Flux\Client;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -26,35 +23,37 @@ class CampaignPaneEditAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		if ($this->getContext()->getRequest()->getMethod() == Request::POST) {
-			/* @var $user Flux\Campaign */
-			$campaign = new Campaign();
-			$campaign->populate($_POST);
-			$campaign->update();
-			
-			$this->getContext()->getController()->redirect('/campaign/campaign?_id=' . $campaign->getId());
-		} else {
-			/* @var $user Flux\Campaign */
-			$campaign = new Campaign();
-			$campaign->populate($_GET);
-			$campaign->query();
-			
-			$client = new Client();
-			$client->setSort('name');
-			$client->setSord('ASC');
-			$client->setIgnorePagination(true);
-			$clients = $client->queryAll();
-			
-			$offer = new Offer();
-			$offer->setSort('name');
-			$offer->setSord('ASC');
-			$offer->setIgnorePagination(true);
-			$offers = $offer->queryAll();
-			
-			$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
-			$this->getContext()->getRequest()->setAttribute("clients", $clients);
-			$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		}
+		/* @var $campaign \Flux\Campaign */
+		$campaign = new \Flux\Campaign();
+		$campaign->populate($_GET);
+		$campaign->query();
+		
+		/* @var $client \Flux\Client */
+		$client = new \Flux\Client();
+		$client->setSort('name');
+		$client->setSord('ASC');
+		$client->setIgnorePagination(true);
+		$clients = $client->queryAll();
+		
+		/* @var $offer \Flux\Offer */
+		$offer = new \Flux\Offer();
+		$offer->setSort('name');
+		$offer->setSord('ASC');
+		$offer->setIgnorePagination(true);
+		$offers = $offer->queryAll();
+		
+		/* @var $traffic_source \Flux\TrafficSource */
+		$traffic_source = new \Flux\TrafficSource();
+		$traffic_source->setSort('name');
+		$traffic_source->setSord('ASC');
+		$traffic_source->setIgnorePagination(true);
+		$traffic_sources = $traffic_source->queryAll();
+		
+		$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
+		$this->getContext()->getRequest()->setAttribute("clients", $clients);
+		$this->getContext()->getRequest()->setAttribute("offers", $offers);
+		$this->getContext()->getRequest()->setAttribute("traffic_sources", $traffic_sources);
+		
 		return View::SUCCESS;
 	}
 }

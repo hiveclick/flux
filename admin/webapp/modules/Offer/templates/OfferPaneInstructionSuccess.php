@@ -180,7 +180,6 @@ $(document).ready(function() {
 		valueField: 'campaign_key',
 		labelField: 'description',
 		searchField: ['client_name', 'description', 'campaign_key'],
-		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
 	            return '<div style="padding-right:25px;">' +

@@ -55,8 +55,6 @@ $(document).ready(function() {
 		{id:'client_type', name:'type', field:'client_type', def_value: ' ', cssClass: 'text-center', maxWidth:150, width:150, minWidth:150, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ?>') {
 				return '<span class="">Primary Admin</span>';
-			} else if (value == '<?php echo \Flux\Client::CLIENT_TYPE_SECONDARY_ADMIN ?>') {
-				return '<span class="">Secondary Admin</span>';
 			} else if (value == '<?php echo \Flux\Client::CLIENT_TYPE_AFFILIATE ?>') {
 				return '<span class="">Affiliate</span>';
 			}

@@ -9,7 +9,7 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title">Edit Offer</h4>
+	<h4 class="modal-title">Edit <?php echo $offer->getName() ?> Offer</h4>
 </div>
 <form action="/api" id="offer_form" method="PUT">
 	<input type="hidden" name="func" value="/offer/offer" />
@@ -32,9 +32,26 @@
 				<div class="form-group">
 					<label class="control-label hidden-xs" for="client_id">Advertiser</label>
 					<select class="form-control selectize" name="client[client_id]" id="client_id" placeholder="Advertising Client">
-						<?php foreach ($clients AS $client) { ?>
-						<option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName(); ?></option>
-						<?php } ?>
+						<optgroup label="Administrators">
+            		        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+            		    </optgroup>
+            			<optgroup label="Advertisers">
+            		        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo $offer->getClient()->getClientId() == $client->getId() ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+            		    </optgroup>
 					</select>
 				</div>
 		
@@ -168,7 +185,6 @@ $(document).ready(function() {
 		valueField: 'campaign_key',
 		labelField: 'description',
 		searchField: ['client_name', 'description', 'campaign_key'],
-		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
 	            return '<div style="padding-right:25px;">' +

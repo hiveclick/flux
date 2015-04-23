@@ -13,8 +13,10 @@ class Campaign extends MongoForm {
 	protected $status;
 	protected $offer;
 	protected $client;
+	protected $traffic_source;
 	protected $redirect_link;
 	protected $whitelist_ips;
+	
 	
 	protected $daily_clicks;
 	protected $daily_conversions;
@@ -205,6 +207,47 @@ class Campaign extends MongoForm {
 		}
 		$this->addModifiedColumn('client');
 		return $this;
+	}
+	
+	/**
+	 * Returns the traffic_source
+	 * @return \Flux\Link\TrafficSource
+	 */
+	function getTrafficSource() {
+	    if (is_null($this->traffic_source)) {
+	        $this->traffic_source = new \Flux\Link\TrafficSource();
+	    }
+	    return $this->traffic_source;
+	}
+	
+	/**
+	 * Sets the traffic_source
+	 * @var \Flux\Link\TrafficSource
+	 */
+	function setTrafficSource($arg0) {
+	    if (is_array($arg0)) {
+			$traffic_source = $this->getTrafficSource();
+			$traffic_source->populate($arg0);
+			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceName() == "") {
+				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
+			}
+			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceIcon() == "") {
+			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+			}
+			$this->traffic_source = $traffic_source;
+		} else if (is_string($arg0)) {
+			$traffic_source = $this->getTrafficSource();
+			$traffic_source->setTrafficSourceId($arg0);
+			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceName() == "") {
+				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
+			}
+			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceIcon() == "") {
+			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+			}
+			$this->traffic_source = $traffic_source;
+		}
+		$this->addModifiedColumn('traffic_source');
+	    return $this;
 	}
 	
 	/**

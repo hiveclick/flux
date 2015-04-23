@@ -12,6 +12,8 @@
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
 					<li><a data-toggle="modal" data-target="#edit_modal" href="/admin/fulfillment-pane-edit?_id=<?php echo $fulfillment->getId() ?>">edit fulfillment</a></li>
 					<li class="divider"></li>
+					<li><a data-toggle="modal" data-target="#map_preview_modal" href="/admin/fulfillment-pane-map-preview-modal?_id=<?php echo $fulfillment->getId() ?>">preview mapping</a></li>
+					<li class="divider"></li>
 					<li><a data-toggle="modal" data-target="#clone_modal" href="/admin/fulfillment-pane-clone?_id=<?php echo $fulfillment->getId() ?>">clone</a></li>
 					<li><a data-toggle="modal" data-target="#test_modal" href="/admin/fulfillment-pane-test?_id=<?php echo $fulfillment->getId() ?>">test</a></li>
 					<li class="divider"></li>
@@ -22,6 +24,9 @@
 		<div class="hidden-sm hidden-xs">
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" data-toggle="modal" data-target="#edit_modal" href="/admin/fulfillment-pane-edit?_id=<?php echo $fulfillment->getId() ?>">edit fulfillment</a>
+			</div>
+			<div class="btn-group" role="group">
+			    <a class="btn btn-info" data-toggle="modal" data-target="#map_preview_modal" href="/admin/fulfillment-pane-map-preview-modal?_id=<?php echo $fulfillment->getId() ?>">preview mapping</a>
 			</div>
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" data-toggle="modal" data-target="#clone_modal" href="/admin/fulfillment-pane-clone?_id=<?php echo $fulfillment->getId() ?>">clone</a>
@@ -47,7 +52,10 @@
 		<div class="hidden-xs hidden-sm col-md-1 col-lg-1"></div>
 		<div class="col-xs-5 col-sm-5 col-md-4 col-lg-4"><b>Post Parameter</b></div>
 		<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5"><b>Map to Datafield</b></div>
-		<div class="col-xs-3 col-sm-3 col-md-2 col-lg-2"></div>
+		<div class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
+		    <button type="button" class="btn btn-info" id="add_map_btn"><span class="glyphicon glyphicon-plus"></span></button>
+			<input type="submit" name="__saveMapping" class="btn btn-success" value="Save Mapping" />
+		</div>
 	</div>
 	<hr />
 	<div id="map_groups">
@@ -97,14 +105,6 @@
 			} 
 		?>
 	</div>
-	<div class="form-group row">
-		<div class="col-md-offset-2 col-md-10">
-			<button type="button" class="btn btn-info" id="add_map_btn"><span class="glyphicon glyphicon-plus"></span> Add Field</button>
-			<button type="button" class="btn btn-primary" id="preview_map_btn" data-toggle="modal" data-target="#map_preview_modal">Preview Mapping</button>
-			<input type="submit" name="__saveMapping" class="btn btn-success" value="Save Mapping" />
-		</div>
-	</div>
-	<div class="help-text small">* denotes a custom mapping function is defined for this data field</div>
 </form>
 
 <div class="map-group-item" style="display:none;" id="dummy_map_div">

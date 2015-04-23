@@ -88,7 +88,9 @@ class GraphLeadByHour extends GoogleChart {
 		}
 		
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getCols(), true));
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export(json_encode($this->getRows()), true));
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export(json_encode($this->getRows()), true));
+		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
 		
 	}
 	
@@ -202,6 +204,10 @@ class GraphLeadByHour extends GoogleChart {
 		$op_query = str_replace('"$exists"', '$exists', $op_query);
 		$op_query = str_replace('"$elemMatch"', '$elemMatch', $op_query);
 		$op_query = str_replace('"$project"', '$project', $op_query);
+		$start_date = new \MongoDate($this->getStartDate());
+		$end_date = new \MongoDate($this->getEndDate());
+		$op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
+		$op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
         */
 

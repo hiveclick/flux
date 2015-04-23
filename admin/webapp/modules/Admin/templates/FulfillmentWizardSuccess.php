@@ -40,18 +40,36 @@
 				<div id="export_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() == 0 ? 'hidden' : ''; ?>">
 					<div class="help-block">Associate this handler with a client and give it a name</div>
 					<div class="form-group">
-						<input type="text" id="name" name="name" class="form-control" required="required" placeholder="Enter nickname..." value="<?php echo $fulfillment->getName() ?>" />
+						<input type="text" id="name" name="name" class="form-control" placeholder="Enter nickname..." value="<?php echo $fulfillment->getName() ?>" />
 					</div>
 					
 					<div class="form-group">
-						<select class="form-control" name="client[client_id]" id="client_id" required="required" placeholder="Assign an owner to this handler...">
-							<option value="">Assign an owner to this handler...</option>
-							<?php
-								/* @var $client \Flux\Client */ 
-								foreach ($clients AS $client) { 
-							?>
-								<option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
-							<?php } ?>
+						<textarea id="description" name="description" class="form-control" placeholder="Enter description..."><?php echo $fulfillment->getDescription() ?></textarea>
+					</div>
+					
+					<div class="form-group">
+						<select class="form-control" name="client[client_id]" id="client_id" placeholder="Assign an owner to this handler...">
+							<option value=""></option>
+							<optgroup label="Administrators">
+							    <?php
+    								/* @var $client \Flux\Client */ 
+    								foreach ($clients AS $client) { 
+    							?>
+    							    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+    								    <option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
+    								<?php } ?>
+    							<?php } ?>
+							</optgroup>
+							<optgroup label="Affiliates">
+							    <?php
+    								/* @var $client \Flux\Client */ 
+    								foreach ($clients AS $client) { 
+    							?>
+    							    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+    								    <option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
+    								<?php } ?>
+    							<?php } ?>
+							</optgroup>
 						</select>
 					</div>
 					<hr />
@@ -221,7 +239,7 @@
 		<input type="text" name="mapDummyReqName[dummy_datafield_id][default_value]" class="form-control" value="" placeholder="default value (optional)" />		
 	</div>
 	<div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
-		<select name="mapDummyReqName[dummy_datafield_id][datafield_id]" class="form-control">
+		<select name="mapDummyReqName[dummy_datafield_id][datafield]" class="form-control">
 			<optgroup label="Custom Field">
 				<option value="0" data-data="<?php echo htmlentities(json_encode(array('_id' => 0, 'name' => 'Custom Field', 'keyname' => 'custom', 'description' => 'Custom field such as an API Token', 'request_names' => ''))) ?>">Custom Field</option>
 			</optgroup>

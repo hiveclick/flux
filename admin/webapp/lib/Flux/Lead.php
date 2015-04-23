@@ -158,6 +158,13 @@ class Lead extends Base\Lead {
 	 * @return array
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
+	    if (count($this->getOfferIdArray()) > 0) {
+	        $criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
+	    }
+	    if (count($this->getCampaignIdArray()) > 0) {
+	        $criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign.campaign_id'] = array('$in' => $this->getCampaignIdArray());
+	    }
+	    
 		if (trim($this->getKeywords()) != '') {
 			$search_params = array();
 			if (\MongoId::isValid(trim($this->getKeywords()))) {
@@ -202,12 +209,10 @@ class Lead extends Base\Lead {
 			}
 		}
 		
-		if (count($this->getOfferIdArray()) > 0) {
-			$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
-		}
-		if (count($this->getCampaignIdArray()) > 0) {
-			$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign.campaign_id'] = array('$in' => $this->getCampaignIdArray());
-		}
+		$ops = json_encode($criteria);
+		$ops = str_replace('"$or"', '$or', $ops);
+		$ops = str_replace('"$exists"', '$exists', $ops);
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
 						
 		return parent::queryAll($criteria, $hydrate);
 	}

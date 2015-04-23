@@ -40,8 +40,8 @@
             </campaignsearch>
             <spacer>
 				<label></label>
-				<module>campaign</module>
-				<controller>campaign-search</controller>
+				<module></module>
+				<controller></controller>
 				<class>nav-secondary</class>
 			</spacer>
             <campaignwizard>
@@ -202,6 +202,12 @@
                 <controller>user-search</controller>
                 <class>nav-secondary</class>
             </users>
+            <trafficsources>
+                <label>Traffic Sources</label>
+                <module>admin</module>
+                <controller>traffic-source-search</controller>
+                <class>nav-secondary</class>
+            </trafficsources>
             <spacer2>
 				<label></label>
 				<module></module>

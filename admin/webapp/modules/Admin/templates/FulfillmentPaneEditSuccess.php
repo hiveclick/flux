@@ -93,12 +93,12 @@
 					<div class="help-block">Enter the POST url and what to check in the result for a successful post</div>
 					<div class="form-group">
 						<label class="control-label" for="parse_url">Post URL</label>
-						<textarea name="post_url" rows="4" class="form-control"><?php echo $fulfillment->getPostUrl() ?></textarea>
+						<textarea name="post_url" rows="4" class="form-control" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
 					</div>
 		
 					<div class="form-group">
 						<label class="control-label" for="success_msg">Success String</label>
-						<textarea name="success_msg" class="form-control"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
+						<textarea name="success_msg" class="form-control" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
 					</div>
 				</div>
 			

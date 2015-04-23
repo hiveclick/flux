@@ -47,7 +47,6 @@ $(document).ready(function() {
                 '</div>';
 			}
 		}
-
     });
 	
     $('#split_queue_mark_unfulfillable_form').form(function(data) {

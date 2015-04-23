@@ -54,7 +54,6 @@
         			<label class="control-label hidden-xs" for="type">Client Type</label>
         			<select class="form-control" name="client_type" id="client_type" placeholder="Select the role of this client...">
         				<option value="<?php echo \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ? ' selected' : '' ?>>Primary Administrator</option>
-        				<option value="<?php echo \Flux\Client::CLIENT_TYPE_SECONDARY_ADMIN ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_SECONDARY_ADMIN ? ' selected' : '' ?>>Secondary Administrator</option>
         				<option value="<?php echo \Flux\Client::CLIENT_TYPE_AFFILIATE ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE ? ' selected' : '' ?>>Affiliate</option>
         			</select>
         		</div>

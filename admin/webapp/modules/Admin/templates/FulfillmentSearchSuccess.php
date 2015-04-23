@@ -47,7 +47,7 @@ $(document).ready(function() {
 				ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'client_name', name:'client', field:'client.client_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'client_name', name:'owner', field:'client.client_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
 		}},
 		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:68, width:68, minWidth:68, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {

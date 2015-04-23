@@ -1,8 +1,9 @@
 <?php
-	/* @var $user Flux\User */
+	/* @var $campaign \Flux\Campaign */
 	$campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
+	$traffic_sources = $this->getContext()->getRequest()->getAttribute("traffic_sources", array());
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -36,25 +37,53 @@
         		</div>		  
         	
         		<div class="form-group">
-        			<label class="control-label hidden-xs" for="client_id">Publisher Client</label>
-        			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Publisher Client">
-        				<?php
-        					/* @var $client \Flux\Client */
-        					foreach ($clients AS $client) { 
-        				?>
-        					<option value="<?php echo $client->getId(); ?>"<?php echo $campaign->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
-        				<?php } ?>
+        			<label class="control-label hidden-xs" for="client_id">Affiliate</label>
+        			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Choose an owner of this campaign...">
+        				<optgroup label="Administrators">
+    				        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo $campaign->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+    				    </optgroup>
+    					<optgroup label="Affiliates">
+    				        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo $campaign->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+    				    </optgroup>
         			</select>
         		</div>
         	
         		<div class="form-group">
         			<label class="control-label hidden-xs" for="offer_id">Offer</label>
-        			<select class="form-control" name="offer[offer_id]" id="offer_id" placeholder="Offer">
+        			<select class="form-control" name="offer[offer_id]" id="offer_id" placeholder="Select an offer to redirect to...">
+        			    <option value=""></option>
         				<?php
         					/* @var $offer \Flux\Offer */ 
         					foreach ($offers AS $offer) { 
         				?>
         					<option value="<?php echo $offer->getId(); ?>"<?php echo $campaign->getOffer()->getOfferId() == $offer->getId() ? ' selected="selected"' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('url' => $offer->getFormattedRedirectUrl()))) ?>"><?php echo $offer->getName() ?></option>
+        				<?php } ?>
+        			</select>
+        		</div>
+        		
+        		<div class="form-group">
+        			<label class="control-label hidden-xs" for="traffic_source">Traffic Source</label>
+        			<select class="form-control" name="traffic_source[traffic_source_id]" id="traffic_source" placeholder="Choose where the traffic is originating from...">
+        			    <option value=""></option>
+        				<?php
+        					/* @var $traffic_source \Flux\TrafficSource */
+        					foreach ($traffic_sources AS $traffic_source) { 
+        				?>
+        					<option value="<?php echo $traffic_source->getId() ?>" <?php echo $campaign->getTrafficSource()->getTrafficSourceId() == $traffic_source->getId() ? ' selected="selected"' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => $traffic_source->getName(), 'description' => $traffic_source->getDescription(), 'icon' => $traffic_source->getIcon(), 'username' => $traffic_source->getUsername()))) ?>"><?php echo $traffic_source->getName() ?></option>
         				<?php } ?>
         			</select>
         		</div>
@@ -95,6 +124,34 @@
 <script>
 //<!--
 $(document).ready(function() {
+	$('#traffic_source').selectize({
+    	valueField: 'value',
+		labelField: 'name',
+		searchField: ['name', 'description'],
+		render: {
+			item: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h4 class="media-heading">' + escape(item.name) + '</h4>';
+				ret_val += '<div class="text-muted">' + escape(item.description) + '</div>';
+				ret_val += '<div class="text-muted small">' + escape(item.username) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			},
+			option: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h4 class="media-heading">' + escape(item.name) + '</h4>';
+				ret_val += '<div class="text-muted">' + escape(item.description) + '</div>';
+				ret_val += '<div class="text-muted small">' + escape(item.username) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
+    });
+	
     $('#whitelist_ips').selectize({
     	delimiter: ',',
 		persist: false,

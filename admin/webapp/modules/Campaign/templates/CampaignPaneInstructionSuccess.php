@@ -9,12 +9,12 @@
 <div class="modal-body">
     <!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">PPC Traffic</a></li>
+		<li role="presentation" class="active"><a href="#ppctraffic" role="tab" data-toggle="tab">PPC Traffic</a></li>
 		<li role="presentation" class=""><a href="#hostnpost" role="tab" data-toggle="tab">Host &amp; Post Instructions</a></li>
 	</ul>
 	<!-- Tab panes -->
 	<div class="tab-content">
-		<div role="tabpanel" class="tab-pane fade in active" id="basic">
+		<div role="tabpanel" class="tab-pane fade in active" id="ppctraffic">
             <div class="help-block">Use this form to generate a unique tracking link that you can use in Adwords</div>
         	<br />
         	<form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">

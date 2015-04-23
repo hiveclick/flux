@@ -10,7 +10,6 @@ class Client extends MongoForm {
 	const CLIENT_STATUS_DELETED = 3;
 
 	const CLIENT_TYPE_PRIMARY_ADMIN = 1;
-	const CLIENT_TYPE_SECONDARY_ADMIN = 2;
 	const CLIENT_TYPE_AFFILIATE = 3;
 
 	protected $name;

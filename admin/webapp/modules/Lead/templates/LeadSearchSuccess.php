@@ -11,6 +11,9 @@
 	}
 ?>
 <div class="page-header">
+    <div class="pull-right">
+		<a data-toggle="modal" data-target="#export_lead_modal" href="/lead/lead-export-wizard" class="btn btn-success"><span class="glyphicon glyphicon-export"></span> Export Leads</a>
+	</div>
    <h2>Search Leads</h2>
 </div>
 <div class="help-block">These are all the leads in the system.  Search by offer, campaign, lead name or id.</div>
@@ -81,6 +84,9 @@
 	<div id="lead-grid"></div>
 	<div id="lead-pager" class="panel-footer"></div>
 </div>
+
+<!-- Add data field modal -->
+<div class="modal fade" id="export_lead_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
@@ -185,7 +191,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#txtSearch").keyup(function(e) {
+	$("#txtSearch",'#lead_search_form').keyup(function(e) {
 		// clear on Esc
 		if (e.which == 27) {
 			this.value = "";
@@ -195,7 +201,7 @@ $(document).ready(function() {
 	});
 
 	
-	$('#required_fields').selectize({
+	$('#required_fields','#lead_search_form').selectize({
 		valueField: 'key_name',
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
@@ -223,12 +229,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#offer_id_array').selectize({
+	$('#offer_id_array','#lead_search_form').selectize({
 		dropdownWidthOffset: 150,
 		allowEmptyOption: true
 	});
 
-	$('#campaign_id_array').selectize({
+	$('#campaign_id_array','#lead_search_form').selectize({
 		valueField: 'campaign_key',
 		labelField: 'description',
 		searchField: ['client_name', 'description', 'campaign_key'],
