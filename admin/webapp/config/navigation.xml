@@ -87,7 +87,7 @@
 	<export>
         <label>Splits</label>
         <module>export</module>
-        <controller>export-search</controller>
+        <controller>split-search</controller>
         <class>nav-primary</class>
         <pages>
             <splitsearch>

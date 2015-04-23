@@ -144,7 +144,7 @@
 							$counter = 0;
 							foreach($fulfillment->getMapping() AS $fulfillment_map) {
 					?>
-						<div class="form-group map-group-item">
+						<div class="form-group map-group-item row">
 							<div class="hidden-xs hidden-sm col-md-1 col-lg-1">
 								<label>#<?php echo $counter + 1 ?></label>
 							</div>
@@ -230,7 +230,7 @@
 </form>
 
 <!-- Dummy template for adding new mappings -->
-<div class="form-group map-group-item" style="display:none;" id="dummy_map_div">
+<div class="form-group map-group-item row" style="display:none;" id="dummy_map_div">
 	<div class="hidden-xs hidden-sm col-md-1 col-lg-1">
 		<label class="col-md-2 control-label" for="mapping[dummy_datafield_id][datafield_id]">#dummy_column_id</label>
 	</div>

@@ -67,7 +67,7 @@
 						foreach ($split->getFilters() as $key => $filter) { 
 							$selected_data_set = array();
 					?>
-						<div class="form-group">
+						<div class="form-group row">
 							<div class="col-sm-5">
 								<select name="filters[<?php echo $key ?>][data_field_key_name]" class="form-control selectize">
 									<optgroup label="Data Fields">
@@ -140,6 +140,12 @@
         				<?php } ?>
 					</select>
 				</div>
+				<p />
+				<div class="row">
+				    <input type="hidden" id="fulfill_immediately_0" name="fulfill_immediately" value="0" />
+				    <div class="col-md-8"><div class="help-block">Choose when the fulfillment script will be run on this split</div></div>
+				    <div class="col-md-4 text-right"><input type="checkbox" class="form-control" id="fulfill_immediately_1" name="fulfill_immediately" value="1" <?php echo $split->getFulfillImmediately() ? 'checked' : '' ?> /></div>
+				</div>
 				<hr />
 				<div class="help-block">If a lead cannot be fulfilled, you can send an email notification</div>
 				<div class="form-group">
@@ -148,35 +154,36 @@
 				</div>
 				<hr />
 				<div class="help-block">Set a schedule for when leads can be fulfilled</div>
-				<div class="form-group col-md-8">
-					<label class="control-label" for="days">Days</label>
-					<select id="days" name="scheduling[days][]" class="form-control" multiple placeholder="select one or more days when leads can be accepted">
-						<option value="0" <?php echo in_array("0", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Sunday</option>
-						<option value="1" <?php echo in_array("1", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Monday</option>
-						<option value="2" <?php echo in_array("2", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Tuesday</option>
-						<option value="3" <?php echo in_array("3", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Wednesday</option>
-						<option value="4" <?php echo in_array("4", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Thursday</option>
-						<option value="5" <?php echo in_array("5", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Friday</option>
-						<option value="6" <?php echo in_array("6", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Saturday</option>
-					</select>
+				<div class="row">
+    				<div class="form-group col-md-8">
+    					<label class="control-label" for="days">Days</label>
+    					<select id="days" name="scheduling[days][]" class="form-control" multiple placeholder="select one or more days when leads can be accepted">
+    						<option value="0" <?php echo in_array("0", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Sunday</option>
+    						<option value="1" <?php echo in_array("1", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Monday</option>
+    						<option value="2" <?php echo in_array("2", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Tuesday</option>
+    						<option value="3" <?php echo in_array("3", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Wednesday</option>
+    						<option value="4" <?php echo in_array("4", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Thursday</option>
+    						<option value="5" <?php echo in_array("5", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Friday</option>
+    						<option value="6" <?php echo in_array("6", $split->getScheduling()->getDays()) ? "selected" : "" ?>>Saturday</option>
+    					</select>
+    				</div>
+    				<div class="form-group col-md-2">
+    					<label class="control-label" for="start_hour">Hours</label>
+    					<select id="start_hour" name="scheduling[start_hour]" class="form-control" placeholder="enter starting hour">
+    						<?php for ($i=0;$i<24;$i++) { ?>
+    							<option value="<?php echo $i ?>" <?php echo $split->getScheduling()->getStartHour() == $i ? "selected" : "" ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+    						<?php } ?>
+    					</select>
+    				</div>
+    				<div class="form-group col-md-2">
+    					<label class="control-label" for="end_hour">&nbsp;</label>
+    					<select id="end_hour" name="scheduling[end_hour]" class="form-control" placeholder="enter ending hour">
+    						<?php for ($i=0;$i<24;$i++) { ?>
+    							<option value="<?php echo $i ?>" <?php echo $split->getScheduling()->getEndHour() == $i ? "selected" : "" ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+    						<?php } ?>
+    					</select>
+    				</div>
 				</div>
-				<div class="form-group col-md-2">
-					<label class="control-label" for="start_hour">Hours</label>
-					<select id="start_hour" name="scheduling[start_hour]" class="form-control" placeholder="enter starting hour">
-						<?php for ($i=0;$i<24;$i++) { ?>
-							<option value="<?php echo $i ?>" <?php echo $split->getScheduling()->getStartHour() == $i ? "selected" : "" ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
-						<?php } ?>
-					</select>
-				</div>
-				<div class="form-group col-md-2">
-					<label class="control-label" for="end_hour">&nbsp;</label>
-					<select id="end_hour" name="scheduling[end_hour]" class="form-control" placeholder="enter ending hour">
-						<?php for ($i=0;$i<24;$i++) { ?>
-							<option value="<?php echo $i ?>" <?php echo $split->getScheduling()->getEndHour() == $i ? "selected" : "" ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
-						<?php } ?>
-					</select>
-				</div>
-				<div class="clearfix"></div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="validators">
 				<div class="help-block">Add one or more validation checks that will be verified before the lead is fulfilled</div>
@@ -186,7 +193,7 @@
 						foreach ($split->getValidators() as $key => $validator) { 
 							$selected_data_set = array();
 					?>
-						<div class="form-group">
+						<div class="form-group row">
 							<div class="col-sm-5">
 								<select name="validators[<?php echo $key ?>][data_field_key_name]" class="form-control selectize">
 									<optgroup label="Data Fields">
@@ -245,7 +252,7 @@
 	</div>
 </form>
 <!-- Dummy Filter Div -->
-<div class="form-group" style="display:none;" id="dummy_filter_data_field">
+<div class="form-group row" style="display:none;" id="dummy_filter_data_field">
 	<div class="col-sm-5">
 		<select name="filters[dummy-dummy_id][data_field_key_name]" class="form-control selectize">
 			<optgroup label="Data Fields">
@@ -280,7 +287,7 @@
 </div>
 
 <!-- Dummy Filter Div -->
-<div class="form-group" style="display:none;" id="dummy_validator_data_field">
+<div class="form-group row" style="display:none;" id="dummy_validator_data_field">
 	<div class="col-sm-5">
 		<select name="validators[dummy-dummy_id][data_field_key_name]" class="form-control selectize">
 			<optgroup label="Data Fields">
@@ -452,6 +459,12 @@ $(document).ready(function() {
 			$('.btn-add-dataField').hide();
 		}
 	})
+	
+	$('#fulfill_immediately_1').bootstrapSwitch({
+		onText: 'Immediate',
+		offText: 'Manual',
+		size: 'small'
+	});
 	
 	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type').selectize();
 

@@ -29,59 +29,57 @@
     		
 <!-- main col right -->
 <div class="col-md-10 col-lg-10 col-sm-10 hidden-xs" id="main_graph_div">
-    <div class="col-md-5 col-lg-5 col-sm-5">
-    	<div class="panel panel-default">
-    		<div class="panel-heading">Clicks by Traffic Source</div>
-    		<div class="panel-body">
-    			<div id="traffic_source_by_hour_div">
-            		<!--Divs that will hold each control and chart-->
-            		<div id="traffic_source_by_hour_chart_div" style="width:100%;height:200px">
-            			<div class="text-muted text-center">
-            				<span class="fa fa-spinner fa-spin"></span>
-            				Loading report data...
-            			</div>
-            		</div>
-            		<div id="traffic_source_by_hour_filter_div" style="width:100%;height:30px"></div>
+    <div class="row">
+        <div class="col-md-5 col-lg-5 col-sm-5">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">Clicks by Traffic Source</div>
+        		<div class="panel-body">
+        			<div id="traffic_source_by_hour_div">
+                		<!--Divs that will hold each control and chart-->
+                		<div id="traffic_source_by_hour_chart_div" style="width:100%;height:200px">
+                			<div class="text-muted text-center">
+                				<span class="fa fa-spinner fa-spin"></span>
+                				Loading report data...
+                			</div>
+                		</div>
+                		<div id="traffic_source_by_hour_filter_div" style="width:100%;height:30px"></div>
+                    </div>
                 </div>
-            </div>
+        	</div>
+    	</div>
+    	<div class="col-md-7 col-lg-7 col-sm-7">
+        	<div class="panel panel-default">
+        		<div class="panel-heading"><a href="/lead/lead-search" class="pull-right small">View all</a> Click Traffic</div>
+        		<div class="panel-body">
+        		    <div id="click_by_hour_div">
+                		<!--Divs that will hold each control and chart-->
+                		<div id="click_by_hour_chart_div" style="width:100%;height:200px">
+                			<div class="text-muted text-center">
+                				<span class="fa fa-spinner fa-spin"></span>
+                				Loading report data...
+                			</div>
+                		</div>
+                		<div id="click_by_hour_filter_div" style="width:100%;height:30px"></div>
+                    </div>
+        		</div>
+        	</div>
     	</div>
 	</div>
-	<div class="col-md-7 col-lg-7 col-sm-7">
-    	<div class="panel panel-default">
-    		<div class="panel-heading"><a href="/lead/lead-search" class="pull-right small">View all</a> Click Traffic</div>
-    		<div class="panel-body">
-    		    <div id="click_by_hour_div">
-            		<!--Divs that will hold each control and chart-->
-            		<div id="click_by_hour_chart_div" style="width:100%;height:200px">
-            			<div class="text-muted text-center">
-            				<span class="fa fa-spinner fa-spin"></span>
-            				Loading report data...
-            			</div>
-            		</div>
-            		<div id="click_by_hour_filter_div" style="width:100%;height:30px"></div>
-                </div>
-    		</div>
-    	</div>
-	</div>
-	
-	<div class="clearfix"></div>
-    <div class="col-md-12 col-lg-12 col-sm-12">
-    	<div class="panel panel-default">
-    		<div class="panel-heading"><a href="/export/split-queue-search" class="pull-right small">View all</a> Conversion Traffic</div>
-    		<div class="panel-body">
-    			<div id="conversion_by_hour_div">
-            		<!--Divs that will hold each control and chart-->
-            		<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
-            			<div class="text-muted text-center">
-            				<span class="fa fa-spinner fa-spin"></span>
-            				Loading report data...
-            			</div>
-            		</div>
-            		<div id="conversion_by_hour_filter_div" style="width:100%;height:30px"></div>
-                </div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><a href="/export/split-queue-search" class="pull-right small">View all</a> Conversion Traffic</div>
+		<div class="panel-body">
+			<div id="conversion_by_hour_div">
+        		<!--Divs that will hold each control and chart-->
+        		<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
+        			<div class="text-muted text-center">
+        				<span class="fa fa-spinner fa-spin"></span>
+        				Loading report data...
+        			</div>
+        		</div>
+        		<div id="conversion_by_hour_filter_div" style="width:100%;height:30px"></div>
             </div>
-    	</div>
-    </div>
+        </div>
+	</div>
 </div>
     
     
@@ -155,11 +153,11 @@ function drawClickByHourChart(response) {
 			},
 			legend: { textStyle: { color: '#737373', fontSize: 11 }},
 			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
-			chartArea:{ left:'0%', top: '8%', width: '80%', height:'80%' }
+			chartArea:{ left:'8%', top: '8%', width: '70%', height:'80%' }
 		},
 	    containerId: 'click_by_hour_chart_div'
     });
-    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'0%',width: '95%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
     dashboard.bind(chart_range_control, chart);
     dashboard.draw(data); 
 }
@@ -180,11 +178,11 @@ function drawConversionByHourChart(response) {
 			bar: { groupWidth: 17 },
 			legend: { textStyle: { color: '#737373', fontSize: 11 }},
 			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
-			chartArea:{ left:'0%', top: '8%', width: '80%', height:'80%' }
+			chartArea:{ left:'8%', top: '8%', width: '80%', height:'80%' }
 		},
 	    containerId: 'conversion_by_hour_chart_div'
     });
-    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'0%',width: '95%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
     dashboard.bind(chart_range_control, chart);
     dashboard.draw(data); 
 }
@@ -203,11 +201,11 @@ function drawTrafficSourceByHourChart(response) {
 			},
 			legend: { textStyle: { color: '#737373', fontSize: 11 }},
 			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
-			chartArea:{ left:'0%', top: '8%', width: '70%', height:'80%' }
+			chartArea:{ left:'8%', top: '8%', width: '70%', height:'80%' }
 		},
 	    containerId: 'traffic_source_by_hour_chart_div'
     });
-    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'traffic_source_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'0%',width: '95%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'traffic_source_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
     dashboard.bind(chart_range_control, chart);
     dashboard.draw(data); 
 }

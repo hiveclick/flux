@@ -19,38 +19,11 @@
         	<br />
         	<form class="form-horizontal" name="offer_instructions_form" method="GET" action="" autocomplete="off" role="form">
         		<input type="hidden" name="posting_url_client" class="form-control posting_url_change" value="<?php echo $campaign->getId() ?>">
-        		<div class="form-group">
-        			<label class="col-sm-2 control-label" for="example_url">Example Posting URL</label>
-        			<div class="col-sm-10">
-        				<textarea type="text" id="example_url" rows="5" name="example_url" class="form-control" /></textarea>
-        			</div>
-        		</div>
-        		<div class="row">
-        			<label class="col-sm-2 control-label"></label>
-        			<div class="col-sm-10">
-        				<div class="row">
-        					<div class="col-sm-12">
-        						<div class="help-block">
-        							Use the form controls below to create an example Posting URL
-        						</div>
-        					</div>
-        				</div>
-        				<div class="form-group">
-        					<div class="col-sm-12">
-        						<div class="btn-group has-feedback" data-toggle="buttons">
-        							<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
-        							<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
-        							<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
-        						</div>
-        						<button type="button" class="btn btn-success btn-add-dataField">
-        							<span class="glyphicon glyphicon-plus"></span> Add Data Field
-        						</button>
-        					</div>
-        				</div>
-        				<div id="dataField_posting_url_container">
-        				</div>
-        			</div>
-        		</div>
+    			<textarea type="text" id="example_url" rows="5" name="example_url" class="form-control" /></textarea>
+				<div class="help-block">
+					Click Add Datafield below to insert additional fields to the redirect url
+				</div>
+				<div id="dataField_posting_url_container"></div>
         	</form>
     	</div>
     	<div role="tabpanel" class="tab-pane fade in" id="hostnpost">
@@ -163,12 +136,13 @@
 	</div>
 </div>
 <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-add-dataField"><span class="glyphicon glyphicon-plus"></span> Add Data Field</button>
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
 <!-- Dummy datafield posting url div -->
-<div class="form-group" style="display:none;" id="dummy_posting_url_dataField">
-	<div class="col-sm-5">
+<div class="form-group row" style="display:none;" id="dummy_posting_url_dataField">
+	<div class="col-sm-6">
 		<select name="posting_url_dataField_name" class="form-control posting_url_change">
 			<optgroup label="Events">
 			<?php foreach($data_fields AS $data_field) { ?>
@@ -196,9 +170,9 @@
 	<div class="col-sm-5">
 		<input type="text" name="posting_url_dataField_value" class="form-control posting_url_change" placeholder="Value" />
 	</div>
-	<div class="col-sm-2">
+	<div class="col-sm-1">
 		<button type="button" class="btn btn-danger btn-remove-dataField">
-			<span class="glyphicon glyphicon-minus"></span> Remove
+			<span class="glyphicon glyphicon-minus"></span>
 		</button>
 	</div>
 </div>
@@ -275,15 +249,8 @@ $(document).ready(function() {
 function buildPostingUrl() {
 	var posting_params = {};
 
-	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = $('[name=posting_url_client]').val();
-	
-	if($('[name=posting_url_save]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_SAVE_FLAG); ?>] = 1;
-	}
-
-	if($('[name=posting_url_clear]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
-	}
+	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = $('[name=posting_url_client]').val();	
+	posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
 
 	$('#dataField_posting_url_container .form-group').each(function() {
 		var dataFieldName = $(this).find('[name=posting_url_dataField_name]').val();

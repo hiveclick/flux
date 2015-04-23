@@ -148,53 +148,55 @@ class PostLeadAction extends BasicRestAction
 			$split_queue_insert_id = $split_queue->insert();
 			$split_queue->setId($split_queue_insert_id);
 			
-			/*
-			 * If we get here, then it's time for the magic.  We need to fulfill the lead to the advertiser, catch any errors
-			 * and return to the client
-			 */
-			/* @var $fulfillment \Flux\Fulfillment */
-			$fulfillment = $split->getFulfillment()->getFulfillment();
-			/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-			$split_queue_attempt = new \Flux\SplitQueueAttempt();
-			$split_queue_attempt->setSplitQueue($split_queue->getId());
-			$split_queue_attempt->setFulfillment($fulfillment->getId());
-			$split_queue_attempt->setAttemptTime(new \MongoDate());
-			$split_queue_attempt_insert_id = $split_queue_attempt->insert();
-			$split_queue_attempt->setId($split_queue_attempt_insert_id);
-			
-            $results = $fulfillment->queueLead($split_queue_attempt);
-
-	        /* @var $result \Flux\SplitQueueAttempt */
-	        foreach ($results as $key => $result) {
-	            // Save the split queue attempts back to the split queue item
-	            $split_queue->addAttempt($result);
-	             
-	            $split_queue->setDebug($result->getRequest());
-	            $split_queue->setLastAttemptTime(new \MongoDate());
-	            $split_queue->setIsProcessing(false);
-	             
-	            if ($result->getIsError()) {
-	                $split_queue->setIsError(true);
-	                $split_queue->setErrorMessage($result->getResponse());
-	                $split_queue->setIsFulfilled(false);
-	                $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
-	                $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
-	                $split_queue->update();
-	                throw new \Exception($result->getResponse());
-	            } else {
-	                $split_queue->setIsFulfilled(true);
-	                $split_queue->setIsError(false);
-	                $split_queue->setErrorMessage('');
-	                $split_queue->update();
-	                $post_response->setResponse('success');
-	                
-	                // Add a fulfilled event to the lead
-	                $lead = $split_queue->getLead()->getLead();
-	                $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME, '1');
-	                $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
-	                $lead->update();
-	            }
-	        }
+			if ($split_queue->getSplit()->getSplit()->getFulfillImmediately()) {
+    			/*
+    			 * If we get here, then it's time for the magic.  We need to fulfill the lead to the advertiser, catch any errors
+    			 * and return to the client
+    			 */
+    			/* @var $fulfillment \Flux\Fulfillment */
+    			$fulfillment = $split->getFulfillment()->getFulfillment();
+    			/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+    			$split_queue_attempt = new \Flux\SplitQueueAttempt();
+    			$split_queue_attempt->setSplitQueue($split_queue->getId());
+    			$split_queue_attempt->setFulfillment($fulfillment->getId());
+    			$split_queue_attempt->setAttemptTime(new \MongoDate());
+    			$split_queue_attempt_insert_id = $split_queue_attempt->insert();
+    			$split_queue_attempt->setId($split_queue_attempt_insert_id);
+    			
+                $results = $fulfillment->queueLead($split_queue_attempt);
+    
+    	        /* @var $result \Flux\SplitQueueAttempt */
+    	        foreach ($results as $key => $result) {
+    	            // Save the split queue attempts back to the split queue item
+    	            $split_queue->addAttempt($result);
+    	             
+    	            $split_queue->setDebug($result->getRequest());
+    	            $split_queue->setLastAttemptTime(new \MongoDate());
+    	            $split_queue->setIsProcessing(false);
+    	             
+    	            if ($result->getIsError()) {
+    	                $split_queue->setIsError(true);
+    	                $split_queue->setErrorMessage($result->getResponse());
+    	                $split_queue->setIsFulfilled(false);
+    	                $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
+    	                $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
+    	                $split_queue->update();
+    	                throw new \Exception($result->getResponse());
+    	            } else {
+    	                $split_queue->setIsFulfilled(true);
+    	                $split_queue->setIsError(false);
+    	                $split_queue->setErrorMessage('');
+    	                $split_queue->update();
+    	                $post_response->setResponse('success');
+    	                
+    	                // Add a fulfilled event to the lead
+    	                $lead = $split_queue->getLead()->getLead();
+    	                $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME, '1');
+    	                $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
+    	                $lead->update();
+    	            }
+    	        }
+			}
 			 
             $ajax_form->setInsertId((string)$insert_id);
             $ajax_form->setRowsAffected(1);

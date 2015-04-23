@@ -4,60 +4,6 @@
 	$data_fields = $this->getContext()->getRequest()->getAttribute('data_fields', array());
 	$selected_data_fields = $this->getContext()->getRequest()->getAttribute('selected_data_fields', array());
 ?>
-<div class="form-group" style="display:none;" id="dummy_posting_url_data_field">
-	<div class="col-sm-6">
-		<select name="posting_url_data_field_name[dummy-dummy_id]" class="form-control selectize">
-			<optgroup label="Data Fields">
-				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-				?>
-					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-			<optgroup label="Derived">
-			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-			?>
-				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED) { ?>
-					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-				<?php  } ?>
-			<?php } ?>
-			</optgroup>
-			<optgroup label="Tracking">
-				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-						$data_field_set = $data_field->getDataFieldSet();
-						array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-				?>
-					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-			<optgroup label="Events">
-			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-			?>
-				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-				<?php  } ?>
-			<?php } ?>
-			</optgroup>
-		</select>
-	</div>
-	<div class="col-sm-4">
-		<textarea name="posting_url_data_field_value[dummy-dummy_id][]" class="form-control selectize-text" placeholder="Enter New Value" rows="3"></textarea>
-	</div>
-	<div class="col-sm-2">
-		<button type="button" class="btn btn-sm btn-danger btn-remove-data_field">
-			<span class="glyphicon glyphicon-minus"></span>
-		</button>
-	</div>
-</div>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Add/Modify Data</h4>
@@ -72,7 +18,7 @@
 			<?php 
 				foreach ($selected_data_fields as $selected_data_field) { 
 			?>
-				<div class="form-group">
+				<div class="form-group row">
 					<div class="col-sm-6">
 						<select name="posting_url_data_field_name[<?php echo $selected_data_field['posting_url_data_field_id'] ?>]" class="form-control selectize">
 							<optgroup label="Data Fields">
@@ -117,7 +63,7 @@
 							</optgroup>
 						</select>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<select name="posting_url_data_field_value[<?php echo $selected_data_field['posting_url_data_field_id'] ?>][]" class="form-control selectize-text" multiple placeholder="Enter New Value">
 							<?php if (count($selected_data_field['posting_url_data_field_set']) > 0) { ?>
 								<?php foreach ($selected_data_field['posting_url_data_field_set'] as $data_field_set) { ?>
@@ -134,7 +80,7 @@
 							<?php } ?>
 						</select>
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-1">
 						<button type="button" class="btn btn-sm btn-danger btn-remove-data_field">
 							<span class="glyphicon glyphicon-minus"></span>
 						</button>
@@ -150,6 +96,62 @@
 		<button type="submit" class="btn btn-primary">Save Changes</button>
 	</div>
 </form>
+
+<!-- Dummy Data Field Div -->
+<div class="form-group row" style="display:none;" id="dummy_posting_url_data_field">
+	<div class="col-sm-6">
+		<select name="posting_url_data_field_name[dummy-dummy_id]" class="form-control selectize">
+			<optgroup label="Data Fields">
+				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
+					$data_field_set = $data_field->getDataFieldSet();
+					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+				?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+					<?php } ?>
+				<?php } ?>
+			</optgroup>
+			<optgroup label="Derived">
+			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
+					$data_field_set = $data_field->getDataFieldSet();
+					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+			?>
+				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED) { ?>
+					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+				<?php  } ?>
+			<?php } ?>
+			</optgroup>
+			<optgroup label="Tracking">
+				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
+						$data_field_set = $data_field->getDataFieldSet();
+						array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+				?>
+					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
+						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+					<?php } ?>
+				<?php } ?>
+			</optgroup>
+			<optgroup label="Events">
+			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
+					$data_field_set = $data_field->getDataFieldSet();
+					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+			?>
+				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
+					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
+				<?php  } ?>
+			<?php } ?>
+			</optgroup>
+		</select>
+	</div>
+	<div class="col-sm-5">
+		<textarea name="posting_url_data_field_value[dummy-dummy_id][]" class="form-control selectize-text" placeholder="Enter New Value" rows="3"></textarea>
+	</div>
+	<div class="col-sm-1">
+		<button type="button" class="btn btn-sm btn-danger btn-remove-data_field">
+			<span class="glyphicon glyphicon-minus"></span>
+		</button>
+	</div>
+</div>
 
 <script>
 //<!--
@@ -209,6 +211,7 @@ $(document).ready(function() {
 	$('.btn-add-data_field').on('click', function() {
 		var index_number = $('#data_field_posting_url_container > .form-group').length;
 		var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
+		$dataFieldRow.removeAttr('id');
 		$dataFieldRow.html(function(i, oldHTML) {
 			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
 			return oldHTML;

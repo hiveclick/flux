@@ -95,7 +95,7 @@ class GraphLeadByHour extends GoogleChart {
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getCols(), true));
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export(json_encode($this->getRows()), true));
 		
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
 		
 	}
 	

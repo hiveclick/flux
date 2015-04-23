@@ -72,7 +72,7 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getCols(), true));
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export(json_encode($this->getRows()), true));
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
 	}
 	
 	/**
@@ -141,7 +141,7 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		
 		$ops[] = array('$group' => array( 
 				'_id' => array(
-						'offer' => '$campaign_name',
+						'campaign' => '$campaign_name',
 						'date' => '$event_date'
 				),
 				'offer_name' => array('$max' => '$offer_name'),
@@ -170,23 +170,36 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		$end_date = new \MongoDate($this->getEndDate());
 		$op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		$op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
         
 		
 		$traffic_source_aggregate = array();
 		$results = $lead->getCollection()->aggregate($ops);
 		foreach ($results['result'] as $result) {
 		    if (($campaign = $this->getCampaign($result['campaign_id'])) != null) {
-		        if (isset($ret_val[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']])) {
-		            $traffic_source_aggregate[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']]['clicks'] += (int)$result['clicks'];
+		        
+		        if (isset($traffic_source_aggregate[$result['event_date']])) {
+		            if (isset($traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()])) {
+		                $traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()]['clicks'] += (int)$result['clicks'];
+		            } else {
+		                $traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()] = array(
+		                    'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
+		                    'traffic_source_id' => $campaign->getTrafficSource()->getTrafficSourceId(),
+		                    'clicks' => (int)$result['clicks'],
+		                    'event_date' => $result['event_date']
+		                );
+		            }
 		        } else {
-		            $traffic_source_aggregate[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']] = array(
-                        'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
+		            $traffic_source_aggregate[$result['event_date']] = array($campaign->getTrafficSource()->getTrafficSourceName() => array(
+		                'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
 		                'traffic_source_id' => $campaign->getTrafficSource()->getTrafficSourceId(),
 		                'clicks' => (int)$result['clicks'],
 		                'event_date' => $result['event_date']
-		            );
+		            ));
 		        }
+		        
+		    } else {
+		        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Campaign not found: " . $result['campaign_id'] . '/' . $result['event_date'] . ': ' . $result['clicks']);
 		    }
 		}
 		

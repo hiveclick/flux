@@ -24,6 +24,7 @@ class Split extends MongoForm {
 	protected $description;
 	protected $status;
 	protected $split_type;
+	protected $fulfill_immediately;
 
 	protected $send_type;
 	protected $offers;
@@ -173,6 +174,27 @@ class Split extends MongoForm {
 		$this->send_type = $arg0;
 		$this->addModifiedColumn('send_type');
 		return $this;
+	}
+	
+	/**
+	 * Returns the fulfill_immediately
+	 * @return boolean
+	 */
+	function getFulfillImmediately() {
+	    if (is_null($this->fulfill_immediately)) {
+	        $this->fulfill_immediately = false;
+	    }
+	    return $this->fulfill_immediately;
+	}
+	
+	/**
+	 * Sets the fulfill_immediately
+	 * @var boolean
+	 */
+	function setFulfillImmediately($arg0) {
+	    $this->fulfill_immediately = (boolean)$arg0;
+	    $this->addModifiedColumn("fulfill_immediately");
+	    return $this;
 	}
 
 	/**

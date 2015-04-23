@@ -66,13 +66,6 @@
 			<?php } ?>
 		</select>
 	</div>
-	<div class="form-group">
-		<div class="btn-group" data-toggle="buttons">
-			<label class="btn btn-info" title="Whether or not the url will function as a redirect or return json"><input type="checkbox" name="posting_url_save" value="1" class="posting_url_change" /> Save</label>
-			<label class="btn btn-info" title="Whether or not the url will clear any existing cookies, creating a new lead automatically"><input type="checkbox" name="posting_url_clear" value="1" class="posting_url_change" /> Clear</label>
-			<label class="btn btn-info" title="If the posting URL will be used as a pixel, the format of the link is different"><input type="checkbox" name="posting_url_pixel" value="1" class="posting_url_change" /> Pixel</label>
-		</div>
-	</div>
 	<div id="data_field_posting_url_container"></div>
 	<div class="clearfix"></div>
 </div>
@@ -81,7 +74,8 @@
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
-<div class="form-group" style="display:none;" id="dummy_posting_url_data_field">
+<!-- Dummy data field div -->
+<div class="form-group row" style="display:none;" id="dummy_posting_url_data_field">
 	<div class="col-sm-6">
 		<select name="posting_url_data_field_name" class="form-control posting_url_change">
 			<optgroup label="Events">
@@ -221,14 +215,8 @@ function buildPostingUrl() {
 
 	var campaign_key = $('[name=posting_url_campaign]').val();
 	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = campaign_key;
+	posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
 	
-	if($('[name=posting_url_save]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_SAVE_FLAG); ?>] = 1;
-	}
-
-	if($('[name=posting_url_clear]').is(':checked')) {
-		posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
-	}
 
 	$('#data_field_posting_url_container .form-group').each(function() {
 		var dataFieldName = $(this).find('[name=posting_url_data_field_name]').val();

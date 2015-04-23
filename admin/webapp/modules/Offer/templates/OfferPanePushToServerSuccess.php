@@ -12,81 +12,77 @@
 	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
 	<input type="hidden" id="force_overwrite" name="force_overwrite" value="0" />
 	<div class="modal-body">
-		<div class="help-block col-md-12">
+		<div class="help-block">
 			Select a server to connect with and create this offer on:
 		</div>
-		<div class="col-md-12">
-			<div class="form-group">
-				<label class="col-sm-2 control-label" for="server_id">Server</label>
-				<div class="col-sm-10">
-					<select name="server_id" id="server_id">
-					<?php foreach ($servers as $server) { ?>
-						<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
-					<?php } ?>
-					</select>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label" for="docroot_dir">Document Root</label>
-				<div class="col-sm-10">
-					<input type="text" id="modal_docroot_dir" name="docroot_dir" class="form-control" value="" placeholder="Docroot Dir (/var/www/sites/...)" />
-					<small class="help-block">Specifies the root folder on the server where this offer is located</small>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label" for="domain">Domain</label>
-				<div class="col-sm-10">
-					<input type="text" id="modal_domain_name" name="domain" class="form-control" value="" />
-					<small class="help-block">Specifies the domain to use in the VirtualHost file</small>
-				</div>
-			</div>
-			<hr />
-			<div class="help-block">
-				Select which configuration options you'd like to include with this offer
-			</div>
-			<div class="form-group">
-				<div class="col-sm-9">
-					<label class="control-label" for="modal_flush_offer_cache_1">Clear Cache</label>
-					<small class="help-block">Clears all caches for this offer including pages, flows, and campaigns</small>
-				</div>
-				<div class="col-sm-2">
-					<input type="hidden" name="flush_offer_cache" value="0" />
-					<input type="checkbox" id="modal_flush_offer_cache_1" name="flush_offer_cache" value="1" />
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-9">
-					<label class="control-label" for="modal_recreate_lib_1">Push configuration</label>
-					<small class="help-block">Pushes new configuration settings to the frontend shared library files</small>
-				</div>
-				<div class="col-sm-2">
-					<input type="hidden" name="recreate_lib_folder" value="0" />
-					<input type="checkbox" id="modal_recreate_lib_1" name="recreate_lib_folder" value="1" />
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-9">
-					<label class="control-label" for="modal_create_skeleton">Create skeleton folders</label>
-					<small class="help-block">Instructs the server to generate a default site using pre-generated folders if they do not exist</small>
-				</div>
-				<div class="col-sm-2">
-					<input type="hidden" name="create_skeleton_folder" value="0" />
-					<input type="checkbox" id="modal_create_skeleton" name="create_skeleton_folder" value="1" />
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<div class="col-sm-9">
-					<label class="control-label" for="modal_generate_virtualhost">Generate VirtualHost</label>
-					<small class="help-block">Generates a VirtualHost file for apache and loads it for you</small>
-				</div>
-				<div class="col-sm-2">
-					<input type="hidden" name="generate_virtualhost" value="0" />
-					<input type="checkbox" id="modal_generate_virtualhost" name="generate_virtualhost" value="1" />
-				</div>
+		<div class="row form-group">
+			<label class="col-sm-2 control-label" for="server_id">Server</label>
+			<div class="col-sm-10">
+				<select name="server_id" id="server_id">
+				<?php foreach ($servers as $server) { ?>
+					<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
+				<?php } ?>
+				</select>
 			</div>
 		</div>
-		<div class="clearfix" />
+		<div class="row form-group">
+			<label class="col-sm-2 control-label" for="docroot_dir">Document Root</label>
+			<div class="col-sm-10">
+				<input type="text" id="modal_docroot_dir" name="docroot_dir" class="form-control" value="" placeholder="Docroot Dir (/var/www/sites/...)" />
+				<small class="help-block">Specifies the root folder on the server where this offer is located</small>
+			</div>
+		</div>
+		<div class="row form-group">
+			<label class="col-sm-2 control-label" for="domain">Domain</label>
+			<div class="col-sm-10">
+				<input type="text" id="modal_domain_name" name="domain" class="form-control" value="" />
+				<small class="help-block">Specifies the domain to use in the VirtualHost file</small>
+			</div>
+		</div>
+		<hr />
+		<div class="help-block">
+			Select which configuration options you'd like to include with this offer
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-9">
+				<label class="control-label" for="modal_flush_offer_cache_1">Clear Cache</label>
+				<small class="help-block">Clears all caches for this offer including pages, flows, and campaigns</small>
+			</div>
+			<div class="col-sm-2">
+				<input type="hidden" name="flush_offer_cache" value="0" />
+				<input type="checkbox" id="modal_flush_offer_cache_1" name="flush_offer_cache" value="1" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-9">
+				<label class="control-label" for="modal_recreate_lib_1">Push configuration</label>
+				<small class="help-block">Pushes new configuration settings to the frontend shared library files</small>
+			</div>
+			<div class="col-sm-2">
+				<input type="hidden" name="recreate_lib_folder" value="0" />
+				<input type="checkbox" id="modal_recreate_lib_1" name="recreate_lib_folder" value="1" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-9">
+				<label class="control-label" for="modal_create_skeleton">Create skeleton folders</label>
+				<small class="help-block">Instructs the server to generate a default site using pre-generated folders if they do not exist</small>
+			</div>
+			<div class="col-sm-2">
+				<input type="hidden" name="create_skeleton_folder" value="0" />
+				<input type="checkbox" id="modal_create_skeleton" name="create_skeleton_folder" value="1" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-9">
+				<label class="control-label" for="modal_generate_virtualhost">Generate VirtualHost</label>
+				<small class="help-block">Generates a VirtualHost file for apache and loads it for you</small>
+			</div>
+			<div class="col-sm-2">
+				<input type="hidden" name="generate_virtualhost" value="0" />
+				<input type="checkbox" id="modal_generate_virtualhost" name="generate_virtualhost" value="1" />
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -92,7 +92,7 @@ class GraphConversionByHour extends GoogleChart {
 			}
 		}
 		
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
+		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Done compiling report");
 	}
 	
 	/**
@@ -210,7 +210,7 @@ class GraphConversionByHour extends GoogleChart {
 		 $op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		 $op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		 
-		 \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
+		 #\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
 		 
 		
 		return $lead->getCollection()->aggregate($ops);
