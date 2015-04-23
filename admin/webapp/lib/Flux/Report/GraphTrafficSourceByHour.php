@@ -30,6 +30,11 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		    }
 		}
 		
+		if (count($this->getCols()) == 1) {
+		    // We have not data, so use dummy data
+		    $this->addColumn(null, 'No Data', 'number');
+		}
+		
 		// Add default rows for each hour and each offer
 		$start_date = new \DateTime();
 		$start_date->setTimestamp($this->getStartDate());
@@ -173,12 +178,12 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		foreach ($results['result'] as $result) {
 		    if (($campaign = $this->getCampaign($result['campaign_id'])) != null) {
 		        if (isset($ret_val[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']])) {
-		            $traffic_source_aggregate[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']]['clicks'] += $result['clicks'];
+		            $traffic_source_aggregate[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']]['clicks'] += (int)$result['clicks'];
 		        } else {
 		            $traffic_source_aggregate[$campaign->getTrafficSource()->getTrafficSourceId()][$result['event_date']] = array(
                         'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
 		                'traffic_source_id' => $campaign->getTrafficSource()->getTrafficSourceId(),
-		                'clicks' => $result['clicks'],
+		                'clicks' => (int)$result['clicks'],
 		                'event_date' => $result['event_date']
 		            );
 		        }

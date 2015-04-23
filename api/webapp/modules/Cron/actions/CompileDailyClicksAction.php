@@ -27,6 +27,9 @@ class CompileDailyClicksAction extends BasicConsoleAction
         try {
             // Compile the number of clicks per offer
             StringTools::consoleWrite('Compiling daily clicks by offer', null, StringTools::CONSOLE_COLOR_GREEN, true);
+            $offer = new \Flux\Offer();
+            $offer->updateMultiple(array(), array('$set' => array('daily_clicks' => 0, 'daily_conversions' => 0)));
+            
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
             $lead = new \Flux\Lead();
             $criteria = array(
@@ -40,12 +43,12 @@ class CompileDailyClicksAction extends BasicConsoleAction
                 ),
                 array(
             		'$match' => array(
-                        '_e.n' => '_cr'
+                        '_e.data_field.data_field_key_name' => '_cr'
             		)
                 ),
                 array(
                     '$group' => array(
-                	   '_id' => '$_t._o._id',
+                	   '_id' => '$_t.offer.offer_id',
                        'count' => array('$sum' => 1)
                     )    	
                 )
@@ -85,12 +88,12 @@ class CompileDailyClicksAction extends BasicConsoleAction
             		),
             		array(
             				'$match' => array(
-            						'_e.n' => 'conv'
+            						'_e.data_field.data_field_key_name' => 'conv'
             				)
             		),
             		array(
             				'$group' => array(
-            						'_id' => '$_t._o._id',
+            						'_id' => '$_t.offer.offer_id',
             						'count' => array('$sum' => 1)
             				)
             		)
@@ -117,6 +120,9 @@ class CompileDailyClicksAction extends BasicConsoleAction
             
             // Compile the number of clicks per campaign
             StringTools::consoleWrite('Compiling daily clicks by campaign', null, StringTools::CONSOLE_COLOR_GREEN, true);
+            $campaign = new \Flux\Campaign();
+            $campaign->updateMultiple(array(), array('$set' => array('daily_clicks' => 0, 'daily_conversions' => 0)));
+            
             StringTools::consoleWrite(' - Finding records', 'finding', StringTools::CONSOLE_COLOR_YELLOW);
             $lead = new \Flux\Lead();
             $criteria = array(
@@ -130,12 +136,12 @@ class CompileDailyClicksAction extends BasicConsoleAction
             		),
             		array(
             				'$match' => array(
-            						'_e.n' => '_cr'
+            						'_e.data_field.data_field_key_name' => '_cr'
             				)
             		),
             		array(
             				'$group' => array(
-            						'_id' => '$_t._ck._id',
+            						'_id' => '$_t.campaign.campaign_id',
             						'count' => array('$sum' => 1)
             				)
             		)
@@ -175,12 +181,12 @@ class CompileDailyClicksAction extends BasicConsoleAction
             		),
             		array(
             				'$match' => array(
-            						'_e.n' => 'conv'
+            						'_e.data_field.data_field_key_name' => 'conv'
             				)
             		),
             		array(
             				'$group' => array(
-            						'_id' => '$_t._ck._id',
+            						'_id' => '$_t.campaign.campaign_id',
             						'count' => array('$sum' => 1)
             				)
             		)

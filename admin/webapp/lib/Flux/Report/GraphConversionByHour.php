@@ -48,6 +48,11 @@ class GraphConversionByHour extends GoogleChart {
 			}
 		}
 		
+		if (count($this->getCols()) == 1) {
+		    // We have not data, so use dummy data
+		    $this->addColumn(null, 'No Data', 'number');
+		}
+		
 		// Add default rows for each hour and each offer
 		$start_date = new \DateTime();
 		$start_date->setTimestamp($this->getStartDate());

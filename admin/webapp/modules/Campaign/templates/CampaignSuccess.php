@@ -4,7 +4,7 @@
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart', 'controls']}]}"></script>
 <div class="page-header">
 	<!-- Actions -->
 	<div class="pull-right">
@@ -47,7 +47,7 @@
 	<!-- main col right -->
 	<div class="col-sm-8">
 		<div class="panel panel-default">
-			<div class="panel-heading"><h4>Click Traffic</h4></div>
+			<div class="panel-heading">Click Traffic</div>
 			<div class="panel-body">
 				<div id="click_by_hour_div">
             		<!--Divs that will hold each control and chart-->
@@ -63,7 +63,7 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading"><h4>Conversion Traffic</h4></div>
+			<div class="panel-heading">Conversion Traffic</div>
 			<div class="panel-body">
 				<div id="conversion_by_hour_div">
             		<!--Divs that will hold each control and chart-->
@@ -94,7 +94,7 @@
 		<?php } ?>
 		<div class="panel panel-default text-center">
 			<div class="panel-heading">
-				<h4>Today's Stats</h4>
+				Today's Stats
 			</div>
 			<div class="panel-body">
 			<h4><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
@@ -103,7 +103,7 @@
 		</div>
 		<p />
 		<div class="panel panel-default">
-			<div class="panel-heading"><h4>Quick Links</h4></div>
+			<div class="panel-heading">Quick Links</div>
 			<div class="panel">
 				<div class="list-group">
 					<a href="/offer/offer?_id=<?php echo $campaign->getOffer()->getOfferId() ?>" class="list-group-item"><?php echo $campaign->getOffer()->getOfferName() ?></a>
@@ -121,190 +121,66 @@
 
 <script>
 //<!--
-google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(initialize);
 
-$(document).ready(function() {
-	$('#btn_delete,#btn_delete_sm').click(function() {
-		if (confirm('Are you sure you want to delete this campaign and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/campaign/campaign/<?php echo $campaign->getId() ?>' }, function(data) {
-				$.rad.notify('Campaign Removed', 'This campaign has been removed from the system.');
-				window.location.replace('/campaign/campaign-search');
-			});
-		}
-	});
-
-	drawClickByHourChart();
-   	drawConversionByHourChart();
+$(window).on('debouncedresize', function() {
+	initialize();
 });
 
-function drawClickByHourChart() {
-	$.rad.get("/api", { "func": "/report/graph-click-by-hour", "date_range": "<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_24_HOURS ?>", "tz": "<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>", "group_type": 2, "campaign_id_array": "<?php echo $campaign->getId() ?>" }, function(data) {
-		if (data.record && data.record.cols && data.record.cols.length > 1) {
-			var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_chart_div'));
-			var datatable = new google.visualization.DataTable({ cols: data.record.cols, rows: data.record.rows });	
-			var dataview = new google.visualization.DataView(datatable);	
-			var series = data.record.series;
-			
-			var columns = [];
-			for (var i = 0; i < datatable.getNumberOfColumns(); i++) {
-				columns.push(i);
-			}
-		
-			var $options = {
-				animation:{ duration: 250, easing: 'out' },
-				hAxis: {
-					gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-					minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-					textStyle: { color: '#737373', fontSize: 11 },
-				},
-				legend: { textStyle: { color: '#737373', fontSize: 11 }},
-				vAxis: { 
-					gridlines: {color: '#eaeaea', count: 4},
-					minorGridlines: {color: '#f4f4f4', count: 1},
-					textStyle: { color: '#737373', fontSize: 11 }
-				},
-				series: data.record.series,
-				chartArea:{ left:'8%', top: '8%', width: '70%', height:'80%' }
-			};
-			// Create a pie chart, passing some options
-	        var chart = new google.visualization.ChartWrapper({
-	          chartType: 'LineChart',
-	          containerId: 'click_by_hour_chart_div',
-	          options: $options
-	        });
-	        
-	        var chart_range_control = new google.visualization.ControlWrapper({
-	        	controlType: 'ChartRangeFilter',
-	            containerId: 'click_by_hour_filter_div',
-	            options: {
-	              	filterColumnLabel: 'Hour',
-		            ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '70%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }
-	            },
-	            state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}
-			});
+function initialize() {
+	var query1 = new google.visualization.Query('/chart/graph-click-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
+	query1.send(drawClickByHourChart);
 
-	        dashboard.bind(chart_range_control, chart);
-	        dashboard.draw(dataview);
-
-	        google.visualization.events.addListener(chart, 'select', function () {
-				var sel = dashboard.getSelection();
-				// if selection length is 0, we deselected an element
-				if (sel.length > 0) {
-					// if row is undefined, we clicked on the legend
-					if (typeof sel[0].row === 'undefined' || sel[0].row === null) {
-						var col = sel[0].column;
-						if (columns[col] == col) {
-							// hide the data series
-							columns[col] = {
-								label: datatable.getColumnLabel(col),
-								type: datatable.getColumnType(col),
-								calc: function () {
-									return null;
-								}
-							};
-		
-							// grey out the legend entry
-							series[col - 1].color = '#eaeaea';
-						}
-						else {
-							// show the data series
-							columns[col] = col;
-							series[col - 1].color = series[col - 1].orig_color;
-						}
-						dataview.setColumns(columns);
-						dashboard.draw(dataview);
-					}
-				}
-			});
-		} else {
-			$('#click_by_hour_chart_div').html('<div class="alert alert-warning"><h3 class="text-warning text-center"><span class="glyphicon glyphicon-retweet"></span> We\'re sorry, there is no data to display on this graph yet</h3></div>');
-		}
-	});
+	var query2 = new google.visualization.Query('/chart/graph-conversion-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
+	query2.send(drawConversionByHourChart);
 }
 
-function drawConversionByHourChart() {
-	$.rad.get("/api", { "func": "/report/graph-conversion-by-hour", "date_range": "<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_24_HOURS ?>", "tz": "<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>", "group_type": 2, "campaign_id_array": "<?php echo $campaign->getId() ?>" }, function(data) {
-		if (data.record && data.record.cols && data.record.cols.length > 1) {
-			var dashboard = new google.visualization.Dashboard(document.getElementById('conversion_by_hour_chart_div'));
-			var datatable = new google.visualization.DataTable({ cols: data.record.cols, rows: data.record.rows });	
-			var dataview = new google.visualization.DataView(datatable);	
-			var series = data.record.series;
-			
-			var columns = [];
-			for (var i = 0; i < datatable.getNumberOfColumns(); i++) {
-				columns.push(i);
-			}
-		
-			var $options = {
-				animation:{ duration: 250, easing: 'out' },
-				hAxis: {
-					gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-					minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-					textStyle: { color: '#737373', fontSize: 11 },
-				},
-				legend: { textStyle: { color: '#737373', fontSize: 11 }},
-				vAxis: { 
-					gridlines: {color: '#eaeaea', count: 4},
-					minorGridlines: {color: '#f4f4f4', count: 1},
-					textStyle: { color: '#737373', fontSize: 11 }
-				},
-				series: data.record.series,
-				chartArea:{ left:'8%', top: '8%', width: '70%', height:'80%' }
-			};
-			// Create a pie chart, passing some options
-	        var chart = new google.visualization.ChartWrapper({
-	          chartType: 'LineChart',
-	          containerId: 'click_by_hour_chart_div',
-	          options: $options
-	        });
-	        
-	        var chart_range_control = new google.visualization.ControlWrapper({
-	        	controlType: 'ChartRangeFilter',
-	            containerId: 'click_by_hour_filter_div',
-	            options: {
-	              	filterColumnLabel: 'Hour',
-		            ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '70%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }
-	            },
-	            state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}
-			});
+function drawClickByHourChart(response) {
+	var data = response.getDataTable();
+	var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_div'));
+	var chart = new google.visualization.ChartWrapper({
+	    chartType: "LineChart",
+	    options: {
+			animation:{ duration: 250, easing: 'out' },
+			hAxis: {
+				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
+				minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
+				textStyle: { color: '#737373', fontSize: 11 },
+			},
+			legend: { textStyle: { color: '#737373', fontSize: 11 }},
+			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
+			chartArea:{ left:'0%', top: '8%', width: '80%', height:'80%' }
+		},
+	    containerId: 'click_by_hour_chart_div'
+    });
+    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'0%',width: '95%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+    dashboard.bind(chart_range_control, chart);
+    dashboard.draw(data); 
+}
 
-	        dashboard.bind(chart_range_control, chart);
-	        dashboard.draw(dataview);
-
-	        google.visualization.events.addListener(chart, 'select', function () {
-				var sel = dashboard.getSelection();
-				// if selection length is 0, we deselected an element
-				if (sel.length > 0) {
-					// if row is undefined, we clicked on the legend
-					if (typeof sel[0].row === 'undefined' || sel[0].row === null) {
-						var col = sel[0].column;
-						if (columns[col] == col) {
-							// hide the data series
-							columns[col] = {
-								label: datatable.getColumnLabel(col),
-								type: datatable.getColumnType(col),
-								calc: function () {
-									return null;
-								}
-							};
-		
-							// grey out the legend entry
-							series[col - 1].color = '#eaeaea';
-						}
-						else {
-							// show the data series
-							columns[col] = col;
-							series[col - 1].color = series[col - 1].orig_color;
-						}
-						dataview.setColumns(columns);
-						dashboard.draw(dataview);
-					}
-				}
-			});
-		} else {
-			$('#conversion_by_hour_chart_div').html('<div class="alert alert-warning"><h3 class="text-warning text-center"><span class="glyphicon glyphicon-retweet"></span> We\'re sorry, there is no data to display on this graph yet</h3></div>');
-		}
-	});
+function drawConversionByHourChart(response) {
+	var data = response.getDataTable();
+	var dashboard = new google.visualization.Dashboard(document.getElementById('conversion_by_hour_div'));
+	var chart = new google.visualization.ChartWrapper({
+	    chartType: "ColumnChart",
+	    options: {
+			animation:{ duration: 250, easing: 'out' },
+			hAxis: {
+				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
+				minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
+				textStyle: { color: '#737373', fontSize: 11 },
+			},
+			isStacked: true,
+			bar: { groupWidth: 17 },
+			legend: { textStyle: { color: '#737373', fontSize: 11 }},
+			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
+			chartArea:{ left:'0%', top: '8%', width: '80%', height:'80%' }
+		},
+	    containerId: 'conversion_by_hour_chart_div'
+    });
+    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'0%',width: '95%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+    dashboard.bind(chart_range_control, chart);
+    dashboard.draw(data); 
 }
 //-->
 </script>

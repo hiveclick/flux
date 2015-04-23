@@ -60,14 +60,14 @@ $(document).ready(function() {
 			}
 			return cell_html;
 		}},
-		{id:'clicks', name:'clicks', field:'clicks', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'daily_clicks', name:'clicks', field:'daily_clicks', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '0') {
 				return '<span class="text-muted">' + $.number(value) + '</span>';
 			} else {
 				return $.number(value);
 			}
 		}},
-		{id:'conversions', name:'conversions', field:'conversions', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'daily_conversions', name:'conversions', field:'daily_conversions', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '0') {
 				return '<span class="text-muted">' + $.number(value) + '</span>';
 			} else {
