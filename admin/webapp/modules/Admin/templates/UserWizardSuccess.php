@@ -10,7 +10,6 @@
 <form class="" id="user_form_<?php echo $user->getId() ?>" method="<?php echo ($user->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/user" />
 	<input type="hidden" name="status" value="<?php echo \Flux\User::USER_STATUS_ACTIVE ?>" />
-	<input type="hidden" name="user_type" value="<?php echo \Flux\User::USER_TYPE_ADMIN ?>" />
 	<?php if ($user->getId() > 0) { ?>
 		<input type="hidden" name="_id" value="<?php echo $user->getId() ?>" />
 	<?php } ?>
@@ -41,17 +40,40 @@
 			</select>
 		</div>
 		<hr />
+		<div class="help-block">Users can either see everything in the site or do data entry only</div>
+			<div class="form-group">
+			<label class="control-label hidden-xs" for="user_type">Role</label>
+			<select class="form-control" name="user_type" id="user_type" placeholder="Assign this user a role">
+				<option value="<?php echo \Flux\User::USER_TYPE_ADMIN ?>" <?php echo $user->getUserType() == \Flux\User::USER_TYPE_ADMIN ? 'selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => \Flux\User::USER_TYPE_ADMIN, 'name' => 'Administrator', 'description' => 'This user will be able to see and edit everything in the system including revenue reports, lead data, and users'))) ?>">Administrator</option>
+				<option value="<?php echo \Flux\User::USER_TYPE_DATA_ENTRY ?>" <?php echo $user->getUserType() == \Flux\User::USER_TYPE_DATA_ENTRY ? 'selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => \Flux\User::USER_TYPE_DATA_ENTRY, 'name' => 'Data Entry', 'description' => 'This user will be able to view lead reports and alter lead information only'))) ?>">Data Entry</option>
+			</select>
+		</div>
+		<hr />
 		<div class="help-block">Users are assigned to a default client's account for reporting</div>	
 
 		<div class="form-group">
 			<label class="control-label hidden-xs" for="client_id">Client</label>
 			<select class="form-control" name="client[client_id]" id="client_id" placeholder="Assign this user to a client...">
+				<optgroup label="Administrators">
 				<?php
 					/* @var $client \Flux\Client */ 
 					foreach($clients AS $client) { 
 				?>
-					<option value="<?php echo $client->getId() ?>"<?php echo $user->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
+				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+					<option value="<?php echo $client->getId() ?>" <?php echo $user->getClient()->getClientId() == $client->getId() ? 'selected' : ''; ?>><?php echo $client->getName() ?></option>
+					<?php } ?>
 				<?php } ?>
+				</optgroup>
+				<optgroup label="Affiliates">
+				<?php
+					/* @var $client \Flux\Client */ 
+					foreach($clients AS $client) { 
+				?>
+				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+					<option value="<?php echo $client->getId() ?>" <?php echo $user->getClient()->getClientId() == $client->getId() ? 'selected' : ''; ?>><?php echo $client->getName() ?></option>
+					<?php } ?>
+				<?php } ?>
+				</optgroup>
 			</select>
 		</div>
 	</div>
@@ -71,7 +93,30 @@ $(document).ready(function() {
 		$('#user_search_form').trigger('submit');
 	}, {keep_form:1});
 
-	$('#status,#type,#client_id,#timezone').selectize();
+    $('#user_type').selectize({
+    	valueField: '_id',
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name','description'],
+		render: {
+			item: function(item, escape) {
+				var ret_val = '<div class="item">' +
+                '<b>' + escape(item.name) + '</b><br />' +
+                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+                '</div>';
+				return ret_val;
+			},
+			option: function(item, escape) {
+				var ret_val = '<div class="option">' +
+                '<b>' + escape(item.name) + '</b><br />' +
+                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+                '</div>';
+				return ret_val;
+			}
+		}
+    });
+	
+	$('#status,#client_id,#timezone').selectize();
 });
 
 <?php if ($user->getId() > 0) { ?>

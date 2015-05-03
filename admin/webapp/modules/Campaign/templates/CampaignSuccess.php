@@ -16,17 +16,22 @@
 					<li class="divider"></li>
 					<li><a data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a></li>
 					<li class="divider"></li>
+					<li><a href="<?php echo $campaign->getRedirectLink() ?>" target="_blank">preview</a></li>
+					<li class="divider"></li>
 					<li><a data-toggle="modal" id="btn_delete_sm" data-target="#delete_modal" href="#"><span class="text-danger">delete</span></a></li>
 				</ul>
 			</div>
 		</div>
 		<div class="hidden-sm hidden-xs">
 			<div class="btn-group" role="group">
-				<a class="btn btn-info" data-toggle="modal" data-target="#edit_modal" href="/campaign/campaign-pane-edit?_id=<?php echo $campaign->getId() ?>">edit campaign</a>
+				<a class="btn btn-info" data-toggle="modal" data-target="#edit_modal" href="/campaign/campaign-pane-edit?_id=<?php echo $campaign->getId() ?>"><span class="glyphicon glyphicon-edit"></span> edit campaign</a>
 			</div>
 			<div class="btn-group" role="group">
 				<a class="btn btn-info" data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a>
 			</div>
+			<div class="btn-group" role="group">
+                <a class="btn btn-info" href="<?php echo $campaign->getRedirectLink() ?>" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> preview</a>
+            </div>
 			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
 		</div>
 	</div>
@@ -45,7 +50,7 @@
 <!-- content -->
 <div class="row">
 	<!-- main col right -->
-	<div class="col-sm-8">
+	<div class="col-md-9 col-sm-9">
 		<div class="panel panel-default">
 			<div class="panel-heading">Click Traffic</div>
 			<div class="panel-body">
@@ -80,47 +85,45 @@
 	</div>
 	
 	<!-- main col right -->
-	<div class="col-sm-4">
-	    <?php if ($campaign->getOffer()->getOffer()->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
-		<div class="panel panel-default text-center">
-			<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
-			<p />
-			<div>
-				<a class="btn btn-info" href="<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>" target="_blank">Preview Landing Page</a>
-				<br /><small><?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?></small>
-			</div>
-		</div>
-		<p />
-		<?php } ?>
-		<div class="panel panel-default text-center">
-			<div class="panel-heading">
-				Today's Stats
-			</div>
-			<div class="panel-body">
-			<h4><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
-			<h4><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?> Conversions</h4>
-			</div>
-		</div>
-		<p />
-		<div class="panel panel-default">
-			<div class="panel-heading">Quick Links</div>
-			<div class="panel">
-				<div class="list-group">
-					<a href="/offer/offer?_id=<?php echo $campaign->getOffer()->getOfferId() ?>" class="list-group-item"><?php echo $campaign->getOffer()->getOfferName() ?></a>
-					<a href="/client/client?_id=<?php echo $campaign->getClient()->getClientId() ?>" class="list-group-item"><?php echo $campaign->getClient()->getClientName() ?></a>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="col-md-3 col-sm-3">
+        <ul class="list-group">
+            <li class="list-group-item active">Campaign Stats</li>
+            <li class="list-group-item">
+                <span class="badge"><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?></span>
+                Today's Clicks
+            </li>
+            <li class="list-group-item">
+                <span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
+                Today's Conversions
+            </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item disabled">Landing Page Preview</li>
+            <li class="list-group-item text-center">
+                <img class="img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
+            </li>
+        </ul>
+    </div>
 </div>
 
 <!-- edit modal -->
 <div class="modal fade" id="edit_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <!-- instruction modal -->
 <div class="modal fade" id="instruction_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- confirm delete modal -->
+<div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this campaign?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
 
 <script>
 //<!--
+$(document).ready(function() {
+	// delete the client information
+	$('#confirm_delete').click(function() {
+		$.rad.del('/api', {func: '/campaign/campaign/<?php echo $campaign->getId() ?>' }, function() {
+			window.location = '/campaign/campaign-search';
+		});
+	});
+});
+
 google.setOnLoadCallback(initialize);
 
 $(window).on('debouncedresize', function() {

@@ -59,10 +59,8 @@ $(document).ready(function() {
 		{id:'user_type', name:'type', field:'user_type', def_value: ' ', cssClass: 'text-center', maxWidth:90, width:90, minWidth:90, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\User::USER_TYPE_ADMIN ?>') {
 				return '<span class="">Administrator</span>';
-			} else if (value == '<?php echo \Flux\User::USER_TYPE_REPORT ?>') {
-				return '<span class="">Report User</span>';
-			} else if (value == '<?php echo \Flux\User::USER_TYPE_MOBILE_ONLY ?>') {
-				return '<span class="">Mobile Only</span>';
+			} else if (value == '<?php echo \Flux\User::USER_TYPE_DATA_ENTRY ?>') {
+				return '<span class="">Data Entry</span>';
 			}
 		}},
 		{id:'_client_name', name:'client', field:'client.client_name', def_value: ' ', cssClass: 'text-center', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {

@@ -19,6 +19,7 @@
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Basic Settings</a></li>
 			<li role="presentation" class=""><a href="#advanced" role="tab" data-toggle="tab">Advanced Settings</a></li>
+			<li role="presentation" class=""><a href="#entry" role="tab" data-toggle="tab">Entry Points</a></li>
 		</ul>
 		<!-- Tab panes -->
 		<div class="tab-content">
@@ -67,20 +68,12 @@
 				<hr />
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Verticals</label>
-					<select id="verticals" name="verticals[]" class="form-control selectize" require placeholder="Verticals" multiple>
+					<label class="control-label hidden-xs" for="name">Vertical</label>
+					<select id="vertical" name="vertical[vertical_id]" class="form-control selectize" placeholder="Vertical">
 						<?php foreach ($verticals as $vertical) { ?>
-							<option value="<?php echo $vertical->getName() ?>" <?php echo in_array($vertical->getName(), $offer->getVerticals()) ? "selected=\"SELECTED\"" : "" ?>><?php echo $vertical->getName() ?></option>
+							<option value="<?php echo $vertical->getId() ?>" <?php echo $offer->getVertical()->getVerticalId() == $vertical->getName() ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $vertical->getId(), 'name' => $vertical->getName(), 'description' => $vertical->getDescription()))) ?>"><?php echo $vertical->getName() ?></option>
 						<?php } ?>
 					</select>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label hidden-xs" for="payout">Payout</label>
-					<div class="input-group">
-						<span class="input-group-addon">$</span>
-						<input type="text" id="payout" name="payout" class="form-control" placeholder="Enter payout" value="<?php echo number_format($offer->getPayout(), 2) ?>" />
-					</div>
 				</div>
 				
 				<hr />
@@ -148,17 +141,69 @@
 					</div>
 				</div>
 			</div>
+			<div role="tabpanel" class="tab-pane fade in" id="entry">
+                <div class="help-block">These are the various entry points (landing pages) into this offer.  Campaigns can redirect to any of these pages.</div>
+                <div id="landing_pages">
+                    <?php 
+                        foreach ($offer->getLandingPages() as $key => $landing_page) {
+                    ?>
+                        <div class="media">
+                            <div class="media-left pull-left">
+                                <img class="media-object img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=120x120&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=<?php echo urlencode($landing_page->getUrl()) ?>" border="0" width="120" data-url="<?php echo $landing_page->getUrl() ?>" />
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><input type="text" class="form-control" placeholder="Enter a nickname for this landing page" name="landing_pages[<?php echo $key ?>][name]" value="<?php echo $landing_page->getName() ?>" /></h4>
+                                <textarea name="landing_pages[<?php echo $key ?>][url]" class="form-control" placeholder="Enter the url to this landing page" rows="2"><?php echo $landing_page->getUrl() ?></textarea>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
+	    <button type="button" class="btn btn-success hidden" id="add_landing_page_btn">Add Landing Page</button>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		<input type="submit" name="__save" class="btn btn-primary" value="Save Offer" />
 	</div>
 </form>
 
+<!-- Landing Page div -->
+<div class="media hidden" id="dummy-landing-page-div">
+    <div class="media-left pull-left">
+        <img class="media-object img-thumbnail page_thumbnail" src="/images/no_preview.png" border="0" alt="" width="120" data-url="" />
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><input type="text" class="form-control" placeholder="Enter a nickname for this landing page" name="landing_pages[dummy_id][name]" value="" /></h4>
+        <textarea name="landing_pages[dummy_id][url]" class="form-control" placeholder="Enter the url to this landing page" rows="2"></textarea>
+    </div>
+</div>
+
 <script>
 //<!--
 $(document).ready(function() {
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		if ($(e.target).attr('href') == '#entry') {
+	        $('#add_landing_page_btn').removeClass('hidden');
+	    } else {
+	    	$('#add_landing_page_btn').addClass('hidden');
+	    }
+	});
+
+	
+	$('#add_landing_page_btn').on('click', function() {
+		var index_number = $('#landing_pages > .media').length;
+		var $landing_page_div = $('#dummy-landing-page-div').clone(true);
+		$landing_page_div.removeAttr('id');
+		$landing_page_div.html(function(i, oldHTML) {
+			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+			return oldHTML;
+		});
+		
+		$('#landing_pages').append($landing_page_div);
+		$landing_page_div.removeClass('hidden');
+	});
+	
 	$('#split_id').selectize();
 
     $('#redirect_type').selectize({
@@ -201,7 +246,26 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#client_id,#status,#verticals').selectize();
+	$('#client_id,#status').selectize();
+
+	$('#vertical').selectize({
+		valueField: '_id',
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name','description'],
+		render: {
+			item: function(item, escape) {
+				return '<div>' + escape(item.name) + '</div>';
+			},
+			option: function(item, escape) {
+				var ret_val = '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+                '<b>' + escape(item.name) + '</b><br />' +
+                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+                '</div>';
+				return ret_val;
+			}
+		}
+	});
 
 	$('#pushToServerModal').on('shown.bs.modal', function(e) {
 		$('#modal_domain_name').val($('#domain_name').val());

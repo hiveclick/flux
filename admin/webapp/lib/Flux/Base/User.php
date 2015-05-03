@@ -10,8 +10,7 @@ class User extends MongoForm {
 	const USER_STATUS_DELETED = 3;
 
 	const USER_TYPE_ADMIN = 1;
-	const USER_TYPE_REPORT = 2;
-	const USER_TYPE_MOBILE_ONLY = 3;
+	const USER_TYPE_DATA_ENTRY = 2;
 
 	protected $name;
 	protected $email;

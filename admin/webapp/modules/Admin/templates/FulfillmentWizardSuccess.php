@@ -113,6 +113,24 @@
 						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"></textarea>
 					</div>
 				</div>
+				
+				<!-- FORM FILL specific settings -->
+				<div id="formfill_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the TRACKING url below.  This is the url provided by the affiliate network that redirects you to the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="tracking_url">Tracking URL</label>
+						<textarea name="tracking_url" id="tracking_url" class="form-control" rows="4" placeholder="enter tracking url here..."></textarea>
+					</div>
+					<div class="help-block">Enter the FORM POST url below.  You can retrieve this from viewing the source of the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Post URL</label>
+						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Response success text</label>
+						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"></textarea>
+					</div>
+				</div>
 			   
 				<!-- Email specific settings -->
 				<div id="email_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_EMAIL ? 'hidden' : ''; ?>">
@@ -377,6 +395,7 @@ $(document).ready(function() {
 	});
 
 	$('#export_class_name').change(function() {
+		$('#formfill_settings').addClass('hidden');
 		$('#export_settings').addClass('hidden');
 		$('#ftp_settings').addClass('hidden');
 		$('#email_settings').addClass('hidden');
@@ -394,6 +413,8 @@ $(document).ready(function() {
 		 			$('#email_settings').removeClass('hidden');
 				<?php } else if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST) { ?>
 		 			$('#post_settings').removeClass('hidden');
+				<?php } else if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST) { ?>
+		 			$('#formfill_settings').removeClass('hidden');
 				<?php } if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT) { ?>
 		 			$('#infusionsoft_settings').removeClass('hidden');
 				<?php } ?>

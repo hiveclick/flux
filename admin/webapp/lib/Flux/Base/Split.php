@@ -78,7 +78,7 @@ class Split extends MongoForm {
 	 */
 	function getSplitType() {
 	    if (is_null($this->split_type)) {
-	        $this->split_type = self::SPLIT_TYPE_NORMAL;
+	        $this->split_type = 0;
 	    }
 	    return $this->split_type;
 	}

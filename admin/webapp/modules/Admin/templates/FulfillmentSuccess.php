@@ -35,7 +35,7 @@
 			<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-danger" href="#">delete</a>
 		</div>
 	</div>
-	<h1><?php echo $fulfillment->getName() ?> <small>Manage Fulfillment</small></h1>
+	<h1><?php echo $fulfillment->getName() ?></h1>
 </div>
 <!-- Add breadcrumbs -->
 <ol class="breadcrumb">
@@ -158,6 +158,9 @@
 <!-- Fulfillment Clone modal -->
 <div class="modal fade" id="clone_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 
+<!-- confirm delete modal -->
+<div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this fulfillment?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
+
 <script>
 //<!--
 $(document).ready(function() {
@@ -242,14 +245,12 @@ $(document).ready(function() {
 		$(this).closest('.map-group-item').remove();
 	});
 
-	$('#btn_delete,#btn_delete_sm').click(function() {
-		if (confirm('Are you sure you want to delete this data field from the system?')) {
-			$.rad.del({ func: '/admin/fulfillment/<?php echo $fulfillment->getId() ?>' }, function(data) {
-				$.rad.notify('You have deleted this fulfillment', 'You have deleted this fulfillment successfully.');
-				window.location.href = '/admin/fulfillment-search';
-			});
-		}
-	})
+	// delete the client information
+	$('#confirm_delete').click(function() {
+		$.rad.del('/api', {func: '/admin/fulfillment/<?php echo $fulfillment->getId() ?>' }, function() {
+			window.location = '/admin/fulfillment-search';
+		});
+	});
 });
 //-->
 </script>

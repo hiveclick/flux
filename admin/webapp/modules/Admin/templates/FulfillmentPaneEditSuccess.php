@@ -64,6 +64,7 @@
 				
 				<hr />
 
+				<!-- FTP specific settings -->
 				<div id="ftp_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_FTP ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the FTP credentials for the remote server</div>
 					<div class="form-group">
@@ -88,7 +89,8 @@
 						<input class="form-control" type="text" id="ftp_folder" name="ftp_folder" value="<?php echo $fulfillment->getFtpFolder() ?>" />
 					</div>
 				</div>
-
+				
+                <!-- POST specific settings -->
 				<div id="post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the POST url and what to check in the result for a successful post</div>
 					<div class="form-group">
@@ -101,7 +103,26 @@
 						<textarea name="success_msg" class="form-control" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
 					</div>
 				</div>
-			
+				
+				<!-- FORM FILL specific settings -->
+				<div id="formfill_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the TRACKING url below.  This is the url provided by the affiliate network that redirects you to the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="tracking_url">Tracking URL</label>
+						<textarea name="tracking_url" id="tracking_url" class="form-control" rows="4" placeholder="enter tracking url here..."><?php echo $fulfillment->getTrackingUrl() ?></textarea>
+					</div>
+					<div class="help-block">Enter the FORM POST url below.  You can retrieve this from viewing the source of the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Post URL</label>
+						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Response success text</label>
+						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
+					</div>
+				</div>
+				
+			    <!-- Email specific settings -->
 				<div id="email_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_EMAIL ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter one or more email addresses below</div>
 					<div class="form-group">
@@ -110,6 +131,7 @@
 					</div>
 				</div>
 			
+			    <!-- INFUSIONSOFT specific settings -->
 				<div id="infusionsoft_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the Infusionsoft domain name and api key found in the Infusionsoft Dashboard</div>
 					<div class="form-group">
@@ -227,6 +249,11 @@ $(document).ready(function() {
 				<?php } else { ?>
 					$('#email_settings').addClass('hidden');
 				<?php } ?>
+				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST) { ?>
+		 			$('#formfill_settings').removeClass('hidden');
+		 		<?php } else { ?>
+			 	    $('#formfill_settings').addClass('hidden');
+		 		<?php } ?>
 				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST) { ?>
 		 			$('#post_settings').removeClass('hidden');
 				<?php } else { ?>

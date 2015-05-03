@@ -26,7 +26,7 @@ class User extends CommonForm {
 	 * @var integer
 	 */
 	function setUserId($arg0) {
-		$this->user_id = $arg0;
+		$this->user_id = (int)$arg0;
 		return $this;
 	}
 	

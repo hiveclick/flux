@@ -23,13 +23,14 @@
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
 				</div>
 				<div class="form-group text-left">
-					<select name="split_type" id="split_type">
+					<select name="split_type" id="split_type" style="width:200px;">
 					   <optgroup label="Show All Split Types">
-					       <option value="0">Show all split types&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+					       <option value="0">Show all split types</option>
 					   </optgroup>
 					   <optgroup label="Show Selected Split Type">
-    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>">Show normal splits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
-    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>">Show catch-all splits&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>">Show normal splits</option>
+    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>">Show post splits</option>
+    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>">Show catch-all splits</option>
 					   </optgroup>
 					</select>
 				</div>
@@ -63,10 +64,31 @@ $(document).ready(function() {
  		        if (dataContext.last_queue_time == null) {
  		        	ret_val += '<div class="small text-muted">nothing queued yet</div>';
  		        } else {
-  		            ret_val += '<div class="small text-muted">' + moment.unix(dataContext.last_queue_time.sec).calendar(); + '</div>';
+  		            ret_val += '<div class="small text-muted">' + moment.unix(dataContext.last_queue_time.sec).calendar() + '</div>';
  		        }
  	 			ret_val += '</div>';
  	 			return ret_val;
+ 		}},
+ 		{id:'schedule', name:'Schedule', field:'scheduling.days', def_value: ' ', cssClass:'text-center', hidden:true, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 	 		var ret_val = $('<div class="btn-group"><div class="btn btn-default disabled sunday">S</div><div class="btn btn-default disabled monday">M</div><div class="btn btn-default disabled tuesday">T</div><div class="btn btn-default disabled wednesday">W</div><div class="btn btn-default disabled thursday">T</div><div class="btn btn-default disabled friday">F</div><div class="btn btn-default disabled saturday">S</div></div>');
+ 			$.each(value, function(i, item) {
+ 	 			if (item == 0) {
+ 	 	 			$('div.sunday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 1) {
+ 	 				$('div.monday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 2) {
+ 	 				$('div.tuesday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 3) {
+ 	 				$('div.wednesday',ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 4) {
+ 	 				$('div.thursday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 5) {
+ 	 				$('div.friday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			} else if (item == 6) {
+ 	 				$('div.saturday', ret_val).removeClass('btn-default').addClass('active btn-success');
+ 	 			}
+ 			});
+ 			return '<div class="btn-group">' + ret_val.html() + '</div>';
  		}}
 
  	];

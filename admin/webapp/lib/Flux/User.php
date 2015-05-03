@@ -5,6 +5,9 @@ class User extends Base\User {
 
 	private $client_id_array;
 	
+	private $new_password;
+	private $new_password_confirm;
+	
 	/**
 	 * Returns the client_id_array
 	 * @return array
@@ -56,13 +59,51 @@ class User extends Base\User {
 	function getUserTypeName() {
 		if ($this->getUserType() == self::USER_TYPE_ADMIN) {
 			return "Administrator";
-		} else if ($this->getUserType() == self::USER_TYPE_REPORT) {
-			return "Report User";
-		} else if ($this->getUserType() == self::USER_TYPE_MOBILE_ONLY) {
-			return "Mobile Only";
+		} else if ($this->getUserType() == self::USER_TYPE_DATA_ENTRY) {
+			return "Data Entry Only";
 		} else {
 			return "Unknown Type";
 		}
+	}
+	
+	/**
+	 * Returns the new_password
+	 * @return string
+	 */
+	function getNewPassword() {
+	    if (is_null($this->new_password)) {
+	        $this->new_password = "";
+	    }
+	    return $this->new_password;
+	}
+	
+	/**
+	 * Sets the new_password
+	 * @var string
+	 */
+	function setNewPassword($arg0) {
+	    $this->new_password = $arg0;
+	    return $this;
+	}
+	
+	/**
+	 * Returns the new_password_confirm
+	 * @return string
+	 */
+	function getNewPasswordConfirm() {
+	    if (is_null($this->new_password_confirm)) {
+	        $this->new_password_confirm = "";
+	    }
+	    return $this->new_password_confirm;
+	}
+	
+	/**
+	 * Sets the new_password_confirm
+	 * @var string
+	 */
+	function setNewPasswordConfirm($arg0) {
+	    $this->new_password_confirm = $arg0;
+	    return $this;
 	}
 
 	// +------------------------------------------------------------------------+
@@ -92,6 +133,19 @@ class User extends Base\User {
 	 */
 	function queryAllByClient() {
 		return $this->queryAll(array('client.client_id' => $this->getClient()->getClientId()));
+	}
+	
+	/**
+	 * Updates the password for this user
+	 * @return integer
+	 */
+	function updatePassword() {
+	    if ($this->getNewPassword() == $this->getNewPasswordConfirm()) {
+	        $this->setPassword($this->getNewPassword());
+	        return $this->update();
+	    } else {
+	        throw new \Exception('The passwords do not match. Please check them.');
+	    }
 	}
 
 	/**

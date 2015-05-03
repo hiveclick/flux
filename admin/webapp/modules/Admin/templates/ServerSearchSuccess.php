@@ -29,6 +29,8 @@
 
 <!-- edit server modal -->
 <div class="modal fade" id="edit_server_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
+<!-- server explorer modal -->
+<div class="modal fade" id="server_explorer_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 <script>
 //<!--
 $(document).ready(function() {
@@ -46,6 +48,12 @@ $(document).ready(function() {
  			return value;
  		}},
  		{id:'root_password', name:'password', field:'root_password', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 			return value;
+ 		}},
+ 		{id:'ftp_username', name:'ftp username', field:'ftp_username', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 			return value;
+ 		}},
+ 		{id:'ftp_password', name:'ftp password', field:'ftp_password', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			return value;
  		}},
  		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -68,6 +76,10 @@ $(document).ready(function() {
  		}},
  		{id:'web_group', name:'group', field:'web_group', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			return value;
+ 		}},
+ 		{id:'browse', name:'&nbsp;', field:'browse', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 			ret_val = '<a class="btn btn-sm btn-default" data-toggle="modal" data-target="#server_explorer_modal" href="/admin/server-explorer-form?_id=' + dataContext._id + '">Browse</a> ';
+ 			return ret_val;
  		}}
  	];
 

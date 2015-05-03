@@ -260,7 +260,7 @@ class LeadTracking extends MojaviForm {
      */
     function getUab() {
     	if (is_null($this->_uab)) {
-    		$this->_uab = self::getUserAgentInfo()->getData()->browser;
+    		$this->_uab = ''; //self::getUserAgentInfo()->getData()->browser;
     	}
     	return $this->_uab;
     }
@@ -281,7 +281,7 @@ class LeadTracking extends MojaviForm {
      */
     function getUav() {
     	if (is_null($this->_uav)) {
-    		$this->_uav = self::getUserAgentInfo()->getData()->version;
+    		$this->_uav = ''; //self::getUserAgentInfo()->getData()->version;
     	}
     	return $this->_uav;
     }
@@ -302,7 +302,7 @@ class LeadTracking extends MojaviForm {
      */
     function getUap() {
     	if (is_null($this->_uap)) {
-    		$this->_uap = self::getUserAgentInfo()->getData()->platform;
+    		$this->_uap = ''; //self::getUserAgentInfo()->getData()->platform;
     	}
     	return $this->_uap;
     }

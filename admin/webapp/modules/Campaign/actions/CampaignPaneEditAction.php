@@ -35,6 +35,13 @@ class CampaignPaneEditAction extends BasicAction
 		$client->setIgnorePagination(true);
 		$clients = $client->queryAll();
 		
+		/* @var $vertical \Flux\Vertical */
+		$vertical = new \Flux\Vertical();
+		$vertical->setSort('name');
+		$vertical->setSord('ASC');
+		$vertical->setIgnorePagination(true);
+		$verticals = $vertical->queryAll();
+		
 		/* @var $offer \Flux\Offer */
 		$offer = new \Flux\Offer();
 		$offer->setSort('name');
@@ -52,6 +59,7 @@ class CampaignPaneEditAction extends BasicAction
 		$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
+		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
 		$this->getContext()->getRequest()->setAttribute("traffic_sources", $traffic_sources);
 		
 		return View::SUCCESS;

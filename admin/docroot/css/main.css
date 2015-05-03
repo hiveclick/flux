@@ -12,8 +12,29 @@ body {
 #main-navbar ul li:last-child ul.dropdown-menu::before { left:12px;left:auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu::after { left:13px;left:auto;right:0; }
 
+/* Placeholder color */
+*::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #D8D8D8;
+}
+*:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #D8D8D8;
+   opacity:  1;
+}
+*::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #D8D8D8;
+   opacity:  1;
+}
+*:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #D8D8D8;
+}
+.form-control::-webkit-input-placeholder { color: #D8D8D8; }
+.form-control:-moz-placeholder { color: #D8D8D8; }
+.form-control::-moz-placeholder { color: #D8D8D8; }
+.form-control:-ms-input-placeholder { color: #D8D8D8; }
+
+/* fix for bootstrap panel and selectize */
 .panel, .panel-default {
-	overflow: visible; /* fix for bootstrap panel and selectize */
+	overflow: visible; 
 }
 
 .word-break {
@@ -103,30 +124,4 @@ body {
 .selectize-dropdown .meta li span,
 .selectize-input .meta li span {
 	font-weight: bold;
-}
-
-
-/* Asset preview classes on the offers page */
-.asset_preview {
-	margin: 0 auto;
-}
-
-.asset_preview_wall {
-	width: 200px;
-}
-
-.asset_preview_path {
-	width:400px;
-}
-
-.asset_preview_img {
-	
-}
-
-.asset_preview_title {
-	font-weight: bold;
-}
-
-.asset_preview_description {
-	
 }

@@ -1,243 +1,312 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nav>
+	<!-- ################################ -->
+	<!-- Start the MAIN ADMIN menu system -->
+	<!-- ################################ -->
 	<offer>
         <label>Offers</label>
-        <module>offer</module>
-        <controller>offer-search</controller>
+        <uri>/offer/offer-search</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <offersearch>
                 <label>Offers</label>
-                <module>offer</module>
-                <controller>offer-search</controller>
+                <uri>/offer/offer-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </offersearch>
             <spacer>
 				<label></label>
-				<module>client</module>
-				<controller>client-search</controller>
+				<uri></uri>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer>
+			<!-- Insert Offer Saved Searches -->
+			<!-- <saved_searches_offer /> -->
             <offerwizard>
                 <label>Add New Offer</label>
-                <module>offer</module>
-                <controller>offer-wizard</controller>
+                <uri>/offer/offer-wizard</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </offerwizard>
        </pages>
 	</offer>
 	<campaign>
         <label>Campaigns</label>
-        <module>campaign</module>
-        <controller>campaign-search</controller>
+        <uri>/campaign/campaign-wizard</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <campaignsearch>
                 <label>Campaigns</label>
-                <module>campaign</module>
-                <controller>campaign-search</controller>
+                <uri>/campaign/campaign-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </campaignsearch>
             <spacer>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer>
+			<!-- Insert Campaign Saved Searches -->
+			<!-- <saved_searches_campaign /> -->
             <campaignwizard>
                 <label>Add New Campaign</label>
-                <module>campaign</module>
-                <controller>campaign-wizard</controller>
+                <uri>/campaign/campaign-wizard</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </campaignwizard>
        </pages>
 	</campaign>
 	<leads>
         <label>Leads</label>
-        <module>lead</module>
-        <controller>lead-search</controller>
+        <uri>/lead/lead-search</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <leadsearch>
                 <label>Search All Leads</label>
-                <module>lead</module>
-                <controller>lead-search</controller>
+                <uri>/lead/lead-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </leadsearch>
             <spacer>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer>
+			<!-- Insert Lead Saved Searches -->
+			<!-- <saved_searches_lead /> -->
 			<splitqueuesearch>
                 <label>View Queued Leads</label>
-                <module>export</module>
-                <controller>split-queue-search</controller>
+                <uri>/export/split-queue-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </splitqueuesearch>
             <splitqueuecatchallsearch>
                 <label>View Catch-All Leads</label>
-                <module>export</module>
-                <controller>split-queue-catch-all-search</controller>
+                <uri>/export/split-queue-catch-all-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </splitqueuecatchallsearch>
        </pages>
 	</leads>
 	<export>
         <label>Splits</label>
-        <module>export</module>
-        <controller>split-search</controller>
+        <uri>/export/split-search</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <splitsearch>
                 <label>Splits</label>
-                <module>export</module>
-                <controller>split-search</controller>
+                <uri>/export/split-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </splitsearch>
             <spacer2>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer2>
-			<exportsearch>
-                <label>Exports</label>
-                <module>export</module>
-                <controller>export-search</controller>
-                <class>nav-secondary</class>
-            </exportsearch>
-            <spacer>
-				<label></label>
-				<module></module>
-				<controller></controller>
-				<class>nav-secondary</class>
-			</spacer>
             <fulfillmentsearch>
                 <label>Fulfillment Handlers</label>
-                <module>admin</module>
-                <controller>fulfillment-search</controller>
+                <uri>/admin/fulfillment-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </fulfillmentsearch>
        </pages>
 	</export>
 	<reports>
         <label>Reporting</label>
-        <module>report</module>
-        <controller>revenue-report</controller>
+        <uri>/report/revenue-report</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <dashboard>
                 <label>Dashboard</label>
-                <module>default</module>
-                <controller>index</controller>
+                <uri>/default/index</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </dashboard>
             <spacer>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer>
             <revenue>
                 <label>Revenue Report</label>
-                <module>report</module>
-                <controller>revenue-report</controller>
+                <uri>/report/revenue-report</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </revenue>
        </pages>
 	</reports>
 	<admin>
         <label>Admin</label>
-        <module>admin</module>
-        <controller>data-field-search</controller>
+        <uri>/admin/data-field-search</uri>
         <class>nav-primary</class>
+        <permission>1</permission>
         <pages>
             <datafield>
                 <label>Data Fields</label>
-                <module>admin</module>
-                <controller>data-field-search</controller>
+                <uri>/admin/data-field-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </datafield>
             <vertical>
                 <label>Verticals</label>
-                <module>admin</module>
-                <controller>vertical-search</controller>
+                <uri>/admin/vertical-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </vertical>
             <domaingroups>
                 <label>Domain Groups</label>
-                <module>admin</module>
-                <controller>domain-group-search</controller>
+                <uri>/admin/domain-group-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </domaingroups>
             <servers>
                 <label>Servers</label>
-                <module>admin</module>
-                <controller>server-search</controller>
+                <uri>/admin/server-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </servers>
             <zipcodes>
                 <label>Zipcodes</label>
-                <module>admin</module>
-                <controller>zip-search</controller>
-                <class>nav-secondary</class>
+                <uri>/admin/zip-search</uri>
+				<class>nav-secondary</class>
+				<permission>1</permission>
             </zipcodes>
             <spacer>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer>
 			<clients>
                 <label>Clients</label>
-                <module>client</module>
-                <controller>client-search</controller>
+                <uri>/client/client-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </clients>
 			<users>
                 <label>Users</label>
-                <module>admin</module>
-                <controller>user-search</controller>
+                <uri>/admin/user-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </users>
             <trafficsources>
                 <label>Traffic Sources</label>
-                <module>admin</module>
-                <controller>traffic-source-search</controller>
+                <uri>/admin/traffic-source-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </trafficsources>
             <spacer2>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer2>
 			<daemonsearch>
                 <label>Daemons</label>
-                <module>admin</module>
-                <controller>daemon-search</controller>
+                <uri>/admin/daemon-search</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </daemonsearch>
+            <savedsearch>
+                <label>Saved Searches</label>
+                <uri>/admin/saved-search-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </savedsearch>
             <apc>
                 <label>APC Cache</label>
-                <module>admin</module>
-                <controller>apc</controller>
+                <uri>/admin/apc</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </apc>
             <spacer3>
 				<label></label>
-				<module></module>
-				<controller></controller>
+				<uri></uri>>
 				<class>nav-secondary</class>
+				<permission>1</permission>
 			</spacer3>
 			<logout>
                 <label>Logout</label>
-                <module>default</module>
-                <controller>logout</controller>
+                <uri>/default/logout</uri>
                 <class>nav-secondary</class>
+                <permission>1</permission>
             </logout>
        </pages>
 	</admin>
+	<!-- ################################ -->
+	<!-- Start the DATA ENTRY menu system -->
+	<!-- ################################ -->
+	<leads_data_entry>
+        <label>Leads</label>
+        <uri>/lead/lead-search</uri>
+        <class>nav-primary</class>
+        <permission>2</permission>
+        <pages>
+            <leadsearch>
+                <label>Search All Leads</label>
+                <uri>/lead/lead-search</uri>
+                <class>nav-secondary</class>
+                <permission>2</permission>
+            </leadsearch>
+            <spacer>
+				<label></label>
+				<uri></uri>
+				<class>nav-secondary</class>
+				<permission>2</permission>
+			</spacer>
+			<!-- Insert Lead Saved Searches -->
+			<!-- <saved_searches_lead /> -->
+       </pages>
+	</leads_data_entry>
+	<logout_data_entry>
+        <label>Logout</label>
+        <uri>/default/logout</uri>
+        <class>nav-secondary</class>
+        <permission>2</permission>
+    </logout_data_entry>
+    <!-- ################################# -->
+	<!-- Start the REPORT ONLY menu system -->
+	<!-- ################################# -->
+	<reporting_reports_only>
+        <label>Reporting</label>
+        <uri>/report/revenue-report</uri>
+        <class>nav-primary</class>
+        <permission>3</permission>
+        <pages>
+            <dashboard>
+                <label>Dashboard</label>
+                <uri>/default/index</uri>
+                <class>nav-secondary</class>
+                <permission>3</permission>
+            </dashboard>
+            <spacer>
+				<label></label>
+				<uri></uri>>
+				<class>nav-secondary</class>
+				<permission>3</permission>
+			</spacer>
+            <revenue>
+                <label>Revenue Report</label>
+                <uri>/report/revenue-report</uri>
+                <class>nav-secondary</class>
+                <permission>3</permission>
+            </revenue>
+       </pages>
+	</reporting_reports_only>
+	<logout_reports_only>
+        <label>Logout</label>
+        <uri>/default/logout</uri>
+        <class>nav-secondary</class>
+        <permission>3</permission>
+    </logout_reports_only>
 </nav>

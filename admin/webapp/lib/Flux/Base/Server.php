@@ -18,6 +18,10 @@ class Server extends MongoForm {
 	protected $ip_address;
 	protected $root_username;
 	protected $root_password;
+	
+	protected $ftp_username;
+	protected $ftp_password;
+	protected $use_passive_mode;
 
 	protected $fluxfe_lib_dir;
 	protected $docroot_dir;
@@ -165,6 +169,69 @@ class Server extends MongoForm {
 		$this->root_password = $arg0;
 		$this->addModifiedColumn('root_password');
 		return $this;
+	}
+	
+	/**
+	 * Returns the ftp_username
+	 * @return string
+	 */
+	function getFtpUsername() {
+	    if (is_null($this->ftp_username)) {
+	        $this->ftp_username = "";
+	    }
+	    return $this->ftp_username;
+	}
+	
+	/**
+	 * Sets the ftp_username
+	 * @var string
+	 */
+	function setFtpUsername($arg0) {
+	    $this->ftp_username = $arg0;
+	    $this->addModifiedColumn("ftp_username");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the ftp_password
+	 * @return string
+	 */
+	function getFtpPassword() {
+	    if (is_null($this->ftp_password)) {
+	        $this->ftp_password = "";
+	    }
+	    return $this->ftp_password;
+	}
+	
+	/**
+	 * Sets the ftp_password
+	 * @var string
+	 */
+	function setFtpPassword($arg0) {
+	    $this->ftp_password = $arg0;
+	    $this->addModifiedColumn("ftp_password");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the use_passive_mode
+	 * @return boolean
+	 */
+	function getUsePassiveMode() {
+	    if (is_null($this->use_passive_mode)) {
+	        $this->use_passive_mode = false;
+	    }
+	    return $this->use_passive_mode;
+	}
+	
+	/**
+	 * Sets the use_passive_mode
+	 * @var boolean
+	 */
+	function setUsePassiveMode($arg0) {
+	    $this->use_passive_mode = $arg0;
+	    $this->addModifiedColumn('use_passive_mode');
+	    return $this;
 	}
 
 	/**

@@ -25,7 +25,7 @@
 								/* @var $client \Flux\Fulfillment */
 								foreach ($client->getFulfillments() AS $fulfillment) { 
 							?>
-								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split_queue->getSplit()->getSplit()->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
+								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split_queue->getSplit()->getSplit()->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName(), 'description' => $fulfillment->getDescription(), 'fulfillment_type' => $fulfillment->getExportType(), 'tracking_url' => $fulfillment->getTrackingUrl()))) ?>"><?php echo $fulfillment->getName() ?></option>
 							<?php } ?>
 						</optgroup>
 					<?php } ?>
@@ -85,7 +85,30 @@
 </form>
 <script>
 //<!--
-$('#fulfillment_id').selectize();
+$('#fulfillment_id').selectize({
+	valueField: '_id',
+	labelField: 'name',
+	searchField: ['name', 'description'],
+	dropdownWidthOffset: 150,
+	render: {
+		item: function(item, escape) {
+			return '<div>' +
+				'<span class="title">' + 
+				'<span class="name">' + escape(item.name ? item.name : 'No Name') + '</span>' + 
+				'</span>' +
+				'<span class="description">' + escape(item.description ? item.description : 'no description') + '</span>' +
+				'</div>';
+		},
+		option: function(item, escape) {
+			return '<div>' +
+				'<span class="title">' + 
+				'<span class="name">' + escape(item.name ? item.name : 'No Name') + '</span>' + 
+				'</span>' +
+				'<span class="description">' + escape(item.description ? item.description : 'no description') + '</span>' +
+				'</div>';
+		}
+	}
+});
 
 $('#lead_fulfill_manual_form').form(
 	function(data) {

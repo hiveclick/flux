@@ -12,6 +12,9 @@ class Lead extends Base\Lead {
 	private $offer_id_array;
 	private $campaign_id_array;
 	
+	private $start_date;
+	private $end_date;
+	
 	/**
 	 * Returns the note
 	 * @return string
@@ -144,6 +147,48 @@ class Lead extends Base\Lead {
 	}
 	
 	/**
+	 * Returns the start_date
+	 * @return string
+	 */
+	function getStartDate() {
+	    if (is_null($this->start_date)) {
+	        $this->start_date = "";
+	    }
+	    return $this->start_date;
+	}
+	
+	/**
+	 * Sets the start_date
+	 * @var string
+	 */
+	function setStartDate($arg0) {
+	    $this->start_date = $arg0;
+	    $this->addModifiedColumn("start_date");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the end_date
+	 * @return string
+	 */
+	function getEndDate() {
+	    if (is_null($this->end_date)) {
+	        $this->end_date = "";
+	    }
+	    return $this->end_date;
+	}
+	
+	/**
+	 * Sets the end_date
+	 * @var string
+	 */
+	function setEndDate($arg0) {
+	    $this->end_date = $arg0;
+	    $this->addModifiedColumn("end_date");
+	    return $this;
+	}
+	
+	/**
 	 * Queries the leads
 	 * @return array
 	 */
@@ -199,10 +244,20 @@ class Lead extends Base\Lead {
 			}
 		}
 		
+		if ($this->getStartDate() != '' && $this->getEndDate() != '') {
+		    $criteria['_e.t'] = array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime($this->getStartDate())))), '$lte' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime($this->getEndDate())))));
+		} else if ($this->getStartDate() != '' && $this->getEndDate() == '') {
+		    $criteria['_e.t'] = array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime($this->getStartDate())))));
+		} else if ($this->getStartDate() == '' && $this->getEndDate() != '') {
+		    $criteria['_e.t'] = array('$lte' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime($this->getEndDate())))));
+		}
+		
+		/*
 		$ops = json_encode($criteria);
 		$ops = str_replace('"$or"', '$or', $ops);
 		$ops = str_replace('"$exists"', '$exists', $ops);
-		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
+		*/
 						
 		return parent::queryAll($criteria, $hydrate);
 	}

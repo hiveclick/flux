@@ -197,7 +197,7 @@ class Campaign extends MongoForm {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
-		} else if (is_string($arg0)) {
+		} else if (is_string($arg0) || is_int($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
 			if ($client->getClientId() > 0 && $client->getClientName() == "") {
@@ -235,7 +235,7 @@ class Campaign extends MongoForm {
 			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
 			}
 			$this->traffic_source = $traffic_source;
-		} else if (is_string($arg0)) {
+		} else if (is_string($arg0) || is_int($arg0)) {
 			$traffic_source = $this->getTrafficSource();
 			$traffic_source->setTrafficSourceId($arg0);
 			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceName() == "") {
@@ -273,7 +273,7 @@ class Campaign extends MongoForm {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0)) {
+		} else if (is_string($arg0) || is_int($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
 			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {

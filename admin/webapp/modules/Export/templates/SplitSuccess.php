@@ -198,6 +198,9 @@
 
 <!-- edit split modal -->
 <div class="modal fade" id="edit_split_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
+<!-- confirm delete modal -->
+<div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this split?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
+
 
 <script>
 //<!--
@@ -212,13 +215,11 @@ $(document).ready(function() {
     	$(this).removeData('bs.modal');
     });
 
-	$('#btn_delete,#btn_delete_sm').click(function() {
-		if (confirm('Are you sure you want to delete this split and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/export/split', _id: '<?php echo $split->getId() ?>' }, function(data) {
-				$.rad.notify('Split Removed', 'This split has been removed from the system.');
-				window.location.href = '/export/split-search';
-			});
-		}
+	// delete the client information
+	$('#confirm_delete').click(function() {
+		$.rad.del('/api', {func: '/export/split/<?php echo $split->getId() ?>' }, function() {
+			window.location = '/export/split-search';
+		});
 	});
 });
 //-->

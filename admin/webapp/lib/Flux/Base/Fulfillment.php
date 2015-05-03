@@ -34,6 +34,7 @@ class Fulfillment extends MongoForm {
 	protected $ftp_password;
 	protected $ftp_folder;
 
+	protected $tracking_url;
 	protected $post_url;
 	
 	protected $infusionsoft_host;
@@ -405,6 +406,27 @@ class Fulfillment extends MongoForm {
 		$this->infusionsoft_api_key = $arg0;
 		$this->addModifiedColumn("infusionsoft_api_key");
 		return $this;
+	}
+	
+	/**
+	 * Returns the tracking_url
+	 * @return string
+	 */
+	function getTrackingUrl() {
+	    if (is_null($this->tracking_url)) {
+	        $this->tracking_url = "";
+	    }
+	    return $this->tracking_url;
+	}
+	
+	/**
+	 * Sets the tracking_url
+	 * @var string
+	 */
+	function setTrackingUrl($arg0) {
+	    $this->tracking_url = $arg0;
+	    $this->addModifiedColumn("tracking_url");
+	    return $this;
 	}
 
 	/**

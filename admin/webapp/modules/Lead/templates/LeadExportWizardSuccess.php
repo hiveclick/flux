@@ -58,6 +58,17 @@
 			</select>
 		</div>
 		<div class="form-group">
+			<label>Filter leads by date: </label>
+			<div class="row">
+			    <div class="col-md-6">
+                    <input type="text" class="form-control" id="start_date" name="start_date" value="" placeholder="since the dinosaurs..." />
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="end_date" name="end_date" value="" placeholder="end of the universe..." />
+                </div>
+			</div>
+		</div>
+		<div class="form-group">
 			<label>How many leads do you want to export</label>
 			<select class="form-control selectize" name="items_per_page" id="items_per_page" placeholder="How many leads do you want to export...">
 			    <optgroup label="Export all leads">
@@ -102,7 +113,7 @@
 //<!--
 $(document).ready(function() {
 	// submit the form
-
+    $('#start_date,#end_date').datepicker();
 	
 	$('#headers,#required_fields','#lead_export_form').selectize({
 		valueField: 'key_name',

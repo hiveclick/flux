@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nav>
+	<account>
+        <label>Account</label>
+        <module>account</module>
+        <controller>user</controller>
+        <class>nav-primary</class>
+	</account>
+	<campaign>
+        <label>Campaigns</label>
+        <module>campaign</module>
+        <controller>campaign-search</controller>
+        <class>nav-primary</class>
+	</campaign>
+	<reports>
+        <label>Reporting</label>
+        <module>report</module>
+        <controller>click-report</controller>
+        <class>nav-primary</class>
+        <pages>
+            <dashboard>
+                <label>Dashboard</label>
+                <module>default</module>
+                <controller>index</controller>
+                <class>nav-secondary</class>
+            </dashboard>
+            <spacer>
+				<label></label>
+				<module></module>
+				<controller></controller>
+				<class>nav-secondary</class>
+			</spacer>
+            <revenue>
+                <label>Click Report</label>
+                <module>report</module>
+                <controller>click-report</controller>
+                <class>nav-secondary</class>
+            </revenue>
+            <leaddetail>
+                <label>Lead Report</label>
+                <module>report</module>
+                <controller>lead-report</controller>
+                <class>nav-secondary</class>
+            </leaddetail>
+       </pages>
+	</reports>
+	<logout>
+        <label>Logout</label>
+        <module>default</module>
+        <controller>logout</controller>
+        <class>nav-primary</class>
+    </logout>
+</nav>

@@ -58,7 +58,6 @@ class LoginAction extends BasicAction
 		    $this->getContext()->getUser()->setUserDetails($user);
 		    $this->getContext()->getUser()->setAuthenticated(true);
 		    
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Redirecting to " . $redirect);
 		    $this->getContext()->getController()->redirect($redirect);
 		    return View::NONE;
 		}
@@ -80,6 +79,8 @@ class LoginAction extends BasicAction
 						throw new \Exception("Your login credentials could not be validated. Please try again.");
 					} else if (!$user->isActive()) {
 						throw new \Exception("Your account is not currently active. Please contact customer service to re-activate your account.");
+					} else if ($user->getClient()->getClient()->getClientType() != \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) {
+					    throw new \Exception("Your account is not an administrator account.  Please login to the affiliate portal.");
 					}
 				} catch (\Exception $e) {
 					$this->getErrors()->addError("error", new Error($e->getMessage()));

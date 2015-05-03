@@ -14,7 +14,72 @@ class Server extends Base\Server {
 	private $create_skeleton_folder;
 	private $generate_virtualhost;
 	private $force_overwrite;
-
+	
+	private $html_input_element_id;
+	private $files;
+	private $_connection_id;
+	
+	/**
+	 * Returns the files
+	 * @return string
+	 */
+	function getFiles() {
+	    if (is_null($this->files)) {
+	        $this->files = $this->downloadFiles();
+	    }
+	    return $this->files;
+	}
+	
+	/**
+	 * Returns the folder_name
+	 * @return string
+	 */
+	function getFolderName() {
+	    if (is_null($this->folder_name)) {
+	        $this->folder_name = "";
+	    }
+	    return $this->folder_name;
+	}
+	
+	/**
+	 * Returns the folder name
+	 * @return string
+	 */
+	function setFolderName($arg0) {
+	    if (strpos($arg0, '/') === 0) {
+	        $this->folder_name = substr($arg0, 1);
+	    } else if (strpos($arg0, './') === 0) {
+	        $this->folder_name = substr($arg0, 2);
+	    } else if (strpos($arg0, '../') === 0) {
+	        $this->folder_name = substr($arg0, 3);
+	    } else if (strpos($arg0, '.') === 0) {
+	        $this->folder_name = substr($arg0, 1);
+	    } else {
+	       $this->folder_name = $arg0;
+	    }
+	    return $this;
+	}
+	
+	/**
+	 * Returns the html_input_element_id
+	 * @return string
+	 */
+	function getHtmlInputElementId() {
+	    if (is_null($this->html_input_element_id)) {
+	        $this->html_input_element_id = "";
+	    }
+	    return $this->html_input_element_id;
+	}
+	
+	/**
+	 * Sets the html_input_element_id
+	 * @var string
+	 */
+	function setHtmlInputElementId($arg0) {
+	    $this->html_input_element_id = $arg0;
+	    $this->addModifiedColumn('html_input_element_id');
+	    return $this;
+	}
 
 	/**
 	 * Returns the _status_name
@@ -50,27 +115,6 @@ class Server extends Base\Server {
 	function setOfferId($arg0) {
 		$this->offer_id = (int)$arg0;
 		$this->addModifiedColumn("offer_id");
-		return $this;
-	}
-	
-	/**
-	 * Returns the folder_name
-	 * @return string
-	 */
-	function getFolderName() {
-		if (is_null($this->folder_name)) {
-			$this->folder_name = "";
-		}
-		return $this->folder_name;
-	}
-	
-	/**
-	 * Sets the folder_name
-	 * @var string
-	 */
-	function setFolderName($arg0) {
-		$this->folder_name = $arg0;
-		$this->addModifiedColumn("folder_name");
 		return $this;
 	}
 	
@@ -602,6 +646,78 @@ EOL;
 		$apache_response = $this->runRemoteCommand($cmd);
 		// If apache fails to restart, then remove the virtualhost, try again, and throw an error
 		return true;
+	}
+	
+	/**
+	 * Returns the FTP Connection id, or connects if not already connected
+	 * @return resource|null
+	 */
+	function getFtpConnection() {
+	    if (is_null($this->_connection_id)) {
+	        $this->_connection_id = @ftp_connect($this->getHostname(), 21, 5);
+	        if ($this->_connection_id !== false) {
+	            if (is_null($this->_connection_id)) {
+	                throw new \Exception('Cannot connect to ftp "' . $this->getHostname() . '" because the _connection_id is null');
+	            }
+	            if (!@ftp_login($this->_connection_id, $this->getFtpUsername(), $this->getFtpPassword())) {
+	                throw new \Exception('We are able to connect to "' . $this->getHostname() . '", but cannot login using the username "' . $this->getFtpUsername() . '" and password');
+	            }
+	        } else {
+	            throw new \Exception('Cannot connect to "' . $this->getHostname() . '", check the hostname and that <code>vsftpd</code> is running');
+	        }
+	    }
+	    return $this->_connection_id;
+	}
+	
+	/**
+	 * Downloads a list of files from the ftp server
+	 * Format of returned array is
+	 *  - [type] = directory|file
+	 *  - [rights] = drwxrwx---
+	 *  - [number] = integer
+	 *  - [user] = owner name
+	 *  - [group] = group name
+	 *  - [size] = size in bytes
+	 *  - [month] = last modified month
+	 *  - [day] = last modified day
+	 *  - [time] = last modified time
+	 * @return array
+	 */
+	private function downloadFiles() {
+	    try {
+	        $connection = $this->getFtpConnection();
+	        	
+	        // Strip the first slash from folder names
+	        if (strpos($this->getFolderName(), '/') === 0) {
+	            $folder_name = substr($this->getFolderName(), 1);
+	        } else {
+	            $folder_name = $this->getFolderName();
+	        }
+	        	
+	        // Enable passive mode
+	        if ($this->getUsePassiveMode()) {
+	            ftp_pasv($connection, true);
+	        }
+	        	
+	        // Pull down the list of files
+	        $raw_list = ftp_rawlist($connection, $folder_name);
+	        if (is_array($raw_list)) {
+	            $file_list = array();
+	            foreach ($raw_list as $list_item) {
+	                $chunks = preg_split("/\s+/", $list_item);
+	                list($item['rights'], $item['number'], $item['user'], $item['group'], $item['size'], $item['month'], $item['day'], $item['time']) = $chunks;
+	                $item['type'] = $chunks[0]{0} === 'd' ? 'directory' : 'file';
+	                array_splice($chunks, 0, 8);
+	                $filename = implode(" ", $chunks);
+	                // Apply a file filter if we have one
+                    $file_list[$filename] = $item;
+	            }
+	            return $file_list;
+	        }
+	    } catch (\Exception $e) {
+	        throw $e;
+	    }
+	    return array();
 	}
 	
 	/**

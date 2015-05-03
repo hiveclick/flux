@@ -1,18 +1,16 @@
 <?php
 	/* @var $lead \Flux\Lead */
 	$lead = $this->getContext()->getRequest()->getAttribute("lead", array());
-	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
-	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
+	
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
-	if (trim($lead->getKeywords()) == '') {
-        $selected_columns = array(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
-	} else {
-	    $selected_columns = array();
-	}
+	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 ?>
 <div class="page-header">
     <div class="pull-right">
+        <a id="save_search_btn" data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>" class="btn btn-info">Save Search</a>
+        <?php if ($this->getContext()->getUser()->getUserDetails()->getUserType() == \Flux\User::USER_TYPE_ADMIN) { ?>
 		<a data-toggle="modal" data-target="#export_lead_modal" href="/lead/lead-export-wizard" class="btn btn-success"><span class="glyphicon glyphicon-export"></span> Export Leads</a>
+		<?php } ?>
 	</div>
    <h2>Search Leads</h2>
 </div>
@@ -34,42 +32,15 @@
 			</div>
 			<div class="form-group text-left col-md-6">
 				<label>Only show leads with the following fields set: </label>
-				<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="No Fields">
-					<?php
-						/* @var $data_field \Flux\DataField */ 
-						foreach($data_fields AS $data_field) { 
-					?>
-						<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-							<option value="<?php echo $data_field->getKeyName() ?>"<?php echo in_array($data_field->getKeyName(), $selected_columns) ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
-						<?php } else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-							<option value="<?php echo $data_field->getKeyName() ?>"<?php echo in_array($data_field->getKeyName(), $selected_columns) ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
-						<?php } else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-							<option value="<?php echo $data_field->getKeyName() ?>"<?php echo in_array($data_field->getKeyName(), $selected_columns) ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?></option>
-						<?php } ?>
-					<?php } ?>
-				</select>
+				<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="Add required fields..."></select>
 			</div>
 			<div class="form-group text-left col-md-6">
 				<label>Filter leads by offer: </label>
-				<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
-					<?php 
-						/* @var $offer \Flux\Offer */
-						foreach($offers as $offer) {
-					?>
-						<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $lead->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
-					<?php } ?>
-				</select>
+				<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer..."></select>
 			</div>
 			<div class="form-group text-left col-md-6">
 				<label>Filter leads by campaign: </label>
-				<select class="form-control selectize" name="campaign_id_array[]" id="campaign_id_array" multiple placeholder="Filter by campaign">
-					<?php
-						/* @var $campaign \Flux\Campaign */ 
-						foreach ($campaigns as $campaign) { 
-					?>
-						<option value="<?php echo $campaign->getId() ?>" <?php echo in_array($campaign->getId(), $lead->getCampaignIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('campaign_key' => $campaign->getKey(), 'description' => $campaign->getDescription(), 'client_name' => $campaign->getClient()->getClientName()))) ?>"><?php echo $campaign->getId() ?></option>
-					<?php } ?>
-				</select>
+				<select class="form-control selectize" name="campaign_id_array[]" id="campaign_id_array" multiple placeholder="Filter by campaign..."></select>
 			</div>
 			
 			<div class="text-center">
@@ -87,6 +58,8 @@
 
 <!-- Add data field modal -->
 <div class="modal fade" id="export_lead_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- edit saved-search modal -->
+<div class="modal fade" id="edit_saved_search_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
@@ -102,9 +75,12 @@ $(document).ready(function() {
 			ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'name', name:'Name', field:'_d.fn', sort_field:'_d.fn', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var name = (dataContext._d.fn == undefined) ? '' : dataContext._d.fn;
-			name += (dataContext._d.ln == undefined) ? '' : (' ' + dataContext._d.ln);
+		{id:'contact_name', name:'Lead Name', field:'_id', sort_field:'_d.fn', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var name = (dataContext._d.name == undefined) ? '' : dataContext._d.name;
+			if (name == '') {
+			    var name = (dataContext._d.fn == undefined) ? '' : dataContext._d.fn;
+			    name += (dataContext._d.ln == undefined) ? '' : (' ' + dataContext._d.ln);
+			}			
 			var email = (dataContext._d.em == undefined) ? '' : 'E: ' + dataContext._d.em;
 			var phone = (dataContext._d.ph1 == undefined) ? '' : ', P: ' + dataContext._d.ph1;
 			var ret_val = '<div style="line-height:16pt;">'
@@ -119,7 +95,7 @@ $(document).ready(function() {
 			/* @var $data_field \Flux\DataField */
 			foreach ($data_fields as $key => $data_field) {
 		?>
-			<?php if (trim($data_field->getKeyName()) != '' && ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT || $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING || $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT)) { ?>
+			<?php if (trim($data_field->getKeyName()) != '' && trim($data_field->getKeyName()) != 'fn' && ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT || $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING || $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT)) { ?>
 				,
 				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
 					{id:'<?php echo $data_field->getKeyName() ?>', name:'<?php echo ucfirst(strtolower(preg_replace("/[^a-zA-Z0-9 ]/", "", $data_field->getName()))) ?>', field:'_d.<?php echo $data_field->getKeyName() ?>', hidden: true, def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -209,7 +185,7 @@ $(document).ready(function() {
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;            
-	            return '<div">' + escape(label) + '</div>';
+	            return '<div class="item">' + escape(label) + '</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
@@ -229,31 +205,135 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#offer_id_array','#lead_search_form').selectize({
-		dropdownWidthOffset: 150,
-		allowEmptyOption: true
-	});
+	$('#required_fields','#lead_search_form').selectize()[0].selectize.load(function (callback) {
+        $.ajax({
+        	url: '/api',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                func: '/admin/data-field',
+                ignore_pagination: true,
+                sort: 'name',
+                sord: 'asc',
+                storage_type_array: [ <?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>,<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT ?>, <?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>]
+            },
+            error: function() {
+                callback();
+            },
+            success: function(res) {
+                callback(res.entries);
+                <?php foreach ($lead->getRequiredFields() as $required_field) { ?>
+                $('#required_fields','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $required_field ?>');
+            	<?php } ?>
+            }
+        });
+    });
 
-	$('#campaign_id_array','#lead_search_form').selectize({
-		valueField: 'campaign_key',
-		labelField: 'description',
-		searchField: ['client_name', 'description', 'campaign_key'],
-		dropdownWidthOffset: 150,
-		create: true,
+	$('#offer_id_array','#lead_search_form').selectize({
+    	valueField: '_id',
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name'],
+		optgroups: [
+		    <?php foreach ($verticals as $vertical) { ?>
+		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
+            <?php } ?>
+		],
+		lockOptgroupOrder: true,
 		render: {
 			item: function(item, escape) {
-	            return '<div>' + escape(item.campaign_key) + '</div>';
+				return '<div class="item">' + escape(item.name) + '</div>';
 			},
 			option: function(item, escape) {
-				return '<div style="padding-right:25px;">' +
-	                '<b>' + escape(item.campaign_key) + '</b>' +
-	                '<span class="pull-right label label-success">' + (item.client_name ? escape(item.client_name) : 'Unknown') + '</span>' + 
-	    	        '<br />' +
-	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
-	            '</div>';
+				var landing_page = item.landing_pages.shift();
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				if (landing_page != undefined) {
+				    ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(landing_page.url) + '" width="64" border="0" />';
+				} else {
+					ret_val += '<img class="media-object img-thumbnail" src="/images/no_preview.png" width="64" border="0" />';
+				}
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+				ret_val += '<div class="text-muted small">' + (landing_page ? escape(landing_page.url) : '') + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
 			}
 		}
 	});
+
+	$('#offer_id_array','#lead_search_form').selectize()[0].selectize.load(function (callback) {
+        $.ajax({
+        	url: '/api',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                func: '/offer/offer',
+                ignore_pagination: true,
+                sort: 'name',
+                sord: 'asc'
+            },
+            error: function() {
+                callback();
+            },
+            success: function(res) {
+                callback(res.entries);
+                <?php foreach ($lead->getOfferIdArray() as $offer_id) { ?>
+                $('#offer_id_array','#lead_search_form').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
+            	<?php } ?>
+            }
+        });
+    });
+
+	$('#campaign_id_array','#lead_search_form').selectize({
+		valueField: '_id',
+		labelField: 'description',
+		searchField: ['client.client_name', 'description', '_id', 'offer.offer_name'],
+		dropdownWidthOffset: 150,
+		render: {
+			item: function(item, escape) {
+	            return '<div class="item">' + escape(item._id) + '</div>';
+			},
+			option: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="/images/traffic-sources/' + (item.traffic_source.traffic_source_icon ? escape(item.traffic_source.traffic_source_icon) : 'unknown') + '_48.png" width="32" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<span class="pull-right text-right"><div class="label label-info">' + (item.offer.offer_name ? escape(item.offer.offer_name) : 'Unknown') + '</div><br /><div class="label label-success">' + (item.client.client_name ? escape(item.client.client_name) : 'Unknown') + '</div></span>';
+				ret_val += '<h5 class="media-heading">' + escape(item._id) + '</h5>';
+				
+				ret_val += '<div class="text-muted small">' + escape(item.description) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
+	});
+
+	// Preload the campaigns
+	$('#campaign_id_array','#lead_search_form').selectize()[0].selectize.load(function (callback) {
+        $.ajax({
+        	url: '/api',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                func: '/campaign/campaign',
+                items_per_page: 100,
+                sort: '_id',
+                sord: 'desc'
+            },
+            error: function() {
+                callback();
+            },
+            success: function(res) {
+                callback(res.entries);
+                <?php foreach ($lead->getCampaignIdArray() as $campaign_id) { ?>
+                $('#campaign_id_array','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $campaign_id ?>');
+            	<?php } ?>
+            }
+        });
+    });
+
+	$('#save_search_btn').on('click', function() {
+        $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>&query_string=' + encodeURIComponent($('#lead_search_form').serialize()));
+    });
 
 	<?php if (trim($lead->getKeywords()) != '') { ?>
 	   $('#lead_search_form').trigger('submit');

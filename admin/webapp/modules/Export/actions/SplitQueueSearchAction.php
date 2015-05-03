@@ -37,6 +37,13 @@ class SplitQueueSearchAction extends BasicAction
 		$split->setIgnorePagination(true);
 		$splits = $split->queryAll();
 		
+		/* @var $vertical \Flux\Vertical */
+		$vertical = new \Flux\Vertical();
+		$vertical->setSort('name');
+		$vertical->setSord('ASC');
+		$vertical->setIgnorePagination(true);
+		$verticals = $vertical->queryAll();
+		
 		$offer = new \Flux\Offer();
 		$offer->setSort('name');
 		$offer->setSord('asc');
@@ -46,6 +53,7 @@ class SplitQueueSearchAction extends BasicAction
 		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
 		$this->getContext()->getRequest()->setAttribute("splits", $splits);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
+		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
 		 
 		return View::SUCCESS;
 	}

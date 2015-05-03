@@ -16,6 +16,7 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
+			<li role="presentation" class=""><a href="#ftp" role="tab" data-toggle="tab">FTP</a></li>
 			<li role="presentation" class=""><a href="#apache" role="tab" data-toggle="tab">Apache Setup</a></li>
 			<?php if ($server->getId() > 0) { ?>
 				<li role="presentation" class=""><a href="#apc" role="tab" data-toggle="tab">APC</a></li>
@@ -31,12 +32,12 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="root_username">Username</label>
+					<label class="control-label hidden-xs" for="root_username">Root Username</label>
 					<input type="text" id="root_username" name="root_username" class="form-control" placeholder="Root Username" value="<?php echo $server->getRootUsername() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="root_password">Password</label>
+					<label class="control-label hidden-xs" for="root_password">Root Password</label>
 					<input type="text" id="root_password" name="root_password" class="form-control" placeholder="Root Password" value="<?php echo $server->getRootPassword() ?>" />
 				</div>
 
@@ -55,6 +56,19 @@
 					<input type="text" id="alternate_hostname" name="alternate_hostname" class="form-control" placeholder="Alternate Hostname" value="<?php echo $server->getAlternateHostname() ?>" />
 					<div class="help-block small">If the hostname on the server is not accessible, you can specify an alternate hostname</div>
 				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane fade in" id="ftp">
+				<div class="help-block">Setup FTP access to this server</div>
+				
+				<div class="form-group">
+					<label class="control-label hidden-xs" for="ftp_username">Username</label>
+					<input type="text" id="ftp_username" name="ftp_username" class="form-control" placeholder="FTP Username" value="<?php echo $server->getFtpUsername() ?>" />
+				</div>
+
+				<div class="form-group">
+					<label class="control-label hidden-xs" for="ftp_password">Password</label>
+					<input type="text" id="ftp_password" name="ftp_password" class="form-control" placeholder="FTP Password" value="<?php echo $server->getFtpPassword() ?>" />
+				</div>				
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="apache">
 				<div class="help-block">These settings are used to configure Apache and when pushing new files to the server</div>

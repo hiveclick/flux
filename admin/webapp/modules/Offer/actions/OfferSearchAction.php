@@ -26,18 +26,27 @@ class OfferSearchAction extends BasicAction
 	public function execute ()
 	{
 		/* @var $offer Flux\Offer */
-		$offer = new Offer();
+		$offer = new \Flux\Offer();
 		$offer->populate($_REQUEST);
 		
 		/* @var $client \Flux\Client */
-		$client = new Client();
+		$client = new \Flux\Client();
 		$client->setSort('name');
 		$client->setSord('ASC');
 		$client->setIgnorePagination(true);
 		$clients = $client->queryAll();
+		
+		/* @var $vertical \Flux\Vertical */
+		$vertical = new \Flux\Vertical();
+		$vertical->setSort('name');
+		$vertical->setSord('ASC');
+		$vertical->setIgnorePagination(true);
+		$verticals = $vertical->queryAll();
 
 		$this->getContext()->getRequest()->setAttribute("offer", $offer);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
+		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
+		
 		return View::SUCCESS;
 	}
 }

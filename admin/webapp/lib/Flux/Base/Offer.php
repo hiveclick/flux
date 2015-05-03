@@ -28,10 +28,11 @@ class Offer extends MongoForm {
 	protected $events;
 	protected $split;
 	protected $flow_id;
-	protected $verticals;
+	protected $vertical;
 	protected $payout;
 	protected $default_campaign_id;
 	protected $client;
+	protected $landing_pages;
 
 	protected $notes;
 	
@@ -295,32 +296,35 @@ class Offer extends MongoForm {
 	}
 
 	/**
-	 * Returns the verticals
+	 * Returns the vertical
 	 * @return array
 	 */
-	function getVerticals() {
-		if (is_null($this->verticals)) {
-			$this->verticals = array();
+	function getVertical() {
+		if (is_null($this->vertical)) {
+			$this->vertical = new \Flux\Link\Vertical();
 		}
-		return $this->verticals;
+		return $this->vertical;
 	}
 
 	/**
 	 * Sets the verticals
 	 * @var array
 	 */
-	function setVerticals($arg0) {
+	function setVertical($arg0) {
 		if (is_array($arg0)) {
-			asort($arg0);
-			$this->verticals = $arg0;
-		} else if (is_string($arg0)) {
-			if (strpos($arg0, ',')) {
-				$this->verticals = explode(",", $arg0);
-			} else {
-				$this->verticals = array($arg0);
+			$this->vertical = new \Flux\Link\Vertical();
+			$this->vertical->populate($arg0);
+			if ($this->vertical->getVerticalId() > 0 && $this->vertical->getVerticalName() == '') {
+			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+			}
+		} else if (is_string($arg0) || is_int($arg0)) {
+            $this->vertical = new \Flux\Link\Vertical();
+			$this->vertical->setVerticalId($arg0);
+			if ($this->vertical->getVerticalId() > 0 && $this->vertical->getVerticalName() == '') {
+			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
 			}
 		}
-		$this->addModifiedColumn('verticals');
+		$this->addModifiedColumn('vertical');
 		return $this;
 	}
 
@@ -518,6 +522,36 @@ class Offer extends MongoForm {
 			$this->split = $split;
 		}
 		$this->addModifiedColumn('split');
+	    return $this;
+	}
+	
+	/**
+	 * Returns the landing_pages
+	 * @return array
+	 */
+	function getLandingPages() {
+	    if (is_null($this->landing_pages)) {
+	        $this->landing_pages = array();
+	    }
+	    return $this->landing_pages;
+	}
+	
+	/**
+	 * Sets the landing_pages
+	 * @var array
+	 */
+	function setLandingPages($arg0) {
+	    $this->landing_pages = array();
+	    if (is_array($arg0)) {
+	        foreach ($arg0 as $lander) {
+	            $landing_page = new \Flux\Link\LandingPage();
+	            $landing_page->populate($lander);
+	            if ($landing_page->getUrl() != '') {
+                    $this->landing_pages[] = $landing_page;
+	            }
+	        }   
+	    }
+	    $this->addModifiedColumn("landing_pages");
 	    return $this;
 	}
 

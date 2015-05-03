@@ -3,6 +3,7 @@
 	$split_queue = $this->getContext()->getRequest()->getAttribute("split_queue", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
+	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 ?>
 <div class="page-header">
    <h1>Pending Catch-All Leads</h1>
@@ -29,12 +30,26 @@
 			<div class="text-right">
 			    <div class="form-group text-left">
 					<select class="form-control selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
+						<optgroup label="Normal Splits">
 						<?php
 							/* @var $split \Flux\Split */ 
 							foreach ($splits as $split) { 
 						?>
-							<option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
+						    <?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) { ?>
+                                <option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
+							<?php } ?>
 						<?php } ?>
+						</optgroup>
+						<optgroup label="Host & Post Splits">
+						<?php
+							/* @var $split \Flux\Split */ 
+							foreach ($splits as $split) { 
+						?>
+                            <?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) { ?>
+                                <option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
+							<?php } ?>
+						<?php } ?>
+						</optgroup>
 					</select>
 				</div>
 				<div class="form-group text-left">
@@ -43,7 +58,7 @@
 							/* @var $offer \Flux\Offer */ 
 							foreach ($offers as $offer) { 
 						?>
-							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $split_queue->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
+							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $split_queue->getOfferIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectUrl(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
@@ -200,7 +215,36 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#split_queue_spy_offer_id,#split_queue_spy_split_id').selectize({
+	$('#split_queue_spy_offer_id').selectize({
+    	valueField: '_id',
+    	dropdownWidthOffset: 250,
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name'],
+		optgroups: [
+		    <?php foreach ($verticals as $vertical) { ?>
+		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
+            <?php } ?>
+		],
+		render: {
+			item: function(item, escape) {
+				return '<div>' + escape(item.name) + '</div>';
+			},
+			option: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(item.url) + '" width="64" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+				ret_val += '<div class="text-muted small">' + escape(item.url) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
+	}).on('change', function(e) {
+		$('#split_search_form').trigger('submit');
+	});
+
+	$('#split_queue_spy_split_id').selectize({
 		dropdownWidthOffset: 150,
 		allowEmptyOption: true
 	}).on('change', function(e) {

@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 	$('#edit_client_modal').on('hide.bs.modal', function(e) {
   		$(this).removeData('bs.modal');
-    });
+    });    
 });
 //-->
 </script>

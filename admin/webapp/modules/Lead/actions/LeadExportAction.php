@@ -35,9 +35,10 @@ class LeadExportAction extends BasicAction
 		if ($lead->getItemsPerPage() == 0) {
 		    $lead->setIgnorePagination(true);
 		}
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Exporting leads...");
-		$leads = $lead->queryAll();
-		
+
+		$leads = $lead->queryAll(array(), false);
+		$leads_found = $leads->count();
+				
 		$header_names = array('id','created');
 		$headers = array();
 		foreach ($_REQUEST['headers'] as $header_col) {
@@ -50,16 +51,23 @@ class LeadExportAction extends BasicAction
 		
 		echo implode("\t", $header_names) . "\n";
 		
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found " . count($leads) . " leads");
+		
 		
 		header("Content-Type: text/plain");
 		header("Content-Disposition: attachment; filename=\"lead_export-" . date('Ymdhi') . "\";");
 		header("Content-Transfer-Encoding: ascii");
-		foreach ($leads as $lead) {
+		$counter = 0;
+		while ($leads->hasNext()) {
+		    $counter++;
+		    $start_time = microtime(true);
+		    $cursor_item = $leads->next();
+		    
+		    $lead = new \Flux\Lead();
+		    $lead->populate($cursor_item);
+		    
 		    $line = array();
 		    $line[] = $lead->getId();
 		    $line[] = date('Y-m-d g:i:s a', $lead->getId()->getTimestamp());
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Exporting lead " . $lead->getId());
             
             /* @var $header \Flux\DataField */
             foreach ($headers as $header) {
@@ -73,7 +81,6 @@ class LeadExportAction extends BasicAction
             }
             echo implode("\t", $line) . "\n";
 		}
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Exporting Complete");
 		return View::NONE;
 	}
 }

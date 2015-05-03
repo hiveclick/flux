@@ -37,6 +37,13 @@ class CampaignSearchAction extends BasicAction
 		$offer->setIgnorePagination(true);
 		$offers = $offer->queryAll();
 		
+		/* @var $vertical \Flux\Vertical */
+		$vertical = new \Flux\Vertical();
+		$vertical->setSort('name');
+		$vertical->setSord('ASC');
+		$vertical->setIgnorePagination(true);
+		$verticals = $vertical->queryAll();
+		
 		/* @var $client \Flux\Client */
 		$client = new \Flux\Client();
 		$client->setSort('name');
@@ -55,6 +62,7 @@ class CampaignSearchAction extends BasicAction
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("traffic_sources", $traffic_sources);
+		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
 		return View::SUCCESS;
 	}
 }

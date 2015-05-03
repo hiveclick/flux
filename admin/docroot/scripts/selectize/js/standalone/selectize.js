@@ -2054,7 +2054,7 @@
 				option_html = self.render('option', option);
 				optgroup    = option[self.settings.optgroupField] || '';
 				optgroups   = $.isArray(optgroup) ? optgroup : [optgroup];
-	
+
 				for (j = 0, k = optgroups && optgroups.length; j < k; j++) {
 					optgroup = optgroups[j];
 					if (!self.optgroups.hasOwnProperty(optgroup)) {

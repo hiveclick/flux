@@ -78,6 +78,12 @@ $(document).ready(function() {
 					ret_val += '<div class="small text-muted">' + dataContext.post_url + '</div>';
 					ret_val += '</div>';
 				return ret_val;
+			} else if (value == '<?php echo json_encode(\Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST) ?>') {
+				var ret_val = '<div style="line-height:16pt;">'
+					ret_val += 'Form Fill Post';
+					ret_val += '<div class="small text-muted">' + dataContext.post_url + '</div>';
+					ret_val += '</div>';
+				return ret_val;
 			} else if (value == '<?php echo json_encode(\Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT) ?>') {
 				var ret_val = '<div style="line-height:16pt;">'
 					ret_val += 'Infusionsoft API';

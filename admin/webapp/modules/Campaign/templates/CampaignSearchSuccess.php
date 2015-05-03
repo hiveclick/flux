@@ -4,9 +4,11 @@
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$traffic_sources = $this->getContext()->getRequest()->getAttribute("traffic_sources", array());
+	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 ?>
 <div class="page-header">
 	<div class="pull-right">
+	    <a id="save_search_btn" data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" class="btn btn-info">Save Search</a>
 		<a href="/campaign/campaign-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Campaign</a>
 	</div>
 	<h1>Campaigns</h1>
@@ -24,22 +26,31 @@
 			<div class="text-right">
 				<div class="form-group text-left">
 					<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
-						<?php 
-							/* @var $offer \Flux\Offer */
-							foreach($offers as $offer) { 
-						?>
-							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $campaign->getOfferIdArray()) ? "selected" : "" ?>><?php echo $offer->getName() ?></option>
-						<?php } ?>
+						
 					</select>
 				</div>
 				<div class="form-group text-left">
 					<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+					    <optgroup label="Administrators">
 						<?php
 							/* @var $client \Flux\Client */ 
 							foreach ($clients as $client) { 
 						?>
-							<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+                            <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+                                <option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+                            <?php } ?>
 						<?php } ?>
+						</optgroup>
+						<optgroup label="Affiliates">
+						<?php
+							/* @var $client \Flux\Client */ 
+							foreach ($clients as $client) { 
+						?>
+                            <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+                                <option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+                            <?php } ?>
+						<?php } ?>
+						</optgroup>
 					</select>
 				</div>
 				<div class="form-group text-left">
@@ -53,7 +64,7 @@
 					</select>
 				</div>
 				<div class="form-group text-left">
-					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="<?php echo $campaign->getKeywords() ?>" />
 				</div>
 			</div>
 		</form>
@@ -61,6 +72,9 @@
 	<div id="campaign-grid"></div>
 	<div id="campaign-pager" class="panel-footer"></div>
 </div>
+
+<!-- edit saved-search modal -->
+<div class="modal fade" id="edit_saved_search_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
@@ -140,17 +154,76 @@ $(document).ready(function() {
   	});
 	  	
   	$('#campaign_search_form').trigger('submit');
-	
-	$('#offer_id_array,#client_id_array').selectize({
-		dropdownWidthOffset: 150,
+
+    $('#client_id_array').selectize({
+    	dropdownWidthOffset: 200,
 		allowEmptyOption: true
+    }).on('change', function(e) {
+		$('#campaign_search_form').trigger('submit');
+	});
+	
+	$('#offer_id_array').selectize({
+    	valueField: '_id',
+    	dropdownWidthOffset: 200,
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name'],
+		optgroups: [
+		    <?php foreach ($verticals as $vertical) { ?>
+		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
+            <?php } ?>
+		],
+		lockOptgroupOrder: true,
+		render: {
+			item: function(item, escape) {
+				return '<div>' + escape(item.name) + '</div>';
+			},
+			option: function(item, escape) {
+				var landing_page = item.landing_pages.shift();
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				if (landing_page != undefined) {
+				    ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(landing_page.url) + '" width="64" border="0" />';
+				} else {
+					ret_val += '<img class="media-object img-thumbnail" src="/images/no_preview.png" width="64" border="0" />';
+				}
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+				ret_val += '<div class="text-muted small">' + (landing_page ? escape(landing_page.url) : '') + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
 	}).on('change', function(e) {
 		$('#campaign_search_form').trigger('submit');
 	});
 
+	// Preload the offers
+	$('#offer_id_array').selectize()[0].selectize.load(function (callback) {
+        $.ajax({
+        	url: '/api',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                func: '/offer/offer',
+                ignore_pagination: true,
+                sort: 'name',
+                sord: 'asc'
+            },
+            error: function() {
+                callback();
+            },
+            success: function(res) {
+                callback(res.entries);
+                <?php foreach ($campaign->getOfferIdArray() as $offer_id) { ?>
+                $('#offer_id_array').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
+            	<?php } ?>
+            }
+        });
+    });
+
 	$('#traffic_source_id_array').selectize({
     	allowEmptyOption: true,
-    	dropdownWidthOffset: 150,
+    	dropdownWidthOffset: 200,
     	valueField: 'value',
 		labelField: 'name',
 		searchField: ['name', 'description'],
@@ -169,6 +242,10 @@ $(document).ready(function() {
 		}
     }).on('change', function(e) {
     	$('#campaign_search_form').trigger('submit');
+    });
+
+    $('#save_search_btn').on('click', function() {
+        $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>&query_string=' + encodeURIComponent($('#campaign_search_form').serialize()));
     });
 });
 //-->

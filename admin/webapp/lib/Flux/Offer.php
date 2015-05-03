@@ -5,18 +5,47 @@ class Offer extends Base\Offer {
 	
 	protected $daily_clicks;
 	protected $daily_conversions;
+	protected $optgroup;
 
 	private $offer_pages;
 	private $flow;
 	private $offer_map;
 	private $publisher_campaigns;
+	private $default_campaign;
 	
 	/* these fields are used when searching */
 	private $client_id_array;
+	private $vertical_id_array;
 	private $status_array;
 	
 	private static $_offers;
 
+	/**
+	 * Returns the optgroup
+	 * @return string
+	 */
+	function getOptgroup() {
+	    if (is_null($this->optgroup)) {
+	        $this->optgroup = $this->getVertical()->getVerticalName();
+	    }
+	    return $this->optgroup;
+	}	
+	
+	/**
+	 * Returns the default campaign
+	 * @return \Flux\Campaign
+	 */
+	function getDefaultCampaign() {
+	    if (is_null($this->default_campaign)) {
+	        $this->default_campaign = new \Flux\Campaign();
+    	    if (\MongoId::isValid($this->getDefaultCampaignId())) {
+    	        $this->default_campaign->setId($this->getDefaultCampaignId());
+    	        $this->default_campaign->query();
+    	    }
+	    }
+	    return $this->default_campaign;
+	}
+	
 	/**
 	 * Returns the _status_name
 	 * @return string
@@ -55,12 +84,20 @@ class Offer extends Base\Offer {
 	 */
 	function getFormattedRedirectUrl() {
 		if ($this->getRedirectType() == self::REDIRECT_TYPE_HOSTED) {
-			$ret_val = 'http://' . $this->getDomainName() . '/';
-			if ($this->getFolderName() != '') {
-				$ret_val .= $this->getFolderName() . '/';
-			}
-			$ret_val .= '?_id=#_id#';
-			return $ret_val;
+		    if (strpos($this->getDomainName(), 'http') === 0) {
+		        if (strpos($this->getDomainName(), '#_id#') === false) {
+		            return $this->getDomainName() . '?_id=#_id#';   
+		        } else {
+                    return $this->getDomainName();
+		        }
+		    } else {
+    			$ret_val = 'http://' . $this->getDomainName() . '/';
+    			if ($this->getFolderName() != '') {
+    				$ret_val .= $this->getFolderName() . '/';
+    			}
+    			$ret_val .= '?_id=#_id#';
+    			return $ret_val;
+		    }
 		} else {
 			return $this->getRedirectUrl();
 		}
@@ -94,6 +131,36 @@ class Offer extends Base\Offer {
 			}
 		}
 		return $this;
+	}
+	
+	/**
+	 * Returns the vertical_id_array
+	 * @return array
+	 */
+	function getVerticalIdArray() {
+	    if (is_null($this->vertical_id_array)) {
+	        $this->vertical_id_array = array();
+	    }
+	    return $this->vertical_id_array;
+	}
+	
+	/**
+	 * Sets the vertical_id_array
+	 * @var array
+	 */
+	function setVerticalIdArray($arg0) {
+	    if (is_array($arg0)) {
+			$this->vertical_id_array = $arg0;
+			array_walk($this->vertical_id_array, function(&$val) { $val = (int)$val; });
+		} else if (is_string($arg0)) {
+			if (strpos($arg0, ',') !== false) {
+				$this->vertical_id_array = explode(",", $arg0);
+				array_walk($this->vertical_id_array, function(&$val) { $val = (int)$val; });
+			} else {
+				$this->vertical_id_array = array((int)$arg0);
+			}
+		}
+	    return $this;
 	}
 	
 	/**
@@ -156,6 +223,33 @@ class Offer extends Base\Offer {
 	// | HELPER METHODS															|
 	// +------------------------------------------------------------------------+
 	/**
+	 * Creates a new offer
+	 * @return Flux\Offer
+	 */
+	function insert() {
+	    $insert_id = parent::insert();
+	    $this->setId($insert_id);
+	    // Create the first campaign for this offer
+	    if ($insert_id > 0) {
+	        /* @var $campaign \Flux\Campaign */
+	        $campaign = new \Flux\Campaign();
+	        $campaign->setOffer($insert_id);
+	        $campaign->setClient($this->getClient()->getClientId());
+	        $campaign->setDescription('Default campaign for ' . $this->getName());
+	        // Find the main landing page
+	        $landing_pages = $this->getLandingPages();
+	        $landing_page = array_shift($landing_pages);
+	        $campaign->setRedirectLink($landing_page->getUrl() . '?_id=#_id#');
+	        $campaign_id = $campaign->insert();
+	        
+	        // Assign this new campaign to this offer
+	        $this->setDefaultCampaignId($campaign_id);
+	        $this->update();
+	    }
+	    return $insert_id;
+	}
+	
+	/**
 	 * Returns the offer based on the criteria
 	 * @return Flux\Offer
 	 */
@@ -169,8 +263,8 @@ class Offer extends Base\Offer {
 		if ($this->getClient()->getClientId() > 0) {
 			$criteria['client.client_id'] = $this->getClientId();
 		}
-		if (count($this->getVerticals()) > 0) {
-			$criteria['verticals'] = array('$in' => $this->getVerticals());
+		if (count($this->getVerticalIdArray()) > 0) {
+			$criteria['vertical.vertical_id'] = array('$in' => $this->getVerticalIdArray());
 		}
 		if (trim($this->getKeywords()) != '') {
 			$criteria['$or'] = array(
@@ -211,7 +305,7 @@ class Offer extends Base\Offer {
 	 * @return Flux\Offer
 	 */
 	function queryAllByVerticals() {
-		return $this->queryAll(array('verticals' => array('$in' => $this->getVerticals())));
+		return $this->queryAll(array('vertical.vertical_id' => array('$in' => $this->getVerticalIdArray())));
 	}
 
 	/**

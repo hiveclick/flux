@@ -53,6 +53,7 @@ class Lead extends MongoForm {
 	 */
 	function populate($arg0, $modify_columns = true) {
 		parent::populate($arg0, $modify_columns);
+		
 		if (is_array($arg0)) {
 			foreach ($arg0 as $key => $value) {
 				$this->setValue($key, $value);

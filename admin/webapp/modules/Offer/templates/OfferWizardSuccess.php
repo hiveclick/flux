@@ -32,11 +32,12 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="name">Verticals</label>
+		<label class="col-sm-2 control-label hidden-xs" for="name">Vertical</label>
 		<div class="col-sm-10">
-			<select id="verticals" name="verticals[]" class="form-control selectize" require placeholder="Verticals" multiple>
+			<select id="vertical" name="vertical[vertical_id]" class="form-control selectize" placeholder="Assign a vertical...">
+			    <option value=""></option>
 				<?php foreach ($verticals as $vertical) { ?>
-					<option value="<?php echo $vertical->getName() ?>" <?php echo in_array($vertical->getId(), $offer->getVerticals()) ? "selected=\"SELECTED\"" : "" ?>><?php echo $vertical->getName() ?></option>
+					<option value="<?php echo $vertical->getId() ?>" <?php echo $offer->getVertical()->getVerticalId() == $vertical->getId() ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $vertical->getId(), 'name' => $vertical->getName(), 'description' => $vertical->getDescription()))) ?>"><?php echo $vertical->getName() ?></option>
 				<?php } ?>
 			</select>
 		</div>
@@ -78,7 +79,7 @@
 			<input type="hidden" name="events[0][field]" value="payout" />
 			<div class="input-group">
 				<span class="input-group-addon">$</span>
-				<input type="text" name="events[0][value]" id="payout" class="form-control" value="<?php echo number_format($offer->getPayout(), 2) ?>">
+				<input type="text" name="events[0][value]" id="payout" placeholder="enter payout $0.00" class="form-control" value="<?php echo number_format($offer->getPayout(), 2) ?>">
 			</div>
 		</div>
 	</div>
@@ -91,7 +92,7 @@
 			<input type="hidden" name="events[1][field]" value="revenue" />
 			<div class="input-group">
 				<span class="input-group-addon">$</span>
-				<input type="text" name="events[1][value]" id="revenue" class="form-control" value="0.00">
+				<input type="text" name="events[1][value]" id="revenue" placeholder="enter revenue $0.00" class="form-control" value="0.00">
 			</div>
 		</div>
 	</div>
@@ -136,9 +137,9 @@
 
 	<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">		
 		<div class="form-group" id="domain_name_form_group">
-			<label class="col-sm-2 control-label hidden-xs" for="folder_name">Domain Name</label>
+			<label class="col-sm-2 control-label hidden-xs" for="domain_name">Domain Name</label>
 			<div class="col-sm-10">
-				<input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to landing page (www.offer-domain.com)" value="<?php echo $offer->getDomainName() ?>" />
+				<input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to use in apache vhost file" value="<?php echo $offer->getDomainName() ?>" />
 			</div>
 		</div>
 	
@@ -152,7 +153,18 @@
 		<div class="form-group" id="docroot_dir_form_group">
 			<label class="col-sm-2 control-label hidden-xs" for="docroot_dir">Document Root</label>
 			<div class="col-sm-10">
-				<input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
+			    <div class="input-group">
+                    <input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
+        			<div id="docroot_dir_browse" class="input-group-addon" data-toggle="modal" data-target="#docroot_dir_browse_modal" style="cursor:pointer;">browse</div>
+			    </div>
+		    </div>
+		</div>
+		
+		<div class="form-group" id="domain_name_form_group">
+			<label class="col-sm-2 control-label hidden-xs" for="landing_pages">Landing page</label>
+			<div class="col-sm-10">
+			    <input type="hidden" name="landing_pages[0][name]" value="Primary Landing Page" />
+				<input type="text" id="landing_pages" name="landing_pages[0][url]" class="form-control" placeholder="Url to landing page (http://www.offer-domain.com/index.php)" value="" />
 			</div>
 		</div>
 	</div>
@@ -164,9 +176,25 @@
 	</div>
 
 </form>
+
+<!-- Docroot Browse Modal -->
+<div class="modal fade" id="docroot_dir_browse_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+
 <script>
 //<!--
 $(document).ready(function() {
+	$('#docroot_dir_browse_modal').on('show.bs.modal', function(e) {
+		$('.modal-content','#docroot_dir_browse_modal').load('/admin/server-explorer-form', { html_input_element_id: 'docroot_dir' });
+    });
+
+    $('#docroot_dir_browse_modal').on('hide.bs.modal', function(e) {
+    	$(this).removeData('bs.modal');
+    	
+    	if ($('#docroot_dir').val() == '' && ($('#remote-ftp').hasClass('active'))) {
+	    	$('#docroot_dir').val($('#filename_upload').val());
+	    }
+    });
+	
     $('#split_id').selectize();
 
     $('#redirect_type').selectize({
@@ -188,8 +216,27 @@ $(document).ready(function() {
     		}
 		}
     });
+
+    $('#vertical').selectize({
+    	valueField: '_id',
+		allowEmptyOption: true,
+		labelField: 'name',
+		searchField: ['name','description'],
+		render: {
+			item: function(item, escape) {
+				return '<div>' + escape(item.name) + '</div>';
+			},
+			option: function(item, escape) {
+				var ret_val = '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+                '<b>' + escape(item.name) + '</b><br />' +
+                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+                '</div>';
+				return ret_val;
+			}
+		}
+    });
 	
-	$('#verticals,#client_id').selectize();
+	$('#client_id').selectize();
 
 	$('#redirect_type').on('change', function() {
 		$('#redirect_form_group').hide();
