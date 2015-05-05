@@ -13,9 +13,7 @@ class Hitpath extends BaseNetwork {
 	 * Syncs revenue with this network
 	 * @return boolean
 	 */
-	function syncLeadRevenue($start_date, $end_date) {
-		\Mojavi\Util\StringTools::consoleWrite('Syncing lead revenue', 'Logging In', \Mojavi\Util\StringTools::CONSOLE_COLOR_RED);
-		
+	function syncLeadRevenue($start_date, $end_date) {		
 		return true;
 	}
 
@@ -50,7 +48,6 @@ class Hitpath extends BaseNetwork {
 		        }
 		        $network_report_data[$start_date]['revenue'] += (float)$click->amount[0];
 		    }
-		
 		    // Sync network data also since hitpath only allows us to pull data once every hour and we can update both offer, network, and ttd at the same time
 		    foreach ($network_report_data as $start_date => $revenue_data) {
 		        // We found a record, so update it's revenue for this day
@@ -58,7 +55,7 @@ class Hitpath extends BaseNetwork {
 		        $report_client->setClient($this->getClient()->getClientId());
 		        $report_client->setReportDate(new \MongoDate(strtotime($start_date)));
 		        $report_client->setClickCount($revenue_data['clicks']);
-		        $report_client->setConversionCount($revenue_data['actions']);
+		        $report_client->setConversionCount($revenue_data['sales']);
 		        $report_client->setRevenue(floatval($revenue_data['revenue']));
 		        \Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getClientName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 		        $report_client->updateMultiple(

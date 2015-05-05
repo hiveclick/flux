@@ -34,13 +34,13 @@ class IndexAction extends BasicAction
 	    $daily_rev_items = $report_client->queryAll(array(), true);
 	    
 	    /* @var $daily_rev_item \Flux\ReportClient */
-	    foreach ($daily_rev_items as $daily_rev_item) {	        
+	    foreach ($daily_rev_items as $daily_rev_item) {	   
 	        $monthly_rev += $daily_rev_item->getRevenue();
 	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
-	            $today_rev = $daily_rev_item->getRevenue();
+	            $today_rev += $daily_rev_item->getRevenue();
 	        }
 	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y', strtotime('yesterday'))) {
-	            $yesterday_rev = $daily_rev_item->getRevenue();
+	            $yesterday_rev += $daily_rev_item->getRevenue();
 	        }
 	    }
 	    
