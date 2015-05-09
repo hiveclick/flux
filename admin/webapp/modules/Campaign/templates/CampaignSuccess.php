@@ -96,6 +96,10 @@
                 <span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
                 Today's Conversions
             </li>
+            <li class="list-group-item">
+                <span class="badge">$<?php echo number_format($campaign->getPayout(), 2, null, ',') ?></span>
+                Payout
+            </li>
         </ul>
         <ul class="list-group">
             <li class="list-group-item disabled">Landing Page Preview</li>

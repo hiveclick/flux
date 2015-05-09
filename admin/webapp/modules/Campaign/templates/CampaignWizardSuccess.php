@@ -21,6 +21,7 @@
 <div id="tab-content-container" class="tab-content">
 	<form class="form-horizontal" name="campaign_form" id="campaign_form" method="POST" action="/api" autocomplete="off">
 	    <input type="hidden" name="func" value="/campaign/campaign" />
+	    <input type="hidden" name="payout" value="0" />
 		<input type="hidden" name="status" value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>" />
 		<div class="form-group">
 			<label class="col-sm-2 control-label hidden-xs" for="description">Description</label>

@@ -36,7 +36,7 @@
 <!-- content -->
 <div class="row">
 	<!-- main col right -->
-	<div class="col-sm-8">
+	<div class="col-sm-9">
 		<div class="panel panel-default">
 			<div class="panel-heading">Click Traffic</div>
 			<div class="panel-body">
@@ -71,28 +71,25 @@
 	</div>
 	
 	<!-- main col right -->
-	<div class="col-sm-4">
-	    <?php if ($campaign->getOffer()->getOffer()->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
-		<div class="panel panel-default text-center">
-			<img id="offer_thumbnail_img" class="page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1024x768&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
-			<p />
-			<div>
-				<a class="btn btn-info" href="<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>" target="_blank">Preview Landing Page</a>
-				<br /><small><?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?></small>
-			</div>
-		</div>
-		<p />
-		<?php } ?>
-		<div class="panel panel-default text-center">
-			<div class="panel-heading">
-				Today's Stats
-			</div>
-			<div class="panel-body">
-			<h4><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?> Clicks</h4>
-			<h4><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?> Conversions</h4>
-			</div>
-		</div>
-	</div>
+    <div class="col-md-3 col-sm-3">
+        <ul class="list-group">
+            <li class="list-group-item active">Campaign Stats</li>
+            <li class="list-group-item">
+                <span class="badge"><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?></span>
+                Today's Clicks
+            </li>
+            <li class="list-group-item">
+                <span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
+                Today's Conversions
+            </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item disabled">Landing Page Preview</li>
+            <li class="list-group-item text-center">
+                <img class="img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
+            </li>
+        </ul>
+    </div>
 </div>
 
 <!-- edit modal -->
@@ -109,10 +106,10 @@ $(window).on('debouncedresize', function() {
 });
 
 function initialize() {
-	var query1 = new google.visualization.Query('/chart/graph-click-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
+	var query1 = new google.visualization.Query('/chart/graph-click-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array[]=<?php echo $campaign->getId() ?>');
 	query1.send(drawClickByHourChart);
 
-	var query2 = new google.visualization.Query('/chart/graph-conversion-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
+	var query2 = new google.visualization.Query('/chart/graph-conversion-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array[]=<?php echo $campaign->getId() ?>');
 	query2.send(drawConversionByHourChart);
 }
 

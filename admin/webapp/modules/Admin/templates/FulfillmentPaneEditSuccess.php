@@ -1,5 +1,5 @@
 <?php
-	/* @var $export \Flux\Export */
+	/* @var $fulfillment \Flux\Fulfillment */
 	$fulfillment = $this->getContext()->getRequest()->getAttribute("fulfillment", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$export_handlers = $this->getContext()->getRequest()->getAttribute("export_handlers", array());
@@ -48,6 +48,14 @@
 							<option value="<?php echo $client->getId() ?>"<?php echo $fulfillment->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
 						<?php } ?>
 					</select>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label" for="bounty">Payout</label>
+					<div class="input-group">
+					   <div class="input-group-addon">$</div>
+					   <input type="text" name="bounty" id="bounty" class="form-control" value="<?php echo number_format($fulfillment->getBounty(), 2) ?>" placeholder="Enter payout from advertiser...">
+					</div>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade in" id="export_type">

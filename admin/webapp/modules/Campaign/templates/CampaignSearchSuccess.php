@@ -109,6 +109,17 @@ $(document).ready(function() {
 				return '<span class="text-muted">Deleted</span>';
 			}
 		}},
+		{id:'payout', name:'payout', field:'payout', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value > 0) {
+			    return '$' + $.number(value, 2);
+			} else {
+				var ret_val = '<div style="line-height:16pt;">'
+					ret_val += '<i class="text-muted">$0.00</i>';
+					ret_val += '<div class="small text-muted">Use offer default payout</div>';
+					ret_val += '</div>';
+					return ret_val;
+			}
+		}},
 		{id:'daily_clicks', name:'# clicks', field:'daily_clicks', sort_field:'daily_clicks', cssClass: 'text-center', def_value: ' ', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '0') {
 				return '<span class="text-muted">' + $.number(value) + '</span>';

@@ -25,6 +25,8 @@ class Fulfillment extends MongoForm {
 	protected $success_msg;
 	protected $export_type;
 	protected $export_class_name;
+	
+	protected $bounty;
 
 	protected $email_address;
 	
@@ -94,6 +96,27 @@ class Fulfillment extends MongoForm {
 		$this->description = $arg0;
 		$this->addModifiedColumn('description');
 		return $this;
+	}
+	
+	/**
+	 * Returns the bounty
+	 * @return float
+	 */
+	function getBounty() {
+	    if (is_null($this->bounty)) {
+	        $this->bounty = 0.00;
+	    }
+	    return $this->bounty;
+	}
+	
+	/**
+	 * Sets the bounty
+	 * @var float
+	 */
+	function setBounty($arg0) {
+	    $this->bounty = floatval($arg0);
+	    $this->addModifiedColumn("bounty");
+	    return $this;
 	}
 	
 	/**

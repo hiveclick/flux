@@ -31,7 +31,7 @@
 				<class>nav-secondary</class>
 			</spacer>
             <revenue>
-                <label>Click Report</label>
+                <label>Revenue Report</label>
                 <module>report</module>
                 <controller>click-report</controller>
                 <class>nav-secondary</class>

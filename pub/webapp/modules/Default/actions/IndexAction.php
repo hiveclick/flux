@@ -26,21 +26,23 @@ class IndexAction extends BasicAction
 	    $yesterday_rev = 0;
 	    $monthly_rev = 0;
 	    
-	    /* @var $revenue_report Flux\ReportClient */
-	    $report_client = new \Flux\ReportClient();
-	    $report_client->setStartDate(date('m/01/Y'));
-	    $report_client->setEndDate(date('m/t/Y'));
-	    $report_client->setIgnorePagination(true);
-	    $daily_rev_items = $report_client->queryAll(array(), true);
+	    /* @var $report_lead Flux\ReportLead */
+	    $report_lead = new \Flux\ReportLead();
+	    $report_lead->setStartDate(date('m/01/Y'));
+	    $report_lead->setEndDate(date('m/t/Y'));
+	    $report_lead->setDispositionArray(array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED));
+	    $report_lead->setClientIdArray($this->getContext()->getUser()->getUserDetails()->getClient()->getClientId());
+	    $report_lead->setIgnorePagination(true);
+	    $daily_rev_items = $report_lead->queryAll(array(), true);
 	    
 	    /* @var $daily_rev_item \Flux\ReportClient */
 	    foreach ($daily_rev_items as $daily_rev_item) {	        
-	        $monthly_rev += $daily_rev_item->getRevenue();
+	        $monthly_rev += $daily_rev_item->getPayout();
 	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
-	            $today_rev = $daily_rev_item->getRevenue();
+	            $today_rev += $daily_rev_item->getPayout();
 	        }
 	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y', strtotime('yesterday'))) {
-	            $yesterday_rev = $daily_rev_item->getRevenue();
+	            $yesterday_rev += $daily_rev_item->getPayout();
 	        }
 	    }
 	    
@@ -48,19 +50,6 @@ class IndexAction extends BasicAction
 	    $this->getContext()->getRequest()->setAttribute("yesterday_revenue", $yesterday_rev);
 	    $this->getContext()->getRequest()->setAttribute("monthly_revenue", $monthly_rev);
 	    
-	    /* @var $graph_click_by_hour \Flux\Report\GraphLeadByHour */
-	    $graph_click_by_hour = new \Flux\Report\GraphLeadByHour();
-	    $graph_click_by_hour->setDateRange(\Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS);
-	    $graph_click_by_hour->compileReport();
-	    
-	    /* @var $graph_conversion_by_hour \Flux\Report\GraphConversionByHour */
-	    $graph_conversion_by_hour = new \Flux\Report\GraphConversionByHour();
-	    $graph_conversion_by_hour->setDateRange(\Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS);
-	    $graph_conversion_by_hour->compileReport();
-	    
-	    $this->getContext()->getRequest()->setAttribute("graph_click_by_hour", $graph_click_by_hour);
-	    $this->getContext()->getRequest()->setAttribute("graph_conversion_by_hour", $graph_conversion_by_hour);
-
 		return View::SUCCESS;
 	}
 	

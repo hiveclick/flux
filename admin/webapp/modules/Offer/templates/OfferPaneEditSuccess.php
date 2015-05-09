@@ -55,6 +55,14 @@
             		    </optgroup>
 					</select>
 				</div>
+				
+				<div class="form-group">
+            		<label class="control-label hidden-xs" for="payout">Payout</label>
+        			<div class="input-group">
+        				<span class="input-group-addon">$</span>
+        				<input type="text" name="payout" id="payout" placeholder="enter default payout to publishers..." class="form-control" value="<?php echo $offer->getPayout() > 0 ? number_format($offer->getPayout(), 2) : '' ?>">
+        			</div>
+            	</div>
 		
 				<div class="form-group">
 					<label class="control-label hidden-xs" for="default_campaign_id">Default Campaign</label>

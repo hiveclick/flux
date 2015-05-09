@@ -26,14 +26,13 @@ class DashboardAction extends BasicAction
 	 */
 	public function execute ()
 	{		
-		/* @var $campaign \Flux\Campaign */
-		$campaign = new \Flux\Campaign();
-		$campaign->setSort('name');
-		$campaign->setSord('ASC');
-		$campaign->setIgnorePagination(true);
-		$campaigns = $campaign->queryAll();
+		/* @var $report_lead \Flux\ReportLead */
+		$report_lead = new \Flux\ReportLead();
+		$report_lead->setSort('name');
+		$report_lead->setSord('ASC');
+		$report_lead->setIgnorePagination(true);
+		$report_leads = $report_lead->queryAll();
 		
-		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
 		return View::SUCCESS;
 	}
 }

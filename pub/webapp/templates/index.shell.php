@@ -100,11 +100,6 @@
 				<a class="navbar-brand" href="/index"><img class="visible-xs" alt="Brand" src="/images/logo-brand.png" /> <span class="hidden-xs">flux</span></a>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="main-navbar">
-                    <form class="navbar-form navbar-left hidden-xs hidden-sm" role="search" method="GET" action="/lead/lead-search">
-                        <div class="form-group">
-                            <input type="text" class="form-control selectize" id="nav_search" name="keywords" style="width:300px;" size="35" placeholder="search leads" value="">
-                        </div>
-                    </form>
 			    
 					<?php if ($this->getMenu() !== null) { ?>
 						<ul class="nav navbar-nav navbar-right">

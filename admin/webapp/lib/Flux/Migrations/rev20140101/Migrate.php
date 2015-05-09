@@ -25,6 +25,8 @@ class Migrate extends \Mojavi\Migration\Migration {
 		\Flux\OfferPage::ensureIndexes();
 		\Flux\Preferences::ensureIndexes();
 		\Flux\Server::ensureIndexes();
+		\Flux\ReportClient::ensureIndexes();
+		\Flux\ReportLead::ensureIndexes();
 		\Flux\Split::ensureIndexes();
 		\Flux\SplitQueue::ensureIndexes();
 		\Flux\User::ensureIndexes();

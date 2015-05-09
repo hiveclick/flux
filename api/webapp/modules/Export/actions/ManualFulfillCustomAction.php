@@ -105,6 +105,16 @@ class ManualFulfillCustomAction extends BasicRestAction
                 	        $split_queue->setAttemptCount($split_queue->getAttemptCount() + 1);
                 	        $split_queue->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
                 	        $split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_PENDING);
+                	        
+                	        /* @var $report_lead \Flux\ReportLead */
+                	        $report_lead = new \Flux\ReportLead();
+                	        $report_lead->setLead($lead->getId());
+                	        $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+                	        $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
+                	        $report_lead->setRevenue(0.00);
+                	        $report_lead->setPayout(0.00);
+                	        $report_lead->setReportDate(new \MongoDate());
+                	        $report_lead->insert();
                 	    } else {
                 	        $split_queue->setIsFulfilled(true);            	        
                 	        $split_queue->setIsError(false);
@@ -112,9 +122,26 @@ class ManualFulfillCustomAction extends BasicRestAction
                 	        $split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_FULFILLED);
                 	        
                 	        // Add a fulfilled event to the lead
+                	        /* @var $lead \Flux\Lead */
                 	        $lead = $split_queue->getLead()->getLead();
                 	        $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
                 	        $lead->update();
+                	        
+                	        // Add/Update the lead reporting
+                	        /* @var $report_lead \Flux\ReportLead */
+                	        $report_lead = new \Flux\ReportLead();
+                	        $report_lead->setLead($lead->getId());
+                	        $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+                	        $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
+                	        $report_lead->setRevenue($fulfillment->getBounty());
+                	        if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
+                                $report_lead->setPayout($lead->getTracking()->getCampaign()->getCampaign()->getPayout());
+                	        } else {
+                	            $report_lead->setPayout($lead->getTracking()->getOffer()->getOffer()->getPayout());
+                	        }
+                	        $report_lead->setReportDate(new \MongoDate());
+                	        $report_lead->setAccepted(true);
+                	        $report_lead->insert();
                 	    }
                 	}
         	    }

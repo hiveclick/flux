@@ -26,19 +26,13 @@ class LeadReportAction extends BasicAction
 	 */
 	public function execute ()
 	{		
-	    /* @var $split_queue \Flux\SplitQueue */
-	    $split_queue = new \Flux\SplitQueue();
-	    $split_queue->populate($_REQUEST);
-	    
-		/* @var $campaign \Flux\Campaign */
-		$campaign = new \Flux\Campaign();
-		$campaign->setSort('name');
-		$campaign->setSord('ASC');
-		$campaign->setIgnorePagination(true);
-		$campaigns = $campaign->queryAll();
+	    /* @var $report_lead Flux\ReportLead */
+		$report_lead = new \Flux\ReportLead();
+		$report_lead->setReportDate(new \MongoDate(strtotime(date('m/01/Y'))));
+		$report_lead->populate($_GET);
 		
-		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
-		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
+		$this->getContext()->getRequest()->setAttribute("report_lead", $report_lead);
+		
 		return View::SUCCESS;
 	}
 }

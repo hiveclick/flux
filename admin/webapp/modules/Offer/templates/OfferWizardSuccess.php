@@ -74,25 +74,9 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label hidden-xs" for="payout">Payout</label>
 		<div class="col-sm-10">
-		    <input type="hidden" name="events[0][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
-			<input type="hidden" name="events[0][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
-			<input type="hidden" name="events[0][field]" value="payout" />
 			<div class="input-group">
 				<span class="input-group-addon">$</span>
-				<input type="text" name="events[0][value]" id="payout" placeholder="enter payout $0.00" class="form-control" value="<?php echo number_format($offer->getPayout(), 2) ?>">
-			</div>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="revenue">Revenue</label>
-		<div class="col-sm-10">
-		    <input type="hidden" name="events[1][event_id]" value="<?php echo !is_null($conversion_data_field) ? $conversion_data_field->getId() : 0 ?>" />
-			<input type="hidden" name="events[1][modifier_id]" value="<?php echo \Flux\DataField::DATA_FIELD_MODIFIER_SET ?>" />
-			<input type="hidden" name="events[1][field]" value="revenue" />
-			<div class="input-group">
-				<span class="input-group-addon">$</span>
-				<input type="text" name="events[1][value]" id="revenue" placeholder="enter revenue $0.00" class="form-control" value="0.00">
+				<input type="text" name="payout" id="payout" placeholder="enter default payout to publishers..." class="form-control" value="<?php echo $offer->getPayout() > 0 ? number_format($offer->getPayout(), 2) : '' ?>">
 			</div>
 		</div>
 	</div>

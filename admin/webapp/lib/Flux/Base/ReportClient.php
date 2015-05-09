@@ -143,4 +143,18 @@ class ReportClient extends MongoForm {
         $this->addModifiedColumn("client");
         return $this;
     }
+    
+    // +------------------------------------------------------------------------+
+    // | HELPER METHODS															|
+    // +------------------------------------------------------------------------+
+    
+    /**
+     * Ensures that the mongo indexes are set (should be called once)
+     * @return boolean
+     */
+    public static function ensureIndexes() {
+        $report_client = new self();
+        $report_client->getCollection()->ensureIndex(array('report_date' => 1, 'client.client_id' => 1), array('background' => true));
+        return true;
+    }
 }

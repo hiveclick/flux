@@ -72,6 +72,13 @@
 							</optgroup>
 						</select>
 					</div>
+					
+					<div class="form-group">
+    					<div class="input-group">
+    					   <div class="input-group-addon">$</div>
+    					   <input type="text" name="bounty" id="bounty" class="form-control" value="<?php echo $fulfillment->getBounty() > 0 ? number_format($fulfillment->getBounty(), 2) : '' ?>" placeholder="Enter payout from advertiser...">
+    					</div>
+    				</div>
 					<hr />
 				</div>
 				

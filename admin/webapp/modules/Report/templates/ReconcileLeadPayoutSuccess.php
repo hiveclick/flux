@@ -1,27 +1,46 @@
 <?php
     /* @var $revenue_report \Flux\ReportLead */
 	$report_lead = $this->getContext()->getRequest()->getAttribute('report_lead', array());
+	$clients = $this->getContext()->getRequest()->getAttribute('clients', array());
 ?>
 <div class="page-header">
-   <h2>Lead Report</h2>
+   <h2>Reconcile Lead Payouts</h2>
 </div>
-<!-- Add breadcrumbs -->
-<ol class="breadcrumb">
-	<li><a href="/default/index">Reports</a></li>
-	<li class="active">Lead Report</li>
-</ol>
-<div class="help-block">View the leads you have submitted and their current disposition</div>
+<div class="help-block">Reconcile leads that need to be paid out to publishers</div>
 <div class="panel panel-primary">
-	<div id='lead_report-header' class='grid-header panel-heading clearfix'>
-		<form id="lead_report_search_form" method="GET" class="form-inline" action="/api">
+	<div id='reconcile_lead_payout-header' class='grid-header panel-heading clearfix'>
+		<form id="reconcile_lead_payout_search_form" method="GET" class="form-inline" action="/api">
 			<input type="hidden" name="func" value="/report/report-lead">
 			<input type="hidden" name="format" value="json" />
 			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="client_id" name="client_id_array[]" value="<?php echo $this->getContext()->getUser()->getUserDetails()->getClient()->getClientId() ?>" />
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
 			<input type="hidden" id="sort" name="sort" value="name" />
 			<input type="hidden" id="sord" name="sord" value="asc" />
 			<div class="pull-right">
+    			<div class="form-group text-left">
+    				<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+    					<optgroup label="Administrators">
+        			        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo in_array($client->getId(), $report_lead->getClientIdArray()) ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+        			    </optgroup>
+        				<optgroup label="Affiliates">
+        			        <?php
+            					/* @var $client \Flux\Client */
+            					foreach ($clients AS $client) { 
+            				?>
+            				    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+            					    <option value="<?php echo $client->getId(); ?>"<?php echo in_array($client->getId(), $report_lead->getClientIdArray()) ? ' selected' : ''; ?>><?php echo $client->getName() ?></option>
+            					<?php } ?>
+            				<?php } ?>
+        			    </optgroup>
+    				</select>
+    			</div>
     			<div class="form-group text-left">
     				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
     			</div>
@@ -44,9 +63,12 @@
 			</div>
 		</form>
 	</div>
-	<div id="lead_report-grid"></div>
-	<div id="lead_report-pager" class="panel-footer"></div>
+	<div id="reconcile_lead_payout-grid"></div>
+	<div id="reconcile_lead_payout-pager" class="panel-footer"></div>
 </div>
+
+<!-- edit report lead modal -->
+<div class="modal fade" id="edit_report_lead_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
@@ -64,12 +86,21 @@ $(document).ready(function() {
 			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
 			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
 			var ret_val = '<div style="line-height:16pt;">'
-			ret_val += value.lead_name;
+			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '">' + value.lead_name + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (' + offer_name + ')';
+			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
+		}},
+		{id:'client', name:'client', field:'client', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">' + dataContext.client.client_name + '</a>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
+		{id:'revenue', name:'revenue', field:'revenue', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '$' + $.formatNumber(value, {format:"#,##0.00", locale:"us"});
 		}},
 		{id:'payout', name:'payout', field:'payout', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return '$' + $.formatNumber(value, {format:"#,##0.00", locale:"us"});
@@ -77,11 +108,11 @@ $(document).ready(function() {
 		{id:'disposition', name:'disposition', field:'disposition', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
 				if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>) {
-					ret_val += '<span class="text-success">Accepted</span>';
+					ret_val += '<a class="text-success" data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">Accepted</a>';
 			    } else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>) {
-			    	ret_val += '<span class="text-danger">Disqualified</span>';
+			    	ret_val += '<a class="text-danger" data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">Disqualified</a>';
 			    } else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>) {
-			    	ret_val += '<span class="text-muted">Pending</span>';
+			    	ret_val += '<a class="text-muted" data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">Pending</a>';
 			    }
 				ret_val += '<div class="small text-muted">';
 				ret_val += dataContext.disposition_message;
@@ -99,9 +130,9 @@ $(document).ready(function() {
 		}}
 	];
 
-  	slick_grid = $('#lead_report-grid').slickGrid({
-		pager: $('#lead_report-pager'),
-		form: $('#lead_report_search_form'),
+  	slick_grid = $('#reconcile_lead_payout-grid').slickGrid({
+		pager: $('#reconcile_lead_payout-pager'),
+		form: $('#reconcile_lead_payout_search_form'),
 		columns: columns,
 		useFilter: false,
 		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
@@ -118,11 +149,15 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#disposition_array,#report_date').selectize().on('change', function(e) {
-		$('#lead_report_search_form').trigger('submit');
+	$('#client_id_array,#disposition_array,#report_date').selectize().on('change', function(e) {
+		$('#reconcile_lead_payout_search_form').trigger('submit');
 	});
 
-  	$('#lead_report_search_form').trigger('submit');
+  	$('#reconcile_lead_payout_search_form').trigger('submit');
+
+  	$('#edit_report_lead_modal').on('hide.bs.modal', function(e) {
+ 		$(this).removeData('bs.modal');
+	});
 });
 //-->
 </script>

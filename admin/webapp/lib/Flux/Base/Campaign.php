@@ -17,7 +17,7 @@ class Campaign extends MongoForm {
 	protected $redirect_link;
 	protected $whitelist_ips;
 	
-	
+	protected $payout;
 	protected $daily_clicks;
 	protected $daily_conversions;
 	
@@ -67,6 +67,27 @@ class Campaign extends MongoForm {
 	 */
 	function setRedirectUrl($arg0) {
 		return $this->setRedirectLink($arg0);
+	}
+	
+	/**
+	 * Returns the payout
+	 * @return float
+	 */
+	function getPayout() {
+	    if (is_null($this->payout)) {
+	        $this->payout = 0.00;
+	    }
+	    return $this->payout;
+	}
+	
+	/**
+	 * Sets the payout
+	 * @var float
+	 */
+	function setPayout($arg0) {
+	    $this->payout = floatval($arg0);
+	    $this->addModifiedColumn("payout");
+	    return $this;
 	}
 	
 	/**

@@ -1,18 +1,13 @@
 <?php
-use Mojavi\Action\BasicAction;
-use Mojavi\View\View;
-use Mojavi\Request\Request;
-
-use Flux\Campaign;
-use Flux\Offer;
-use Flux\Client;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class ClickReportAction extends BasicAction
+require_once(MO_MODULE_DIR . '/Default/views/IndexBlankView.php');
+
+class ReconcileLeadPayoutWizardSuccessView extends IndexBlankView
 {
 
 	// +-----------------------------------------------------------------------+
@@ -20,21 +15,16 @@ class ClickReportAction extends BasicAction
 	// +-----------------------------------------------------------------------+
 
 	/**
-	 * Execute any application/business logic for this action.
+	 * Execute any presentation logic and set template attributes.
 	 *
-	 * @return mixed - A string containing the view name associated with this action
+	 * @return void
 	 */
 	public function execute ()
-	{		
-	    
-		/* @var $report_lead Flux\ReportLead */
-		$report_lead = new \Flux\ReportLead();
-		$report_lead->setReportDate(new \MongoDate(strtotime(date('m/01/Y'))));
-		$report_lead->populate($_GET);
-
-		$this->getContext()->getRequest()->setAttribute("revenue_report", $report_lead);
-		return View::SUCCESS;
+	{
+		parent::execute();
+		$this->setTitle('Reconcile Lead Payout');
 	}
+
 }
 
 ?>

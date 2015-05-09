@@ -143,6 +143,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </revenue>
+            <reconcileleadpayout>
+                <label>Reconcile Lead Payouts</label>
+                <uri>/report/reconcile-lead-payout</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </reconcileleadpayout>
        </pages>
 	</reports>
 	<admin>
@@ -229,6 +235,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </apc>
+            <monitoring>
+                <label>Monitoring</label>
+                <uri>/admin/monitoring</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </monitoring>
             <spacer3>
 				<label></label>
 				<uri></uri>>

@@ -64,6 +64,14 @@
         		</div>
         		
         		<div class="form-group">
+            		<label class="control-label hidden-xs" for="payout">Payout</label>
+        			<div class="input-group">
+        				<span class="input-group-addon">$</span>
+        				<input type="text" name="payout" id="payout" placeholder="enter payout to publisher (leave blank to use offer payout of $<?php echo number_format($campaign->getOffer()->getOffer()->getPayout(), 2) ?>)" class="form-control" value="<?php echo $campaign->getPayout() > 0 ? number_format($campaign->getPayout(), 2) : '' ?>">
+        			</div>
+            	</div>
+        		
+        		<div class="form-group">
         			<label class="control-label hidden-xs" for="traffic_source">Traffic Source</label>
         			<select class="form-control" name="traffic_source[traffic_source_id]" id="traffic_source" placeholder="Choose where the traffic is originating from...">
         			    <option value=""></option>

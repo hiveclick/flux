@@ -97,6 +97,10 @@
                 <span class="badge"><?php echo number_format($offer->getDailyConversions(), 0, null, ',') ?></span>
                 Today's Conversions
             </li>
+             <li class="list-group-item">
+                <span class="badge">$<?php echo number_format($offer->getPayout(), 2, null, ',') ?></span>
+                Default Payout
+            </li>
         </ul>
         <?php if ($offer->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
         <ul class="list-group">

@@ -3,16 +3,16 @@ use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
 
-use Flux\Campaign;
-use Flux\Offer;
+use Flux\User;
 use Flux\Client;
+use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class ClickReportAction extends BasicAction
+class MonitoringAction extends BasicAction
 {
 
 	// +-----------------------------------------------------------------------+
@@ -25,14 +25,13 @@ class ClickReportAction extends BasicAction
 	 * @return mixed - A string containing the view name associated with this action
 	 */
 	public function execute ()
-	{		
+	{
+	    /* @var $server_monitor \Flux\ServerMonitor */
+	    $server_monitor = new \Flux\ServerMonitor();
+	    $server_monitor->discoverMetrics();
 	    
-		/* @var $report_lead Flux\ReportLead */
-		$report_lead = new \Flux\ReportLead();
-		$report_lead->setReportDate(new \MongoDate(strtotime(date('m/01/Y'))));
-		$report_lead->populate($_GET);
-
-		$this->getContext()->getRequest()->setAttribute("revenue_report", $report_lead);
+	    $this->getContext()->getRequest()->setAttribute('server_monitor', $server_monitor);
+	    
 		return View::SUCCESS;
 	}
 }

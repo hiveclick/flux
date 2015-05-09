@@ -3,8 +3,6 @@
     $today_revenue = $this->getContext()->getRequest()->getAttribute('today_revenue', 0);
     $yesterday_revenue = $this->getContext()->getRequest()->getAttribute('yesterday_revenue', 0);
     $monthly_revenue = $this->getContext()->getRequest()->getAttribute('monthly_revenue', 0);
-    $graph_click_by_hour = $this->getContext()->getRequest()->getAttribute('graph_click_by_hour', array());
-    $graph_conversion_by_hour = $this->getContext()->getRequest()->getAttribute('graph_conversion_by_hour', array());
 ?>
 
 <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart', 'controls']}]}"></script>
@@ -29,57 +27,7 @@
     		
 <!-- main col right -->
 <div class="col-md-10 col-lg-10 col-sm-10 hidden-xs" id="main_graph_div">
-    <div class="row">
-        <div class="col-md-5 col-lg-5 col-sm-5">
-        	<div class="panel panel-default">
-        		<div class="panel-heading">Clicks by Traffic Source</div>
-        		<div class="panel-body">
-        			<div id="traffic_source_by_hour_div">
-                		<!--Divs that will hold each control and chart-->
-                		<div id="traffic_source_by_hour_chart_div" style="width:100%;height:200px">
-                			<div class="text-muted text-center">
-                				<span class="fa fa-spinner fa-spin"></span>
-                				Loading report data...
-                			</div>
-                		</div>
-                		<div id="traffic_source_by_hour_filter_div" style="width:100%;height:30px"></div>
-                    </div>
-                </div>
-        	</div>
-    	</div>
-    	<div class="col-md-7 col-lg-7 col-sm-7">
-        	<div class="panel panel-default">
-        		<div class="panel-heading"><a href="/lead/lead-search" class="pull-right small">View all</a> Click Traffic</div>
-        		<div class="panel-body">
-        		    <div id="click_by_hour_div">
-                		<!--Divs that will hold each control and chart-->
-                		<div id="click_by_hour_chart_div" style="width:100%;height:200px">
-                			<div class="text-muted text-center">
-                				<span class="fa fa-spinner fa-spin"></span>
-                				Loading report data...
-                			</div>
-                		</div>
-                		<div id="click_by_hour_filter_div" style="width:100%;height:30px"></div>
-                    </div>
-        		</div>
-        	</div>
-    	</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><a href="/export/split-queue-search" class="pull-right small">View all</a> Conversion Traffic</div>
-		<div class="panel-body">
-			<div id="conversion_by_hour_div">
-        		<!--Divs that will hold each control and chart-->
-        		<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
-        			<div class="text-muted text-center">
-        				<span class="fa fa-spinner fa-spin"></span>
-        				Loading report data...
-        			</div>
-        		</div>
-        		<div id="conversion_by_hour_filter_div" style="width:100%;height:30px"></div>
-            </div>
-        </div>
-	</div>
+
 </div>
     
     
@@ -107,10 +55,10 @@
 		<div class="panel-heading"><h5>Common Links</h5></div>
 		<div class="panel">
 			<div class="list-group">
-				<a href="/report/revenue-report" class="list-group-item">Revenue Report</a>
-				<a href="/export/split-queue-search" class="list-group-item">Queued Leads</a>
-				<a href="/offer/offer-search" class="list-group-item">Offers</a>
-				<a href="/lead/lead-search" class="list-group-item">All Leads</a>
+				<a href="/report/click-report" class="list-group-item">Revenue Report</a>
+				<a href="/report/lead-report" class="list-group-item">Lead Report</a>
+				<a href="/campaign/campaign-search" class="list-group-item">Campaigns</a>
+				<a href="/account/user" class="list-group-item">Change Password</a>
 			</div>
 		</div>
 	</div>

@@ -30,6 +30,7 @@ class Offer extends MongoForm {
 	protected $flow_id;
 	protected $vertical;
 	protected $payout;
+	protected $bounty;
 	protected $default_campaign_id;
 	protected $client;
 	protected $landing_pages;
@@ -125,7 +126,7 @@ class Offer extends MongoForm {
 		$this->payout = (float)$arg0;
 		$this->addModifiedColumn('payout');
 		return $this;
-	}
+	}	
 	
 	/**
 	 * Returns the default_campaign_id
