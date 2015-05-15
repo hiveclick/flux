@@ -124,6 +124,11 @@
         			<label class="control-label hidden-xs" for="redirect_link">Adwords Url</label>
         			<textarea id="adwords_url" class="form-control" placeholder="<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>&__clear=1"><?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>&__clear=1</textarea>
         		</div>
+        		<hr />
+        		<div class="form-group">
+        			<label class="control-label hidden-xs" for="tracking_pixel">Tracking Pixel</label>
+        			<textarea id="tracking_pixel" name="tracking_pixel" class="form-control" rows="4" placeholder="Enter the tracking pixel (HTML or Javascript) from the ad network..."><?php echo $campaign->getTrackingPixel() ?></textarea>
+        		</div>
         	</div>
         	<div role="tabpanel" class="tab-pane fade in" id="whitelisted_ips">
         	    <div class="help-block">If you want to limit incoming traffic, you can specify a list of whitelisted IPs</div>

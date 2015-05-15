@@ -50,7 +50,7 @@ $(document).ready(function() {
 		{id:'client_name', name:'owner', field:'client.client_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
 		}},
-		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:68, width:68, minWidth:68, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:90, width:90, minWidth:90, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_ACTIVE ?>') {
 				return '<span class="text-success">Active</span>';
 			} else if (value == '<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_INACTIVE ?>') {
@@ -58,6 +58,9 @@ $(document).ready(function() {
 			} else if (value == '<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_DELETED ?>') {
 				return '<span class="text-muted">Deleted</span>';
 			}
+		}},
+		{id:'revenue', name:'payout', field:'bounty', def_value: ' ', cssClass: 'text-center', maxWidth:90, width:90, minWidth:90, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '$' + $.number(value, 2);
 		}},
 		{id:'export_type', name:'type', field:'export_type', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo json_encode(\Flux\Export\ExportAbstract::FULFILLMENT_TYPE_FTP) ?>') {
@@ -101,7 +104,7 @@ $(document).ready(function() {
 		useFilter: false,
 		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
 		pagingOptions: {
-			pageSize: 25,
+			pageSize: <?php echo \Flux\Preferences::getPreference('items_per_page', 25) ?>,
 			pageNum: 1
 		},
 		slickOptions: {

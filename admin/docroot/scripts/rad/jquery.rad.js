@@ -119,7 +119,11 @@
 				}
 				return xhr;
 			},
-			get: function(url, data, callback, dataType) {
+			get: function(url, data, callback, dataType, options) {
+				if (options) {
+					this.ajax.setup(options);
+					return this.ajax.get(url, data, callback, dataType);
+				}
 				return this.ajax.get(url, data, callback, dataType);
 			},
 			post: function(url, data, callback, dataType) {

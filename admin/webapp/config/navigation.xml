@@ -229,18 +229,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </savedsearch>
-            <apc>
-                <label>APC Cache</label>
-                <uri>/admin/apc</uri>
+            <setting>
+                <label>Global Settings</label>
+                <uri>/admin/preferences</uri>
                 <class>nav-secondary</class>
                 <permission>1</permission>
-            </apc>
-            <monitoring>
-                <label>Monitoring</label>
-                <uri>/admin/monitoring</uri>
-                <class>nav-secondary</class>
-                <permission>1</permission>
-            </monitoring>
+            </setting>
             <spacer3>
 				<label></label>
 				<uri></uri>>

@@ -11,10 +11,10 @@
         <![endif]-->
 
         <!-- Bootstrap and jQuery base classes -->
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 
         <!-- Font Awesome library -->
@@ -97,7 +97,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/index"><img class="visible-xs" alt="Brand" src="/images/logo-brand.png" /> <span class="hidden-xs">flux</span></a>
+				<a class="navbar-brand" href="/index"><img class="visible-xs" alt="Brand" src="/images/logo-brand.png" /> <span class="hidden-xs"><?php echo \Flux\Preferences::getPreference('BRAND_NAME', 'flux') ?></span></a>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="main-navbar">
                     <form class="navbar-form navbar-left hidden-xs hidden-sm" role="search" method="GET" action="/lead/lead-search">

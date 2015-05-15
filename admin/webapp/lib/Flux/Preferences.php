@@ -1,101 +1,96 @@
 <?php
 namespace Flux;
 
-use Mojavi\Form\MongoForm;
-
-class Preferences extends MongoForm {
+class Preferences extends Base\Preferences {
 	
-	const READ_WRITE_GLOBAL = 1;
-	const READ_WRITE_ADMIN = 2;
-	const READ_ONLY = 3;
+    private $preferences_array;
+    
+    /**
+     * Returns the preferences_array
+     * @return array
+     */
+    function getPreferencesArray() {
+        if (is_null($this->preferences_array)) {
+            $this->preferences_array = array();
+        }
+        return $this->preferences_array;
+    }
+    
+    /**
+     * Sets the preferences_array
+     * @var array
+     */
+    function setPreferencesArray($arg0) {
+        $this->preferences_array = $arg0;
+        return $this;
+    }
+    
+    /**
+     * Queries by the name
+     * @return string
+     */
+    function queryByKey() {
+        $criteria = array('key' => $this->getKey());
+        return parent::query($criteria, false);
+    }
+    
+    /**
+     * Returns the preference value for a name
+     * @param string $preference_name
+     * @return string
+     */
+    static function savePreference($preference_name, $preference_value) {
+        /* @var $preference \Flux\Preferences */
+        $preference = new \Flux\Preferences();
+        $preference->setKey(strtolower($preference_name));
+        $preference->setValue($preference_value);
+        $insert_id = $preference->update();
+        return $insert_id;
+    }
+    
+    /**
+     * Returns the setting value for a name
+     * @param string $preference_name
+     * @return string
+     */
+    static function getPreference($preference_name, $default_value = '') {
+        /* @var $preference \Flux\Preferences */
+        $preference = new \Flux\Preferences();
+        $preference->setKey(strtolower($preference_name));
+        if (($preference = $preference->queryByKey()) !== false) {
+            return $preference->getValue();
+        } else {
+            return $default_value;
+        }
+    }
+    
+    /**
+     * Queries by the name
+     * @return string
+     */
+    function insert() {
+        return $this->update();
+    }
+    
+    /**
+     * Queries by the name
+     * @return string
+     */
+    function update($criteria_array = array(), $update_array = array(), $options_array = array('upsert' => true), $use_set_notation = false) {
+        if (empty($this->getPreferencesArray())) {
+            // If we don't have multiple values, then just save our setting
+            return parent::updateMultiple(array('key' => $this->getKey()), array('$set' => array('value' => $this->getValue())));
+        } else {
+            // If we are saving multiple values, then do it one at a time
+            foreach ($this->getPreferencesArray() as $key => $value) {
+                /* @var $preference \Flux\Preferences */
+                $preference = new \Flux\Preferences();
+                $preference->setKey($key);
+                $preference->setValue($value);
+                $insert_id = $preference->update();
+            }
+            return $insert_id;
+        }
+    }
 	
-	protected $key;
-	protected $value;
-	protected $control;
-	
-	/**
-	 * Constructs new user
-	 * @return void
-	 */
-	function __construct() {
-		$this->setCollectionName('preferences');
-		$this->setDbName('admin');
-	}
-	
-	/**
-	 * Returns the key
-	 * @return string
-	 */
-	function getKey() {
-		if (is_null($this->key)) {
-			$this->key = null;
-		}
-		return $this->key;
-	}
-	
-	/**
-	 * Sets the key
-	 * @var string
-	 */
-	function setKey($arg0) {
-		$this->key = $arg0;
-		$this->addModifiedColumn('key');
-		return $this;
-	}
-	
-	/**
-	 * Returns the value
-	 * @return string
-	 */
-	function getValue() {
-		if (is_null($this->value)) {
-			$this->value = null;
-		}
-		return $this->value;
-	}
-	
-	/**
-	 * Sets the key
-	 * @var string
-	 */
-	function setValue($arg0) {
-		$this->value = $arg0;
-		$this->addModifiedColumn('value');
-		return $this;
-	}
-	
-	/**
-	 * Returns the control
-	 * @return int
-	 */
-	function getControl() {
-		if (is_null($this->control)) {
-			$this->control = null;
-		}
-		return $this->control;
-	}
-	
-	/**
-	 * Sets the key
-	 * @var int
-	 */
-	function setControl($arg0) {
-		$this->control = (int)$arg0;
-		$this->addModifiedColumn('control');
-		return $this;
-	}
-	
-	// +------------------------------------------------------------------------+
-	// | HELPER METHODS															|
-	// +------------------------------------------------------------------------+
-	
-	/**
-	 * Ensures that the mongo indexes are set (should be called once)
-	 * @return boolean
-	 */
-	public static function ensureIndexes() {
-		$daemon = new self();
-		$daemon->getCollection()->ensureIndex(array('key' => 1), array('background' => true, 'unique' => true));
-		return true;
-	}
 }

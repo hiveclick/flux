@@ -83,7 +83,9 @@ $(document).ready(function() {
 		{id:'_id', name:'name', field:'_id', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/campaign/campaign?_id=' + dataContext._id + '">' + value + '</a>';
-			ret_val += '<div class="small text-muted">' + dataContext.description + '</div>';
+			ret_val += '<div class="small text-muted">';
+			ret_val += dataContext.description;
+			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
 		}},
@@ -143,7 +145,7 @@ $(document).ready(function() {
 		useFilter: false,
 		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
 		pagingOptions: {
-			pageSize: 25,
+			pageSize: <?php echo \Flux\Preferences::getPreference('items_per_page', 25) ?>,
 			pageNum: 1
 		},
 		slickOptions: {
@@ -153,6 +155,13 @@ $(document).ready(function() {
 			width: 800,
 			rowHeight: 48
 		}
+	});
+
+ 	slick_grid.slickGetDataView().onRowsChanged.subscribe(function() {
+ 		$('[data-toggle="tooltip"]').tooltip({
+ 			delay: { "show": 100, "hide": 10000 },
+ 			template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+ 		});
 	});
 	
  	$("#txtSearch").keyup(function(e) {
@@ -258,6 +267,8 @@ $(document).ready(function() {
     $('#save_search_btn').on('click', function() {
         $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>&query_string=' + encodeURIComponent($('#campaign_search_form').serialize()));
     });
+
+    
 });
 //-->
 </script>

@@ -16,6 +16,7 @@ class Campaign extends MongoForm {
 	protected $traffic_source;
 	protected $redirect_link;
 	protected $whitelist_ips;
+	protected $tracking_pixel;
 	
 	protected $payout;
 	protected $daily_clicks;
@@ -336,7 +337,26 @@ class Campaign extends MongoForm {
 	    return $this;
 	}
 	
+	/**
+	 * Returns the tracking_pixel
+	 * @return string
+	 */
+	function getTrackingPixel() {
+	    if (is_null($this->tracking_pixel)) {
+	        $this->tracking_pixel = "";
+	    }
+	    return $this->tracking_pixel;
+	}
 	
+	/**
+	 * Sets the tracking_pixel
+	 * @var string
+	 */
+	function setTrackingPixel($arg0) {
+	    $this->tracking_pixel = $arg0;
+	    $this->addModifiedColumn("tracking_pixel");
+	    return $this;
+	}
 
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|
