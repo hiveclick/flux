@@ -37,8 +37,7 @@ class UpdateAction extends BasicConsoleAction {
             // Next install the new packages
             $updater->setPercentComplete(35)->setUpdateMessage('Installing updates...')->saveProgress();
             $cmd = 'yum update -q -y ' . \Flux\Updater::PACKAGE_NAME;
-            //$cmd_output = shell_exec($cmd);
-            sleep(5);
+            $cmd_output = shell_exec($cmd);
             \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $cmd_output);
             
             // Next install the new packages
