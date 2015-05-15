@@ -153,7 +153,7 @@
 	</reports>
 	<admin>
         <label>Admin</label>
-        <uri>/admin/data-field-search</uri>
+        <uri>/admin/preferences</uri>
         <class>nav-primary</class>
         <permission>1</permission>
         <pages>
