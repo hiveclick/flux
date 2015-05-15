@@ -33,7 +33,7 @@
 	</offer>
 	<campaign>
         <label>Campaigns</label>
-        <uri>/campaign/campaign-wizard</uri>
+        <uri>/campaign/campaign-search</uri>
         <class>nav-primary</class>
         <permission>1</permission>
         <pages>
