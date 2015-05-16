@@ -26,21 +26,25 @@
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
 			<input type="hidden" id="sort" name="sort" value="_id" />
 			<input type="hidden" id="sord" name="sord" value="desc" />
-			<div class="form-group text-left col-md-6">
-				<label>Search by lead name or id: </label>
-				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="<?php echo $lead->getKeywords() ?>" />
+			<div class="row">
+    			<div class="form-group text-left col-md-6">
+    				<label>Search by lead name or id: </label>
+    				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="<?php echo $lead->getKeywords() ?>" />
+    			</div>
+    			<div class="form-group text-left col-md-6">
+    				<label>Only show leads with the following fields set: </label>
+    				<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="Add required fields..."></select>
+    			</div>
 			</div>
-			<div class="form-group text-left col-md-6">
-				<label>Only show leads with the following fields set: </label>
-				<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="Add required fields..."></select>
-			</div>
-			<div class="form-group text-left col-md-6">
-				<label>Filter leads by offer: </label>
-				<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer..."></select>
-			</div>
-			<div class="form-group text-left col-md-6">
-				<label>Filter leads by campaign: </label>
-				<select class="form-control selectize" name="campaign_id_array[]" id="campaign_id_array" multiple placeholder="Filter by campaign..."></select>
+			<div class="row">
+    			<div class="form-group text-left col-md-6">
+    				<label>Filter leads by offer: </label>
+    				<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer..."></select>
+    			</div>
+    			<div class="form-group text-left col-md-6">
+    				<label>Filter leads by campaign: </label>
+    				<select class="form-control selectize" name="campaign_id_array[]" id="campaign_id_array" multiple placeholder="Filter by campaign..."></select>
+    			</div>
 			</div>
 			
 			<div class="text-center">

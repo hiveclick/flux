@@ -93,6 +93,12 @@ $(document).ready(function() {
 					ret_val += '<div class="small text-muted">' + dataContext.infusionsoft_host + '</div>';
 					ret_val += '</div>';
 				return ret_val;
+			} else if (value == '<?php echo json_encode(\Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MANUAL) ?>') {
+				var ret_val = '<div style="line-height:16pt;">'
+					ret_val += 'Manual Fulfillment';
+			        ret_val += '<div class="small text-muted">Leads will just be marked as fulfilled</div>';
+					ret_val += '</div>';
+				return ret_val;
 			}
 		}}
 	];

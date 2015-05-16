@@ -1,5 +1,5 @@
 <?php
-namespace Flux;
+namespace Flux\Report;
 
 use \Mojavi\Form\MongoForm;
 

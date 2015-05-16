@@ -143,6 +143,18 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </revenue>
+            <leadpayoutreport>
+                <label>Lead Payout Report</label>
+                <uri>/report/lead-payout-report</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </leadpayoutreport>
+            <spacer2>
+				<label></label>
+				<uri></uri>>
+				<class>nav-secondary</class>
+				<permission>1</permission>
+			</spacer2>
             <reconcileleadpayout>
                 <label>Reconcile Lead Payouts</label>
                 <uri>/report/reconcile-lead-payout</uri>

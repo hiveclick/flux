@@ -3,6 +3,7 @@ namespace Flux;
 
 class ReportLead extends Base\ReportLead {
     
+    private $date_range;
     private $start_date;
     private $end_date;
     
@@ -19,6 +20,27 @@ class ReportLead extends Base\ReportLead {
         parent::setReportDate($arg0);
         $this->setStartDate(date('m/01/Y', $this->getReportDate()->sec));
         $this->setEndDate(date('m/t/Y', $this->getReportDate()->sec));
+        return $this;
+    }
+    
+    /**
+     * Returns the date_range
+     * @return integer
+     */
+    function getDateRange() {
+        if (is_null($this->date_range)) {
+            $this->date_range = \Flux\Report\BaseReport::DATE_RANGE_TODAY;
+        }
+        return $this->date_range;
+    }
+    
+    /**
+     * Sets the date_range
+     * @var integer
+     */
+    function setDateRange($arg0) {
+        $this->date_range = $arg0;
+        $this->addModifiedColumn("date_range");
         return $this;
     }
     
@@ -141,11 +163,28 @@ class ReportLead extends Base\ReportLead {
         if (count($this->getDispositionArray()) > 0) {
             $criteria['disposition'] = array('$in' => $this->getDispositionArray());
         }
+        if (trim($this->getKeywords()) != '') {
+            if (\MongoId::isValid($this->getKeywords())) {
+                $criteria['lead.lead_id'] = $this->getKeywords();
+            } else {
+                $criteria['$or'] = array(
+                    array('lead.lead_name' => new \MongoRegex('/' . $this->getKeywords() . '/i')), 
+                    array('lead.email' => new \MongoRegex('/' . $this->getKeywords() . '/i'))
+                );
+            }
+        }
         if (count($this->getClientIdArray()) > 0) {
             $criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
         }
-        if ($this->getStartDate() != '' && $this->getEndDate() != '') {
-            $criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($this->getStartDate())), '$lte' => new \MongoDate(strtotime($this->getEndDate())));
+        if ($this->getDateRange() == \Flux\Report\BaseReport::DATE_RANGE_CUSTOM) {
+            if ($this->getStartDate() != '' && $this->getEndDate() != '') {
+                $criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($this->getStartDate())), '$lte' => new \MongoDate(strtotime($this->getEndDate())));
+            }
+        } else {
+            $base_report = new \Flux\Report\BaseReport();
+            $base_report->setDateRange($this->getDateRange());
+            $base_report->massageDates();
+            $criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($base_report->getStartTime())), '$lte' => new \MongoDate(strtotime($base_report->getEndTime())));
         }
         return parent::queryAll($criteria, $hydrate);
     }

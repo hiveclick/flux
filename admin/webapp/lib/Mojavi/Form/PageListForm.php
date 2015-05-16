@@ -198,11 +198,14 @@ class PageListForm extends Form {
         * @return integer
         */
         function getPageCount() {
-            if ($this->getTotal() % $this->getItemsPerPage() == 0) {
-                return (integer)($this->getTotal()/$this->getItemsPerPage());
-            } else {
-                return (integer)($this->getTotal()/$this->getItemsPerPage() + 1);
+            if ($this->getItemsPerPage() > 0) {
+                if ($this->getTotal() % $this->getItemsPerPage() == 0) {
+                    return (integer)($this->getTotal()/$this->getItemsPerPage());
+                } else {
+                    return (integer)($this->getTotal()/$this->getItemsPerPage() + 1);
+                }
             }
+            return 0;
         }
 
         /**

@@ -39,10 +39,10 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="bounty">Bounty</label>
+			<label class="control-label hidden-xs" for="revenue">Bounty</label>
 			<div class="input-group">
                 <div class="input-group-addon">$</div>
-                <input type="text" class="form-control" name="bounty" placeholder="Enter bounty..." value="<?php echo number_format($report_lead->getRevenue(), 2) ?>" />
+                <input type="text" class="form-control" name="revenue" placeholder="Enter bounty..." value="<?php echo number_format($report_lead->getRevenue(), 2) ?>" />
 			</div>
 		</div>
 		<div class="form-group">

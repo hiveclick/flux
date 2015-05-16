@@ -82,20 +82,20 @@ $(document).ready(function() {
 			return ret_val;
 		}},
 		{id:'lead', name:'lead', field:'lead', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+			
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '">' + value.lead_name + '</a>';
-			ret_val += '<div class="small text-muted">';
-			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
-			ret_val += '</div>';
+			ret_val += '<div class="small text-muted">' + dataContext.lead.email + '</div>';
 			ret_val += '</div>';
 			return ret_val;
 		}},
 		{id:'client', name:'client', field:'client', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
+			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
+			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">' + dataContext.client.client_name + '</a>';
+			ret_val += '<div class="small text-muted"><a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a></div>';
 			ret_val += '</div>';
 			return ret_val;
 		}},
@@ -148,6 +148,15 @@ $(document).ready(function() {
 			rowHeight: 48
 		}
 	});
+
+  	$("#txtSearch").keyup(function(e) {
+  		// clear on Esc
+  		if (e.which == 27) {
+  			this.value = "";
+  		} else if (e.which == 13) {
+  			$('#reconcile_lead_payout_search_form').trigger('submit');
+  		}
+  	});
 
 	$('#client_id_array,#disposition_array,#report_date').selectize().on('change', function(e) {
 		$('#reconcile_lead_payout_search_form').trigger('submit');

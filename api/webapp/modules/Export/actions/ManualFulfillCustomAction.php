@@ -108,6 +108,7 @@ class ManualFulfillCustomAction extends BasicRestAction
                 	        
                 	        /* @var $report_lead \Flux\ReportLead */
                 	        $report_lead = new \Flux\ReportLead();
+                	        $lead = $split_queue->getLead()->getLead();
                 	        $report_lead->setLead($lead->getId());
                 	        $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
                 	        $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
