@@ -31,9 +31,15 @@ class ReportClientAction extends BasicConsoleAction
             $client->setIgnorePagination(true);
             $clients = $client->queryAll();
             
-            $start_date = $this->getContext()->getRequest()->getParameter('start_date', date('m/d/Y', strtotime('now - 1 week')));
+            $start_date = $this->getContext()->getRequest()->getParameter('start_date', '');
             if (trim($start_date) == '') {
-                $start_date = date('m/d/Y', strtotime('now - 1 week'));
+                // If it's the first of the month, then close out the previous month, otherwise, just go off the 1st of the month
+                if (date('d') == '1') {
+                    StringTools::consoleWrite('Closing out last month first', null, StringTools::CONSOLE_COLOR_YELLOW, true);
+                    $start_date = date('m/1/Y', strtotime('last month'));   
+                } else {
+                    $start_date = date('m/1/Y');
+                }
             }
             $end_date = $this->getContext()->getRequest()->getParameter('end_date', date('m/d/Y'));
             if (trim($end_date) == '') {
