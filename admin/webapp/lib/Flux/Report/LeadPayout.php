@@ -262,7 +262,6 @@ class LeadPayout extends BaseReport {
             );
         }
         $this->massageDates();
-        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getStartTime(), true));
         $criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($this->getStartTime())), '$lte' => new \MongoDate(strtotime($this->getEndTime())));
                 
 		$ops[] = array(
@@ -331,10 +330,9 @@ class LeadPayout extends BaseReport {
 		$ops = array();
 		$criteria = array();
 		if (count($this->getClientIdArray()) > 0) {
-		    $criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+		    $criteria['_t.client.client_id'] = array('$in' => $this->getClientIdArray());
 		}
 		$this->massageDates();
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($this->getStartTime(), true));
 	    $criteria['_id'] = array('$gte' => $this->createMongoIdFromTimestamp(strtotime($this->getStartTime())), '$lte' => $this->createMongoIdFromTimestamp(strtotime($this->getEndTime())));
 	    
 	    
