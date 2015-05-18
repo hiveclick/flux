@@ -31,6 +31,14 @@ class ReportClientAction extends BasicConsoleAction
             $client->setIgnorePagination(true);
             $clients = $client->queryAll();
             
+            $id = $this->getContext()->getRequest()->getParameter('id', '');
+            if (trim($id) != '') {
+                $client = new \Flux\Client();
+                $client->setId($id);
+                $client->query();
+                $clients = array(0 => $client);
+            }
+            
             $start_date = $this->getContext()->getRequest()->getParameter('start_date', '');
             if (trim($start_date) == '') {
                 // If it's the first of the month, then close out the previous month, otherwise, just go off the 1st of the month
