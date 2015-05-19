@@ -8,6 +8,7 @@ class LeadPayout extends BaseReport {
     const GROUPING_CLIENT = 2;
     
     private $client_id_array;
+    private $offer_id_array;
     private $disposition_array;
     private $grouping;
     
@@ -17,6 +18,36 @@ class LeadPayout extends BaseReport {
     protected $pending_leads;
     protected $payout;
     protected $revenue;
+    
+    /**
+     * Returns the offer_id_array
+     * @return array
+     */
+    function getOfferIdArray() {
+        if (is_null($this->offer_id_array)) {
+            $this->offer_id_array = array();
+        }
+        return $this->offer_id_array;
+    }
+    
+    /**
+     * Sets the offer_id_array
+     * @var array
+     */
+    function setOfferIdArray($arg0) {
+        if (is_array($arg0)) {
+            $this->offer_id_array = $arg0;
+        } else if (is_string($arg0)) {
+            if (strpos($arg0, ",") !== false) {
+                $this->offer_id_array = explode(",", $arg0);
+            } else {
+                $this->offer_id_array = array($arg0);
+            }
+        }
+        array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+        $this->addModifiedColumn("offer_id_array");
+        return $this;
+    }
     
     /**
      * Returns the client_id_array
@@ -271,6 +302,8 @@ class LeadPayout extends BaseReport {
 		    '$project' => array(
                 'client_name' => '$client.client_name',
 		        'client_id' => '$client.client_id',
+		        'offer_id' => '$lead.offer.offer_id',
+		        'offer_name' => '$lead.offer.offer_name',
 		        'report_date' => '$report_date',
 		        'payout' => array('$cond' => array(array('$eq' => array('$accepted', true)), '$payout', 0)),
 		        'revenue' => array('$cond' => array(array('$eq' => array('$accepted', true)), '$revenue', 0)),
@@ -283,10 +316,13 @@ class LeadPayout extends BaseReport {
 		$ops[] = array(
 		    '$group' => array(
     		    '_id' => array(
-    		        'client_id' => '$client_id'
+    		        'client_id' => '$client_id',
+    		        'offer_id' => '$offer_id'
     		    ),
     		    'client_name' => array('$max' => '$client_name'),
     		    'client_id' => array('$max' => '$client_id'),
+		        'offer_name' => array('$max' => '$offer_name'),
+		        'offer_id' => array('$max' => '$offer_id'),
     		    'report_date' => array('$max' => '$report_date'),
     		    'accepted_leads' => array('$sum' => '$accepted_leads'),
     		    'disqualified_leads' => array('$sum' => '$disqualified_leads'),
@@ -322,6 +358,7 @@ class LeadPayout extends BaseReport {
     		foreach ($results['result'] as $result) {
     		    $result['clicks'] = 0;
     		    $result['conversions'] = 0;
+    		    $result['fulfilled'] = 0;
     		    $ret_val[] = $result;
     		}
 		}
@@ -354,6 +391,8 @@ class LeadPayout extends BaseReport {
 		    '$project' => array(
 		        'client_name' => '$_t.client.client_name',
 		        'client_id' => '$_t.client.client_id',
+		        'offer_name' => '$_t.offer.offer_name',
+		        'offer_id' => '$_t.offer.offer_id',
 		        'report_date' => '$created_time',
 		        'clicks' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME)), 1, 0)),
 		        'conversions' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME)), 1, 0)),
@@ -363,10 +402,13 @@ class LeadPayout extends BaseReport {
 		$ops[] = array(
 		    '$group' => array(
 		        '_id' => array(
-		            'client_id' => '$client_id'
+		            'client_id' => '$client_id',
+		            'offer_id' => '$offer_id'
 		        ),
 		        'client_name' => array('$max' => '$client_name'),
 		        'client_id' => array('$max' => '$client_id'),
+		        'offer_name' => array('$max' => '$offer_name'),
+		        'offer_id' => array('$max' => '$offer_id'),
 		        'report_date' => array('$max' => '$report_date'),
 		        'clicks' => array('$sum' => '$clicks'),
 		        'conversions' => array('$sum' => '$conversions'),
@@ -396,9 +438,8 @@ class LeadPayout extends BaseReport {
 		$results = $lead->getCollection()->aggregate($ops);
 		if (isset($results['result'])) {
 		    foreach ($results['result'] as $key => $result) {
-		        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($result, true));
 		        foreach ($ret_val as $key => $ret_result) {
-		            if ($ret_result['client_id'] == $result['client_id']) {
+		            if ($ret_result['client_id'] == $result['client_id'] && $ret_result['offer_id'] == $result['offer_id']) {
 		                $ret_result['clicks'] = $result['clicks'];
 		                $ret_result['conversions'] = $result['conversions'];
 		                $ret_result['fulfilled'] = $result['fulfilled'];

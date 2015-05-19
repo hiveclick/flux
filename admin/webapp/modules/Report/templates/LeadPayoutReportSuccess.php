@@ -102,6 +102,7 @@
 		</form>
 	</div>
 </div>
+<hr />
 <table class="table table-responsive table-striped">
     <thead>
         <tr>
@@ -109,6 +110,7 @@
             <th class="text-center">Clicks</th>
             <th class="text-center">Conversions</th>
             <th class="text-center">Fulfilled</th>
+            <th class="text-center">CTR</th>
             <th class="text-center">Pending</th>
             <th class="text-center">Accepted</th>
             <th class="text-center">Disqualified</th>
@@ -125,6 +127,7 @@
             <th id="total_clicks" class="text-center text-muted"></th>
             <th id="total_conversions" class="text-center text-muted"></th>
             <th id="total_fulfilled" class="text-center text-muted"></th>
+            <th id="total_ctr" class="text-center text-muted"></th>
             <th id="total_pending_leads" class="text-center text-muted"></th>
             <th id="total_accepted_leads" class="text-center text-success"></th>
             <th id="total_disqualified_leads" class="text-center text-danger"></th>
@@ -163,21 +166,59 @@ $(document).ready(function() {
     $('#lead_payout_report_search_form').form(function(data) {
   	    if (data.entries) {
             $('#report_tbody').html('');
+            var client_id = 0;
+            var client_entries = [];
+            $.each(data.entries, function(i, entry) {
+                client_found = false;
+            	$.each(client_entries, function(i, client_entry) {
+            	    if (client_entry.client_id == entry.client_id) {
+            	    	client_found = true;
+            	    	client_entry.clicks += entry.clicks;
+            	    	client_entry.conversions += entry.conversions;
+            	    	client_entry.fulfilled += entry.fulfilled;
+            	    	client_entry.accepted_leads += entry.accepted_leads;
+            	    	client_entry.disqualified_leads += entry.disqualified_leads;
+            	    	client_entry.duplicate_leads += entry.duplicate_leads;
+            	    	client_entry.pending_leads += entry.pending_leads;
+            	    	client_entry.revenue += entry.revenue;
+            	    	client_entry.payout += entry.payout;
+            	    }
+            	});
+            	if (!client_found) {
+            	    client_entries.push({
+                	    client_id: entry.client_id, 
+                	    client_name: entry.client_name,
+                	    clicks: entry.clicks,
+            	    	conversions: entry.conversions,
+            	    	fulfilled: entry.fulfilled,
+            	    	accepted_leads: entry.accepted_leads,
+            	    	disqualified_leads: entry.disqualified_leads,
+            	    	duplicate_leads: entry.duplicate_leads,
+            	    	pending_leads: entry.pending_leads,
+            	    	revenue: entry.revenue,
+            	    	payout: entry.payout
+            	    });
+            	}
+            });
+
+            $.each(client_entries, function(i, client_entry) {
+            	var tr = $('<tr />').attr('id', 'client_row_' + client_entry.client_id).appendTo($('#report_tbody'));
+                $('<td class="bg-warning" />').html(client_entry.client_name).appendTo(tr);
+                $('<td class="bg-warning text-center text-muted " />').html($.formatNumber(client_entry.clicks, {format:'#,##0'})).appendTo(tr);
+                $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.conversions, {format:'#,##0'})).appendTo(tr);
+                $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.fulfilled, {format:'#,##0'})).appendTo(tr);
+                $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.conversions / client_entry.clicks * 100, {format:'#,##0.00'}) + '%').appendTo(tr);
+                $('<td class="bg-warning text-center text-muted" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.pending_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="bg-warning text-center text-success" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.accepted_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="bg-warning text-center text-danger" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.disqualified_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="bg-warning text-center text-warning" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.duplicate_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="bg-warning text-center" />').html('$' + $.formatNumber(client_entry.revenue, {format:'#,##0.00'})).appendTo(tr);
+                $('<td class="bg-warning text-center" />').html('$' + $.formatNumber(client_entry.payout, {format:'#,##0.00'})).appendTo(tr);
+                $('<td class="bg-warning text-center" />').html($.formatNumber(((client_entry.revenue - client_entry.payout) / client_entry.revenue) * 100, {format:'#,##0.0'}) + '%').appendTo(tr);
+            });
+            
             var total_clicks = 0, total_conversions = 0, total_accepted_leads = 0, total_disqualified_leads = 0, total_duplicate_leads = 0, total_pending_leads = 0, total_revenue = 0, total_payout = 0;
             $.each(data.entries, function(i, entry) {
-                var tr = $('<tr />').appendTo($('#report_tbody'));
-                $('<td />').html(entry.client_name).appendTo(tr);
-                $('<td class="text-center text-muted" />').html($.formatNumber(entry.clicks, {format:'#,##0'})).appendTo(tr);
-                $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions, {format:'#,##0'})).appendTo(tr);
-                $('<td class="text-center text-muted" />').html($.formatNumber(entry.fulfilled, {format:'#,##0'})).appendTo(tr);
-                $('<td class="text-center text-muted" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.pending_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
-                $('<td class="text-center text-success" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.accepted_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
-                $('<td class="text-center text-danger" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.disqualified_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
-                $('<td class="text-center text-warning" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.duplicate_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
-                $('<td class="text-center" />').html('$' + $.formatNumber(entry.revenue, {format:'#,##0.00'})).appendTo(tr);
-                $('<td class="text-center" />').html('$' + $.formatNumber(entry.payout, {format:'#,##0.00'})).appendTo(tr);
-                $('<td class="text-center" />').html($.formatNumber(((entry.revenue - entry.payout) / entry.revenue) * 100, {format:'#,##0.0'}) + '%').appendTo(tr);
-
                 total_clicks += entry.clicks;
                 total_conversions += entry.conversions;
                 total_fulfilled += entry.fulfilled;
@@ -187,11 +228,26 @@ $(document).ready(function() {
                 total_pending_leads += entry.pending_leads;
                 total_revenue += entry.revenue;
                 total_payout += entry.payout;
+
+                var tr = $('<tr class="small" />').insertAfter($('#client_row_' + entry.client_id));
+                $('<td />').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + (entry.offer_name ? entry.offer_name : '<i>Offer Missing</i>')).appendTo(tr);
+                $('<td class="text-center text-muted" />').html($.formatNumber(entry.clicks, {format:'#,##0'})).appendTo(tr);
+                $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions, {format:'#,##0'})).appendTo(tr);
+                $('<td class="text-center text-muted" />').html($.formatNumber(entry.fulfilled, {format:'#,##0'})).appendTo(tr);
+                $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions / entry.clicks * 100, {format:'#,##0.00'}) + '%').appendTo(tr);
+                $('<td class="text-center text-muted" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.pending_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="text-center text-success" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.accepted_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="text-center text-danger" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.disqualified_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="text-center text-warning" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.duplicate_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
+                $('<td class="text-center" />').html('$' + $.formatNumber(entry.revenue, {format:'#,##0.00'})).appendTo(tr);
+                $('<td class="text-center" />').html('$' + $.formatNumber(entry.payout, {format:'#,##0.00'})).appendTo(tr);
+                $('<td class="text-center" />').html($.formatNumber(((entry.revenue - entry.payout) / entry.revenue) * 100, {format:'#,##0.0'}) + '%').appendTo(tr);
             });
 
             $('#total_clicks').html($.formatNumber(total_clicks, {format:'#,##0'}));
             $('#total_conversions').html($.formatNumber(total_conversions, {format:'#,##0'}));
             $('#total_fulfilled').html($.formatNumber(total_fulfilled, {format:'#,##0'}));
+            $('#total_ctr').html($.formatNumber(total_conversions / total_clicks * 100, {format:'#,##0.00'}) + '%');
             $('#total_accepted_leads').html($.formatNumber(total_accepted_leads, {format:'#,##0'}));
             $('#total_disqualified_leads').html($.formatNumber(total_disqualified_leads, {format:'#,##0'}));
             $('#total_duplicate_leads').html($.formatNumber(total_duplicate_leads, {format:'#,##0'}));

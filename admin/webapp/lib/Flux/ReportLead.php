@@ -8,6 +8,7 @@ class ReportLead extends Base\ReportLead {
     private $end_date;
     
     private $client_id_array;
+    private $offer_id_array;
     private $disposition_array;
     
     protected $day_of_year;
@@ -95,6 +96,36 @@ class ReportLead extends Base\ReportLead {
     }
     
     /**
+     * Returns the offer_id_array
+     * @return array
+     */
+    function getOfferIdArray() {
+        if (is_null($this->offer_id_array)) {
+            $this->offer_id_array = array();
+        }
+        return $this->offer_id_array;
+    }
+    
+    /**
+     * Sets the offer_id_array
+     * @var array
+     */
+    function setOfferIdArray($arg0) {
+        if (is_array($arg0)) {
+            $this->offer_id_array = $arg0;
+            array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+        } else if (is_string($arg0) || is_int($arg0)) {
+            if (strpos($arg0, ',') !== false) {
+                $this->offer_id_array = explode(",", $arg0);
+            } else {
+                $this->offer_id_array = array($arg0);
+            }
+            array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+        }
+        $this->addModifiedColumn("offer_id_array");
+    }
+    
+    /**
      * Returns the client_id_array
      * @return array
      */
@@ -175,6 +206,9 @@ class ReportLead extends Base\ReportLead {
         }
         if (count($this->getClientIdArray()) > 0) {
             $criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+        }
+        if (count($this->getOfferIdArray()) > 0) {
+            $criteria['lead.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
         }
         if ($this->getDateRange() == \Flux\Report\BaseReport::DATE_RANGE_CUSTOM) {
             if ($this->getStartDate() != '' && $this->getEndDate() != '') {

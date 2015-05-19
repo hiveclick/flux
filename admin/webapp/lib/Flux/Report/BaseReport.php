@@ -356,12 +356,14 @@ class BaseReport extends MongoForm {
 				case self::DATE_RANGE_LAST_30_DAYS:
 					$start_time = new \DateTime('30 days ago', $timezone);
 					$this->start_time = $start_time->setTime(0,0,0);
-					$this->end_time = new \DateTime('now', $timezone);
+					$end_time = new \DateTime('now', $timezone);
+					$this->end_time = $end_time->setTime(23,59,59);
 					break;
 				case self::DATE_RANGE_LAST_7_DAYS:
 					$start_time = new \DateTime('7 days ago', $timezone);
 					$this->start_time = $start_time->setTime(0,0,0);
-					$this->end_time = new \DateTime('now', $timezone);
+					$end_time = new \DateTime('now', $timezone);
+					$this->end_time = $end_time->setTime(23,59,59);
 					break;
 				case self::DATE_RANGE_THIS_WEEK:
 					$this->start_time = new \DateTime('last monday midnight', $timezone);
@@ -402,6 +404,9 @@ class BaseReport extends MongoForm {
 					$this->start_time = new \DateTime('-10 minutes', $timezone);
 					$this->end_time = new \DateTime('now', $timezone);
 					break;
+				case self::DATE_RANGE_CUSTOM:
+				    $end_time = new \DateTime($this->getEndTime());
+				    $this->end_time = $end_time->setTime(23,59,59);
 			}
 		}
 

@@ -32,6 +32,7 @@
                 <td>
                     <?php echo $lead->getLead()->getLeadName() ?>
                     <div class="small text-muted"><?php echo $lead->getLead()->getEmail() ?></div>
+                    <div class="small text-muted"><?php echo $lead->getLead()->getCampaign()->getCampaignDescription() ?></div>
                 </td>
                 <td>$<?php echo number_format($lead->getPayout(), 2, null, ',') ?></td>
                 <td>$<?php echo number_format($lead->getRevenue(), 2, null, ',') ?></td>

@@ -3,6 +3,8 @@
 	$revenue_report = $this->getContext()->getRequest()->getAttribute('revenue_report', array());
 	$report_data = $this->getContext()->getRequest()->getAttribute('report_data', array());
 ?>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart', 'controls']}]}"></script>
+
 <div class="page-header">
 	<div class="pull-right">
         <form id="revenue_report_form" name="revenue_report_form" method="GET" action="/report/revenue-report" autocomplete="off">
@@ -37,6 +39,10 @@
         <li class="list-group-item">
             <span class="badge" id="lowest_day_top"></span>
             Lowest Day
+        </li>
+        <li class="list-group-item">
+            <span class="badge" id="trending_rev_top"></span>
+            Trending Revenue
         </li>
     </ul>
 </div>
@@ -117,6 +123,38 @@
             <span class="badge" id="lowest_day"></span>
             Lowest Day
         </li>
+        <li class="list-group-item">
+            <span class="badge" id="trending_rev"></span>
+            Trending Revenue
+        </li>
+    </ul>
+    
+    <ul class="list-group">
+        <li class="list-group-item active">
+            Graphs
+        </li>
+        <li class="list-group-item">
+             <div id="network_pie_div">
+        		<!--Divs that will hold each control and chart-->
+        		<div id="network_pie_chart_div" style="width:100%;height:200px;">
+        			<div class="text-muted text-center">
+        				<span class="fa fa-spinner fa-spin"></span>
+        				Loading report data...
+        			</div>
+        		</div>
+            </div>
+        </li>
+        <li class="list-group-item">
+             <div id="daily_col_div">
+        		<!--Divs that will hold each control and chart-->
+        		<div id="daily_col_chart_div" style="width:100%;height:250px;">
+        			<div class="text-muted text-center">
+        				<span class="fa fa-spinner fa-spin"></span>
+        				Loading report data...
+        			</div>
+        		</div>
+            </div>
+        </li>
     </ul>
 </div>
 
@@ -133,6 +171,10 @@ $(document).ready(function() {
 
 	loadRevenue();
 });
+
+function initialize() {
+	
+}
 
 function loadRevenue() {
 	$.rad.get('/api', {func: '/report/report-client', start_date: '<?php echo date('m/1/Y', $revenue_report->getReportDate()->sec) ?>', end_date: '<?php echo date('m/t/Y', $revenue_report->getReportDate()->sec) ?>', ignore_pagination: '1' }, function(data) {
@@ -168,7 +210,7 @@ function loadRevenue() {
 					}
 				});
 				if (!rev_obj_found) {
-					rev_obj = {'day_of_year' : (moment.unix(item.report_date.sec).format('DDD') - 1), 'revenue': parseFloat(item.revenue) };
+					rev_obj = {'day_of_year' : (moment.unix(item.report_date.sec).format('DDD') - 1), 'day_of_month': (moment.unix(item.report_date.sec).format('D')), 'revenue': parseFloat(item.revenue) };
 					revenue_total_array.push(rev_obj);
 				}
 
@@ -193,6 +235,42 @@ function loadRevenue() {
 		});
 		$('#mtd_total_revenue,#mtd_total_revenue_top').html('$' + $.formatNumber(total_revenue, {format:"#,##0.00", locale:"us"}));
 
+		// Draw the Network Pie Graph
+	    var rev_data_pie = [['Label', 'Revenue']];
+	    $.each(revenue_array, function(i, item) {
+	    	rev_data_pie.push([item.name, {v:item.revenue, f:'$' + $.formatNumber(item.revenue, {format:"#,##0.00", locale:"us"})}]);
+	    });
+		
+	    var pie_options = {
+	      is3D: false,
+	      theme: 'maximized'
+	    };
+	    var pie_data = google.visualization.arrayToDataTable(rev_data_pie);
+	    var network_rev_chart = new google.visualization.PieChart(document.getElementById('network_pie_chart_div'));
+	    network_rev_chart.draw(pie_data, pie_options);
+
+	    // Draw the daily rev graph
+	    var daily_col_array = [['Label', 'Revenue']];
+	    revenue_total_array.sort(function(a,b) {
+	        return a.day_of_year - b.day_of_year;
+	    });
+	    var max_day_of_month = 0;
+	    $.each(revenue_total_array, function(i, item) {
+	    	daily_col_array.push([item.day_of_month, {v:item.revenue, f:'$' + $.formatNumber(item.revenue, {format:"#,##0.00", locale:"us"})}]);
+	    	max_day_of_month = item.day_of_month;
+	    });
+	    for (var i=max_day_of_month;i<<?php echo date("t", $revenue_report->getReportDate()->sec) ?>;i++) {
+	    	daily_col_array.push([i, {v:0.00, f:'$0.00'}]);
+	    }
+		
+	    var daily_col_options = {
+	      is3D: false,
+	      theme: 'maximized'
+	    };
+	    var daily_col_data = google.visualization.arrayToDataTable(daily_col_array);
+	    var daily_col_chart = new google.visualization.ColumnChart(document.getElementById('daily_col_chart_div'));
+	    daily_col_chart.draw(daily_col_data, daily_col_options);
+		
 		// Add the stats to the right
 		var low_day_item = {'day_of_year' : 0, 'revenue': 0.00 };
 		var high_day_item = {'day_of_year' : 0, 'revenue': 0.00 };
@@ -218,6 +296,7 @@ function loadRevenue() {
 		$('#highest_day,#highest_day_top').html('$' + $.formatNumber(high_day_item.revenue, {format:"#,##0.00", locale:"us"}));
 		$('#lowest_day,#lowest_day_top').html('$' + $.formatNumber(low_day_item.revenue, {format:"#,##0.00", locale:"us"}));
 		$('#average_day,#average_day_top').html('$' + $.formatNumber(avg_day_item.revenue, {format:"#,##0.00", locale:"us"}));
+		$('#trending_rev,#trending_rev_top').html('$' + $.formatNumber(avg_day_item.revenue * <?php echo date("t", $revenue_report->getReportDate()->sec) ?>, {format:"#,##0.00", locale:"us"}));
 	});
 }
 //-->

@@ -197,11 +197,17 @@ class Lead extends CommonForm {
 			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignName() == '') {
 				$this->campaign->setCampaignName((string)$this->campaign->getCampaignId());
 			}
+			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignDescription() == '') {
+			    $this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
+			}
 		} else if (is_string($arg0)) {
 			$this->campaign = $this->getCampaign();
-			$this->campaign->populate($arg0);
+			$this->campaign->setCampaignId($arg0);
 			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignName() == '') {
 				$this->campaign->setCampaignName((string)$this->campaign->getCampaignId());
+			}
+			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignDescription() == '') {
+			    $this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
 			}
 		}
 		return $this;

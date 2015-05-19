@@ -7,6 +7,7 @@ class Campaign extends CommonForm {
 	
 	protected $campaign_id;
 	protected $campaign_name;
+	protected $campaign_description;
 	
 	private $campaign;
 	
@@ -48,6 +49,27 @@ class Campaign extends CommonForm {
 	function setCampaignName($arg0) {
 		$this->campaign_name = $arg0;
 		return $this;
+	}
+	
+	/**
+	 * Returns the campaign_description
+	 * @return string
+	 */
+	function getCampaignDescription() {
+	    if (is_null($this->campaign_description)) {
+	        $this->campaign_description = "";
+	    }
+	    return $this->campaign_description;
+	}
+	
+	/**
+	 * Sets the campaign_description
+	 * @var string
+	 */
+	function setCampaignDescription($arg0) {
+	    $this->campaign_description = $arg0;
+	    $this->addModifiedColumn("campaign_description");
+	    return $this;
 	}
 	
 	/**
