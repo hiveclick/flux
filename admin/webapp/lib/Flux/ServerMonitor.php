@@ -24,6 +24,7 @@ class ServerMonitor extends CommonForm {
     protected $raid_status_core9;
     protected $raid_status_core16;
     protected $raid_status_core8;
+    protected $raid_status_core28;
     
     protected $warnings;
     
@@ -59,6 +60,9 @@ class ServerMonitor extends CommonForm {
         }
         if (strpos($this->getRaidStatusCore9(), 'degraded') !== false) {
             $this->addWarning('The RAID on Core9 is degraded.  Check the hard drives immediately!');
+        }
+        if (strpos($this->getRaidStatusCore28(), 'degraded') !== false) {
+            $this->addWarning('The RAID on Core28 is degraded.  Check the hard drives immediately!');
         }
         
         return $this;
@@ -152,6 +156,7 @@ class ServerMonitor extends CommonForm {
         $this->setRaidStatusCore9($this->discoverCoreRaidByHost('core09.jojohost.net'));
         $this->setRaidStatusCore8($this->discoverCoreRaidByHost('core08.jojohost.net'));
         $this->setRaidStatusCore16($this->discoverCoreRaidByHost('core16.jojohost.net'));
+        $this->setRaidStatusCore28($this->discoverCoreRaidByHost('core28.jojohost.net'));
         return $this;
     }
     
@@ -501,6 +506,27 @@ class ServerMonitor extends CommonForm {
     function setRaidStatusCore8($arg0) {
         $this->raid_status_core8 = $arg0;
         $this->addModifiedColumn("raid_status_core8");
+        return $this;
+    }
+    
+    /**
+     * Returns the raid_status_core8
+     * @return string
+     */
+    function getRaidStatusCore28() {
+        if (is_null($this->raid_status_core28)) {
+            $this->raid_status_core28 = "";
+        }
+        return $this->raid_status_core28;
+    }
+    
+    /**
+     * Sets the raid_status_core28
+     * @var string
+     */
+    function setRaidStatusCore28($arg0) {
+        $this->raid_status_core28 = $arg0;
+        $this->addModifiedColumn("raid_status_core28");
         return $this;
     }
     
