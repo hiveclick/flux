@@ -7,7 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo ($data_field->getId() > 0) ? 'Edit' : 'Add' ?> Data Field</h4>
 </div>
-<form id="data_field_form_<?php echo $data_field->getId() ?>" method="<?php echo ($data_field->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" role="form">
+<form id="data_field_form_<?php echo $data_field->getId() ?>" method="POST" action="/api" role="form">
 	<input type="hidden" name="func" value="/admin/data-field" />
 	<?php if ($data_field->getId() > 0) { ?>
 		<input type="hidden" name="_id" value="<?php echo $data_field->getId() ?>" />

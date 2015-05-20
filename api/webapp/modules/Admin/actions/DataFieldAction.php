@@ -29,4 +29,16 @@ class DataFieldAction extends BasicRestAction
     function getInputForm() {
         return new \Flux\DataField();
     }
+    
+    /**
+     * Executes a POST request
+     * @return \Mojavi\Form\BasicAjaxForm
+     */
+    function executePost($input_form) {
+        if ($input_form->getId() > 0) {
+            return parent::executePut($input_form);
+        } else {
+            return parent::executePost($input_form);
+        }
+    }
 }
