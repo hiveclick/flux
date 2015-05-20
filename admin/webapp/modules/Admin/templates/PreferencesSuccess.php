@@ -154,17 +154,17 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
                 <div class="row">
                     <div class="col-md-4">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><span class="<?php echo (strpos($server_monitor->getRaidStatusCore9(), 'degraded') !== false) ? 'text-danger' : 'text-success' ?>">Core 09 RAID (Main Flux Server)</span></div>
+                            <div class="panel-heading"><span class="<?php echo (strpos($server_monitor->getRaidStatusCore28(), 'degraded') !== false) ? 'text-danger' : 'text-success' ?>">Core 28 RAID (Main Flux Server)</span></div>
                             <div class="panel-body">
-                                <?php echo nl2br($server_monitor->getRaidStatusCore9()) ?>
+                                <?php echo nl2br($server_monitor->getRaidStatusCore28()) ?>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><span class="<?php echo (strpos($server_monitor->getRaidStatusCore28(), 'degraded') !== false) ? 'text-danger' : 'text-success' ?>">Core 28 RAID (Main Flux Server)</span></div>
+                            <div class="panel-heading"><span class="<?php echo (strpos($server_monitor->getRaidStatusCore9(), 'degraded') !== false) ? 'text-danger' : 'text-success' ?>">Core 09 RAID (Backup Flux Server)</span></div>
                             <div class="panel-body">
-                                <?php echo nl2br($server_monitor->getRaidStatusCore28()) ?>
+                                <?php echo nl2br($server_monitor->getRaidStatusCore9()) ?>
                             </div>
                         </div>
                     </div>

@@ -52,9 +52,6 @@ class ServerMonitor extends CommonForm {
         if ($this->getLoadCurrent() > 5) {
             $this->addWarning('The current CPU load (' . $this->getLoadCurrent() . ') is over 5, check the server!');
         }
-        if (strpos($this->getRaidStatusCore16(), 'degraded') !== false) {
-            $this->addWarning('The RAID on Core16 is degraded.  Check the hard drives immediately!');
-        }
         if (strpos($this->getRaidStatusCore8(), 'degraded') !== false) {
             $this->addWarning('The RAID on Core8 is degraded.  Check the hard drives immediately!');
         }
@@ -155,7 +152,6 @@ class ServerMonitor extends CommonForm {
     private function discoverCoreRaid($debug = false) {
         $this->setRaidStatusCore9($this->discoverCoreRaidByHost('core09.jojohost.net'));
         $this->setRaidStatusCore8($this->discoverCoreRaidByHost('core08.jojohost.net'));
-        $this->setRaidStatusCore16($this->discoverCoreRaidByHost('core16.jojohost.net'));
         $this->setRaidStatusCore28($this->discoverCoreRaidByHost('core28.jojohost.net'));
         return $this;
     }
