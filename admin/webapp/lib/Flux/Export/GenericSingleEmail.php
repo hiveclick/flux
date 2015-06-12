@@ -42,7 +42,11 @@ class GenericSingleEmail extends ExportAbstract {
 			/* @var $mapping \Flux\FulfillmentMap */
 			foreach ($params as $key => $value) {
 		        $line = '<b>' . $key . '</b>: ';
-			    $line .= ' ' . $value;
+		        if (is_array($value)) {
+		            $line .= ' ' . implode(", ", $value);
+		        } else {
+                    $line .= ' ' . $value;
+		        }
 			    $buffer[] = $line;
 			}
 			
@@ -61,6 +65,7 @@ class GenericSingleEmail extends ExportAbstract {
 				$options['connection_class'] = 'login';
 				$options['connection_config']['username'] = defined('MO_MAIL_USERNAME') ? MO_MAIL_USERNAME : '';
 				$options['connection_config']['password'] = defined('MO_MAIL_PASSWORD') ? MO_MAIL_PASSWORD : '';
+				$options['connection_config']['ssl'] = 'tls';
 			}
 			$smtp_options = new \Zend\Mail\Transport\SmtpOptions($options);
 			$transport = new \Zend\Mail\Transport\Smtp($smtp_options);

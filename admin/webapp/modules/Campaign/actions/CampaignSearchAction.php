@@ -30,13 +30,6 @@ class CampaignSearchAction extends BasicAction
 		$campaign = new \Flux\Campaign();
 		$campaign->populate($_REQUEST);
 		
-		/* @var $offer \Flux\Offer */
-		$offer = new \Flux\Offer();
-		$offer->setSort('name');
-		$offer->setSord('ASC');
-		$offer->setIgnorePagination(true);
-		$offers = $offer->queryAll();
-		
 		/* @var $vertical \Flux\Vertical */
 		$vertical = new \Flux\Vertical();
 		$vertical->setSort('name');
@@ -51,6 +44,13 @@ class CampaignSearchAction extends BasicAction
 		$client->setIgnorePagination(true);
 		$clients = $client->queryAll();
 		
+		/* @var $offer \Flux\Offer */
+		$offer = new \Flux\Offer();
+		$offer->setSort('name');
+		$offer->setSord('ASC');
+		$offer->setIgnorePagination(true);
+		$offers = $offer->queryAll();
+		
 		/* @var $traffic_source \Flux\TrafficSource */
 		$traffic_source = new \Flux\TrafficSource();
 		$traffic_source->setSort('name');
@@ -59,10 +59,10 @@ class CampaignSearchAction extends BasicAction
 		$traffic_sources = $traffic_source->queryAll();
 		
 		$this->getContext()->getRequest()->setAttribute("campaign", $campaign);
-		$this->getContext()->getRequest()->setAttribute("offers", $offers);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("traffic_sources", $traffic_sources);
 		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
+		$this->getContext()->getRequest()->setAttribute("offers", $offers);
 		return View::SUCCESS;
 	}
 }

@@ -1,10 +1,10 @@
 <?php
 	/* @var $campaign \Flux\Campaign */
 	$campaign = $this->getContext()->getRequest()->getAttribute("campaign", array());
-	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 	$clients = $this->getContext()->getRequest()->getAttribute("clients", array());
 	$traffic_sources = $this->getContext()->getRequest()->getAttribute("traffic_sources", array());
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
+	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
 <div class="page-header">
 	<div class="pull-right">
@@ -54,14 +54,7 @@
 					</select>
 				</div>
 				<div class="form-group text-left">
-					<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source">
-						<?php
-							/* @var $traffic_source \Flux\TrafficSource */ 
-							foreach ($traffic_sources as $traffic_source) { 
-						?>
-							<option value="<?php echo $traffic_source->getId() ?>" <?php echo in_array($traffic_source->getId(), $campaign->getTrafficSourceIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('name' => $traffic_source->getName(), 'description' => $traffic_source->getDescription(), 'icon' => $traffic_source->getIcon(), 'username' => $traffic_source->getUsername()))) ?>"><?php echo $traffic_source->getName() ?></option>
-						<?php } ?>
-					</select>
+					<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source"></select>
 				</div>
 				<div class="form-group text-left">
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="<?php echo $campaign->getKeywords() ?>" />
@@ -188,6 +181,11 @@ $(document).ready(function() {
 		allowEmptyOption: true,
 		labelField: 'name',
 		searchField: ['name'],
+		options: [
+		    <?php foreach ($offers as $offer) { ?>
+		    <?php echo json_encode($offer->toArray()) ?>,
+		    <?php } ?>
+		],
 		optgroups: [
 		    <?php foreach ($verticals as $vertical) { ?>
 		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
@@ -218,37 +216,22 @@ $(document).ready(function() {
 	});
 
 	// Preload the offers
-	$('#offer_id_array').selectize()[0].selectize.load(function (callback) {
-        $.ajax({
-        	url: '/api',
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                func: '/offer/offer',
-                ignore_pagination: true,
-                sort: 'name',
-                sord: 'asc'
-            },
-            error: function() {
-                callback();
-            },
-            success: function(res) {
-                callback(res.entries);
-                <?php foreach ($campaign->getOfferIdArray() as $offer_id) { ?>
-                $('#offer_id_array').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
-            	<?php } ?>
-            }
-        });
-    });
+	<?php foreach ($campaign->getOfferIdArray() as $offer_id) { ?>
+    $('#offer_id_array').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
+	<?php } ?>
 
 	$('#traffic_source_id_array').selectize({
     	allowEmptyOption: true,
     	dropdownWidthOffset: 200,
-    	valueField: 'value',
+    	valueField: '_id',
 		labelField: 'name',
 		searchField: ['name', 'description'],
+		options: [
+		    <?php foreach ($traffic_sources as $traffic_source) { ?>
+		    <?php echo json_encode($traffic_source->toArray()) ?>,
+		    <?php } ?>
+		],
 		render: {
-			
 			option: function(item, escape) {
 				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
 				ret_val += '<img class="media-object img-thumbnail" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />';
@@ -263,6 +246,11 @@ $(document).ready(function() {
     }).on('change', function(e) {
     	$('#campaign_search_form').trigger('submit');
     });
+
+	// Preload the traffic sources
+	<?php foreach ($campaign->getTrafficSourceIdArray() as $traffic_source_id) { ?>
+    $('#traffic_source_id_array').selectize()[0].selectize.addItem(<?php echo $traffic_source_id ?>);
+	<?php } ?>
 
     $('#save_search_btn').on('click', function() {
         $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>&query_string=' + encodeURIComponent($('#campaign_search_form').serialize()));

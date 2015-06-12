@@ -4,6 +4,8 @@
 	
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
+	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
+	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
 <div class="page-header">
     <div class="pull-right">
@@ -186,6 +188,11 @@ $(document).ready(function() {
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,
+		options: [
+            <?php foreach ($data_fields as $data_field) { ?>
+                <?php echo json_encode($data_field->toArray()) ?>,
+            <?php } ?>		
+		],
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;            
@@ -208,36 +215,21 @@ $(document).ready(function() {
 			}
 		}
 	});
-
-	$('#required_fields','#lead_search_form').selectize()[0].selectize.load(function (callback) {
-        $.ajax({
-        	url: '/api',
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                func: '/admin/data-field',
-                ignore_pagination: true,
-                sort: 'name',
-                sord: 'asc',
-                storage_type_array: [ <?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>,<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT ?>, <?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>]
-            },
-            error: function() {
-                callback();
-            },
-            success: function(res) {
-                callback(res.entries);
-                <?php foreach ($lead->getRequiredFields() as $required_field) { ?>
-                $('#required_fields','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $required_field ?>');
-            	<?php } ?>
-            }
-        });
-    });
+    // Preload any required fields from a saved search
+	<?php foreach ($lead->getRequiredFields() as $required_field) { ?>
+    $('#required_fields','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $required_field ?>');
+	<?php } ?>	
 
 	$('#offer_id_array','#lead_search_form').selectize({
     	valueField: '_id',
 		allowEmptyOption: true,
 		labelField: 'name',
 		searchField: ['name'],
+		options: [
+		   <?php foreach ($offers as $offer) { ?>
+		    <?php echo json_encode($offer->toArray()) ?>,
+		   <?php } ?>
+		],
 		optgroups: [
 		    <?php foreach ($verticals as $vertical) { ?>
 		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
@@ -265,6 +257,12 @@ $(document).ready(function() {
 		}
 	});
 
+	// Preload any offers from a saved search
+	<?php foreach ($lead->getOfferIdArray() as $offer_id) { ?>
+    $('#offer_id_array','#lead_search_form').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
+	<?php } ?>
+	
+    /*
 	$('#offer_id_array','#lead_search_form').selectize()[0].selectize.load(function (callback) {
         $.ajax({
         	url: '/api',
@@ -287,12 +285,18 @@ $(document).ready(function() {
             }
         });
     });
+    */
 
 	$('#campaign_id_array','#lead_search_form').selectize({
 		valueField: '_id',
 		labelField: 'description',
 		searchField: ['client.client_name', 'description', '_id', 'offer.offer_name'],
 		dropdownWidthOffset: 150,
+		options: [
+		   <?php foreach ($campaigns as $campaign) { ?>
+		    <?php echo json_encode($campaign->toArray()) ?>,
+		   <?php } ?>
+		],
 		render: {
 			item: function(item, escape) {
 	            return '<div class="item">' + escape(item._id) + '</div>';
@@ -311,7 +315,13 @@ $(document).ready(function() {
 		}
 	});
 
+	// Preload any saved campaigns from a saved search
+	<?php foreach ($lead->getCampaignIdArray() as $campaign_id) { ?>
+    $('#campaign_id_array','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $campaign_id ?>');
+	<?php } ?>
+
 	// Preload the campaigns
+	/*
 	$('#campaign_id_array','#lead_search_form').selectize()[0].selectize.load(function (callback) {
         $.ajax({
         	url: '/api',
@@ -334,6 +344,8 @@ $(document).ready(function() {
             }
         });
     });
+    */
+	
 
 	$('#save_search_btn').on('click', function() {
         $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>&query_string=' + encodeURIComponent($('#lead_search_form').serialize()));

@@ -160,6 +160,11 @@ $(document).ready(function() {
 		allowEmptyOption: true,
 		labelField: 'name',
 		searchField: ['name','description'],
+		options: [
+            <?php foreach ($verticals as $vertical) { ?>
+                <?php echo json_encode($vertical->toArray()) ?>,
+            <?php } ?>	
+	    ],
 		render: {
 			item: function(item, escape) {
 				return '<div>' + escape(item.name) + '</div>';
@@ -177,28 +182,9 @@ $(document).ready(function() {
     });
 
     // Preload the verticals
-	$('#vertical_id_array').selectize()[0].selectize.load(function (callback) {
-        $.ajax({
-        	url: '/api',
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                func: '/admin/vertical',
-                ignore_pagination: true,
-                sort: 'name',
-                sord: 'asc'
-            },
-            error: function() {
-                callback();
-            },
-            success: function(res) {
-                callback(res.entries);
-                <?php foreach ($offer->getVerticalIdArray() as $vertical_id) { ?>
-                $('#vertical_id_array').selectize()[0].selectize.addItem('<?php echo $vertical_id ?>');
-            	<?php } ?>
-            }
-        });
-    });
+    <?php foreach ($offer->getVerticalIdArray() as $vertical_id) { ?>
+    $('#vertical_id_array').selectize()[0].selectize.addItem('<?php echo $vertical_id ?>');
+	<?php } ?>
 	
 	$('#client_id_array').selectize({
 		allowEmptyOption: true,

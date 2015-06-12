@@ -15,7 +15,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+        <script src="/scripts/jquery-ui.min.js"></script>
 
         <!-- Font Awesome library -->
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -53,9 +53,6 @@
         <!-- Selectize plugin for select boxes and comma-delimited fields -->
         <link href="/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" type="text/css" />
         <script src="/scripts/selectize/js/standalone/selectize.min.js" type="text/javascript"></script>
-        
-        <!-- CKeditor WYSIWYG editor -->
-        <script src="/scripts/ckeditor/ckeditor.js"></script>
 
         <!-- Bootstrap dropdown plugin -->
 		<script src="/scripts/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>

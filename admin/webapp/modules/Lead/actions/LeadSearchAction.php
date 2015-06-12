@@ -45,26 +45,25 @@ class LeadSearchAction extends BasicAction
 		$verticals = $vertical->queryAll();
 		
 		/* @var $offer \Flux\Offer */
-		/*
+		
 		$offer = new \Flux\Offer();
 		$offer->setSort('name');
 		$offer->setSord('asc');
 		$offer->setIgnorePagination(true);
 		$offers = $offer->queryAll();
-		*/
+		
 		
 		/* @var $campaign \Flux\Campaign */
-		/*
 		$campaign = new \Flux\Campaign();
 		$campaign->setSort('_id');
 		$campaign->setSord('desc');
 		$campaign->setItemsPerPage(100);
 		$campaigns = $campaign->queryAll();
-		*/
+		
 
 		$this->getContext()->getRequest()->setAttribute("lead", $lead);
-		//$this->getContext()->getRequest()->setAttribute("offers", $offers);
-		//$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
+		$this->getContext()->getRequest()->setAttribute("offers", $offers);
+		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
 		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);
 		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);
 		return View::SUCCESS;

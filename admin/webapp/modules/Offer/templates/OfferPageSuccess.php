@@ -3,6 +3,8 @@
 	$offer_page = $this->getContext()->getRequest()->getAttribute("offer_page", array());
 	$servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 ?>
+<!-- CKeditor WYSIWYG editor -->
+<script src="/scripts/ckeditor/ckeditor.js"></script>
 <div class="page-header">
 	<!-- Actions -->
 	<div class="pull-right">

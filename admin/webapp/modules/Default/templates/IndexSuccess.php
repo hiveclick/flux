@@ -3,8 +3,6 @@
     $today_revenue = $this->getContext()->getRequest()->getAttribute('today_revenue', 0);
     $yesterday_revenue = $this->getContext()->getRequest()->getAttribute('yesterday_revenue', 0);
     $monthly_revenue = $this->getContext()->getRequest()->getAttribute('monthly_revenue', 0);
-    $graph_click_by_hour = $this->getContext()->getRequest()->getAttribute('graph_click_by_hour', array());
-    $graph_conversion_by_hour = $this->getContext()->getRequest()->getAttribute('graph_conversion_by_hour', array());
 ?>
 
 <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart', 'controls']}]}"></script>
