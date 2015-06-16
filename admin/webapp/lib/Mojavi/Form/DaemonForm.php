@@ -5,11 +5,12 @@
  */
 namespace Mojavi\Form;
 
-use Flux\Daemon as DaemonDocument;
+use Rdm\Daemon as DaemonDocument;
 
 class DaemonForm extends MojaviForm {
 
     protected $jobsStarted = 0;
+    protected $primaryThreads = array();
     protected $max_seconds_before_kill = 1800;
     protected $seconds_between_job_check = 2;
     protected $default_end_job_wait = 10;
@@ -72,6 +73,8 @@ class DaemonForm extends MojaviForm {
      */
     public function start() {
         //trying to start daemon, make sure it isn't already started
+        $this->log('*****************************', array($this->pid));
+        $this->log('Attempting to start new daemon for ' . $this->daemon_class->getType(), array($this->pid));
         $ret_val = $this->daemon_class->findAndModify(
             array('type' => $this->daemon_class->getType(), 'run_status' => DaemonDocument::DAEMON_RUN_STATUS_INACTIVE),
             array('$set' => array('run_status' => DaemonDocument::DAEMON_RUN_STATUS_ACTIVE)),
@@ -82,6 +85,7 @@ class DaemonForm extends MojaviForm {
             $pid_control = pcntl_fork();
             $this->pid = getmypid();
             if ($pid_control === -1) {
+            	$this->log('Daemon UNSUCCESSFULLY started', array($this->pid));
                 $this->log('Launch fork error', array($this->pid));
                 return false;
             } elseif ($pid_control > 0) {
@@ -89,6 +93,7 @@ class DaemonForm extends MojaviForm {
                 $this->daemon_class->setPid($pid_control);
                 $this->daemon_class->setStartTime(new \MongoDate());
                 $this->daemon_class->update();
+                $this->log('Daemon SUCCESSFULLY started with PID ' . $pid_control, array($this->pid));
                 return true;
             } else {
                 //Child process
@@ -98,14 +103,25 @@ class DaemonForm extends MojaviForm {
                 $this->run();
             }
         } else {
-            $out = shell_exec('ps ' . $this->daemon_class->getPid() . ' | wc -l');
-            if($out >= 2) {
-                $this->log('Daemon already running...', array($this->pid));
+            if ($this->daemon_class->getPid() !== null && $this->daemon_class->getPid() != '') {
+                $out = shell_exec('ps ' . $this->daemon_class->getPid() . ' | wc -l');
+                if($out >= 2) {
+                    $this->log('Daemon ' . $this->daemon_class->getType() . ' already running...', array($this->pid));
+                } else {
+                    $this->log('Daemon ' . $this->daemon_class->getType() . ' crashed, resetting...', array($this->pid));
+                    $this->daemon_class->setPid(null);
+                    $this->daemon_class->setRunStatus(DaemonDocument::DAEMON_RUN_STATUS_INACTIVE);
+                    $this->daemon_class->update();
+                    sleep(1);
+                    $this->start();
+                }
             } else {
-                $this->log('Daemon crashed, resetting...', array($this->pid));
+                $this->log('Daemon ' . $this->daemon_class->getType() . ' crashed with null pid, resetting...', array($this->pid));
                 $this->daemon_class->setPid(null);
                 $this->daemon_class->setRunStatus(DaemonDocument::DAEMON_RUN_STATUS_INACTIVE);
                 $this->daemon_class->update();
+                sleep(1);
+                $this->start();
             }
             return false;
         }
@@ -116,8 +132,10 @@ class DaemonForm extends MojaviForm {
      * @return boolean
      */
     public function stop() {
-        if(strlen($this->daemon_class->getPid()) > 0) {
-            $this->log('Stopping...', array($this->pid));
+    	$this->log('*****************************', array($this->pid));
+    	$this->log('Attempting to stop ' . $this->daemon_class->getName(), array($this->pid));
+        if (intval($this->daemon_class->getPid()) > 0) {
+            $this->log('Stopping (' . $this->daemon_class->getPid() . ')...', array($this->pid));
             exec('kill -s ' . SIGTERM . ' ' . $this->daemon_class->getPid());
 
             $going = $this->status(false);
@@ -162,7 +180,7 @@ class DaemonForm extends MojaviForm {
      * @return boolean
      */
     public function status($verbose = true) {
-        if(strlen($this->daemon_class->getPid()) > 0) {
+        if (intval($this->daemon_class->getPid()) > 0) {
             $out = shell_exec('ps ' . $this->daemon_class->getPid() . ' | wc -l');
             if($out >= 2) {
                 if ($verbose) {
@@ -186,7 +204,12 @@ class DaemonForm extends MojaviForm {
             while (count($this->currentJobs) >= $this->max_threads) {
                 sleep($this->seconds_between_job_check);
             }
-            $launched = $this->launchJob();
+            if (count($this->primaryThreads) == 0) {
+            	$launched = $this->launchJob(true);
+            } else {
+            	$launched = $this->launchJob();
+            }
+            
             if($launched === false) {
                 //means one of the children didn't fork appropriately
                 //not sure if that means we should kill the parent or not, for now we'll just do nothing
@@ -199,7 +222,7 @@ class DaemonForm extends MojaviForm {
      * Starts a new job and handles forking
      * @return boolean
      */
-    protected function launchJob() {
+    protected function launchJob($is_primary_thread = false) {
         $pid_control = pcntl_fork();
         $this->pid = getmypid();
         if ($pid_control === -1) {
@@ -208,18 +231,28 @@ class DaemonForm extends MojaviForm {
         } elseif ($pid_control > 0) {
             //Parent process
             $this->currentJobs[$pid_control] = 1;
-
+            if (count($this->primaryThreads) == 0) {
+            	$this->primaryThreads[$pid_control] = 1;
+            }
             if (isset($this->signalQueue[$pid_control])) {
                 $this->childSignalHandler(SIGCHLD, $pid_control, $this->signalQueue[$pid_control]);
                 unset($this->signalQueue[$pid_control]);
             }
+            // Update the last spawn time
+            $this->daemon_class->findAndModify(
+                array('type' => $this->daemon_class->getType(), 'run_status' => DaemonDocument::DAEMON_RUN_STATUS_ACTIVE),
+                array('$set' => array('last_run' => new \MongoDate())),
+                null,
+                array('new' => true)
+            );
         } else {
             //Child process
             $daemon_class_name = $this->daemon_class->getClassName();
             $daemon = new $daemon_class_name();
+            if ($is_primary_thread) { $daemon->setPrimaryThread(true); }
             $workDone = $daemon->runOne();
             if ($workDone === true) {
-                sleep(1);
+                //sleep(1);
             } elseif(is_int($workDone)) {
                 sleep($workDone);
             } else {
@@ -249,6 +282,9 @@ class DaemonForm extends MojaviForm {
                     $this->log($pid . ' exited with status ' . $exitCode, array($pid));
                 }
                 unset($this->currentJobs[$pid]);
+                if (isset($this->primaryThreads[$pid])) {
+                	unset($this->primaryThreads[$pid]);	
+                }
             } elseif ($pid) {
                 $this->signalQueue[$pid] = $status;
             }
@@ -268,6 +304,7 @@ class DaemonForm extends MojaviForm {
             $this->log('Waiting for children to exit (' . count($this->currentJobs) . ' remain)', array($this->pid));
             pcntl_waitpid($pid, $status);
             unset($this->currentJobs[$pid]);
+            if (isset($this->primaryThreads[$pid])) { unset($this->primaryThreads[$pid]); }
         }
         $this->log('Daemon stopped', array($this->pid));
         exit;
