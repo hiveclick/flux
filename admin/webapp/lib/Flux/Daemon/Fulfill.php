@@ -8,37 +8,98 @@ class Fulfill extends BaseDaemon
 		$queue_item = $this->getNextQueueItem();
 		if ($queue_item instanceof \Flux\SplitQueue) {
 			if ($queue_item->getSplit()->getSplit()->getScheduling()->isValid()) {
-			
-				$this->log('Fulfilling Queue item ' . $queue_item->getId(), array($this->pid, $queue_item->getId()));
-				
-				// Create the fulfillment handler
-				/* @var $fulfillment \Flux\Fulfillment */
-				$fulfillment = $queue_item->getSplit()->getSplit()->getFulfillment()->getFulfillment();
-				$results = $fulfillment->sendLeads(array($queue_item->getLead()->getLead()));
-				
-				/* @var $result \Flux\ExportQueue */
-				foreach ($results as $result) {
-					if ($result->getIsError()) {
-						$queue_item->setIsError(true);
-						$queue_item->setErrorMessage($result->getResponse());
-						$queue_item->setIsFulfilled(false);
-						$queue_item->setIsProcessing(false);
-						$queue_item->setLastAttemptTime(new \MongoDate());
-						$queue_item->setAttemptCount($queue_item->getAttemptCount() + 1);
-						$queue_item->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
-						// If this item failed, then send an email according to the split
-						
-						
-					} else {
-						$queue_item->setIsFulfilled(true);
-						$queue_item->setLastAttemptTime(new \MongoDate());
-						$queue_item->setIsProcessing(false);
-					}
-				}
-				
-				$queue_item->update();
-	
-				return true;
+			    if ($queue_item->getSplit()->getSplit()->getFulfillImmediately()) {
+    				$this->log('Fulfilling Queue item ' . $queue_item->getId(), array($this->pid, $queue_item->getId()));
+    				
+    				// Create the fulfillment handler
+    				/* @var $fulfillment \Flux\Fulfillment */
+    				$fulfillment = $queue_item->getSplit()->getSplit()->getFulfillment()->getFulfillment();
+    				 
+    				/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+    				$split_queue_attempt = new \Flux\SplitQueueAttempt();
+    				$split_queue_attempt->setSplitQueue($queue_item->getId());
+    				$split_queue_attempt->setFulfillment($fulfillment->getId());
+    				$split_queue_attempt->setAttemptTime(new \MongoDate());
+    				
+    				if ($queue_item->getIsFulfilled()) {
+    				    // The lead has already been fulfilled, so don't allow it to be fulfilled again
+    				    /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+    				    $split_queue_attempt = new \Flux\SplitQueueAttempt();
+    				    $split_queue_attempt->setSplitQueue($queue_item->getId());
+    				    $split_queue_attempt->setFulfillment($fulfillment->getId());
+    				    $split_queue_attempt->setAttemptTime(new \MongoDate());
+    				    $split_queue_attempt->setIsError(false);
+    				    $split_queue_attempt->setResponse('Already Fulfilled');
+    				    $queue_item->addAttempt($split_queue_attempt);
+    				    $queue_item->setDisposition(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED);
+    				    $queue_item->setErrorMessage('Already Fulfilled');
+    				} else {
+    				    $results = $fulfillment->queueLead($split_queue_attempt);
+    				     
+    				    /* @var $result \Flux\SplitQueueAttempt */
+    				    foreach ($results as $key => $result) {
+    				        // Save the split queue attempts back to the split queue item
+    				        $queue_item->addAttempt($result);
+    				         
+    				        $queue_item->setDebug($result->getRequest());
+    				        $queue_item->setLastAttemptTime(new \MongoDate());
+    				        $queue_item->setIsProcessing(false);
+    				         
+    				        if ($result->getIsError()) {
+    				            $queue_item->setIsError(true);
+    				            $queue_item->setErrorMessage($result->getResponse());
+    				            $queue_item->setIsFulfilled(false);
+    				            $queue_item->setAttemptCount($queue_item->getAttemptCount() + 1);
+    				            $queue_item->setNextAttemptTime(new \MongoDate(strtotime('now + 1 hour')));
+    				            $queue_item->setDisposition(\Flux\SplitQueue::DISPOSITION_PENDING);
+    				             
+    				            /* @var $report_lead \Flux\ReportLead */
+    				            $report_lead = new \Flux\ReportLead();
+    				            $lead = $queue_item->getLead()->getLead();
+    				            $report_lead->setLead($lead->getId());
+    				            $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+    				            $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
+    				            $report_lead->setRevenue(0.00);
+    				            $report_lead->setPayout(0.00);
+    				            $report_lead->setReportDate(new \MongoDate());
+    				            $report_lead->insert();
+    				            $this->log('Lead found [' . $queue_item->getSplit()->getSplitName() . ']: ' . $queue_item->getId() . ', ALREADY FULFILLED', array($this->pid, $queue_item->getId()));
+    				        } else {
+    				            $queue_item->setIsFulfilled(true);
+    				            $queue_item->setIsError(false);
+    				            $queue_item->setErrorMessage('');
+    				            $queue_item->setDisposition(\Flux\SplitQueue::DISPOSITION_FULFILLED);
+    				             
+    				            // Add a fulfilled event to the lead
+    				            /* @var $lead \Flux\Lead */
+    				            $lead = $queue_item->getLead()->getLead();
+    				            $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
+    				            $lead->update();
+    				             
+    				            // Add/Update the lead reporting
+    				            /* @var $report_lead \Flux\ReportLead */
+    				            $report_lead = new \Flux\ReportLead();
+    				            $report_lead->setLead($lead->getId());
+    				            $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+    				            $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
+    				            $report_lead->setRevenue($fulfillment->getBounty());
+    				            if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
+    				                $report_lead->setPayout($lead->getTracking()->getCampaign()->getCampaign()->getPayout());
+    				            } else {
+    				                $report_lead->setPayout($lead->getTracking()->getOffer()->getOffer()->getPayout());
+    				            }
+    				            $report_lead->setReportDate(new \MongoDate());
+    				            $report_lead->setAccepted(true);
+    				            $report_lead->insert();
+    				            $this->log('Lead found [' . $queue_item->getSplit()->getSplitName() . ']: ' . $queue_item->getId() . ', FULFILLED', array($this->pid, $queue_item->getId()));
+    				        }
+    				    }
+    				}
+    				 
+    				$queue_item->update();
+    				
+    				return true;
+			    }
 			} else {
 				$this->log('Cannot Fulfill Queue item ' . $queue_item->getId() . ' because the split schedule is not valid', array($this->pid, $queue_item->getId()));
 				$queue_item->setErrorMessage('Fulfillment Schedule is closed');
@@ -67,9 +128,10 @@ class Fulfill extends BaseDaemon
 		// Find active splits with no pid, set the pid, and return the split
 		$split_queue_item = $split_queue->findAndModify(
 			array(
-				'is_fulfilled' => false,
 				'next_attempt_time' => array('$lt' => new \MongoDate()),
 				'is_processing' => false,
+			    'is_catch_all' => false,
+			    'disposition' => 0,
 				'attempt_count' => array('$lte' => 5)
 			),
 			array('$set' => array(

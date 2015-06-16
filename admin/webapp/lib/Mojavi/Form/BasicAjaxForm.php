@@ -107,7 +107,7 @@ class BasicAjaxForm extends CommonForm {
      * Override default toArray functionality so we don't add too much to the request
      * @param boolean $deep
      */
-    function toArray($deep = false) {
+    function toArray($deep = false, $use_null_for_blank = true) {
         $ret_val = array();
         $ret_val['result'] = $this->getResult();
         $ret_val['errors'] = $this->getErrors()->toArray();

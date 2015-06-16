@@ -34,30 +34,33 @@ class MojaviForm extends MojaviObject {
             // Attempt to populate the form
             foreach ($arg0 as $key => $value) {
                 $callableName = null;
+                $entry = str_replace("_", "", $key);
                 if (is_array($value)) {
                     /*
                     * If this is an array, then we need to add all the elements, so first check for an
                     * add***($arg0) function.  If it does not exist, then fallback to a set***($arg0)
                     */
                     # The regex will change '_a' to 'A' or '_1' to '1'
-                    $entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
+                    //$entry = str_replace("_", "", $key);
                     
-                    if (is_callable(array($this, 'add' . ucfirst($entry)),false, $callableName)) {
+                    //$entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
+                    
+                    if (is_callable(array($this, 'add' . $entry),false, $callableName)) {
                         foreach ($value as $key2 => $value1) {
-                            $this->{'add' . ucfirst($entry)}($value1, $key2);
+                            $this->{'add' . $entry}($value1, $key2);
                         }
                     } else {
                         # The regex will change '_a' to 'A' or '_1' to '1'
-                        $entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
-                        if (is_callable(array($this, 'set' . ucfirst($entry)),false, $callableName)) {
-                            $this->{'set' . ucfirst($entry)}($value);
+                        //$entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
+                        if (is_callable(array($this, 'set' . $entry),false, $callableName)) {
+                            $this->{'set' . $entry}($value);
                         }
                     }
                 } else {
                     # The regex will change '_a' to 'A' or '_1' to '1'
-                    $entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
-                    if (is_callable(array($this, 'set' . ucfirst($entry)),false, $callableName)) {
-                        $this->{'set' . ucfirst($entry)}($value);
+                    //$entry = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, strtolower($key));
+                    if (is_callable(array($this, 'set' . $entry),false, $callableName)) {
+                        $this->{'set' . $entry}($value);
                     }
                 }
             }
@@ -66,7 +69,7 @@ class MojaviForm extends MojaviObject {
             $reflection = new ReflectionClass($arg0);
             $properties = $reflection->getProperties(ReflectionProperty::IS_PROTECTED);
             foreach ($properties as $property) {
-                $method_name = ucfirst(StringTools::camelCase($property->getName()));
+                $method_name = str_replace("_", "", $property->getName());
                 if (method_exists($arg0, 'get' . $method_name)) {
                     $value = $arg0->{'get' . $method_name}();
                     # if this form has a setter that matches this getter (i.e. setId() would match getId()), then set it
@@ -199,38 +202,49 @@ class MojaviForm extends MojaviObject {
      * Converts this object to an array
      * @return array
      */
-    function toArray($deep = false) {
+    function toArray($deep = false, $use_null_for_blank = true) {
         $ret_val = array();
-        $reflection = new ReflectionClass($this);
-        $properties = $reflection->getProperties(ReflectionProperty::IS_PROTECTED);
+        $reflection = new \ReflectionClass($this);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PROTECTED);
         foreach ($properties as $property) {
-            if (method_exists($this, 'get' . ucfirst(StringTools::camelCase($property->getName())))) {
-                $value = $this->{'get' . ucfirst(StringTools::camelCase($property->getName()))}();
-                if ($value instanceof MojaviForm) {
-                    $ret_val[$property->getName()] = $value->toArray($deep);
+            $property_name = $property->getName();
+            $method_name = 'get' . str_replace("_", "", $property_name);
+            if ($reflection->hasMethod($method_name)) {
+                $value = $this->$method_name();
+            	if (is_string($value) && $use_null_for_blank && trim($value) == '') { $value = null; }
+            	if (strtolower($method_name) == 'getid') {
+                	$ret_val['_id'] = (string)$value;
+                	$ret_val[$property_name] = (string)$value;
+                } else if (is_null($value)) {
+                    $ret_val[$property_name] = $value;
+                } else if ($value instanceof \Mojavi\Form\MojaviForm) {
+                    $ret_val[$property_name] = $value->toArray($deep, $use_null_for_blank);
                 } else if ($value instanceof \MongoId) {
-                    $ret_val[$property->getName()] = (string)$value;
-                } else if ($value instanceof DatabaseResultResource) {
+                    $ret_val[$property_name] = (string)$value;
+                } else if ($value instanceof \Mojavi\Database\DatabaseResultResource) {
                     foreach ($value as $item) {
-                        $ret_val[$property->getName()][] = $item->toArray();
+                        $ret_val[$property_name][] = $item->toArray($deep, $use_null_for_blank);
                     }
                 } else if (is_array($value)) {
                 	if (count($value) > 0) {
 	                    foreach ($value as $key => $item) {
-	                    	if ($item instanceof MojaviForm) {
-	                        	$ret_val[$property->getName()][$key] = $item->toArray();
+	                    	if ($item instanceof \Mojavi\Form\MojaviForm) {
+	                        	$ret_val[$property_name][$key] = $item->toArray($deep, $use_null_for_blank);
 	                    	} else {
-	                    		$ret_val[$property->getName()][$key] = $item;
+	                    		if ($use_null_for_blank && is_string($item) && trim($item) == '') { $item = null; }
+	                    		$ret_val[$property_name][$key] = $item;
 	                    	}
 	                    }
                 	} else {
-                		$ret_val[$property->getName()] = $value;
+                		 $ret_val[$property_name] = $value;
                 	}
                 } else {
-                    $ret_val[$property->getName()] = $value;
+                    $ret_val[$property_name] = $value;
                 }
             } else {
-                $ret_val[$property->getName()] = $this->{$property->getName()};
+            	$value = $this->$property_name;
+            	if ($use_null_for_blank && is_string($value) && trim($value) == '') { $value = null; }
+                $ret_val[$property_name] = $value;
             }
         }
         return $ret_val;

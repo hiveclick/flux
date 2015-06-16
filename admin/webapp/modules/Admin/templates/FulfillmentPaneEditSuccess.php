@@ -121,12 +121,12 @@
 					</div>
 					<div class="help-block">Enter the FORM POST url below.  You can retrieve this from viewing the source of the landing page</div>
 					<div class="form-group">
-						<label class="control-label" for="post_url">Post URL</label>
-						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
+						<label class="control-label" for="form_post_url">Post URL</label>
+						<textarea name="form_post_url" id="form_post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="post_url">Response success text</label>
-						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
+						<label class="control-label" for="form_success_msg">Response success text</label>
+						<textarea name="form_success_msg" id="form_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
 					</div>
 				</div>
 				

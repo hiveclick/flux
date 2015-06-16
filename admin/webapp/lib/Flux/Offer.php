@@ -238,8 +238,12 @@ class Offer extends Base\Offer {
 	        $campaign->setDescription('Default campaign for ' . $this->getName());
 	        // Find the main landing page
 	        $landing_pages = $this->getLandingPages();
-	        $landing_page = array_shift($landing_pages);
-	        $campaign->setRedirectLink($landing_page->getUrl() . '?_id=#_id#');
+	        if (count($landing_pages) > 0) {
+    	        $landing_page = array_shift($landing_pages);
+    	        if (!is_null($landing_page)) {
+    	           $campaign->setRedirectLink($landing_page->getUrl() . '?_id=#_id#');
+    	        }
+	        }
 	        $campaign_id = $campaign->insert();
 	        
 	        // Assign this new campaign to this offer

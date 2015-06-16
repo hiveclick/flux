@@ -34,8 +34,7 @@ class LeadSearchAction extends BasicAction
 		$data_field->setSort('name');
 		$data_field->setSord('asc');
 		$data_field->setIgnorePagination(true);
-		$data_fields = $data_field->queryAll();
-		
+		$data_fields = $data_field->queryAll();		
 		
 		/* @var $vertical \Flux\Vertical */
 		$vertical = new \Flux\Vertical();
@@ -45,7 +44,6 @@ class LeadSearchAction extends BasicAction
 		$verticals = $vertical->queryAll();
 		
 		/* @var $offer \Flux\Offer */
-		
 		$offer = new \Flux\Offer();
 		$offer->setSort('name');
 		$offer->setSord('asc');

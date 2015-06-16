@@ -1,5 +1,6 @@
 <?php
 try {
+        $start_time = microtime(true);
     // +---------------------------------------------------------------------------+
     // | Set Error Handling prepend and append strings                             |
     // +---------------------------------------------------------------------------+
@@ -29,6 +30,7 @@ try {
     // | Dispatch our request.                                                     |
     // +---------------------------------------------------------------------------+
     $controller->dispatch();
+    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . number_format(microtime(true) - $start_time, 3, null, ','));
 } catch (\Exception $e) {
     echo "Exception found: " . $e->getMessage();
     var_dump($e);

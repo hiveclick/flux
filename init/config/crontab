@@ -14,28 +14,8 @@ MAILTO=""
 0,15,30,45 * * * * root /home/flux/api/webapp/meta/crons/compile_daily_clicks.sh
 
 #
-# Check and restart the split daemon each night
-# 
-@daily root /home/flux/api/webapp/meta/crons/split_daemon.sh restart
-
+# Run the watchdog cron to keep vsftpd and the daemons running
 #
-# Process export queues that should run daily
-# 
-#0 17 * * * root /home/flux/api/webapp/meta/crons/export_queue.sh daily
-
-#
-# Process export queues that should run weekly
-# 
-#0 5 * * 1 root /home/flux/api/webapp/meta/crons/export_queue.sh weekly
-
-#
-# Process export queues that should run monthly on the first
-# 
-#0 5 1 * * root /home/flux/api/webapp/meta/crons/export_queue.sh monthly_first
-
-#
-# Process export queues that should run monthly on the 14th and 28th
-# 
-#0 5 14,28 * * root /home/flux/api/webapp/meta/crons/export_queue.sh monthly
+0,30 * * * * root /home/rdm/api/webapp/meta/crons/watchdog.sh
 
 # End crontab
