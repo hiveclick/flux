@@ -205,6 +205,9 @@
 				<dt>Id:</dt>
 				<dd><a href="/lead/lead?_id=<?php echo $split_queue->getLead()->getLeadId() ?>"><?php echo $split_queue->getLead()->getLeadId() ?></a></dd>
 				<dt>Created:</dt><dd><?php echo date('m/d/Y g:i:s a', $split_queue->getId()->getTimestamp()) ?></dd>
+				<?php if ($split_queue->getLead()->getLead()->getModified() instanceof \MongoDate) { ?>
+				    <dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $split_queue->getLead()->getLead()->getModified()->sec) ?></dd>
+				<?php } ?>
 			</dl>
 			<hr />
 			<dl class="dl-horizontal">

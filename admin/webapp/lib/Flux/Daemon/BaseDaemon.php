@@ -6,7 +6,9 @@ abstract class BaseDaemon {
 
 	const sleepTime = 30;
 
+	protected $primaryThread = false;
 	protected $startTime; //This will hold the start time of the daemon
+	protected $lastSynctime; //This will hold the last time the daemon was synced
 	protected $shouldShutdown = false; //If this is set to true the daemon won't run another iteration
 	protected $name; //This will hold the class name of the daemon
 	protected $pid; //This will hold the pid of the daemon
@@ -24,6 +26,7 @@ abstract class BaseDaemon {
 
 		//This is the time that daemon starts up
 		$this->startTime = time();
+		$this->lastSynctime = time();
 		$this->name = get_class($this);
 		$this->pid = getmypid();
 	}
@@ -47,6 +50,26 @@ abstract class BaseDaemon {
 		$this->shouldShutdown = true;
 		return false;
 	}
+	
+	/**
+	 * Returns the primaryThread
+	 * @return boolean
+	 */
+	function getPrimaryThread() {
+		if (is_null($this->primaryThread)) {
+			$this->primaryThread = false;
+		}
+		return $this->primaryThread;
+	}
+	
+	/**
+	 * Sets the primaryThread
+	 * @var boolean
+	 */
+	function setPrimaryThread($arg0) {
+		$this->primaryThread = $arg0;
+		return $this;
+	}
 
 	/**
 	 * Logs a message to the output
@@ -56,7 +79,11 @@ abstract class BaseDaemon {
 	protected function log($msg, array $identifier_array = array())
 	{
 		$full_msg = '';
-		$initial_identifier_array = array($this->name, date('Y-m-d H:i:s'));
+		if ($this->getPrimaryThread()) {
+			$initial_identifier_array = array($this->name . ' (P)', date('Y-m-d H:i:s'));
+		} else {
+			$initial_identifier_array = array($this->name . '    ', date('Y-m-d H:i:s'));
+		}
 		$identifier_array = array_merge($initial_identifier_array, $identifier_array);
 
 		foreach($identifier_array AS $identifier_string) {
@@ -68,5 +95,35 @@ abstract class BaseDaemon {
 			$full_msg .= $msg;
 		}
 		echo $full_msg . PHP_EOL;
+	}
+	
+	/**
+	 * Finds the number of pending records
+	 * @return \Rdm\Record
+	 */
+	protected function updateLastRunTime() {
+	    $daemon = new \Flux\Daemon();
+	    $daemon->setClassName('\\' . get_class($this));
+	    $daemon->queryByClass();
+	    if ($daemon->getId() > 0) {
+	        $daemon->setStartTime(new \MongoDate());
+	        $daemon->update();
+	    }
+	    return true;
+	}
+	
+	/**
+	 * Finds the number of pending records
+	 * @return \Rdm\Record
+	 */
+	protected function updatePendingRecordCount($pending_record_count) {
+		$daemon = new \Flux\Daemon();
+		$daemon->setClassName('\\' . get_class($this));
+		$daemon->queryByClass();
+		if ($daemon->getId() > 0) {
+			$daemon->setPendingRecords($pending_record_count);
+			$daemon->update();
+		}
+		return true;
 	}
 }

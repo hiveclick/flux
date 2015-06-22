@@ -21,6 +21,7 @@ class Daemon extends MongoForm {
 	protected $status;
 	protected $run_status;
 	protected $children;
+	protected $pending_records;
 	
 	/**
 	 * Constructs new user
@@ -251,6 +252,27 @@ class Daemon extends MongoForm {
 		}
 		$this->addModifiedColumn('children');
 		return $this;
+	}
+	
+	/**
+	 * Returns the pending_records
+	 * @return integer
+	 */
+	function getPendingRecords() {
+	    if (is_null($this->pending_records)) {
+	        $this->pending_records = 0;
+	    }
+	    return $this->pending_records;
+	}
+	
+	/**
+	 * Sets the pending_records
+	 * @var integer
+	 */
+	function setPendingRecords($arg0) {
+	    $this->pending_records = (int)$arg0;
+	    $this->addModifiedColumn('pending_records');
+	    return $this;
 	}
 	
 	// +------------------------------------------------------------------------+

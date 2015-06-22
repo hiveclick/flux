@@ -5,7 +5,7 @@ class Split extends Base\Split {
 
 	private $position;
 	private $pid_split;
-	private $pid_split_last;
+	protected $pid_time_split;
 
 	/**
 	 * Returns true if the offer id is selected
@@ -78,6 +78,27 @@ class Split extends Base\Split {
 		return $this;
 	}
 	
+	/**
+	 * Returns the pid_time_split
+	 * @return \MongoDate
+	 */
+	function getPidTimeSplit() {
+	    if (is_null($this->pid_time_split)) {
+	        $this->pid_time_split = new \MongoDate();
+	    }
+	    return $this->pid_time_split;
+	}
+	
+	/**
+	 * Sets the pid_time_split
+	 * @var \MongoDate
+	 */
+	function setPidTimeSplit($arg0) {
+	    $this->pid_time_split = $arg0;
+	    $this->addModifiedColumn("pid_time_split");
+	    return $this;
+	}
+	
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|
 	// +------------------------------------------------------------------------+
@@ -102,8 +123,7 @@ class Split extends Base\Split {
 	 */
 	function clearPid() {
 		return parent::update(array(), array('$unset' => array(
-				'pid_split' => 1,
-				'pid_time_split' => 1
+				'pid_split' => 1
 		)));
 	}
 	

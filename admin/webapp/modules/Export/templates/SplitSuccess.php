@@ -139,6 +139,13 @@
 	   <li class="help-block">
 	       <a href="/admin/fulfillment?_id=<?php echo $split->getFulfillment()->getFulfillmentId() ?>"><?php echo $split->getFulfillment()->getFulfillmentName() ?></a>
 	       <div class="small"><?php echo $split->getFulfillment()->getFulfillment()->getDescription() ?></div>
+	       <?php if ($split->getFulfillImmediately()) { ?>
+               <br />
+	           <div class="small">Fulfillment will be done automatically by the system</div>
+	           <?php if ($split->getFulfillDelay() > 0) { ?>
+	               <div class="small">Fulfillment will be delayed for <?php echo $split->getFulfillDelay() ?> minutes</div>
+	           <?php } ?>
+	       <?php } ?>
 	   </li>
 	</ul>
 	<b>Schedule</b>
@@ -207,8 +214,12 @@
 $(document).ready(function() {
 	$('#clear_pid,#clear_pid_sm').click(function() {
 		$.rad.post('/api', { func: '/export/split-clear-pid', _id: '<?php echo $split->getId() ?>' }, function(data) {
-			$.rad.notify('Split PID Cleared', 'The Split PID has been cleared and this split should start promptly.')
+			$.rad.notify('Split PID Cleared', 'The Split PID has been cleared and this split should start promptly.');
 		});
+	});
+
+	$('#split_clear_pid_form').form(function(data) {
+		$.rad.notify('Split PID Cleared', 'The Split PID has been cleared and this split should start promptly.');
 	});
 
 	$('#edit_split_modal').on('hide.bs.modal', function(e) {

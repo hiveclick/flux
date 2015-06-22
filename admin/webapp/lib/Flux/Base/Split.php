@@ -25,6 +25,7 @@ class Split extends MongoForm {
 	protected $status;
 	protected $split_type;
 	protected $fulfill_immediately;
+	protected $fulfill_delay;
 
 	protected $send_type;
 	protected $offers;
@@ -194,6 +195,27 @@ class Split extends MongoForm {
 	function setFulfillImmediately($arg0) {
 	    $this->fulfill_immediately = (boolean)$arg0;
 	    $this->addModifiedColumn("fulfill_immediately");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the fulfill_delay
+	 * @return integer
+	 */
+	function getFulfillDelay() {
+	    if (is_null($this->fulfill_delay)) {
+	        $this->fulfill_delay = 0;
+	    }
+	    return $this->fulfill_delay;
+	}
+	
+	/**
+	 * Sets the fulfill_delay
+	 * @var integer
+	 */
+	function setFulfillDelay($arg0) {
+	    $this->fulfill_delay = (int)$arg0;
+	    $this->addModifiedColumn("fulfill_delay");
 	    return $this;
 	}
 

@@ -6,6 +6,11 @@ class Split extends BaseDaemon
     const DEBUG = false;
     
 	public function action() {
+	    if ($this->getPrimaryThread()) {
+	        // Update the last run time of this daemon
+	        $this->updateLastRunTime();
+	    }
+	    
 		$split = $this->getNextSplit();
 		if ($split instanceof \Flux\Split) {
 			$max_event_time = $split->getLastRunTime();
@@ -22,6 +27,8 @@ class Split extends BaseDaemon
 			    $this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', ($split->getLastRunTime()->sec - (2 * 60 * 60))) . ' and ' . date('m/d/Y g:i:s', strtotime('now - 1 hour')), array($this->pid, $split->getId()));
 			    $criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
 			}
+			
+			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name'] = array('$nin' => array(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME));
 			
 			// Add the offers to the criteria
 			if (count($split->getOffers()) > 0) {
@@ -134,7 +141,14 @@ class Split extends BaseDaemon
             			            }
             			        }
             			    }
-    					}	
+    					}
+    					// Verify that this lead has not already been fulfilled
+    					/* @var $lead_event \Flux\LeadEvent */
+    					foreach ($lead->getE() as $lead_event) {
+    					    if ($lead_event->getDataField()->getDataFieldKeyName() == \Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME) {
+    					        throw new \Exception('Validation failed on ALREADY FULFILLED check');
+    					    }
+    					}
 					} catch (\Exception $e) {
 					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
 					    continue;
@@ -187,7 +201,7 @@ class Split extends BaseDaemon
 			}
 			sleep(10);
 			
-			$split->update(array('_id' => $split->getId()), array('$unset' => array('pid_split' => 1), '$set' => array('last_run_time' => $max_event_time)), array());
+			$split->update(array('_id' => $split->getId()), array('$unset' => array('pid_split' => 1), '$set' => array('last_run_time' => $max_event_time, 'pid_time_split' => new \MongoDate())), array());
 
 			return true;
 		} else {
@@ -215,17 +229,13 @@ class Split extends BaseDaemon
 					$cmd = 'ps -p ' . $split_record->getPidSplit() . ' | grep -v "PID"';
 					$cmd_response = trim(shell_exec($cmd));
 					if ($cmd_response == '') {
-						$this->log('Clearing expired PIDs: ' . $split_record->getPidSplit(), array($this->pid));
 						// if there isn't a process running, then clear the PID
 						$split_record->clearPid();
 					}
 				} else {
-					$this->log('Clearing blank PIDs: ' . $split_record->getId(), array($this->pid));
 					$split_record->clearPid();
 				}
 			}
-		} else {
-			$this->log('No Split to Use and no cleared PIDs', array($this->pid));
 		}
 	}
 

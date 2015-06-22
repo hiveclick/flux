@@ -89,6 +89,28 @@ $(document).ready(function() {
  	 			}
  			});
  			return '<div class="btn-group">' + ret_val.html() + '</div>';
+ 		}},
+ 		{id:'last_run', name:'Last Run', field:'pid_time_split', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+ 			var ret_val = '<div style="line-height:16pt;">'
+ 			ret_val += moment.unix(value.sec).fromNow();
+ 			if (dataContext.last_run_time && dataContext.last_run_time.sec) {
+ 			    ret_val += '<div class="small text-muted">Last Fulfilled Lead: ' + moment.unix(dataContext.last_run_time.sec).calendar() + '</div>';
+ 			}
+ 			ret_val += '</div>';
+ 			return ret_val;
+ 		}},
+ 		{id:'fulfill_immediately', name:'Auto-Fulfillment', field:'fulfill_immediately', def_value: ' ', cssClass:'text-center', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+ 			var ret_val = '<div style="line-height:16pt;">'
+ 	 		if (value) {
+ 	 			ret_val += '<span class="text-success">Yes</span>';
+ 	 			if (dataContext.fulfill_delay > 0) {
+ 	 			    ret_val += '<div class="small text-muted">Delayed for ' + dataContext.fulfill_delay + ' minutes</div>';
+ 	 			}
+ 	 		} else {
+ 	 			ret_val += '<span class="text-danger">No</span>';
+ 	 		}
+ 			ret_val += '</div>';
+ 			return ret_val;
  		}}
 
  	];
@@ -122,7 +144,7 @@ $(document).ready(function() {
 	});
 
 	$('#split_type').selectize().on('change', function() {
-		$('#split_search_form').trigger('submit');
+		//$('#split_search_form').trigger('submit');
 	});
  		  	
 	$('#split_search_form').trigger('submit');

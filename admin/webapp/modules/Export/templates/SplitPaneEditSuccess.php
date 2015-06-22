@@ -146,6 +146,18 @@
 				    <div class="col-md-8"><div class="help-block">Choose when the fulfillment script will be run on this split</div></div>
 				    <div class="col-md-4 text-right"><input type="checkbox" class="form-control" id="fulfill_immediately_1" name="fulfill_immediately" value="1" <?php echo $split->getFulfillImmediately() ? 'checked' : '' ?> /></div>
 				</div>
+				<div class="row">
+				    <div class="col-md-8"><div class="help-block">You can delay fulfillment to allow people to finish filling out a form</div></div>
+				    <div class="col-md-4">
+				        <select name="fulfill_delay" id="fulfill_delay" <?php echo $split->getFulfillImmediately() ? '' : 'DISABLED' ?>>
+				            <option value="0" <?php echo $split->getFulfillDelay() == 0 ? 'SELECTED' : '' ?>>Do not delay</option>
+				            <option value="5" <?php echo $split->getFulfillDelay() == 5 ? 'SELECTED' : '' ?>>Delay for 5 minutes</option>
+				            <option value="10" <?php echo $split->getFulfillDelay() == 10 ? 'SELECTED' : '' ?>>Delay for 10 minutes</option>
+				            <option value="15" <?php echo $split->getFulfillDelay() == 15 ? 'SELECTED' : '' ?>>Delay for 15 minutes</option>
+				            <option value="60" <?php echo $split->getFulfillDelay() == 60 ? 'SELECTED' : '' ?>>Delay for 1 hour</option>
+				        </select>
+				    </div>
+				</div>
 				<hr />
 				<div class="help-block">If a lead cannot be fulfilled, you can send an email notification</div>
 				<div class="form-group">
@@ -463,10 +475,19 @@ $(document).ready(function() {
 	$('#fulfill_immediately_1').bootstrapSwitch({
 		onText: 'Immediate',
 		offText: 'Manual',
-		size: 'small'
+		size: 'small',
+		onSwitchChange: function(event, state) {
+		    if (state) {
+		        $('#fulfill_delay').removeAttr('disabled');
+		        $('#fulfill_delay')[0].selectize.enable();
+		    } else {
+		    	$('#fulfill_delay').attr('disabled', 'disabled');
+		    	$('#fulfill_delay')[0].selectize.disable();
+		    }
+		}
 	});
 	
-	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type').selectize();
+	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type,#fulfill_delay').selectize();
 
 	$('#split_form').form(function(data) {
 		$.rad.notify('Split Updated', 'The split has been updated in the system');

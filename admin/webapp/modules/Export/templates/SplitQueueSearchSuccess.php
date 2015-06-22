@@ -154,7 +154,7 @@ $(document).ready(function() {
 				} else {
 					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
 				}
-    			if (dataContext.error_message != '') {
+    			if (dataContext.error_message != null && dataContext.error_message != '') {
     				ret_val +=  '<div class="text-danger small">' + dataContext.error_message + '</div>';
     			} else {
     				ret_val +=  '<div class="text-muted small">no errors</div>';
@@ -181,6 +181,14 @@ $(document).ready(function() {
 				ret_val += '</div>';
 				ret_val += '</div>';
 				return ret_val;
+		}},
+		{id:'actions', name:'Flag Item', field:'_id', def_value: ' ', sortable:false, hidden: false, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var ret_val = '<div class="btn-group" role="group">';
+			ret_val += '<div class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Flag as Pending" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
+			ret_val += '<div class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Flag as Unfulfillable" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
+			ret_val += '<div class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Flag as Already Fulfilled" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
+			ret_val += '</div>';
+			return ret_val;
 		}}
 	];
 
@@ -201,6 +209,15 @@ $(document).ready(function() {
 			width: 800,
 			rowHeight: 48
 		}
+	});
+
+	slick_grid.slickGetDataView().onRowsChanged.subscribe(function() {
+		$('[data-toggle="tooltip"]').tooltip({container:'body'}).click(function() {
+			var item = $.parseJSON($(this).attr('data-data'));
+			$.rad.put('/api', { func: '/export/split-queue', _id: item._id, disposition: item.disposition }, function(data) {
+				$('#split_search_form').trigger('submit');
+			});
+		});
 	});
 
 	$("#txtSearch").keyup(function(e) {
@@ -250,6 +267,7 @@ $(document).ready(function() {
 
 	// submit the form to initially fill in the grid
 	$('#split_search_form').trigger('submit');
+	
 });
 //-->
 </script>

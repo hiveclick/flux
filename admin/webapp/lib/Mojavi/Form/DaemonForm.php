@@ -5,7 +5,7 @@
  */
 namespace Mojavi\Form;
 
-use Rdm\Daemon as DaemonDocument;
+use \Flux\Daemon as DaemonDocument;
 
 class DaemonForm extends MojaviForm {
 
@@ -24,7 +24,7 @@ class DaemonForm extends MojaviForm {
      * Constructs a new daemon based on the daemon class
      * @return boolean
      */
-    public function __construct(DaemonDocument $daemon_class) {
+    public function __construct($daemon_class) {
         //check if daemon_class is instanceof daemon else throw exception
         $this->daemon_class = $daemon_class;
         $this->max_threads = $daemon_class->getThreads();

@@ -172,6 +172,9 @@
 				<dt>Id:</dt>
 				<dd><?php echo $lead->getId() ?></dd>
 				<dt>Created:</dt><dd><?php echo date('m/d/Y g:i:s a', $lead->getId()->getTimestamp()) ?></dd>
+				<?php if ($lead->getModified() instanceof \MongoDate) { ?>
+				    <dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $lead->getModified()->sec) ?></dd>
+				<?php } ?>
 			</dl>
 			<hr />
 			<dl class="dl-horizontal">

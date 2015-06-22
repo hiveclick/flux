@@ -389,7 +389,7 @@ class Lead extends MongoForm {
   
 	    // First update the data array
 	    $data_criteria = array('_id' => $this->getId());
-	    $data_update = array();
+	    $data_update = array('modified' => new \MongoDate());
 	    foreach ($this->getD() as $key => $value) {
 	        $data_update[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $key] = $value;
 	    }
