@@ -78,11 +78,11 @@ try {
     $current_version = '0';
     try {
         $preferences = new \Flux\Preferences();
-        $ret_val = $preferences->query(array('key' => 'version'), false);
+        $ret_val = $preferences->query(array('key' => 'migration_version'), false);
         
         // If we don't have a version yet, the save a default one
         if (is_null($ret_val)) {
-            $preferences->setKey('version');
+            $preferences->setKey('migration_version');
             $preferences->setValue('20000101');
             $preferences->setControl(\Flux\Preferences::READ_WRITE_ADMIN);
             $preferences->insert();

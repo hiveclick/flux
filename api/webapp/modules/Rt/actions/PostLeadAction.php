@@ -197,6 +197,9 @@ class PostLeadAction extends BasicRestAction
     	                $lead->update();
     	            }
     	        }
+			} else {
+			    $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME, '1');
+			    $lead->update();
 			}
 			 
             $ajax_form->setInsertId((string)$insert_id);

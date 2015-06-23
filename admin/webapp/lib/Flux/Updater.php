@@ -245,7 +245,6 @@ class Updater extends CommonForm {
     function startUpdate() {
         $this->setPercentComplete(10)->setUpdateMessage('Starting update')->saveProgress();
         $cmd = 'sudo ' . MO_WEBAPP_DIR . '/meta/crons/update.sh --silent';
-        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $cmd);
         shell_exec($cmd);
     }
     

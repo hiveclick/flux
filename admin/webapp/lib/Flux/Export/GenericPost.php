@@ -110,7 +110,12 @@ class GenericPost extends ExportAbstract {
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		// Add POST data to curl
+		// Passing encoded parameters to this function causes the data
+		// to be sent with application/x-www-form-urlencode mime-type.
+		// Using PHP associative array results in multipart/form-data.
+		// Salesforce.com will not work with multipart/form-data.
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params, null, '&'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 		curl_setopt($ch, CURLOPT_SSLVERSION, 0);
