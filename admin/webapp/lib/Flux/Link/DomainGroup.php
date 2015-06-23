@@ -17,7 +17,7 @@ class DomainGroup extends CommonForm {
 	 */
 	function getDomainGroupId() {
 		if (is_null($this->domain_group_id)) {
-			$this->domain_group_id = 0;
+			$this->domain_group_id = null;
 		}
 		return $this->domain_group_id;
 	}
@@ -27,7 +27,11 @@ class DomainGroup extends CommonForm {
 	 * @var integer
 	 */
 	function setDomainGroupId($arg0) {
-		$this->domain_group_id = (int)$arg0;
+	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->domain_group_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->domain_group_id = $arg0;
+	    }
 		return $this;
 	}
 	

@@ -5,11 +5,11 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($data_field->getId() > 0) ? 'Edit' : 'Add' ?> Data Field</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($data_field->getId()) ? 'Edit' : 'Add' ?> Data Field</h4>
 </div>
 <form id="data_field_form_<?php echo $data_field->getId() ?>" method="POST" action="/api" role="form">
 	<input type="hidden" name="func" value="/admin/data-field" />
-	<?php if ($data_field->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($data_field->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $data_field->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -292,7 +292,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($data_field->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($data_field->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Data Field" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -446,6 +446,7 @@ $(document).ready(function() {
 	$('#data_field_form_<?php echo $data_field->getId() ?>').form(function(data) {
 		$.rad.notify('Data Field Updated', 'The data field has been added/updated in the system');
 		$('#datafield_search_form').trigger('submit');
+		$('#edit_datafield_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#add_set_btn').on('click', function() {
@@ -509,7 +510,7 @@ $(document).ready(function() {
 		}
 	});
 });
-<?php if ($data_field->getId() > 0) { ?>
+<?php if (\MongoId::isValid($data_field->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this data field from the system?')) {
 		$.rad.del({ func: '/admin/data-field/<?php echo $data_field->getId() ?>' }, function(data) {

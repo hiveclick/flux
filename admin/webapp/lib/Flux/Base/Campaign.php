@@ -215,17 +215,24 @@ class Campaign extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
+		} else if ($arg0 instanceof \MongoId) {
+		    $client = $this->getClient();
+		    $client->setClientId($arg0);
+		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+		        $client->setClientName($client->getClient()->getName());
+		    }
+		    $this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -250,23 +257,33 @@ class Campaign extends MongoForm {
 	    if (is_array($arg0)) {
 			$traffic_source = $this->getTrafficSource();
 			$traffic_source->populate($arg0);
-			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceName() == "") {
+			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
 				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
 			}
-			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceIcon() == "") {
+			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
 			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
 			}
 			$this->traffic_source = $traffic_source;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$traffic_source = $this->getTrafficSource();
 			$traffic_source->setTrafficSourceId($arg0);
-			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceName() == "") {
+			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
 				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
 			}
-			if ($traffic_source->getTrafficSourceId() > 0 && $traffic_source->getTrafficSourceIcon() == "") {
+			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
 			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
 			}
 			$this->traffic_source = $traffic_source;
+		} else if ($arg0 instanceof \MongoId) {
+		    $traffic_source = $this->getTrafficSource();
+		    $traffic_source->setTrafficSourceId($arg0);
+		    if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
+		        $traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
+		    }
+		    if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
+		        $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+		    }
+		    $this->traffic_source = $traffic_source;
 		}
 		$this->addModifiedColumn('traffic_source');
 	    return $this;
@@ -291,17 +308,24 @@ class Campaign extends MongoForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer = $this->getOffer();
+		    $offer->setOfferId($arg0);
+		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+		        $offer->setOfferName($offer->getOffer()->getName());
+		    }
+		    $this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;

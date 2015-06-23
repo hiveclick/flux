@@ -27,7 +27,7 @@ class SavedSearchWizardAction extends BasicAction
 		/* @var $saved_search Flux\SavedSearch */
 		$saved_search = new \Flux\SavedSearch();
 		$saved_search->populate($_GET);
-		if ($saved_search->getId() > 0) {
+		if (\MongoId::isValid($saved_search->getId())) {
 			$saved_search->query();	
 		}
 		

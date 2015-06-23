@@ -24,7 +24,14 @@ class User extends Base\User {
 	 * @var array
 	 */
 	function setClientIdArray($arg0) {
-		$this->client_id_array = $arg0;
+	   if (is_array($arg0)) {
+            $this->client_id_array = $arg0;
+	    } else if (is_string($arg0)) {
+	        $this->client_id_array = array($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->client_id_array = array($arg0);
+	    }
+		array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
 	
@@ -115,7 +122,7 @@ class User extends Base\User {
 	 * @return Flux\User
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
-		if ($this->getClient()->getClientId() > 0) {
+		if (\MongoId::isValid($this->getClient()->getClientId())) {
 			$criteria['client.client_id'] = $this->getClient()->getClientId();
 		}
 		if (count($this->getClientIdArray()) > 0) {
@@ -154,10 +161,11 @@ class User extends Base\User {
 	 */
 	function tryLogin() {
 		$user = $this->query(array('email' => $this->getEmail(), 'password' => $this->getPassword(), 'status' => self::USER_STATUS_ACTIVE), false);
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($user, true));
 		if ($user === false) {
 			throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
 		}
-		if (!is_null($user) && $user->getId() > 0) {
+		if (!is_null($user) && \MongoId::isValid($user->getId())) {
 			$this->populate($user);
 		}
 		return $this;

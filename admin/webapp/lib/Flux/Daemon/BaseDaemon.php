@@ -105,7 +105,7 @@ abstract class BaseDaemon {
 	    $daemon = new \Flux\Daemon();
 	    $daemon->setClassName('\\' . get_class($this));
 	    $daemon->queryByClass();
-	    if ($daemon->getId() > 0) {
+	    if (\MongoId::isValid($daemon->getId())) {
 	        $daemon->setStartTime(new \MongoDate());
 	        $daemon->update();
 	    }
@@ -120,7 +120,7 @@ abstract class BaseDaemon {
 		$daemon = new \Flux\Daemon();
 		$daemon->setClassName('\\' . get_class($this));
 		$daemon->queryByClass();
-		if ($daemon->getId() > 0) {
+		if (\MongoId::isValid($daemon->getId())) {
 			$daemon->setPendingRecords($pending_record_count);
 			$daemon->update();
 		}

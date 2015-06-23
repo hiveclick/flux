@@ -597,17 +597,24 @@ class Fulfillment extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
+		} else if ($arg0 instanceof \MongoId) {
+		    $client = $this->getClient();
+		    $client->setClientId($arg0);
+		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+		        $client->setClientName($client->getClient()->getName());
+		    }
+		    $this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;

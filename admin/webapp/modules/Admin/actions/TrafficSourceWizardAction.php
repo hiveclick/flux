@@ -26,7 +26,7 @@ class TrafficSourceWizardAction extends BasicAction
 		$traffic_source = new \Flux\TrafficSource();
 		$traffic_source->populate($_REQUEST);
 		
-		if ($traffic_source->getId() > 0) {
+		if (\MongoId::isValid($traffic_source->getId())) {
 			$traffic_source->query();	
 		}
 		

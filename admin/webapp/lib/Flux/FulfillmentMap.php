@@ -33,17 +33,24 @@ class FulfillmentMap extends CommonForm {
 		if (is_array($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->populate($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->setDataFieldId($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
+		} else if ($arg0 instanceof \MongoId) {
+		    $data_field = $this->getDataField();
+		    $data_field->setDataFieldId($arg0);
+		    if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
+		        $data_field->setDataFieldName($data_field->getDataField()->getName());
+		    }
+		    $this->data_field = $data_field;
 		}
 		$this->addModifiedColumn('data_field');
 		return $this;
@@ -118,7 +125,7 @@ class FulfillmentMap extends CommonForm {
      * @return string
      */
     function getMappedValue($lead) {
-    	if ($this->getDataField()->getDataFieldId() > 0) {
+    	if (\MongoId::isValid($this->getDataField()->getDataFieldId())) {
     		$ret_val = $lead->getValue($this->getDataField()->getDataField()->getKeyName());
     		if (is_string($ret_val)) {
     			if (trim($ret_val) == '') {

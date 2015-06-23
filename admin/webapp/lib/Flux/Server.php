@@ -103,7 +103,7 @@ class Server extends Base\Server {
 	 */
 	function getOfferId() {
 		if (is_null($this->offer_id)) {
-			$this->offer_id = 0;
+			$this->offer_id = null;
 		}
 		return $this->offer_id;
 	}
@@ -113,7 +113,7 @@ class Server extends Base\Server {
 	 * @var integer
 	 */
 	function setOfferId($arg0) {
-		$this->offer_id = (int)$arg0;
+		$this->offer_id = $arg0;
 		$this->addModifiedColumn("offer_id");
 		return $this;
 	}

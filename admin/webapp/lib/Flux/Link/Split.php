@@ -16,7 +16,7 @@ class Split extends CommonForm {
 	 */
 	function getSplitId() {
 		if (is_null($this->split_id)) {
-			$this->split_id = 0;
+			$this->split_id = null;
 		}
 		return $this->split_id;
 	}
@@ -26,7 +26,11 @@ class Split extends CommonForm {
 	 * @var integer
 	 */
 	function setSplitId($arg0) {
-		$this->split_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->split_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->split_id = $arg0;
+	    }
 		return $this;
 	}
 	

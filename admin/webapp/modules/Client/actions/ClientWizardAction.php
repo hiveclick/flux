@@ -27,7 +27,7 @@ class ClientWizardAction extends BasicAction
 		/* @var $client Flux\Client */
 		$client = new Client();
 		$client->populate($_GET);
-		if ($client->getId() > 0) {
+		if (\MongoId::isValid($client->getId())) {
 			$client->query();
 		}
 		

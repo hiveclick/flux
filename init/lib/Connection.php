@@ -6,6 +6,7 @@ class Connection {
     
     static $_instance;
     private $conn;
+    private $mongo;
     private $database_array;
     
     /**
@@ -47,14 +48,57 @@ class Connection {
      */
     function getDbConnection($name) {
         $db_array = $this->getDbConnectionArray($name);
-        if (($res = mysql_connect($db_array['host'], $db_array['user'], $db_array['password'])) !== null) {
-            if (mysql_select_db($db_array['database'], $res) !== false) {
-                return $res;
-            } else {
-                throw new Exception('Failed to select database ' . $db_array['database'] . ' from ' . $db_array['user'] . '@' . $db_array['host']);
+        // determine how to get our parameters
+        $method = isset($db_array['method']) ? $db_array['method'] : 'dsn';
+        $database = isset($db_array['database']) ? $db_array['database'] : null;
+        // get parameters
+        switch($method) {
+            case 'normal' :
+                // get parameters normally
+                $host     = isset($db_array['host']) ? $db_array['host'] : 'localhost';
+                $port     = isset($db_array['port']) ? $db_array['port'] : '27017';
+                $dsn = 'mongodb://' . $host;
+                if ($port != '') {
+                    $dsn .= ':' . $port;
+                }
+                break;
+            case 'dsn' :
+                $dsn = isset($db_array['dsn']) ? $db_array['dsn'] : null;
+                if($dsn == null) {
+                    // missing required dsn parameter
+                    $error = 'Database configuration specifies method "dsn", but is missing dsn parameter';
+                    throw new \DatabaseException($error);
+                }
+                break;
+        }
+
+        try {
+            $options = array();
+
+            if (isset($db_array['user'])) {
+                $options['user'] = $db_array['user'];
             }
-        } else {
-            throw new Exception('Failed to connect to database host: ' . $db_array['user'] . '@' . $db_array['host'] . ': ' . mysql_error());
+            if (isset($db_array['password'])) {
+                $options['password'] = $db_array['password'];
+            }
+            
+            $this->mongo = new \MongoClient($dsn, $options);
+            // make sure the connection went through
+            if ($this->mongo === false)
+            {
+                // the connection's foobar'
+                $error = 'Failed to create a Mongo connection';
+                throw new \DatabaseException($error);
+            }
+            
+            // select our database
+            if ($database != null) {
+                $this->conn = $this->mongo->selectDB($database);
+            }
+            
+            return $this->conn;
+        } catch(\MongoException $e) {
+            throw new \DatabaseException($e->getMessage());
         }
     }
     

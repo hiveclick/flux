@@ -43,17 +43,24 @@ class ExportQueue extends MongoForm {
 		if (is_array($arg0)) {
 			$export = $this->getExport();
 			$export->populate($arg0);
-			if ($export->getExportId() > 0 && $export->getExportName() == "") {
+			if (\MongoId::isValid($export->getExportId()) && $export->getExportName() == "") {
 				$export->setExportName($export->getExport()->getName());
 			}
 			$this->export = $export;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$export = $this->getExport();
 			$export->setExportId($arg0);
-			if ($export->getExportId() > 0 && $export->getExportName() == "") {
+			if (\MongoId::isValid($export->getExportId()) && $export->getExportName() == "") {
 				$export->setExportName($export->getExport()->getName());
 			}
 			$this->export = $export;
+		} else if ($arg0 instanceof \MongoId) {
+		    $export = $this->getExport();
+		    $export->setExportId($arg0);
+		    if (\MongoId::isValid($export->getExportId()) && $export->getExportName() == "") {
+		        $export->setExportName($export->getExport()->getName());
+		    }
+		    $this->export = $export;
 		}
 		$this->setCollectionName('export_queue_' . $this->export->getExportId());
 		$this->addModifiedColumn('export');

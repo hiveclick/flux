@@ -27,7 +27,7 @@ class ServerWizardAction extends BasicAction
 		/* @var $server Flux\Server */
 		$server = new Server();
 		$server->populate($_GET);
-		if ($server->getId() > 0) {
+		if (\MongoId::isValid($server->getId())) {
 			$server->query();	
 		}
 

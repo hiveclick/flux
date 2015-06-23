@@ -59,7 +59,7 @@ class LeadExport extends MojaviForm {
      * @var integer
      */
     function setFulfillmentId($arg0) {
-    	$this->client_export_id = (int)$arg0;
+    	$this->client_export_id = $arg0;
     	$this->addModifiedColumn("client_export_id");
     	$this->addModifiedColumn("client_export_name");
     	return $this;

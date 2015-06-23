@@ -29,7 +29,7 @@ class DomainGroupWizardAction extends BasicAction
 		/* @var $domain_group Flux\DomainGroup */
 		$domain_group = new DomainGroup();
 		$domain_group->populate($_GET);
-		if ($domain_group->getId() > 0) {
+		if (\MongoId::isValid($domain_group->getId())) {
 			$domain_group->query();	
 		}
 

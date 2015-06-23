@@ -41,7 +41,7 @@ class OfferAssetWizardAction extends BasicAction
 						}
 					}
 				}
-				if ($offer_asset->getId() > 0) {
+				if (\MongoId::isValid($offer_asset->getId())) {
 					$offer_asset->update();
 				} else {
 					$offer_asset->insert();
@@ -58,7 +58,7 @@ class OfferAssetWizardAction extends BasicAction
 			/* @var $offer_asset Flux\OfferAsset */
 			$offer_asset = new OfferAsset();
 			$offer_asset->populate($_GET);
-			if ($offer_asset->getId() > 0) {
+			if (\MongoId::isValid($offer_asset->getId())) {
 				$offer_asset->query();
 			}
 

@@ -84,7 +84,7 @@ class OfferPagePath extends MojaviForm {
      * @var integer
      */
     function setOfferId($arg0) {
-    	$this->offer_id = (int)$arg0;
+    	$this->offer_id = $arg0;
     	$this->addModifiedColumn("offer_id");
     	return $this;
     }

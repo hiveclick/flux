@@ -279,17 +279,24 @@ class OfferPage extends MongoForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer = $this->getOffer();
+		    $offer->setOfferId($arg0);
+		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+		        $offer->setOfferName($offer->getOffer()->getName());
+		    }
+		    $this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;

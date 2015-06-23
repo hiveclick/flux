@@ -313,17 +313,24 @@ class SplitQueue extends MongoForm {
 		if (is_array($arg0)) {
 			$split = $this->getSplit();
 			$split->populate($arg0);
-			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
-			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
+		} else if ($arg0 instanceof \MongoId) {
+		    $split = $this->getSplit();
+		    $split->setSplitId($arg0);
+		    if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+		        $split->setSplitName($split->getSplit()->getName());
+		    }
+		    $this->split = $split;
 		}
 		$this->addModifiedColumn('split');
 		return $this;

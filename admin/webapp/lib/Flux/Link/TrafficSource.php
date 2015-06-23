@@ -18,7 +18,7 @@ class TrafficSource extends CommonForm {
 	 */
 	function getTrafficSourceId() {
 		if (is_null($this->traffic_source_id)) {
-			$this->traffic_source_id = 0;
+			$this->traffic_source_id = null;
 		}
 		return $this->traffic_source_id;
 	}
@@ -28,7 +28,11 @@ class TrafficSource extends CommonForm {
 	 * @var integer
 	 */
 	function setTrafficSourceId($arg0) {
-		$this->traffic_source_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->traffic_source_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->traffic_source_id = $arg0;
+	    }
 		return $this;
 	}
 	

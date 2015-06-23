@@ -44,10 +44,12 @@ class Fulfillment extends Base\Fulfillment {
 	function setClientIdArray($arg0) {
 	    if (is_array($arg0)) {
             $this->client_id_array = $arg0;
-	    } else if (is_string($arg0) || is_int($arg0)) {
+	    } else if (is_string($arg0)) {
+	        $this->client_id_array = array($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
 	        $this->client_id_array = array($arg0);
 	    }
-		array_walk($this->client_id_array, function(&$val) { $val = intval(trim($val)); });
+		array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
 	

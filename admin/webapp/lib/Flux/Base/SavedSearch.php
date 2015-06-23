@@ -85,14 +85,21 @@ class SavedSearch extends MongoForm {
         if (is_array($arg0)) {
             $this->user = new \Flux\Link\User();
             $this->user->populate($arg0);
-            if ($this->user->getUserId() > 0 && $this->user->getUsername() == '') {
+            if (\MongoId::isValid($this->user->getUserId()) && $this->user->getUsername() == '') {
                 $this->user->setUsername($this->user->getUser()->getName());
             }
             $this->addModifiedColumn("user");
-        } else if (is_string($arg0) || is_numeric($arg0)) {
+        } else if (is_string($arg0)) {
             $this->user = new \Flux\Link\User();
             $this->user->setUserId($arg0);
-            if ($this->user->getUserId() > 0 && $this->user->getUsername() == '') {
+            if (\MongoId::isValid($this->user->getUserId()) && $this->user->getUsername() == '') {
+                $this->user->setUsername($this->user->getUser()->getName());
+            }
+            $this->addModifiedColumn("user");
+        } else if ($arg0 instanceof \MongoId) {
+            $this->user = new \Flux\Link\User();
+            $this->user->setUserId($arg0);
+            if (\MongoId::isValid($this->user->getUserId()) && $this->user->getUsername() == '') {
                 $this->user->setUsername($this->user->getUser()->getName());
             }
             $this->addModifiedColumn("user");

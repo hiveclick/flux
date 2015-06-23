@@ -5,12 +5,12 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($user->getId() > 0) ? 'Edit' : 'Add' ?> User</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($user->getId()) ? 'Edit' : 'Add' ?> User</h4>
 </div>
-<form class="" id="user_form_<?php echo $user->getId() ?>" method="<?php echo ($user->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="user_form_<?php echo $user->getId() ?>" method="<?php echo \MongoId::isValid($user->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/user" />
 	<input type="hidden" name="status" value="<?php echo \Flux\User::USER_STATUS_ACTIVE ?>" />
-	<?php if ($user->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($user->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $user->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($user->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($user->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete User" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -91,6 +91,7 @@ $(document).ready(function() {
 	$('#user_form_<?php echo $user->getId() ?>').form(function(data) {
 		$.rad.notify('User Updated', 'The user has been added/updated in the system');
 		$('#user_search_form').trigger('submit');
+		$('#edit_user_modal').modal('hide');
 	}, {keep_form:1});
 
     $('#user_type').selectize({
@@ -119,7 +120,7 @@ $(document).ready(function() {
 	$('#status,#client_id,#timezone').selectize();
 });
 
-<?php if ($user->getId() > 0) { ?>
+<?php if (\MongoId::isValid($user->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
 		$.rad.del({ func: '/admin/user/<?php echo $user->getId() ?>' }, function(data) {

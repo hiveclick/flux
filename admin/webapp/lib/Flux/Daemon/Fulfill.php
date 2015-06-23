@@ -28,7 +28,7 @@ class Fulfill extends BaseDaemon
 			    return false;
 			}
 			
-			if ($queue_item->getSplit()->getSplit()->getFulfillImmediately() && $queue_item->getSplit()->getSplit()->getFulfillDelay() > 0) {
+			if ($queue_item->getSplit()->getSplit()->getFulfillImmediately() && \MongoId::isValid($queue_item->getSplit()->getSplit()->getFulfillDelay())) {
 			    if ((strtotime('now') - $queue_item->getLead()->getLead()->getModified->sec) > ($queue_item->getSplit()->getSplit()->getFulfillDelay() * 60)) {
 			        $this->log('Cannot Fulfill Queue item ' . $queue_item->getId() . ' because the delay has not been reached yet', array($this->pid, $queue_item->getId()));
 			        return false;

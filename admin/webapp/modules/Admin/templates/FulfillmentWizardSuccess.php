@@ -7,12 +7,12 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($fulfillment->getId() > 0) ? 'Edit' : 'Add' ?> Fulfillment Handler</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($fulfillment->getId()) ? 'Edit' : 'Add' ?> Fulfillment Handler</h4>
 </div>
-<form class="" id="fulfillment_form_<?php echo $fulfillment->getId() ?>" method="<?php echo ($fulfillment->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="fulfillment_form_<?php echo $fulfillment->getId() ?>" method="<?php echo \MongoId::isValid($fulfillment->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/fulfillment" />
 	<input type="hidden" name="status" value="<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_ACTIVE ?>" />
-	<?php if ($fulfillment->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($fulfillment->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $fulfillment->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -246,7 +246,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($fulfillment->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($fulfillment->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Handler" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -294,6 +294,7 @@ $(document).ready(function() {
 	$('#fulfillment_form_<?php echo $fulfillment->getId() ?>').form(function(data) {
 		$.rad.notify('Fulfillment Updated', 'The fulfillment handler has been added/updated in the system');
 		$('#fulfillment_search_form').trigger('submit');
+		$('#edit_domain_group_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#status,#export_type,#client_id,#scheduling_interval,#scheduling_days').selectize();
@@ -441,7 +442,7 @@ $(document).ready(function() {
 	});
 });
 
-<?php if ($fulfillment->getId() > 0) { ?>
+<?php if (\MongoId::isValid($fulfillment->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
 		$.rad.del({ func: '/admin/fulfillment/<?php echo $fulfillment->getId() ?>' }, function(data) {

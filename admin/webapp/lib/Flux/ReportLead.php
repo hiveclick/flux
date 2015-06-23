@@ -113,14 +113,14 @@ class ReportLead extends Base\ReportLead {
     function setOfferIdArray($arg0) {
         if (is_array($arg0)) {
             $this->offer_id_array = $arg0;
-            array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+            array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         } else if (is_string($arg0) || is_int($arg0)) {
             if (strpos($arg0, ',') !== false) {
                 $this->offer_id_array = explode(",", $arg0);
             } else {
                 $this->offer_id_array = array($arg0);
             }
-            array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+            array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         }
         $this->addModifiedColumn("offer_id_array");
     }
@@ -143,14 +143,14 @@ class ReportLead extends Base\ReportLead {
     function setClientIdArray($arg0) {
         if (is_array($arg0)) {
             $this->client_id_array = $arg0;
-            array_walk($this->client_id_array, function(&$value) { $value = (int)$value; });
+            array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         } else if (is_string($arg0) || is_int($arg0)) {
             if (strpos($arg0, ',') !== false) {
                 $this->client_id_array = explode(",", $arg0);
             } else {
                 $this->client_id_array = array($arg0);
             }
-            array_walk($this->client_id_array, function(&$value) { $value = (int)$value; });
+            array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         }
         $this->addModifiedColumn("client_id_array");
         return $this;

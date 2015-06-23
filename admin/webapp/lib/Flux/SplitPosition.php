@@ -99,7 +99,7 @@ class SplitPosition extends Base\SplitPosition {
 	 * @return array
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true) {
-		if ($this->getSplitIdArray() > 0) {
+		if (count($this->getSplitIdArray()) > 0) {
 			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
 		}
 		if ($this->getPosition() > 0) {

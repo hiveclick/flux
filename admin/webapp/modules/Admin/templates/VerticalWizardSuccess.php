@@ -4,12 +4,12 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($vertical->getId() > 0) ? 'Edit' : 'Add' ?> Vertical</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($vertical->getId()) ? 'Edit' : 'Add' ?> Vertical</h4>
 </div>
-<form class="" id="vertical_form_<?php echo $vertical->getId() ?>" method="<?php echo ($vertical->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="vertical_form_<?php echo $vertical->getId() ?>" method="<?php echo \MongoId::isValid($vertical->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/vertical" />
 	<input type="hidden" name="status" value="<?php echo \Flux\Vertical::VERTICAL_STATUS_ACTIVE ?>" />
-	<?php if ($vertical->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($vertical->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $vertical->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($vertical->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($vertical->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Vertical" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -38,10 +38,11 @@ $(document).ready(function() {
 	$('#vertical_form_<?php echo $vertical->getId() ?>').form(function(data) {
 		$.rad.notify('Vertical Updated', 'The vertical has been added/updated in the system');
 		$('#vertical_search_form').trigger('submit');
+		$('#edit_vertical_modal').modal('hide');
 	}, {keep_form:1});
 });
 
-<?php if ($vertical->getId() > 0) { ?>
+<?php if (\MongoId::isValid($vertical->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this vertical from the system?')) {
 		$.rad.del({ func: '/admin/vertical/<?php echo $vertical->getId() ?>' }, function(data) {

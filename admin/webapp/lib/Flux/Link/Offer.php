@@ -16,7 +16,7 @@ class Offer extends CommonForm {
 	 */
 	function getOfferId() {
 		if (is_null($this->offer_id)) {
-			$this->offer_id = 0;
+			$this->offer_id = null;
 		}
 		return $this->offer_id;
 	}
@@ -26,7 +26,11 @@ class Offer extends CommonForm {
 	 * @var integer
 	 */
 	function setOfferId($arg0) {
-		$this->offer_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->offer_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->offer_id = $arg0;
+	    }
 		return $this;
 	}
 	

@@ -148,10 +148,10 @@ class SplitQueue extends Base\SplitQueue {
             } else {
                 $this->offer_id_array = array($arg0);
             }
-        } else if (is_int($arg0)) {
+        } else if ($arg0 instanceof \MongoId) {
             $this->offer_id_array = array($arg0);
         }
-        array_walk($this->offer_id_array, function(&$value) { $value = (int)trim($value); });
+        array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         return $this;
     }
     
@@ -179,10 +179,10 @@ class SplitQueue extends Base\SplitQueue {
             } else {
                 $this->split_id_array = array($arg0);
             }
-        } else if (is_int($arg0)) {
+        } else if ($arg0 instanceof \MongoId) {
             $this->split_id_array = array($arg0);
         }
-        array_walk($this->split_id_array, function(&$value) { $value = (int)trim($value); });
+        array_walk($this->split_id_array, function(&$value) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         return $this;
     }
     
@@ -205,14 +205,21 @@ class SplitQueue extends Base\SplitQueue {
         if (is_array($arg0)) {
             $fulfillment = $this->getFulfillment();
             $fulfillment->populate($arg0);
-            if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+            if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;
         } else if (is_string($arg0) || is_int($arg0)) {
             $fulfillment = $this->getFulfillment();
             $fulfillment->setId($arg0);
-            if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+            if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+                $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+            }
+            $this->fulfillment = $fulfillment;
+        } else if ($arg0 instanceof \MongoId) {
+            $fulfillment = $this->getFulfillment();
+            $fulfillment->setId($arg0);
+            if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;

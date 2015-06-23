@@ -236,17 +236,24 @@ class LeadPage extends MongoForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer = $this->getOffer();
+		    $offer->setOfferId($arg0);
+		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+		        $offer->setOfferName($offer->getOffer()->getName());
+		    }
+		    $this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;
@@ -271,17 +278,24 @@ class LeadPage extends MongoForm {
 		if (is_array($arg0)) {
 			$offer_page = $this->getOfferPage();
 			$offer_page->populate($arg0);
-			if ($offer_page->getOfferPageId() > 0 && $offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
 				$offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
 			}
 			$this->offer_page = $offer_page;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer_page = $this->getOfferPage();
 			$offer_page->setOfferPageId($arg0);
-			if ($offer_page->getOfferPageId() > 0 && $offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
 				$offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
 			}
 			$this->offer_page = $offer_page;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer_page = $this->getOfferPage();
+		    $offer_page->setOfferPageId($arg0);
+		    if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
+		        $offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
+		    }
+		    $this->offer_page = $offer_page;
 		}
 		$this->addModifiedColumn('offer_page');
 		return $this;

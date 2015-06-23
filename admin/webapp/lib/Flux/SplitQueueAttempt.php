@@ -119,14 +119,21 @@ class SplitQueueAttempt extends CommonForm {
         if (is_array($arg0) || $arg0 instanceof \Flux\Link\Fulfillment) {
             $fulfillment = $this->getFulfillment();
             $fulfillment->populate($arg0);
-            if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+            if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;
         } else if (is_string($arg0) || is_int($arg0)) {
             $fulfillment = $this->getFulfillment();
             $fulfillment->setFulfillmentId($arg0);
-            if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+            if (\MongoId::IsValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+                $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+            }
+            $this->fulfillment = $fulfillment;
+        } else if ($arg0 instanceof \MongoId) {
+            $fulfillment = $this->getFulfillment();
+            $fulfillment->setFulfillmentId($arg0);
+            if (\MongoId::IsValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;

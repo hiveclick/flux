@@ -25,7 +25,7 @@ class ZipWizardAction extends BasicAction
 		/* @var $zip Flux\Zip */
 		$zip = new \Flux\Zip();
 		$zip->populate($_GET);
-		if ($zip->getId() > 0) {
+		if (\MongoId::isValid($zip->getId())) {
 			$zip->query();
 		}
 

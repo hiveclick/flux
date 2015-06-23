@@ -80,7 +80,7 @@
 			<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
 				<select name="mapping[<?php echo $counter;?>][datafield]" class="form-control selectize">
 					<optgroup label="Custom Field">
-						<option value="0" <?php echo $fulfillment_map->getDataField()->getDataFieldId() == 0 ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('key_name' => 'custom', 'name' => 'Custom Field', 'description' => 'Custom field such as an API Token', 'request_names' => '', 'tags' => array(0 => 'custom')))) ?>">Custom Field</option>
+						<option value="0" <?php echo !\MongoId::isValid($fulfillment_map->getDataField()->getDataFieldId()) ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('key_name' => 'custom', 'name' => 'Custom Field', 'description' => 'Custom field such as an API Token', 'request_names' => '', 'tags' => array(0 => 'custom')))) ?>">Custom Field</option>
 					</optgroup>
 					<optgroup label="Data Fields">
 						<?php

@@ -3,7 +3,7 @@
 	$daemon = $this->getContext()->getRequest()->getAttribute('daemon', array());
 	$daemon_classes = $this->getContext()->getRequest()->getAttribute('daemon_classes', array());
 ?>
-<?php if ($daemon->getId() > 0) { ?> 
+<?php if (\MongoId::isValid($daemon->getId())) { ?> 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		<h4 class="modal-title">Edit Daemon</h4>
@@ -52,6 +52,7 @@
 		$('#daemon_<?php echo $daemon->getId() ?>_form').form(function(data) {
 			$.rad.notify('You have updated this daemon', 'You have updated this daemon.');
 			$('#daemon_search_form').trigger('submit');
+			$('#edit_daemon_modal').modal('hide');
 		}, {keep_form: true});
 
 		$('#class_name_<?php echo $daemon->getId() ?>').selectize();
@@ -114,6 +115,7 @@
 		$('#daemon_<?php echo $daemon->getId() ?>_form').form(function(data) {
 			$.rad.notify('You have added this daemon', 'You have added this daemon.');
 			$('#daemon_search_form').trigger('submit');
+			$('#edit_daemon_modal').modal('hide');
 		}, {keep_form: true});
 
 		$('#class_name_<?php echo $daemon->getId() ?>').selectize();

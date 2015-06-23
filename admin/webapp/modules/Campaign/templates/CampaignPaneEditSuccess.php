@@ -193,6 +193,7 @@ $(document).ready(function() {
 	$('#campaign_form').form(function(data) {
 		if (data.record) {
 			$.rad.notify('Campaign Updated', 'The campaign has been updated successfully');
+			$('#edit_modal').modal('hide');
 		}
 	},{keep_form: 1});
 

@@ -16,7 +16,7 @@ class Export extends CommonForm {
 	 */
 	function getExportId() {
 		if (is_null($this->export_id)) {
-			$this->export_id = 0;
+			$this->export_id = null;
 		}
 		return $this->export_id;
 	}
@@ -26,7 +26,11 @@ class Export extends CommonForm {
 	 * @var integer
 	 */
 	function setExportId($arg0) {
-		$this->export_id = (int)$arg0;
+	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->export_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->export_id = $arg0;
+	    }
 		return $this;
 	}
 	

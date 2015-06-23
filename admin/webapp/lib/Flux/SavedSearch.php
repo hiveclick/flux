@@ -26,7 +26,7 @@ class SavedSearch extends Base\SavedSearch {
         if ($this->getName() != '') {
             $criteria['name'] = new \MongoRegex('/' . $this->getName() . '/i');
         }
-        if ($this->getUser()->getUserId() > 0) {
+        if (\MongoId::isValid($this->getUser()->getUserId())) {
             $criteria['$or'] = array(array('user.user_id' => $this->getUser()->getUserId()), array('is_global' => true));
         }
         return parent::queryAll($criteria, $hydrate);

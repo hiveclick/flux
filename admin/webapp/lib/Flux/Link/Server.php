@@ -17,7 +17,7 @@ class Server extends CommonForm {
 	 */
 	function getServerId() {
 		if (is_null($this->server_id)) {
-			$this->server_id = 0;
+			$this->server_id = null;
 		}
 		return $this->server_id;
 	}
@@ -27,7 +27,11 @@ class Server extends CommonForm {
 	 * @var integer
 	 */
 	function setServerId($arg0) {
-		$this->server_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->server_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->server_id = $arg0;
+	    }
 		return $this;
 	}
 	

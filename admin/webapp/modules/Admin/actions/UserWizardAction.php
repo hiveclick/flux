@@ -29,7 +29,7 @@ class UserWizardAction extends BasicAction
 		$user = new User();
 		$user->populate($_GET);
 		
-		if ($user->getId() > 0) {
+		if (\MongoId::isValid($user->getId())) {
 			$user->query();	
 		}
 		

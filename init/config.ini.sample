@@ -35,12 +35,10 @@ upload_password=m3g@gun
 log_folder=/var/log/flux
 
 ; Set the Page2Images API Key (http://www.page2images.com/)
-; API Key for localhost
-page2images_api=108709d8d7ae991c
-; API Key for www.flux.local
-;page2images_api=e3ab9a45dc9308cc
-; API Key for www.directdrivehosting.com
-;page2images_api=afbe76a4d168e488
+; API Key for development (*.flux.dev)
+;page2images_api=163e945a6c976b6b
+; API Key for production (*.directdrivehosting.com)
+page2images_api=0ee3e6ed2dc48ef9
 
 ; Set the Analytic (op.js) tracking domain
 analytic_domain=localhost

@@ -4,12 +4,12 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($domain_group->getId() > 0) ? 'Edit' : 'Add' ?> Domain Group</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($domain_group->getId()) ? 'Edit' : 'Add' ?> Domain Group</h4>
 </div>
-<form class="" id="domain_group_form_<?php echo $domain_group->getId() ?>" method="<?php echo ($domain_group->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="domain_group_form_<?php echo $domain_group->getId() ?>" method="<?php echo \MongoId::isValid($domain_group->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/domain-group" />
 	<input type="hidden" name="status" value="<?php echo \Flux\DomainGroup::DOMAIN_GROUP_STATUS_ACTIVE ?>" />
-	<?php if ($domain_group->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($domain_group->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $domain_group->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($domain_group->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($domain_group->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Domain Group" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -41,6 +41,7 @@ $(document).ready(function() {
 	$('#domain_group_form_<?php echo $domain_group->getId() ?>').form(function(data) {
 		$.rad.notify('Domain Group Updated', 'The domain group has been added/updated in the system');
 		$('#domain_group_search_form').trigger('submit');
+		$('#edit_domain_group_modal').modal('hide');
 	}, {keep_form:1});
 	
 	$('#domains').selectize({
@@ -55,7 +56,7 @@ $(document).ready(function() {
 	});
 });
 
-<?php if ($domain_group->getId() > 0) { ?>
+<?php if (\MongoId::isValid($domain_group->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this domain group from the system?')) {
 		$.rad.del({ func: '/admin/domain-group/<?php echo $domain_group->getId() ?>' }, function(data) {

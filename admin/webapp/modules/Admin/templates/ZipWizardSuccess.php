@@ -4,11 +4,11 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($zip->getId() > 0) ? 'Edit' : 'Add' ?> Zipcode</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($zip->getId()) ? 'Edit' : 'Add' ?> Zipcode</h4>
 </div>
-<form class="" id="zip_form_<?php echo $zip->getId() ?>" method="<?php echo ($zip->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="zip_form_<?php echo $zip->getId() ?>" method="<?php echo \MongoId::isValid($zip->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/zip" />
-	<?php if ($zip->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($zip->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $zip->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -84,7 +84,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($zip->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($zip->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Zip" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -97,12 +97,13 @@ $(document).ready(function() {
 	$('#zip_form_<?php echo $zip->getId() ?>').form(function(data) {
 		$.rad.notify('Zipcode Updated', 'The zipcode has been added/updated in the system');
 		$('#zip_search_form').trigger('submit');
+		$('#edit_zip_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#accuracy_<?php echo $zip->getId() ?>').selectize();
 });
 
-<?php if ($zip->getId() > 0) { ?>
+<?php if (\MongoId::isValid($zip->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this zip from the system?')) {
 		$.rad.del({ func: '/admin/zip/<?php echo $zip->getId() ?>' }, function(data) {

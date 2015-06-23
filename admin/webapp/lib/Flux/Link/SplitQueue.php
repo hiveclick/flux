@@ -16,7 +16,7 @@ class SplitQueue extends CommonForm {
 	 */
 	function getSplitQueueId() {
 		if (is_null($this->split_queue_id)) {
-			$this->split_queue_id = 0;
+			$this->split_queue_id = null;
 		}
 		return $this->split_queue_id;
 	}

@@ -5,11 +5,11 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($traffic_source->getId() > 0) ? 'Edit' : 'Add' ?> Traffic Source</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($traffic_source->getId()) ? 'Edit' : 'Add' ?> Traffic Source</h4>
 </div>
-<form id="traffic_source_form_<?php echo $traffic_source->getId() ?>" method="<?php echo ($traffic_source->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form id="traffic_source_form_<?php echo $traffic_source->getId() ?>" method="<?php echo \MongoId::isValid($traffic_source->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/traffic-source" />
-	<?php if ($traffic_source->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $traffic_source->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -57,7 +57,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($traffic_source->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Traffic Source" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -70,6 +70,7 @@ $(document).ready(function() {
 	$('#traffic_source_form_<?php echo $traffic_source->getId() ?>').form(function(data) {
 		$.rad.notify('Traffic Source Updated', 'The traffic source has been added/updated in the system');
 		$('#traffic-source_search_form').trigger('submit');
+		$('#edit_traffic_source_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#icon').selectize({
@@ -93,7 +94,7 @@ $(document).ready(function() {
     });
 });
 
-<?php if ($traffic_source->getId() > 0) { ?>
+<?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
 		$.rad.del({ func: '/admin/traffic-source/<?php echo $traffic_source->getId() ?>' }, function(data) {

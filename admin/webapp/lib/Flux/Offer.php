@@ -39,8 +39,10 @@ class Offer extends Base\Offer {
 	    if (is_null($this->default_campaign)) {
 	        $this->default_campaign = new \Flux\Campaign();
     	    if (\MongoId::isValid($this->getDefaultCampaignId())) {
-    	        $this->default_campaign->setId($this->getDefaultCampaignId());
+    	        $this->default_campaign->setId(new \MongoId($this->getDefaultCampaignId()));
+    	        \Mojavi\Logging\LoggerManager::error(__METHOD__ . ' :: ' . "QUERYING CAMPAIGN: " . $this->getDefaultCampaignId());
     	        $this->default_campaign->query();
+    	        \Mojavi\Logging\LoggerManager::error(__METHOD__ . ' :: ' . "QUERYING CAMPAIGN: " . var_export($this->default_campaign, true));
     	    }
 	    }
 	    return $this->default_campaign;
@@ -121,13 +123,14 @@ class Offer extends Base\Offer {
 	function setClientIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->client_id_array = $arg0;
-			array_walk($this->client_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->client_id_array = explode(",", $arg0);
-				array_walk($this->client_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->client_id_array = array((int)$arg0);
+				$this->client_id_array = array($arg0);
+				array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -151,13 +154,14 @@ class Offer extends Base\Offer {
 	function setVerticalIdArray($arg0) {
 	    if (is_array($arg0)) {
 			$this->vertical_id_array = $arg0;
-			array_walk($this->vertical_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->vertical_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->vertical_id_array = explode(",", $arg0);
-				array_walk($this->vertical_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->vertical_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->vertical_id_array = array((int)$arg0);
+				$this->vertical_id_array = array($arg0);
+				array_walk($this->vertical_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 	    return $this;
@@ -230,7 +234,7 @@ class Offer extends Base\Offer {
 	    $insert_id = parent::insert();
 	    $this->setId($insert_id);
 	    // Create the first campaign for this offer
-	    if ($insert_id > 0) {
+	    if (\MongoId::isValid($insert_id)) {
 	        /* @var $campaign \Flux\Campaign */
 	        $campaign = new \Flux\Campaign();
 	        $campaign->setOffer($insert_id);
@@ -264,7 +268,7 @@ class Offer extends Base\Offer {
 		if ($this->getDomainName() != '') {
 			$criteria['domain_name'] = $this->getDomainName();
 		}
-		if ($this->getClient()->getClientId() > 0) {
+		if (\MongoId::isValid($this->getClient()->getClientId())) {
 			$criteria['client.client_id'] = $this->getClientId();
 		}
 		if (count($this->getVerticalIdArray()) > 0) {

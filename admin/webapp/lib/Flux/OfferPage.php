@@ -23,7 +23,7 @@ class OfferPage extends Base\OfferPage {
 	 * @var integer
 	 */
 	function setServerId($arg0) {
-		$this->server_id = (int)$arg0;
+		$this->server_id = $arg0;
 		$this->addModifiedColumn("server_id");
 		return $this;
 	}
@@ -45,7 +45,7 @@ class OfferPage extends Base\OfferPage {
 	 */
 	function setOfferIdArray($arg0) {
 		$this->offer_id_array = $arg0;
-		array_walk($this->offer_id_array, function(&$val) { $val = intval($val); });
+		array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
 
@@ -66,7 +66,7 @@ class OfferPage extends Base\OfferPage {
 	 */
 	function setOfferPageIdArray($arg0) {
 		$this->offer_page_id_array = $arg0;
-		array_walk($this->offer_id_array, function(&$val) { $val = intval($val); });
+		array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
 	

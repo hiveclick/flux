@@ -28,7 +28,7 @@ class DaemonWizardAction extends BasicAction
 		/* @var $daemon Flux\Daemon */
 		$daemon = new Daemon();
 		$daemon->populate($_GET);
-		if ($daemon->getId() > 0) {
+		if (\MongoId::isValid($daemon->getId())) {
 			$daemon->query();	
 		}
 		

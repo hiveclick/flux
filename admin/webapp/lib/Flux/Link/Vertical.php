@@ -17,7 +17,7 @@ class Vertical extends CommonForm {
 	 */
 	function getVerticalId() {
 		if (is_null($this->vertical_id)) {
-			$this->vertical_id = 0;
+			$this->vertical_id = null;
 		}
 		return $this->vertical_id;
 	}
@@ -27,7 +27,11 @@ class Vertical extends CommonForm {
 	 * @var integer
 	 */
 	function setVerticalId($arg0) {
-		$this->vertical_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->vertical_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->vertical_id = $arg0;
+	    }
 		return $this;
 	}
 	

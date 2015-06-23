@@ -297,6 +297,7 @@ $(document).ready(function() {
 	$('#offer_form').form(function(data) {
 		if (data.record) {
 			$.rad.notify('Offer Updated', 'The offer has been updated successfully');
+			$('#edit_modal').modal('hide');
 		}
 	},{keep_form: 1});
 });

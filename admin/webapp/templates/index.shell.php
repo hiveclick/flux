@@ -50,6 +50,10 @@
 		<link rel="stylesheet" href="/scripts/slick-grid-1.4/css/slick.ui.css"></link>
 		<link rel="stylesheet" href="/scripts/slick-grid-1.4/css/slick.grid.css"></link>
         
+        <!-- Bootstrap color picker -->
+        <link href="/scripts/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
+        <script src="/scripts/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js" type="text/javascript" ></script>
+        
         <!-- Selectize plugin for select boxes and comma-delimited fields -->
         <link href="/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" type="text/css" />
         <script src="/scripts/selectize/js/standalone/selectize.min.js" type="text/javascript"></script>

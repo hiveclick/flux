@@ -61,11 +61,11 @@ class Export extends Base\Export {
 	function setExportTypeArray($arg0) {
 		if (is_array($arg0)) {
 			$this->export_type_array = $arg0;
-			array_walk($this->export_type_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->export_type_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->export_type_array = explode(",", $arg0);
-				array_walk($this->export_type_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->export_type_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
 				$this->export_type_array = array((int)$arg0);
 			}
@@ -91,13 +91,14 @@ class Export extends Base\Export {
 	function setFulfillmentIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->fulfillment_id_array = $arg0;
-			array_walk($this->fulfillment_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->fulfillment_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->fulfillment_id_array = explode(",", $arg0);
-				array_walk($this->fulfillment_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->fulfillment_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->fulfillment_id_array = array((int)$arg0);
+				$this->fulfillment_id_array = array($arg0);
+				array_walk($this->fulfillment_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -121,13 +122,14 @@ class Export extends Base\Export {
 	function setSplitIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->split_id_array = $arg0;
-			array_walk($this->split_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->split_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->split_id_array = explode(",", $arg0);
-				array_walk($this->split_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->split_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->split_id_array = array((int)$arg0);
+				$this->split_id_array = array($arg0);
+				array_walk($this->split_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -213,10 +215,10 @@ class Export extends Base\Export {
 	 * @return \Flux\Export
 	 */
 	function queryBySplitAndFulfillment(array $criteria = array()) {
-		if ($this->getFulfillment()->getFulfillmentId() > 0) {
+		if (\MongoId::isValid($this->getFulfillment()->getFulfillmentId())) {
 			$criteria['fulfillment.fulfillment_id'] = $this->getFulfillment()->getFulfillmentId();
 		}
-		if ($this->getSplit()->getSplitId() > 0) {
+		if (\MongoId::isValid($this->getSplit()->getSplitId())) {
 			$criteria['split.split_id'] = $this->getSplit()->getSplitId();
 		}
 		$criteria['is_complete'] = false;

@@ -21,12 +21,14 @@ abstract class MongoForm extends PageListForm {
      * @param int|Object $arg0
      */
     function setId($arg0) {
-        if ($this->getIdType() == self::ID_TYPE_AUTO_INC) {
-           	parent::setId((int)$arg0);
-        } else if ($this->getIdType() == self::ID_TYPE_MONGO && \MongoId::isValid($arg0)) {
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
             parent::setId(new \MongoId($arg0));
-        } else {
+        } else if ($arg0 instanceof \MongoId) {
             parent::setId($arg0);
+        } else if (is_null($arg0)) {
+            parent::setId($arg0);
+        } else {
+            throw new \Exception('Invalid ID set: ' . var_export($arg0, true));
         }
     }
 
@@ -78,6 +80,11 @@ abstract class MongoForm extends PageListForm {
         }
 
         $record_array = $this->getCollection()->findOne($criteria);
+        
+        if (is_null($record_array)) {
+            //\Mojavi\Logging\LoggerManager::error(__METHOD__ . ' :: ' . $this->getCollectionName() . " => " . var_export($criteria, true));
+        }
+        
         if (is_array($record_array)) {
             $this->populate($record_array);
             return $this;
@@ -149,6 +156,7 @@ abstract class MongoForm extends PageListForm {
      * @return integer
      */
     public function insert() {
+        /*
         if ($this->getIdType() === self::ID_TYPE_AUTO_INC) {
             $counter_name = $this->getCollectionName();
             $counter_array = $this->getCollection('default', 'counter')->findAndModify(
@@ -163,6 +171,7 @@ abstract class MongoForm extends PageListForm {
             $ret_val = $this->getCollection()->save($insert_array);
             return $this->getId();
         } else {
+        */
             $insert_array = $this->toArray(true);
             if (isset($insert_array['_id'])) { unset($insert_array['_id']); }
             $ret_val = $this->getCollection()->save($insert_array);
@@ -170,7 +179,7 @@ abstract class MongoForm extends PageListForm {
                 $this->setId($insert_array['_id']);
             }
             return $this->getId();
-        }
+        //}
     }
 
     /**
@@ -197,11 +206,11 @@ abstract class MongoForm extends PageListForm {
      */
     public function update($criteria_array = array(), $update_array = array(), $options_array = array('upsert' => true), $use_set_notation = false) {
         // This function will only update a single document
-        if ($this->getIdType() === self::ID_TYPE_MONGO) {
+        //if ($this->getIdType() === self::ID_TYPE_MONGO) {
             $criteria_array = array_merge($criteria_array, array('_id' => new \MongoId($this->getId())));
-        } else {
-            $criteria_array = array_merge($criteria_array, array('_id' => intval($this->getId())));
-        }
+        //} else {
+        //    $criteria_array = array_merge($criteria_array, array('_id' => intval($this->getId())));
+        //}
         // Generate an update array of only the fields that have changed
         if (empty($update_array)) {
             $update_array = $this->createUpdateArray($use_set_notation);
@@ -304,11 +313,11 @@ abstract class MongoForm extends PageListForm {
      */
     public function delete() {
         $delete_array = array();
-        if ($this->getIdType() === self::ID_TYPE_MONGO) {
+        //if ($this->getIdType() === self::ID_TYPE_MONGO) {
             $delete_array['_id'] = new \MongoId($this->getId());
-        } else {
-            $delete_array['_id'] = intval($this->getId());
-        }
+        //} else {
+        //    $delete_array['_id'] = intval($this->getId());
+        //}
         $rows_affected = $this->getCollection()->remove($delete_array);
         return $rows_affected;
     }
@@ -388,7 +397,7 @@ abstract class MongoForm extends PageListForm {
      */
     function getIdType() {
         if (is_null($this->_id_type)) {
-            $this->_id_type = self::ID_TYPE_AUTO_INC;
+            $this->_id_type = self::ID_TYPE_MONGO;
         }
         return $this->_id_type;
     }

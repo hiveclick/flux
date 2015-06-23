@@ -27,7 +27,7 @@ class VerticalWizardAction extends BasicAction
 		/* @var $vertical Flux\Vertical */
 		$vertical = new Vertical();
 		$vertical->populate($_GET);
-		if ($vertical->getId() > 0) {
+		if (\MongoId::isValid($vertical->getId())) {
 			$vertical->query();
 		}
 

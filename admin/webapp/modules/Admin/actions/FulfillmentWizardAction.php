@@ -29,7 +29,7 @@ class FulfillmentWizardAction extends BasicAction
 		/* @var $fulfillment Flux\Fulfillment */
 		$fulfillment = new \Flux\Fulfillment();
 		$fulfillment->populate($_GET);
-		if ($fulfillment->getId() > 0) {
+		if (\MongoId::isValid($fulfillment->getId())) {
 			$fulfillment->query();
 		} else {
 			// Set the default mapping

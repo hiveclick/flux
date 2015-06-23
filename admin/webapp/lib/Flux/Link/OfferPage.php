@@ -16,7 +16,7 @@ class OfferPage extends CommonForm {
 	 */
 	function getOfferPageId() {
 		if (is_null($this->offer_page_id)) {
-			$this->offer_page_id = 0;
+			$this->offer_page_id = null;
 		}
 		return $this->offer_page_id;
 	}
@@ -26,7 +26,11 @@ class OfferPage extends CommonForm {
 	 * @var integer
 	 */
 	function setOfferPageId($arg0) {
-		$this->offer_page_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->offer_page_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->offer_page_id = $arg0;
+	    }
 		return $this;
 	}
 	

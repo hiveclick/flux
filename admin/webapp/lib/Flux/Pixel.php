@@ -156,9 +156,9 @@ class Pixel extends CommonForm {
             $offer_found = false;
             
             // Try finding the offer from the lead
-            if (\MongoId::isValid($this->getLead()->getLeadId()) && $this->getLead()->getLead()->getTracking()->getOffer()->getOfferId() > 0) {
+            if (\MongoId::isValid($this->getLead()->getLeadId()) && \MongoId::isValid($this->getLead()->getLead()->getTracking()->getOffer()->getOfferId())) {
                 $this->offer->setOfferId($this->getLead()->getLead()->getTracking()->getOffer()->getOfferId());
-                if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                if (\MongoId::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
                     $this->offer->setOfferName($this->offer->getOffer()->getName());
                 }
                 $offer_found = true;
@@ -185,7 +185,7 @@ class Pixel extends CommonForm {
                         // We found only one offer, so use that one
                         $offer = array_shift($offers);
                         $this->offer->setOfferId($offer->getId());
-                        if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                        if (\MongoId::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
                             $this->offer->setOfferName($this->offer->getOffer()->getName());
                         }
                         \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found 1 offer (" . $this->offer->getOfferName() . "), using it");
@@ -195,7 +195,7 @@ class Pixel extends CommonForm {
                     	// We found more than one offer, so use the first one
                         $offer = array_shift($offers);
                         $this->offer->setOfferId($offer->getId());
-                        if ($this->offer->getOfferId() > 0 && $this->offer->getOfferName() == '') {
+                        if (\MongoId::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
                             $this->offer->setOfferName($this->offer->getOffer()->getName());
                         }
                         \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Found " . count($offers) . ", using the first one (" . $this->offer->getOfferName() . ")");

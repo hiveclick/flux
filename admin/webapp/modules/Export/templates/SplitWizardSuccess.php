@@ -362,6 +362,7 @@ $(document).ready(function() {
 
 	$('#split_form').form(function(data) {
 		$.rad.notify('Split Added', 'The split has been added into the system');
+		$('#add_split_modal').modal('hide');
 	},{keep_form:true});
 });
 //-->

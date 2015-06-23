@@ -10,14 +10,14 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($saved_search->getId() > 0) ? 'Edit' : 'Add' ?> Saved Search</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($saved_search->getId()) ? 'Edit' : 'Add' ?> Saved Search</h4>
 </div>
-<form id="saved_search_form_<?php echo $saved_search->getId() ?>" method="<?php echo ($saved_search->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form id="saved_search_form_<?php echo $saved_search->getId() ?>" method="<?php echo \MongoId::isValid($saved_search->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/saved-search" />
 	<input type="hidden" name="is_global" value="0" />
-	<?php if ($saved_search->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($saved_search->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $saved_search->getId() ?>" />
-        <input type="hidden" name="user[user_id]" value="<?php echo $saved_search->getUser()->getUserId() > 0 ? $saved_search->getUser()->getUserId() : $this->getContext()->getUser()->getUserDetails()->getId()  ?>" />
+        <input type="hidden" name="user[user_id]" value="<?php echo \MongoId::isValid($saved_search->getUser()->getUserId()) ? $saved_search->getUser()->getUserId() : $this->getContext()->getUser()->getUserDetails()->getId()  ?>" />
 	<?php } else { ?>
 	    <input type="hidden" name="user[user_id]" value="<?php echo $this->getContext()->getUser()->getUserDetails()->getId() ?>" />
 	<?php } ?>
@@ -125,7 +125,7 @@
 			</div>
 		</div>
 		<hr />
-		<div class="form-group <?php echo $saved_search->getSearchType() == 0 ? 'hidden' : ''; ?>" id="saved_search_name">
+		<div class="form-group <?php echo ($saved_search->getSearchType() == 0) ? 'hidden' : ''; ?>" id="saved_search_name">
 			<div class="help-block">Enter a nickname for this saved search that will be displayed in the menu</div>
 			<input type="text" name="name" class="form-control" placeholder="Enter a name for this search..." value="<?php echo $saved_search->getName() ?>" />
 			<div style="padding-left:10px;">
@@ -134,7 +134,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($saved_search->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($saved_search->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Saved Search" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -147,6 +147,7 @@ $(document).ready(function() {
 	$('#saved_search_form_<?php echo $saved_search->getId() ?>').form(function(data) {
 		$.rad.notify('Saved Search Updated', 'The saved search has been added/updated in the system');
 		$('#saved-search_search_form').trigger('submit');
+		$('#edit_saved_search_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#search_type').selectize({
@@ -288,7 +289,7 @@ $(document).ready(function() {
     });
 });
 
-<?php if ($saved_search->getId() > 0) { ?>
+<?php if (\MongoId::isValid($saved_search->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this saved search from the system?')) {
 		$.rad.del({ func: '/admin/saved-search/<?php echo $saved_search->getId() ?>' }, function(data) {

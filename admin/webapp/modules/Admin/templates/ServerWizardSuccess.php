@@ -4,12 +4,12 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title"><?php echo ($server->getId() > 0) ? 'Edit' : 'Add' ?> Server</h4>
+	<h4 class="modal-title"><?php echo \MongoId::isValid($server->getId()) ? 'Edit' : 'Add' ?> Server</h4>
 </div>
-<form class="" id="server_form_<?php echo $server->getId() ?>" method="<?php echo ($server->getId() > 0) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
+<form class="" id="server_form_<?php echo $server->getId() ?>" method="<?php echo \MongoId::isValid($server->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/admin/server" />
 	<input type="hidden" name="status" value="<?php echo \Flux\Server::SERVER_STATUS_ACTIVE ?>" />
-	<?php if ($server->getId() > 0) { ?>
+	<?php if (\MongoId::isValid($server->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $server->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
@@ -18,7 +18,7 @@
 			<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
 			<li role="presentation" class=""><a href="#ftp" role="tab" data-toggle="tab">FTP</a></li>
 			<li role="presentation" class=""><a href="#apache" role="tab" data-toggle="tab">Apache Setup</a></li>
-			<?php if ($server->getId() > 0) { ?>
+			<?php if (\MongoId::isValid($server->getId())) { ?>
 				<li role="presentation" class=""><a href="#apc" role="tab" data-toggle="tab">APC</a></li>
 			<?php } ?>
 		</ul>
@@ -96,7 +96,7 @@
 					<input type="text" id="web_group" name="web_group" class="form-control" placeholder="Website owner" value="<?php echo $server->getWebGroup() ?>" />
 				</div>
 			</div>
-			<?php if ($server->getId() > 0) { ?>
+			<?php if (\MongoId::isValid($server->getId())) { ?>
 				<div role="tabpanel" class="tab-pane fade" id="apc">
 					<div class="help-block">Displays the APC cache running on this server.  Clear the cache when you push changes to this server.</div>
 					<br/>
@@ -106,7 +106,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<?php if ($server->getId() > 0) { ?>
+		<?php if (\MongoId::isValid($server->getId())) { ?>
 			<input type="button" class="btn btn-danger" value="Delete Server" class="small" onclick="javascript:confirmDelete();" />
 		<?php } ?>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -120,6 +120,7 @@ $(document).ready(function() {
 	$('#server_form_<?php echo $server->getId() ?>').form(function(data) {
 		$.rad.notify('Server Updated', 'The server has been added/updated in the system');
 		$('#server_search_form').trigger('submit');
+		$('#edit_server_modal').modal('hide');
 	}, {keep_form:1});
 	
 	$('#btn_lookup_hostname').click(function() {
@@ -132,7 +133,7 @@ $(document).ready(function() {
 	});
 });
 
-<?php if ($server->getId() > 0) { ?>
+<?php if (\MongoId::isValid($server->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this server from the system?')) {
 		$.rad.del({ func: '/admin/server/<?php echo $server->getId() ?>' }, function(data) {

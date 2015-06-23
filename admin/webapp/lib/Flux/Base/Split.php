@@ -240,7 +240,7 @@ class Split extends MongoForm {
 			array_walk($this->offers, function(&$val, $key) { 
 				$offer = new \Flux\Link\Offer();
 				$offer->populate($val);
-				if ($offer->getOfferId() > 0 && $offer->getOfferName() == '') {
+				if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
 					$offer->setOfferName($offer->getOffer()->getName());
 				}
 				$val = $offer; 
@@ -248,22 +248,12 @@ class Split extends MongoForm {
 		} else if (is_string($arg0)) {
 			if (trim($arg0) == '') {
 				$this->offers = array();
-			} else if (is_int($arg0)) {
-				$this->offers = array((int)$arg0);
-				array_walk($this->offers, function(&$val, $key) { 
-					$offer = new \Flux\Link\Offer();
-					$offer->setOfferId($val);
-					if ($offer->getOfferId() > 0 && $offer->getOfferName() == '') {
-						$offer->setOfferName($offer->getOffer()->getName());
-					}
-					$val = $offer; 
-				});
 			} else if (is_string($arg0)) {
 				$this->offers = implode(',', $arg0);
 				array_walk($this->offers, function(&$val, $key) { 
 					$offer = new \Flux\Link\Offer();
 					$offer->setOfferId($val);
-					if ($offer->getOfferId() > 0 && $offer->getOfferName() == '') {
+					if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
 						$offer->setOfferName($offer->getOffer()->getName());
 					}
 					$val = $offer; 
@@ -293,17 +283,24 @@ class Split extends MongoForm {
 		if (is_array($arg0)) {
 			$fulfillment = new \Flux\Link\Fulfillment();
 			$fulfillment->populate($arg0);
-			if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$fulfillment = new \Flux\Link\Fulfillment();
-			$fulfillment->setId($arg0);
-			if ($fulfillment->getFulfillmentId() > 0 && $fulfillment->getFulfillmentName() == '') {
+			$fulfillment->setFulfillmentId($arg0);
+			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
+		} else if ($arg0 instanceof \MongoId) {
+		    $fulfillment = new \Flux\Link\Fulfillment();
+		    $fulfillment->setFulfillmentId($arg0);
+		    if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+		        $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+		    }
+		    $this->fulfillment = $fulfillment;
 		}
 		$this->addModifiedColumn('fulfillment');
 		return $this;
@@ -330,13 +327,13 @@ class Split extends MongoForm {
 			array_walk($this->filters, function(&$val, $key) { 
 				$filter = new \Flux\Link\DataField();
 				$filter->populate($val);
-				if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldId() == 0) {
+				if ($filter->getDataFieldKeyName() != '' && is_null($filter->getDataFieldId())) {
 					$filter->setDataFieldId($filter->getDataField()->getId());
 				}
-				if ($filter->getDataFieldId() > 0 && $filter->getDataFieldKeyName() == '') {
+				if (\MongoId::isValid($filter->getDataFieldId()) && $filter->getDataFieldKeyName() == '') {
 					$filter->setDataFieldKeyName($filter->getDataField()->getKeyName());
 				}
-				if ($filter->getDataFieldId() > 0 && $filter->getDataFieldName() == '') {
+				if (\MongoId::isValid($filter->getDataFieldId()) && $filter->getDataFieldName() == '') {
 					$filter->setDataFieldName($filter->getDataField()->getName());
 				}
 				$val = $filter; 
@@ -344,25 +341,12 @@ class Split extends MongoForm {
 		} else if (is_string($arg0)) {
 			if (trim($arg0) == '') {
 				$this->filters = array();
-			} else if (is_int($arg0)) {
-				$this->filters = array((int)$arg0);
-				array_walk($this->filters, function(&$val, $key) { 
-					$filter = new \Flux\Link\DataField();
-					$filter->setDataFieldKeyName($val);
-					if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldId() == 0) {
-						$filter->setDataFieldId($filter->getDataField()->getId());
-					}
-					if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldName() == '') {
-						$filter->setDataFieldName($filter->getDataField()->getName());
-					}
-					$val = $filter; 
-				});
 			} else if (is_string($arg0)) {
 				$this->filters = implode(',', $arg0);
 				array_walk($this->filters, function(&$val, $key) { 
 					$filter = new \Flux\Link\DataField();
 					$filter->setDataFieldKeyName($val);
-					if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldId() == 0) {
+					if ($filter->getDataFieldKeyName() != '' && is_null($filter->getDataFieldId())) {
 						$filter->setDataFieldId($filter->getDataField()->getId());
 					}
 					if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldName() == '') {
@@ -397,13 +381,13 @@ class Split extends MongoForm {
 	        array_walk($this->validators, function(&$val, $key) {
 	            $validator = new \Flux\Link\DataField();
 	            $validator->populate($val);
-	            if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
+	            if ($validator->getDataFieldKeyName() != '' && is_null($validator->getDataFieldId())) {
 	                $validator->setDataFieldId($validator->getDataField()->getId());
 	            }
-	            if ($validator->getDataFieldId() > 0 && $validator->getDataFieldKeyName() == '') {
+	            if (\MongoId::isValid($validator->getDataFieldId()) && $validator->getDataFieldKeyName() == '') {
 	                $validator->setDataFieldKeyName($validator->getDataField()->getKeyName());
 	            }
-	            if ($validator->getDataFieldId() > 0 && $validator->getDataFieldName() == '') {
+	            if (\MongoId::isValid($validator->getDataFieldId()) && $validator->getDataFieldName() == '') {
 	                $validator->setDataFieldName($validator->getDataField()->getName());
 	            }
 	            $val = $validator;
@@ -411,25 +395,12 @@ class Split extends MongoForm {
 	    } else if (is_string($arg0)) {
 	        if (trim($arg0) == '') {
 	            $this->validators = array();
-	        } else if (is_int($arg0)) {
-	            $this->validators = array((int)$arg0);
-	            array_walk($this->$validators, function(&$val, $key) {
-	                $validator = new \Flux\Link\DataField();
-	                $validator->setDataFieldKeyName($val);
-	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
-	                    $validator->setDataFieldId($validator->getDataField()->getId());
-	                }
-	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldName() == '') {
-	                    $validator->setDataFieldName($validator->getDataField()->getName());
-	                }
-	                $val = $validator;
-	            });
 	        } else if (is_string($arg0)) {
 	            $this->validators = implode(',', $arg0);
 	            array_walk($this->validators, function(&$val, $key) {
 	                $validator = new \Flux\Link\DataField();
 	                $validator->setDataFieldKeyName($val);
-	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldId() == 0) {
+	                if ($validator->getDataFieldKeyName() != '' && is_null($validator->getDataFieldId())) {
 	                    $validator->setDataFieldId($validator->getDataField()->getId());
 	                }
 	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldName() == '') {

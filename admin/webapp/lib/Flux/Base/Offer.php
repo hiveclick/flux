@@ -315,15 +315,21 @@ class Offer extends MongoForm {
 		if (is_array($arg0)) {
 			$this->vertical = new \Flux\Link\Vertical();
 			$this->vertical->populate($arg0);
-			if ($this->vertical->getVerticalId() > 0 && $this->vertical->getVerticalName() == '') {
+			if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
 			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
 			}
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
             $this->vertical = new \Flux\Link\Vertical();
 			$this->vertical->setVerticalId($arg0);
-			if ($this->vertical->getVerticalId() > 0 && $this->vertical->getVerticalName() == '') {
+			if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
 			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
 			}
+		} else if ($arg0 instanceof \MongoId) {
+		    $this->vertical = new \Flux\Link\Vertical();
+		    $this->vertical->setVerticalId($arg0);
+		    if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
+		        $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+		    }
 		}
 		$this->addModifiedColumn('vertical');
 		return $this;
@@ -451,7 +457,9 @@ class Offer extends MongoForm {
 	 */
 	function setEvents($arg0) {
 		$this->events = $arg0;
-		array_walk($this->events, function(&$val) { $val['event_id'] = (int)$val['event_id']; });
+		if (is_array($this->events)) {
+            array_walk($this->events, function(&$val) { if (\MongoId::isValid($val['event_id']) && !($val['event_id'] instanceof \MongoId)) { $val['event_id'] = new \MongoId($val['event_id']); }});
+		}
 		$this->addModifiedColumn('events');
 		return $this;
 	}
@@ -475,17 +483,24 @@ class Offer extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
+		} else if ($arg0 instanceof \MongoId) {
+		    $client = $this->getClient();
+		    $client->setClientId($arg0);
+		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+		        $client->setClientName($client->getClient()->getName());
+		    }
+		    $this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -510,17 +525,24 @@ class Offer extends MongoForm {
 	    if (is_array($arg0)) {
 			$split = $this->getSplit();
 			$split->populate($arg0);
-			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
 		} else if (is_string($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
-			if ($split->getSplitId() > 0 && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
+		} else if ($arg0 instanceof \MongoId) {
+		    $split = $this->getSplit();
+		    $split->setSplitId($arg0);
+		    if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+		        $split->setSplitName($split->getSplit()->getName());
+		    }
+		    $this->split = $split;
 		}
 		$this->addModifiedColumn('split');
 	    return $this;

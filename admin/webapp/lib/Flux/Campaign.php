@@ -41,13 +41,13 @@ class Campaign extends Base\Campaign {
 	function setTrafficSourceIdArray($arg0) {
 	    if (is_array($arg0)) {
 			$this->traffic_source_id_array = $arg0;
-			array_walk($this->traffic_source_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->traffic_source_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->traffic_source_id_array = explode(",", $arg0);
-				array_walk($this->traffic_source_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->traffic_source_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->traffic_source_id_array = array((int)$arg0);
+				$this->traffic_source_id_array = array($arg0);
 			}
 		}
 	    return $this;
@@ -73,13 +73,14 @@ class Campaign extends Base\Campaign {
 	function setOfferIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->offer_id_array = $arg0;
-			array_walk($this->offer_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->offer_id_array = explode(",", $arg0);
-				array_walk($this->offer_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->offer_id_array = array((int)$arg0);
+				$this->offer_id_array = array($arg0);
+				array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -103,13 +104,14 @@ class Campaign extends Base\Campaign {
 	function setClientIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->client_id_array = $arg0;
-			array_walk($this->client_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->client_id_array = explode(",", $arg0);
-				array_walk($this->client_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->client_id_array = array((int)$arg0);
+				$this->client_id_array = array($arg0);
+				array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -130,10 +132,10 @@ class Campaign extends Base\Campaign {
 	        	$criteria['description'] = new \MongoRegex("/" . $this->getKeywords() . "/i");
 	        }
 	    }
-		if ($this->getClient()->getClientId() > 0) {
+		if (\MongoId::isValid($this->getClient()->getClientId())) {
 			$criteria['client.client_id'] = $this->getClientId();
 		}
-		if ($this->getOffer()->getOfferId() > 0) {
+		if (\MongoId::isValid($this->getOffer()->getOfferId())) {
 			$criteria['offer.offer_id'] = $this->getOfferId();
 		}
 		if (count($this->getOfferIdArray()) > 0) {

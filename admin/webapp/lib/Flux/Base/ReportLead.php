@@ -75,14 +75,21 @@ class ReportLead extends MongoForm {
         if (is_array($arg0)) {
             $this->client = new \Flux\Link\Client();
             $this->client->populate($arg0);
-            if ($this->client->getClientId() > 0 && $this->client->getClientName() == '') {
+            if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
                 $this->client->setClientName($this->client->getClient()->getName());
             }
             $this->addModifiedColumn("client");
-        } else if (is_string($arg0) || is_int($arg0)) {
+        } else if (is_string($arg0)) {
             $this->client = new \Flux\Link\Client();
             $this->client->setClientId($arg0);
-            if ($this->client->getClientId() > 0 && $this->client->getClientName() == '') {
+            if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
+                $this->client->setClientName($this->client->getClient()->getName());
+            }
+            $this->addModifiedColumn("client");
+        } else if ($arg0 instanceof \MongoId) {
+            $this->client = new \Flux\Link\Client();
+            $this->client->setClientId($arg0);
+            if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
                 $this->client->setClientName($this->client->getClient()->getName());
             }
             $this->addModifiedColumn("client");

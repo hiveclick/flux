@@ -104,13 +104,14 @@ class Lead extends Base\Lead {
 	function setOfferIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->offer_id_array = $arg0;
-			array_walk($this->offer_id_array, function(&$val) { $val = (int)$val; });
+			array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->offer_id_array = explode(",", $arg0);
-				array_walk($this->offer_id_array, function(&$val) { $val = (int)$val; });
+				array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
-				$this->offer_id_array = array((int)$arg0);
+				$this->offer_id_array = array($arg0);
+				array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -140,7 +141,8 @@ class Lead extends Base\Lead {
 				$this->campaign_id_array = explode(",", $arg0);
 				array_walk($this->campaign_id_array, function(&$val) { $val = trim($val); });
 			} else {
-				$this->campaign_id_array = array((int)$arg0);
+				$this->campaign_id_array = array($arg0);
+				array_walk($this->campaign_id_array, function(&$val) { $val = trim($val); });
 			}
 		}
 		return $this;
@@ -252,12 +254,12 @@ class Lead extends Base\Lead {
 		    $criteria['_e.t'] = array('$lte' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime($this->getEndDate())))));
 		}
 		
-		/*
+		
 		$ops = json_encode($criteria);
 		$ops = str_replace('"$or"', '$or', $ops);
 		$ops = str_replace('"$exists"', '$exists', $ops);
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
-		*/
+		
 						
 		return parent::queryAll($criteria, $hydrate);
 	}

@@ -21,7 +21,7 @@ $servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 	</select>
 	
 	<p />
-	<iframe style="border:1px solid #C8C8C8;" id="server_explorer_iframe" src="<?php echo ($server->getId() > 0) ? '/admin/server-explorer?_id=' . $server->getId() : '' ?>" width="100%" height="500" frameborder="0"></iframe>
+	<iframe style="border:1px solid #C8C8C8;" id="server_explorer_iframe" src="<?php echo \MongoId::isValid($server->getId()) ? '/admin/server-explorer?_id=' . $server->getId() : '' ?>" width="100%" height="500" frameborder="0"></iframe>
 	<input type="text" class="form-control" id="current_folder_name" name="current_folder_name" value="<?php echo $server->getFolderName() ?>" />
 </div>
 <div class="modal-footer">

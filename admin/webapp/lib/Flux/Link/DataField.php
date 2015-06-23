@@ -46,7 +46,7 @@ class DataField extends CommonForm {
 	 */
 	function getDataFieldId() {
 		if (is_null($this->data_field_id)) {
-			$this->data_field_id = 0;
+			$this->data_field_id = null;
 		}
 		return $this->data_field_id;
 	}
@@ -56,7 +56,11 @@ class DataField extends CommonForm {
 	 * @var integer
 	 */
 	function setDataFieldId($arg0) {
-		$this->data_field_id = (int)$arg0;
+	   if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->data_field_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->data_field_id = $arg0;
+	    }
 		return $this;
 	}
 	

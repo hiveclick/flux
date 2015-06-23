@@ -17,7 +17,7 @@ class Client extends CommonForm {
 	 */
 	function getClientId() {
 		if (is_null($this->client_id)) {
-			$this->client_id = 0;
+			$this->client_id = null;
 		}
 		return $this->client_id;
 	}
@@ -27,7 +27,11 @@ class Client extends CommonForm {
 	 * @var integer
 	 */
 	function setClientId($arg0) {
-		$this->client_id = (int)$arg0;
+	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->client_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->client_id = $arg0;
+	    }
 		$this->setClientColor($this->getClient()->getColor());
 		return $this;
 	}

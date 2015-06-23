@@ -44,7 +44,7 @@ class LeadPayout extends BaseReport {
                 $this->offer_id_array = array($arg0);
             }
         }
-        array_walk($this->offer_id_array, function(&$value) { $value = (int)$value; });
+        array_walk($this->offer_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         $this->addModifiedColumn("offer_id_array");
         return $this;
     }
@@ -74,7 +74,7 @@ class LeadPayout extends BaseReport {
                 $this->client_id_array = array($arg0);
             }
         }
-        array_walk($this->client_id_array, function(&$value) { $value = (int)$value; });
+        array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         $this->addModifiedColumn("client_id_array");
         return $this;
     }

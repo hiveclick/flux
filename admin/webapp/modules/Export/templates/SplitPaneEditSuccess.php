@@ -491,6 +491,7 @@ $(document).ready(function() {
 
 	$('#split_form').form(function(data) {
 		$.rad.notify('Split Updated', 'The split has been updated in the system');
+		$('#edit_split_modal').modal('hide');
 	},{keep_form:true});
 });
 //-->

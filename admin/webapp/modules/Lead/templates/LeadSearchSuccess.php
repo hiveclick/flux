@@ -129,7 +129,7 @@ $(document).ready(function() {
 					{id:'<?php echo $data_field->getKeyName() ?>', name:'<?php echo ucfirst(strtolower(preg_replace("/[^a-zA-Z0-9 ]/", "", $data_field->getName()))) ?>', field:'_e.<?php echo $data_field->getKeyName() ?>', hidden: true, def_value: ' ', sortable:false, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 						var ret_val;
 						$.each(dataContext._e, function(i, item) {
-							if (item.data_field.data_field_id == <?php echo $data_field->getId() ?>) {
+							if (item.data_field.data_field_id == '<?php echo $data_field->getId() ?>') {
 								// This is our event
 							        ret_val = '<div style="line-height:16pt;">'
 								    if (item.v == '1') {

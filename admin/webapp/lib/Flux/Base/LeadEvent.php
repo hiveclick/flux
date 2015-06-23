@@ -288,26 +288,36 @@ class LeadEvent extends MojaviForm {
 		if (is_array($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->populate($arg0);
-			if ($data_field->getDataFieldKeyName() == '' && $data_field->getDataFieldId() > 0) {
+			if ($data_field->getDataFieldKeyName() == '' && \MongoId::isValid($data_field->getDataFieldId())) {
 				$data_field->setDataFieldKeyName($data_field->getDataField()->getKeyName());
 			}
-			if ($data_field->getDataFieldKeyName() != '' && $data_field->getDataFieldId() == 0) {
+			if ($data_field->getDataFieldKeyName() != '' && is_null($data_field->getDataFieldId())) {
 				$data_field->setDataFieldId($data_field->getDataField()->getId());
 			}
 			if ($data_field->getDataFieldKeyName() != '' && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->setDataFieldKeyName($arg0);
-			if ($data_field->getDataFieldKeyName() != '' && $data_field->getDataFieldId() == 0) {
+			if ($data_field->getDataFieldKeyName() != '' && is_null($data_field->getDataFieldId())) {
 				$data_field->setDataFieldId($data_field->getDataField()->getId());
 			}
 			if ($data_field->getDataFieldKeyName() != '' && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
+		} else if ($arg0 instanceof \MongoId) {
+		    $data_field = $this->getDataField();
+		    $data_field->setDataFieldKeyName($arg0);
+		    if ($data_field->getDataFieldKeyName() != '' && is_null($data_field->getDataFieldId())) {
+		        $data_field->setDataFieldId($data_field->getDataField()->getId());
+		    }
+		    if ($data_field->getDataFieldKeyName() != '' && $data_field->getDataFieldName() == "") {
+		        $data_field->setDataFieldName($data_field->getDataField()->getName());
+		    }
+		    $this->data_field = $data_field;
 		}
 		$this->addModifiedColumn('data_field');
 		return $this;
@@ -332,17 +342,24 @@ class LeadEvent extends MojaviForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer = $this->getOffer();
+		    $offer->setOfferId($arg0);
+		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+		        $offer->setOfferName($offer->getOffer()->getName());
+		    }
+		    $this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;
@@ -367,17 +384,24 @@ class LeadEvent extends MojaviForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if ($client->getClientId() > 0 && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
+		} else if ($arg0 instanceof \MongoId) {
+		    $client = $this->getClient();
+		    $client->setClientId($arg0);
+		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+		        $client->setClientName($client->getClient()->getName());
+		    }
+		    $this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;

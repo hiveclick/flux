@@ -16,7 +16,7 @@ class User extends CommonForm {
 	 */
 	function getUserId() {
 		if (is_null($this->user_id)) {
-			$this->user_id = 0;
+			$this->user_id = null;
 		}
 		return $this->user_id;
 	}
@@ -26,7 +26,11 @@ class User extends CommonForm {
 	 * @var integer
 	 */
 	function setUserId($arg0) {
-		$this->user_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->user_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->user_id = $arg0;
+	    }
 		return $this;
 	}
 	

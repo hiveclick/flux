@@ -17,7 +17,7 @@ class Campaign extends CommonForm {
 	 */
 	function getCampaignId() {
 		if (is_null($this->campaign_id)) {
-			$this->campaign_id = '';
+			$this->campaign_id = null;
 		}
 		return $this->campaign_id;
 	}

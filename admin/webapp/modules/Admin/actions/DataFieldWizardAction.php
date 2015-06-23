@@ -28,7 +28,7 @@ class DataFieldWizardAction extends BasicAction
 		/* @var $datafield Flux\DataField */
 		$datafield = new DataField();
 		$datafield->populate($_GET);
-		if ($datafield->getId() > 0) {
+		if (\MongoId::isValid($datafield->getId())) {
 			$datafield->query();
 		}
 		

@@ -16,7 +16,7 @@ class Fulfillment extends CommonForm {
 	 */
 	function getFulfillmentId() {
 		if (is_null($this->fulfillment_id)) {
-			$this->fulfillment_id = 0;
+			$this->fulfillment_id = null;
 		}
 		return $this->fulfillment_id;
 	}
@@ -26,7 +26,11 @@ class Fulfillment extends CommonForm {
 	 * @var integer
 	 */
 	function setFulfillmentId($arg0) {
-		$this->fulfillment_id = (int)$arg0;
+        if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->fulfillment_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->fulfillment_id = $arg0;
+	    }
 		return $this;
 	}
 	

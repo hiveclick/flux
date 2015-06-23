@@ -60,17 +60,24 @@ class OfferPageFlow extends CommonForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if ($offer->getOfferId() > 0 && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer = $this->getOffer();
+		    $offer->setOfferId($arg0);
+		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+		        $offer->setOfferName($offer->getOffer()->getName());
+		    }
+		    $this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;
@@ -95,17 +102,24 @@ class OfferPageFlow extends CommonForm {
 		if (is_array($arg0)) {
 			$offer_page = $this->getOfferPage();
 			$offer_page->populate($arg0);
-			if ($offer_page->getOfferPageId() > 0 && $offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
 				$offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
 			}
 			$this->offer_page = $offer_page;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$offer_page = $this->getOfferPage();
 			$offer_page->setOfferPageId($arg0);
-			if ($offer_page->getOfferPageId() > 0 && $offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
 				$offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
 			}
 			$this->offer_page = $offer_page;
+		} else if ($arg0 instanceof \MongoId) {
+		    $offer_page = $this->getOfferPage();
+		    $offer_page->setOfferPageId($arg0);
+		    if (\MongoId::isValid($offer_page->getOfferPageId()) && $offer_page->getOfferPageName() == "") {
+		        $offer_page->setOfferPageName($offer_page->getOfferPage()->getName());
+		    }
+		    $this->offer_page = $offer_page;
 		}
 		$this->addModifiedColumn('offer_page');
 		return $this;
@@ -130,17 +144,24 @@ class OfferPageFlow extends CommonForm {
 		if (is_array($arg0)) {
 			$destination_offer_page = $this->getDestinationOfferPage();
 			$destination_offer_page->populate($arg0);
-			if ($destination_offer_page->getOfferPageId() > 0 && $destination_offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
 				$destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
 			}
 			$this->destination_offer_page = $destination_offer_page;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$destination_offer_page = $this->getDestinationOfferPage();
 			$destination_offer_page->setOfferPageId($arg0);
-			if ($destination_offer_page->getOfferPageId() > 0 && $destination_offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
 				$destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
 			}
 			$this->destination_offer_page = $destination_offer_page;
+		} else if ($arg0 instanceof \MongoId) {
+		    $destination_offer_page = $this->getDestinationOfferPage();
+		    $destination_offer_page->setOfferPageId($arg0);
+		    if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
+		        $destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
+		    }
+		    $this->destination_offer_page = $destination_offer_page;
 		}
 		$this->addModifiedColumn('destination_offer_page');
 		return $this;
@@ -300,17 +321,24 @@ class OfferPageFlowNavigation extends CommonForm {
 		if (is_array($arg0)) {
 			$destination_offer_page = $this->getDestinationOfferPage();
 			$destination_offer_page->populate($arg0);
-			if ($destination_offer_page->getOfferPageId() > 0 && $destination_offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
 				$destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
 			}
 			$this->destination_offer_page = $destination_offer_page;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$destination_offer_page = $this->getDestinationOfferPage();
 			$destination_offer_page->setOfferPageId($arg0);
-			if ($destination_offer_page->getOfferPageId() > 0 && $destination_offer_page->getOfferPageName() == "") {
+			if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
 				$destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
 			}
 			$this->destination_offer_page = $destination_offer_page;
+		} else if ($arg0 instanceof \MongoId) {
+		    $destination_offer_page = $this->getDestinationOfferPage();
+		    $destination_offer_page->setOfferPageId($arg0);
+		    if (\MongoId::isValid($destination_offer_page->getOfferPageId()) && $destination_offer_page->getOfferPageName() == "") {
+		        $destination_offer_page->setOfferPageName($destination_offer_page->getOfferPage()->getName());
+		    }
+		    $this->destination_offer_page = $destination_offer_page;
 		}
 		$this->addModifiedColumn('destination_offer_page');
 		return $this;
@@ -373,17 +401,24 @@ class OfferPageFlowSetter extends CommonForm {
 		if (is_array($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->populate($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->setDataFieldId($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
+		} else if ($arg0 instanceof \MongoId) {
+		    $data_field = $this->getDataField();
+		    $data_field->setDataFieldId($arg0);
+		    if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
+		        $data_field->setDataFieldName($data_field->getDataField()->getName());
+		    }
+		    $this->data_field = $data_field;
 		}
 		$this->addModifiedColumn('data_field');
 		return $this;
@@ -470,17 +505,24 @@ class OfferPageFlowFilter extends CommonForm {
 		if (is_array($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->populate($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
-		} else if (is_string($arg0) || is_int($arg0)) {
+		} else if (is_string($arg0)) {
 			$data_field = $this->getDataField();
 			$data_field->setDataFieldId($arg0);
-			if ($data_field->getDataFieldId() > 0 && $data_field->getDataFieldName() == "") {
+			if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
 				$data_field->setDataFieldName($data_field->getDataField()->getName());
 			}
 			$this->data_field = $data_field;
+		} else if ($arg0 instanceof \MongoId) {
+		    $data_field = $this->getDataField();
+		    $data_field->setDataFieldId($arg0);
+		    if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == "") {
+		        $data_field->setDataFieldName($data_field->getDataField()->getName());
+		    }
+		    $this->data_field = $data_field;
 		}
 		$this->addModifiedColumn('data_field');
 		return $this;
