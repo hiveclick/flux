@@ -27,7 +27,7 @@ class Diablo extends BaseNetwork {
 			);
 
 			/* @var $lead \Flux\Lead */
-			$offer_model = new \Flux\Lead();
+			$lead = new \Flux\Lead();
 
 			$current_date = $start_date;
 			while (strtotime($current_date) <= strtotime($end_date)) {
@@ -51,7 +51,7 @@ class Diablo extends BaseNetwork {
     						$report_lead->setDisposition('Accepted');
     						$report_lead->setAccepted(true);
     					    
-    						\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+    						\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
     						$report_lead->updateMultiple(
     						    array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
     						    array(
