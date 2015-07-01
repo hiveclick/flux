@@ -58,8 +58,8 @@ class CompileDailyClicksAction extends BasicConsoleAction
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
                     /* @var $offer \Flux\Offer */
-                    $offer = new Offer();
-                    $offer->setId((int)$result['_id']);
+                    $offer = new \Flux\Offer();
+                    $offer->setId($result['_id']);
                     if ($offer->query() !== false) {
                         StringTools::consoleWrite(' - ' . $offer->getName() . ' (' . $offer->getId() . ')', number_format($result['count'], 0, null, ',') . ' clicks', StringTools::CONSOLE_COLOR_GREEN, true);
                         $offer->setDailyClicks((int)$result['count']);
@@ -103,8 +103,8 @@ class CompileDailyClicksAction extends BasicConsoleAction
             if (isset($results['result']) && count($results['result']) > 0) {
                 foreach ($results['result'] as $result) {
                 	/* @var $offer \Flux\Offer */
-                	$offer = new Offer();
-                	$offer->setId((int)$result['_id']);
+                	$offer = new \Flux\Offer();
+                	$offer->setId($result['_id']);
                 	if ($offer->query() !== false) {
                 	    StringTools::consoleWrite(' - ' . $offer->getName(), number_format($result['count'], 0, null, ',') . ' conversions', StringTools::CONSOLE_COLOR_GREEN, true);
                 		$offer->setDailyConversions((int)$result['count']);
