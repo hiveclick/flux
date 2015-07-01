@@ -69,7 +69,7 @@ class ClicksNet extends BaseNetwork {
     			            'report_date' => $report_client->getReportDate()
     			        ),
     			        '$set' => array(
-    			            'client' => $report_client->getClient()->toArray(),
+    			            'client' => $report_client->getClient()->toArray(true, true, true),
     			            'click_count' => $report_client->getClickCount(),
     			            'conversion_count' => $report_client->getConversionCount(),
     			            'revenue' => $report_client->getRevenue()

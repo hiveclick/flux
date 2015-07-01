@@ -59,7 +59,7 @@ class Diablo extends BaseNetwork {
     						            'report_date' => $report_lead->getReportDate()
     						        ),
     						        '$set' => array(
-    						            'lead' => $report_lead->getLead()->toArray(),
+    						            'lead' => $report_lead->getLead()->toArray(true, true, true),
     						            'accepted' => $report_lead->getAccepted(),
     						            'disposition' => $report_lead->getDisposition(),
     						            'revenue' => $report_lead->getRevenue()
@@ -128,7 +128,7 @@ class Diablo extends BaseNetwork {
 				            'report_date' => $report_client->getReportDate()
 				        ),
 				        '$set' => array(
-				            'client' => $report_client->getClient()->toArray(),
+				            'client' => $report_client->getClient()->toArray(true, true, true),
 				            'click_count' => $report_client->getClickCount(),
 				            'conversion_count' => $report_client->getConversionCount(),
 				            'revenue' => $report_client->getRevenue()
