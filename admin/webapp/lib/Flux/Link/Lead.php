@@ -23,7 +23,7 @@ class Lead extends CommonForm {
 	 */
 	function getLeadId() {
 		if (is_null($this->lead_id)) {
-			$this->lead_id = '';
+			$this->lead_id = null;
 		}
 		return $this->lead_id;
 	}
@@ -33,7 +33,11 @@ class Lead extends CommonForm {
 	 * @var integer
 	 */
 	function setLeadId($arg0) {
-		$this->lead_id = $arg0;
+	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->lead_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->lead_id = $arg0;
+	    }
 		// Try to set the other fields
 		if (trim($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln')) != '') {
             $this->setLeadName($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));

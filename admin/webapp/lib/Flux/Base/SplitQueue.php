@@ -33,7 +33,7 @@ class SplitQueue extends MongoForm {
 	 * Constructs new user
 	 * @return void
 	 */
-	function __construct($split_id = 0) {
+	function __construct($split_id = null) {
 		$this->setSplit($split_id);
 		$this->setDbName('queue');
 		$this->setCollectionName('split_queue');
@@ -317,7 +317,7 @@ class SplitQueue extends MongoForm {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
-		} else if (is_string($arg0)) {
+		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
 			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
