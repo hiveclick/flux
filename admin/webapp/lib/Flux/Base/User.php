@@ -235,4 +235,20 @@ class User extends MongoForm {
 		$this->addModifiedColumn('client');
 		return $this;
 	}
+	
+	// +------------------------------------------------------------------------+
+	// | HELPER METHODS															|
+	// +------------------------------------------------------------------------+
+	
+	/**
+	 * Ensures that the mongo indexes are set (should be called once)
+	 * @return boolean
+	 */
+	public static function ensureIndexes() {
+	    $user = new self();
+	    $user->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
+	    $user->getCollection()->ensureIndex(array('email' => 1), array('background' => true));
+	    $user->getCollection()->ensureIndex(array('status' => 1, "type" => 1), array('background' => true));
+	    return true;
+	}
 }

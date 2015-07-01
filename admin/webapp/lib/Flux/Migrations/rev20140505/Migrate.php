@@ -70,7 +70,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Client ID');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Client ID');
 			$datafield->setDescription('The client associated with this offer');
 			$datafield->setKeyName('_c');
@@ -87,7 +87,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Offer ID');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Offer ID');
 			$datafield->setDescription('The offer associated with this lead');
 			$datafield->setKeyName('_o');
@@ -104,7 +104,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('SubID 1');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('SubID 1');
 			$datafield->setDescription('Subid used for tracking');
 			$datafield->setKeyName('s1');
@@ -120,7 +120,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('SubID 2');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('SubID 2');
 			$datafield->setDescription('Subid used for tracking');
 			$datafield->setKeyName('s2');
@@ -136,7 +136,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('SubID 3');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('SubID 3');
 			$datafield->setDescription('Subid used for tracking');
 			$datafield->setKeyName('s3');
@@ -152,7 +152,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('SubID 4');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('SubID 4');
 			$datafield->setDescription('Subid used for tracking');
 			$datafield->setKeyName('s4');
@@ -168,7 +168,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('SubID 5');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('SubID 5');
 			$datafield->setDescription('Subid used for tracking');
 			$datafield->setKeyName('s5');
@@ -184,7 +184,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Affiliate Unique ID');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Affiliate Unique ID');
 			$datafield->setDescription('Affiliate Unique ID');
 			$datafield->setKeyName('uid');
@@ -200,7 +200,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('First Name');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('First Name');
 			$datafield->setDescription('Lead first name');
 			$datafield->setKeyName('fn');
@@ -217,7 +217,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Last Name');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Last Name');
 			$datafield->setDescription('Lead last name');
 			$datafield->setKeyName('ln');
@@ -234,7 +234,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Address');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Address');
 			$datafield->setDescription('Lead primary address');
 			$datafield->setKeyName('a1');
@@ -251,7 +251,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Address 2');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Address 2');
 			$datafield->setDescription('Lead secondary address');
 			$datafield->setKeyName('a2');
@@ -268,7 +268,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('City');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('City');
 			$datafield->setDescription('Lead primary city');
 			$datafield->setKeyName('cy');
@@ -285,7 +285,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('State');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('State');
 			$datafield->setDescription('Lead primary state');
 			$datafield->setKeyName('st');
@@ -354,7 +354,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Zip');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Zip');
 			$datafield->setDescription('Lead primary zipcode');
 			$datafield->setKeyName('zi');
@@ -371,7 +371,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Country');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Country');
 			$datafield->setDescription('Lead primary country');
 			$datafield->setKeyName('ctry');
@@ -396,7 +396,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Email');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Email');
 			$datafield->setDescription('Lead primary email address');
 			$datafield->setKeyName('em');
@@ -413,7 +413,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Phone');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Phone');
 			$datafield->setDescription('Lead primary phone number');
 			$datafield->setKeyName('ph');
@@ -430,7 +430,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Gender');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Gender');
 			$datafield->setDescription('Lead\'s gender');
 			$datafield->setKeyName('gd');
@@ -452,7 +452,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Source URL');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield = new \Flux\DataField();
 			$datafield->setName('Source URL');
 			$datafield->setDescription('Source URL of the lead (or referer)');
@@ -469,7 +469,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Referer');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 		    $datafield = new \Flux\DataField();
 		    $datafield->setName('Referer');
 		    $datafield->setDescription('Referer url for the where the user came from');
@@ -487,7 +487,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Query String');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 		    $datafield = new \Flux\DataField();
 		    $datafield->setName('Query String');
 		    $datafield->setDescription('Query string pulled from the $_SERVER');
@@ -505,7 +505,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('IP');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('IP');
 			$datafield->setDescription('IP Address of the lead pulled from the $_SERVER variable');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_REF_IP);
@@ -522,7 +522,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('User Agent Browser');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('User Agent Browser');
 			$datafield->setDescription('User Agent Browser');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_REF_USER_AGENT_BROWSER);
@@ -588,7 +588,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('User Agent Platform');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('User Agent Platform');
 			$datafield->setDescription('User Agent Platform');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_REF_USER_AGENT_PLATFORM);
@@ -625,7 +625,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('User Agent Version');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('User Agent Version');
 			$datafield->setDescription('User Agent Version');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_REF_USER_AGENT_VERSION);
@@ -642,7 +642,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Created');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Created');
 			$datafield->setDescription('Created time of the lead');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME);
@@ -661,7 +661,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Impression');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Impression');
 			$datafield->setDescription('Time of the pixel impression');
 			$datafield->setKeyName('im');
@@ -682,7 +682,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Partial');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Partial');
 			$datafield->setDescription('Time of the partial event');
 			$datafield->setKeyName('pa');
@@ -703,7 +703,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Conversion');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 			$datafield->setName('Conversion');
 			$datafield->setDescription('Time of the conversion event');
 			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
@@ -724,7 +724,7 @@ class Migrate extends Migration {
 		$datafield = new \Flux\DataField();
 		$datafield->setName('Fulfilled');
 		$datafield->queryByName();
-		if (is_null($datafield) || (!is_null($datafield) && $datafield->getId() == 0)) {
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
 		    $datafield->setName('Fulfilled');
 		    $datafield->setDescription('Time of the fulfilled event');
 		    $datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME);
@@ -753,20 +753,26 @@ class Migrate extends Migration {
 					if (isset($data[0]) && isset($data[1])) {
 						//right now we only do US and CA
 						if (in_array($data[0], array('US', 'CA'))) {
-							$zip = new \Flux\Zip();
-							$zip->setCountry($data[0]);
-							$zip->setZipcode(isset($data[1]) ? $data[1] : '');
-							$zip->setCity(isset($data[2]) ? $data[2] : '');
-							$zip->setState(isset($data[3]) ? $data[3] : '');
-							$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
-							$zip->setCounty(isset($data[5]) ? $data[5] : '');
-							$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
-							$zip->setCommunity(isset($data[7]) ? $data[7] : '');
-							$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
-							$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
-							$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
-							$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
-							$zip->insert();
+						    try {
+    							$zip = new \Flux\Zip();
+    							$zip->setCountry($data[0]);
+    							$zip->setZipcode(isset($data[1]) ? $data[1] : '');
+    							$zip->setCity(isset($data[2]) ? $data[2] : '');
+    							$zip->setState(isset($data[3]) ? $data[3] : '');
+    							$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
+    							$zip->setCounty(isset($data[5]) ? $data[5] : '');
+    							$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
+    							$zip->setCommunity(isset($data[7]) ? $data[7] : '');
+    							$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
+    							$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
+    							$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
+    							$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
+    							$zip->insert();
+						    } catch (\Exception $e) {
+						        if (strpos($e->getMessage(), "duplicate key error") === false) {
+                                    StringTools::consoleWrite('   - Zipcode Initialization', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true);
+						        }
+						    }
 						}
 					} else {
 					    StringTools::consoleWrite('   - Zipcode Initialization', 'Column 0 or Column 1 not found', StringTools::CONSOLE_COLOR_RED, true);
@@ -790,7 +796,7 @@ class Migrate extends Migration {
 		$daemon = new \Flux\Daemon();
 		$daemon->setType('Split');
 		$daemon->query(array(), false);
-		if (is_null($daemon) || (!is_null($daemon) && $daemon->getId() == 0)) {
+		if (is_null($daemon) || (!is_null($daemon) && !\MongoId::isValid($daemon->getId()))) {
 			$daemon->setName('Split');
 			$daemon->setStatus(\Flux\Daemon::DAEMON_STATUS_ACTIVE);
 			$daemon->setRunStatus(\Flux\Daemon::DAEMON_RUN_STATUS_INACTIVE);

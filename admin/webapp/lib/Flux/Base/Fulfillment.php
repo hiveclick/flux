@@ -625,8 +625,9 @@ class Fulfillment extends MongoForm {
 	 * @return boolean
 	 */
 	public static function ensureIndexes() {
-		$client_export = new self();
-		$client_export->getCollection()->ensureIndex(array('client_id' => 1), array('background' => true));
+		$fulfillment = new self();
+		$fulfillment->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
+		$fulfillment->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
 		return true;
 	}
 

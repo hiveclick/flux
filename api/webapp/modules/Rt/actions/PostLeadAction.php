@@ -70,7 +70,7 @@ class PostLeadAction extends BasicRestAction
             if (!($lead->getTracking()->getOffer()->getOffer()->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST)) {
                 throw new \Exception('Campaign is not a valid post campaign');
             }
-            if (\MongoId::isValid($lead->getTracking()->getOffer()->getOffer()->getSplit()->getSplitId())) {
+            if (!\MongoId::isValid($lead->getTracking()->getOffer()->getOffer()->getSplit()->getSplitId())) {
                 throw new \Exception('Campaign has not been setup with a fulfillment yet');
             }
             

@@ -307,7 +307,7 @@ class Zip extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$zip = new self();
-		$zip->getCollection()->ensureIndex(array('zipcode' => 1));
+		$zip->getCollection()->ensureIndex(array('zipcode' => 1), array('background' => true, 'unique' => true));
 		return true;
 	}
 }

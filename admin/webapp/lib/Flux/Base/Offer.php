@@ -630,7 +630,8 @@ class Offer extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$offer = new self();
-		$offer->getCollection()->ensureIndex(array('client_id' => 1), array('background' => true));
+		$offer->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
+		$offer->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
 		return true;
 	}
 }

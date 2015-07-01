@@ -62,7 +62,7 @@ class ExportQueue extends MongoForm {
 		    }
 		    $this->export = $export;
 		}
-		$this->setCollectionName('export_queue_' . $this->export->getExportId());
+		$this->setCollectionName('export_queue');
 		$this->addModifiedColumn('export');
 		return $this;
 	}

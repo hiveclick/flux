@@ -392,8 +392,7 @@ class Campaign extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$campaign = new self();
-		$campaign->getCollection()->ensureIndex(array('offer_id' => 1, 'client_id' => 1), array('background' => true));
-		$campaign->getCollection()->ensureIndex(array('client_id' => 1, 'offer_id' => 1), array('background' => true));
+		$campaign->getCollection()->ensureIndex(array('offer.offer_id' => 1, 'client.client_id' => 1, "traffic_source.traffic_source_id" => 1), array('background' => true));
 		return true;
 	}
 }

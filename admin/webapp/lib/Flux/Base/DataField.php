@@ -466,6 +466,21 @@ class DataField extends MongoForm {
 		$this->addModifiedColumn('field_value');
 		return $this;
 	}
+	
+	// +------------------------------------------------------------------------+
+	// | HELPER METHODS															|
+	// +------------------------------------------------------------------------+
+	
+	/**
+	 * Ensures that the mongo indexes are set (should be called once)
+	 * @return boolean
+	 */
+	public static function ensureIndexes() {
+	    $data_field = new self();
+	    $data_field->getCollection()->ensureIndex(array('key_name' => 1), array('background' => true, 'unique' => true));
+	    $data_field->getCollection()->ensureIndex(array('status' => 1, 'access_type' => 1), array('background' => true));
+	    return true;
+	}
 }
 
 /**

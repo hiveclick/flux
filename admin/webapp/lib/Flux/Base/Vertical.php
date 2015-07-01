@@ -91,7 +91,6 @@ class Vertical extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$vertical = new self();
-		$vertical->getCollection()->ensureIndex(array('status' => 1, 'type' => 1), array('background' => true));
 		$vertical->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
 		return true;
 	}

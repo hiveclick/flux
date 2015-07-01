@@ -331,6 +331,18 @@ class Client extends MongoForm {
 	    $this->addModifiedColumn('reporting_api_class');
 	    return $this;
 	}
+	
+	/**
+	 * Ensures that the mongo indexes are set (should be called once)
+	 * @return boolean
+	 */
+	public static function ensureIndexes() {
+	    $client = new self();
+	    $client->getCollection()->ensureIndex(array('status' => 1, 'type' => 1), array('background' => true));
+	    $client->getCollection()->ensureIndex(array('email' => 1), array('background' => true, 'unique' => true));
+	    $client->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
+	    return true;
+	}
 
 	// +------------------------------------------------------------------------+
 	// | HELPER METHODS															|
