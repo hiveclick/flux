@@ -134,11 +134,16 @@ class GenericPost extends ExportAbstract {
 		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
 		$split_queue_attempt->setResponse($response);
 		$split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-		if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
-			$split_queue_attempt->setIsError(false);
+		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
+    		if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
+    			$split_queue_attempt->setIsError(false);
+    		} else {
+    		    $split_queue_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
+    			$split_queue_attempt->setIsError(true);
+    		}
 		} else {
-		    $split_queue_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
-			$split_queue_attempt->setIsError(true);
+		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Missing SuccessMsg on " . $this->getFulfillment()->getFulfillmentName() . " for " . $split_queue_attempt->getSplitQueue()->getSplitQueue()->getSplit()->getSplitName());
+		    $split_queue_attempt->setIsError(false);
 		}
 		return $split_queue_attempt;
 	}

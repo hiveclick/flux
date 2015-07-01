@@ -109,7 +109,14 @@ abstract class ExportAbstract extends MongoForm {
 	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 	        }
 	        $this->fulfillment = $fulfillment;
-	    } else if (is_string($arg0) || is_int($arg0)) {
+	    } else if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $fulfillment = new \Flux\Link\Fulfillment();
+	        $fulfillment->setFulfillmentId($arg0);
+	        if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+	        }
+	        $this->fulfillment = $fulfillment;
+	    } else if ($arg0 instanceof \MongoId) {
 	        $fulfillment = new \Flux\Link\Fulfillment();
 	        $fulfillment->setFulfillmentId($arg0);
 	        if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {

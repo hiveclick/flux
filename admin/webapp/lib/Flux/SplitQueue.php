@@ -209,16 +209,16 @@ class SplitQueue extends Base\SplitQueue {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;
-        } else if (is_string($arg0) || is_int($arg0)) {
+        } else if (is_string($arg0)) {
             $fulfillment = $this->getFulfillment();
-            $fulfillment->setId($arg0);
+            $fulfillment->setFulfillmentId($arg0);
             if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }
             $this->fulfillment = $fulfillment;
         } else if ($arg0 instanceof \MongoId) {
             $fulfillment = $this->getFulfillment();
-            $fulfillment->setId($arg0);
+            $fulfillment->setFulfillmentId($arg0);
             if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
                 $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
             }

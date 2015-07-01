@@ -20,7 +20,7 @@ class SplitQueueAttempt extends CommonForm {
     
     /**
      * Returns the split_queue
-     * @return SplitQueue
+     * @return \Flux\Link\SplitQueue
      */
     function getSplitQueue() {
         if (is_null($this->split_queue)) {
