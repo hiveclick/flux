@@ -202,7 +202,7 @@ class MojaviForm extends MojaviObject {
      * Converts this object to an array
      * @return array
      */
-    function toArray($deep = false, $use_null_for_blank = true) {
+    function toArray($deep = false, $use_null_for_blank = true, $preserve_object_ids = false) {
         $ret_val = array();
         $reflection = new \ReflectionClass($this);
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PROTECTED);
@@ -218,18 +218,22 @@ class MojaviForm extends MojaviObject {
                 } else if (is_null($value)) {
                     $ret_val[$property_name] = $value;
                 } else if ($value instanceof \Mojavi\Form\MojaviForm) {
-                    $ret_val[$property_name] = $value->toArray($deep, $use_null_for_blank);
+                    $ret_val[$property_name] = $value->toArray($deep, $use_null_for_blank, $preserve_object_ids);
                 } else if ($value instanceof \MongoId) {
-                    $ret_val[$property_name] = (string)$value;
+                    if ($preserve_object_ids) {
+                        $ret_val[$property_name] = $value;
+                    } else {
+                        $ret_val[$property_name] = (string)$value;
+                    }
                 } else if ($value instanceof \Mojavi\Database\DatabaseResultResource) {
                     foreach ($value as $item) {
-                        $ret_val[$property_name][] = $item->toArray($deep, $use_null_for_blank);
+                        $ret_val[$property_name][] = $item->toArray($deep, $use_null_for_blank, $preserve_object_ids);
                     }
                 } else if (is_array($value)) {
                 	if (count($value) > 0) {
 	                    foreach ($value as $key => $item) {
 	                    	if ($item instanceof \Mojavi\Form\MojaviForm) {
-	                        	$ret_val[$property_name][$key] = $item->toArray($deep, $use_null_for_blank);
+	                        	$ret_val[$property_name][$key] = $item->toArray($deep, $use_null_for_blank, $preserve_object_ids);
 	                    	} else {
 	                    		if ($use_null_for_blank && is_string($item) && trim($item) == '') { $item = null; }
 	                    		$ret_val[$property_name][$key] = $item;

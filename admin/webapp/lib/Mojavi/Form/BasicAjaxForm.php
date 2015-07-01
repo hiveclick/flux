@@ -107,7 +107,7 @@ class BasicAjaxForm extends CommonForm {
      * Override default toArray functionality so we don't add too much to the request
      * @param boolean $deep
      */
-    function toArray($deep = false, $use_null_for_blank = true) {
+    function toArray($deep = false, $use_null_for_blank = true, $preserve_object_ids = false) {
         $ret_val = array();
         $ret_val['result'] = $this->getResult();
         $ret_val['errors'] = $this->getErrors()->toArray();
@@ -119,14 +119,14 @@ class BasicAjaxForm extends CommonForm {
         $ret_val['pagination']['page_count'] = $this->getPageCount();
         $ret_val['pagination']['total_rows'] = $this->getTotal();
         if (is_object($this->getRecord())) {
-            $ret_val['record'] = $this->getRecord()->toArray($deep);
+            $ret_val['record'] = $this->getRecord()->toArray($deep, $use_null_for_blank, $preserve_object_ids);
         } else {
             $ret_val['record'] = $this->getRecord();
         }
         if (is_object($this->getEntries())) {
             foreach ($this->getEntries() as $entry) {
                 if (is_object($entry)) {
-                    $ret_val['entries'][] = $entry->toArray($deep);
+                    $ret_val['entries'][] = $entry->toArray($deep, $use_null_for_blank, $preserve_object_ids);
                 } else if (is_array($entry)) {
                     $ret_val['entries'][] = $entry;
                 }
@@ -134,7 +134,7 @@ class BasicAjaxForm extends CommonForm {
         } else if (is_array($this->getEntries())) {
             foreach ($this->getEntries() as $entry) {
                 if (is_object($entry)) {
-                    $ret_val['entries'][] = $entry->toArray($deep);
+                    $ret_val['entries'][] = $entry->toArray($deep, $use_null_for_blank, $preserve_object_ids);
                 } else if (is_array($entry)) {
                     $ret_val['entries'][] = $entry;
                 }

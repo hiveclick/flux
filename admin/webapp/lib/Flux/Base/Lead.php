@@ -410,7 +410,7 @@ class Lead extends MongoForm {
 	            if (strpos($e->getMessage(), 'The positional operator did not find the match needed from the query') !== false) {
 	                // The domain group was not found, so push it
 	                $event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => array('$ne' => $lead_event->getDataField()->getDataFieldId()));
-	                $event_update = array('$addToSet' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => $lead_event->toArray()));
+	                $event_update = array('$addToSet' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => $lead_event->toArray(true, true, true)));
 	                $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
 	            } else {
 	                
@@ -420,7 +420,7 @@ class Lead extends MongoForm {
 	    
 	    // Now save the tracking data
 	    $tracking_criteria = array('_id' => $this->getId());
-	    $tracking_update = array('$set' => array('_t' => $this->getTracking()->toArray()));
+	    $tracking_update = array('$set' => array('_t' => $this->getTracking()->toArray(true, true, true)));
 	    $this->getCollection()->update($tracking_criteria, $tracking_update, array('upsert' => true));
 	    
 	    return true;

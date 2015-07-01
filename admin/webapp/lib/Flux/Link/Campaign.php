@@ -27,7 +27,11 @@ class Campaign extends CommonForm {
 	 * @var integer
 	 */
 	function setCampaignId($arg0) {
-		$this->campaign_id = $arg0;
+	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
+	        $this->campaign_id = new \MongoId($arg0);
+	    } else if ($arg0 instanceof \MongoId) {
+	        $this->campaign_id = $arg0;
+	    }
 		return $this;
 	}
 	

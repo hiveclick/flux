@@ -310,7 +310,10 @@ class LeadEvent extends MojaviForm {
 			$this->data_field = $data_field;
 		} else if ($arg0 instanceof \MongoId) {
 		    $data_field = $this->getDataField();
-		    $data_field->setDataFieldKeyName($arg0);
+		    $data_field->setDataFieldId($arg0);
+		    if ($data_field->getDataFieldKeyName() == '' && \MongoId::isValid($data_field->getDataFieldId())) {
+		        $data_field->setDataFieldKeyName($data_field->getDataField()->getKeyName());
+		    }
 		    if ($data_field->getDataFieldKeyName() != '' && is_null($data_field->getDataFieldId())) {
 		        $data_field->setDataFieldId($data_field->getDataField()->getId());
 		    }

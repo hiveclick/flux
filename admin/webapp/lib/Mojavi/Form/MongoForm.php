@@ -179,7 +179,7 @@ abstract class MongoForm extends PageListForm {
             return $this->getId();
         } else {
         */
-            $insert_array = $this->toArray(true);
+            $insert_array = $this->toArray(true, true, true);
             if (isset($insert_array['_id'])) { unset($insert_array['_id']); }
             $ret_val = $this->getCollection()->save($insert_array);
             if (isset($insert_array['_id'])) {
@@ -289,7 +289,7 @@ abstract class MongoForm extends PageListForm {
     protected function createUpdateArray($use_set_notation = true) {
         $return_array = array();
         $set_data_array = array();
-        foreach ($this->toArray(true) AS $name => $value) {
+        foreach ($this->toArray(true, true, true) AS $name => $value) {
             if (in_array($name, $this->getModifiedColumns())) {
                 /* @todo at some point in the future we may want to reference things by more than _id, so this will have to be abstracted */
                 if(strpos($name, '_') === 0) {
