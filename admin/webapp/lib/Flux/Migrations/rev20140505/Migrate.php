@@ -15,14 +15,9 @@ class Migrate extends Migration {
 		$client = new \Flux\Client();
 		$client = $client->query(array('status' => \Flux\Client::CLIENT_STATUS_ACTIVE), false);
 		if (is_null($client)) {
-			// we don't have a client yet, let's create one
-			echo "\n";
-			while (trim($admin_name = StringTools::consolePrompt(StringTools::consoleColor('> Enter the name for the Administrative Client:', StringTools::CONSOLE_COLOR_WHITE), '')) == '') {
-				echo StringTools::consoleColor('The name must be at least 1 character in length.', StringTools::CONSOLE_COLOR_RED) . "\n";
-			}
-
-			$client = new \Flux\Client();
-			$client->setName($admin_name);
+			/* @var $client \Flux\Client */
+		    $client = new \Flux\Client();
+			$client->setName('Administrator');
 			$client->setStatus(\Flux\Client::CLIENT_STATUS_ACTIVE);
 			$client->setClientType(\Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN);
 			$client->insert();
@@ -33,23 +28,11 @@ class Migrate extends Migration {
 		$active_user = $user->query(array('status' => \Flux\User::USER_STATUS_ACTIVE), false);
 		if (is_null($active_user)) {
 			// we don't have a user yet, let's create one
-			echo "\n";
-			while (trim($admin_name = StringTools::consolePrompt(StringTools::consoleColor('> Enter the name for the Administrative User:', StringTools::CONSOLE_COLOR_WHITE), '')) == '') {
-				echo StringTools::consoleColor('The name must be at least 1 character in length.', StringTools::CONSOLE_COLOR_RED) . "\n";
-			}
-
-			while (trim($admin_email = StringTools::consolePrompt(StringTools::consoleColor('> Enter the email for the Administrative User:', StringTools::CONSOLE_COLOR_WHITE), '')) == '') {
-				echo StringTools::consoleColor('The email must be at least 1 character in length.', StringTools::CONSOLE_COLOR_RED) . "\n";
-			}
-
-			while (strlen(trim($admin_password = StringTools::consolePrompt(StringTools::consoleColor('> Enter the password for the Administrative User:', StringTools::CONSOLE_COLOR_WHITE), ''))) < 6) {
-				echo StringTools::consoleColor('The password must be at least 6 character in length.', StringTools::CONSOLE_COLOR_RED) . "\n";
-			}
-
-			$user = new \Flux\User();
-			$user->setName($admin_name);
-			$user->setEmail($admin_email);
-			$user->setPassword($admin_password);
+		    /* @var $user \Flux\User */
+		    $user = new \Flux\User();
+			$user->setName('Admin User');
+			$user->setEmail('admin');
+			$user->setPassword('admin');
 			$user->setUserType(\Flux\User::USER_TYPE_ADMIN);
 			$user->setStatus(\Flux\User::USER_STATUS_ACTIVE);
 			$user->setClientId($client->getId());
@@ -744,51 +727,57 @@ class Migrate extends Migration {
 		StringTools::consoleWrite('   - DataField Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
 
 		StringTools::consoleWrite('   - Zipcode Initialization', 'Building', StringTools::CONSOLE_COLOR_YELLOW);
-				
-		if (file_exists(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt')) {
-			// Preparing to read file
-			if (($fh = fopen(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt','r')) !== false) {
-				$counter = 0;
-				while (($data = fgetcsv($fh, 0, "\t")) !== false) {
-					if (isset($data[0]) && isset($data[1])) {
-						//right now we only do US and CA
-						if (in_array($data[0], array('US', 'CA'))) {
-						    try {
-    							$zip = new \Flux\Zip();
-    							$zip->setCountry($data[0]);
-    							$zip->setZipcode(isset($data[1]) ? $data[1] : '');
-    							$zip->setCity(isset($data[2]) ? $data[2] : '');
-    							$zip->setState(isset($data[3]) ? $data[3] : '');
-    							$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
-    							$zip->setCounty(isset($data[5]) ? $data[5] : '');
-    							$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
-    							$zip->setCommunity(isset($data[7]) ? $data[7] : '');
-    							$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
-    							$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
-    							$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
-    							$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
-    							$zip->insert();
-						    } catch (\Exception $e) {
-						        if (strpos($e->getMessage(), "duplicate key error") === false) {
-                                    StringTools::consoleWrite('   - Zipcode Initialization', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true);
-						        }
-						    }
-						}
-					} else {
-					    StringTools::consoleWrite('   - Zipcode Initialization', 'Column 0 or Column 1 not found', StringTools::CONSOLE_COLOR_RED, true);
-					}
-					$counter++;
-					if (($counter % 100) == 0) { StringTools::consoleWrite('   - Zipcode Initialization', number_format($counter, 0, null, ','), StringTools::CONSOLE_COLOR_YELLOW); }
-				}
-				fclose($fh);
-			} else {
-			    StringTools::consoleWrite('   - Zipcode Initialization', 'Could not open file US.txt', StringTools::CONSOLE_COLOR_RED, true);
-			}
+		if (!\Flux\Preferences::getPreference('zipcode_initialized', false)) {
+    		if (file_exists(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt')) {
+    			// Preparing to read file
+    			if (($fh = fopen(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt','r')) !== false) {
+    				$counter = 0;
+    				while (($data = fgetcsv($fh, 0, "\t")) !== false) {
+    					if (isset($data[0]) && isset($data[1])) {
+    						//right now we only do US and CA
+    						if (in_array($data[0], array('US', 'CA'))) {
+    						    try {
+        							$zip = new \Flux\Zip();
+        							$zip->setCountry($data[0]);
+        							$zip->setZipcode(isset($data[1]) ? $data[1] : '');
+        							$zip->setCity(isset($data[2]) ? $data[2] : '');
+        							$zip->setState(isset($data[3]) ? $data[3] : '');
+        							$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
+        							$zip->setCounty(isset($data[5]) ? $data[5] : '');
+        							$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
+        							$zip->setCommunity(isset($data[7]) ? $data[7] : '');
+        							$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
+        							$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
+        							$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
+        							$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
+        							$zip->insert();
+    						    } catch (\Exception $e) {
+    						        if (strpos($e->getMessage(), "duplicate key error") === false) {
+                                        StringTools::consoleWrite('   - Zipcode Initialization', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true);
+    						        }
+    						    }
+    						}
+    					} else {
+    					    StringTools::consoleWrite('   - Zipcode Initialization', 'Column 0 or Column 1 not found', StringTools::CONSOLE_COLOR_RED, true);
+    					}
+    					$counter++;
+    					if (($counter % 100) == 0) { StringTools::consoleWrite('   - Zipcode Initialization', number_format($counter, 0, null, ','), StringTools::CONSOLE_COLOR_YELLOW); }
+    				}
+    				fclose($fh);
+    				$preferences = new \Flux\Preferences();
+    				$preferences->updateMultiple(array('key' => 'zipcode_initialized'), array('$set' => array('value' => true)));
+    			} else {
+    			    StringTools::consoleWrite('   - Zipcode Initialization', 'Could not open file US.txt', StringTools::CONSOLE_COLOR_RED, true);
+    			}
+    		} else {
+    		    StringTools::consoleWrite('   - Zipcode Initialization', 'File US.txt not found', StringTools::CONSOLE_COLOR_RED, true);
+    		}
+    		StringTools::consoleWrite('   - Zipcode Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
 		} else {
-		    StringTools::consoleWrite('   - Zipcode Initialization', 'File US.txt not found', StringTools::CONSOLE_COLOR_RED, true);
+		    StringTools::consoleWrite('   - Zipcode Initialization', 'Already Initialized', StringTools::CONSOLE_COLOR_GREEN, true);
 		}
 
-		StringTools::consoleWrite('   - Zipcode Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
+		
 
 		StringTools::consoleWrite('   - Building Daemons Collection', 'Building', StringTools::CONSOLE_COLOR_YELLOW);
 
@@ -800,10 +789,28 @@ class Migrate extends Migration {
 			$daemon->setName('Split');
 			$daemon->setStatus(\Flux\Daemon::DAEMON_STATUS_ACTIVE);
 			$daemon->setRunStatus(\Flux\Daemon::DAEMON_RUN_STATUS_INACTIVE);
+			$daemon->setDescription('Finds leads that match split criteria');
 			$daemon->setThreads(3);
+			$daemon->setType('Split');
 			$daemon->setClassName('Flux\Daemon\Split');
 			$daemon->setChildren(array());
 			$daemon->insert();
+		}
+		
+		/* @var $daemon \Flux\Daemon */
+		$daemon = new \Flux\Daemon();
+		$daemon->setType('Fulfill');
+		$daemon->query(array(), false);
+		if (is_null($daemon) || (!is_null($daemon) && !\MongoId::isValid($daemon->getId()))) {
+		    $daemon->setName('Fulfill');
+		    $daemon->setStatus(\Flux\Daemon::DAEMON_STATUS_ACTIVE);
+		    $daemon->setRunStatus(\Flux\Daemon::DAEMON_RUN_STATUS_INACTIVE);
+		    $daemon->setDescription('Fulfills leads in a split that are marked as automatic fulfillment');
+		    $daemon->setThreads(3);
+		    $daemon->setClassName('Flux\Daemon\Fulfill');
+		    $daemon->setType('Fulfill');
+		    $daemon->setChildren(array());
+		    $daemon->insert();
 		}
 
 		StringTools::consoleWrite('   - Building Daemons Collection', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);

@@ -166,8 +166,8 @@ try {
         // Finally update our current version
         if (!$is_silent) { StringTools::consoleWrite('Updating version', 'Writing', StringTools::CONSOLE_COLOR_YELLOW); }
         try {
-            $preferences->setValue($new_version);
-            $ret_val = $preferences->update();
+        	$preferences = new \Flux\Preferences();
+            $preferences->updateMultiple(array('key' => 'migration_version'), array('$set' => array('value' => $new_version)));
             if (!$is_silent) { StringTools::consoleWrite('Updating version', 'Saved as ' . $new_version, StringTools::CONSOLE_COLOR_GREEN, true); }
         } catch (Exception $e) {
             if (!$is_silent) { StringTools::consoleWrite('Updating version', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true); }
