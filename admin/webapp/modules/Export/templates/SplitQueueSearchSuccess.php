@@ -12,7 +12,7 @@
 <!-- Add breadcrumbs -->
 <ol class="breadcrumb">
 	<li><a href="/export/split-search">Splits</a></li>
-	<?php if ($split_queue->getSplit()->getSplitId() > 0) { ?>
+	<?php if (\MongoId::isValid($split_queue->getSplit()->getSplitId())) { ?>
 	<li><a href="/export/split?_id=<?php echo $split_queue->getSplit()->getSplitId() ?>"><?php echo $split_queue->getSplit()->getSplitName() ?></a></li>
 	<?php } ?>
 	<li class="active">View Queued Leads</li>

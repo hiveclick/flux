@@ -40,7 +40,7 @@ class RAction extends BasicRestAction
         $ajax_form = new BasicAjaxForm();
         
         // First try to find the lead
-        if ($input_form->getId() > 0) {
+        if (\MongoId::isValid($input_form->getId())) {
             $lead = new \Flux\Lead();
             $lead->setId($input_form->getId());
             $lead->query();

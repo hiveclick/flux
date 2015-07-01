@@ -129,7 +129,7 @@
     						<div class="panel-body">
     							<div class="offer_page_flow_navigation_div-<?php echo ($key + 1) ?>">
     								<?php if ($offer_page_flow->getNavigation()->getNavigationType() == \Flux\OfferPageFlowNavigation::NAVIGATION_TYPE_LOCAL) { ?>
-    									<?php if ($offer_page_flow->getNavigation()->getDestinationOfferPageId() > 0) { ?>
+    									<?php if (\MongoId::isValid($offer_page_flow->getNavigation()->getDestinationOfferPageId())) { ?>
     										Redirect to another page in this offer:
     										<p />
     										<div>

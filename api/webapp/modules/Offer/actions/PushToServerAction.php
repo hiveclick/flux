@@ -48,13 +48,13 @@ class PushToServerAction extends BasicRestAction
         $offer->setFolderName($input_form->getFolderName());
         $offer->setDomainName($input_form->getDomain());
 
-        if ($offer->getId() > 0) {
+        if (\MongoId::isValid($offer->getId())) {
             $server = new Flux\Server();
             $server->populate($_REQUEST);
             $server->query();
             $server->setDocrootDir($input_form->getDocrootDir());
             $server->setForceOverwrite($input_form->getForceOverwrite());
-            if ($server->getId() > 0) {
+            if (\MongoId::isValid($server->getId())) {
             	if ($input_form->getFlushOfferCache()) {
             		// SSH to the server and clear the APC cache
             	    $server->clearConfigCache($offer);

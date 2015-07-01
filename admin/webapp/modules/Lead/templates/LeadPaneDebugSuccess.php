@@ -107,7 +107,7 @@
 				?>
 					<tr>
 						<td>
-							<?php if ($lead_event->getDatafield()->getDataFieldId() > 0) { ?>
+							<?php if (\MongoId::isValid($lead_event->getDatafield()->getDataFieldId())) { ?>
 								<a href="/admin/data-field?_id=<?php echo $lead_event->getDataField()->getDataFieldId() ?>"><?php echo $lead_event->getDataField()->getDatafieldName() ?></a>
 							<?php } else { ?>
 								<?php echo $lead_event->getDatafield()->getDataFieldId() ?> <span class="label label-danger">Unmatched data field</span>
@@ -126,7 +126,7 @@
 						<td>$<?php echo number_format($lead_event->getPayout(), 2, null, ',') ?></td>
 						<td>$<?php echo number_format($lead_event->getRevenue(), 2, null, ',') ?></td>
 						<td>
-							<?php if ($lead_event->getOffer()->getOfferId() > 0) { ?>
+							<?php if (\MongoId::isValid($lead_event->getOffer()->getOfferId())) { ?>
 								<?php if ($lead_event->getOffer()->getOfferId() == $lead_event->getOffer()->getOfferId()) { ?>
 									<?php echo $lead_event->getOffer()->getOfferName() ?> (<?php echo $lead_event->getOffer()->getOfferId() ?>)
 								<?php } else { ?>
@@ -137,7 +137,7 @@
 							<?php } ?>
 						</td>
 						<td>
-							<?php if ($lead_event->getClient()->getClientId() > 0) { ?>
+							<?php if (\MongoId::isValid($lead_event->getClient()->getClientId())) { ?>
 								<?php if ($lead_event->getClient()->getClientId() == $lead_event->getClient()->getClientId()) { ?>
 									<?php echo $lead_event->getClient()->getClientName() ?> (<?php echo $lead_event->getClient()->getClientId() ?>)
 								<?php } else { ?>

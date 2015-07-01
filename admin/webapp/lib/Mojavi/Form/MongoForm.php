@@ -14,7 +14,7 @@ abstract class MongoForm extends PageListForm {
     private $_collection = '';
     private $_db_name = '';
     private $_class_name = '';
-    private $_id_type = self::ID_TYPE_AUTO_INC;
+    private $_id_type = self::ID_TYPE_MONGO;
 
     /**
      * Sets the id
@@ -27,8 +27,15 @@ abstract class MongoForm extends PageListForm {
             parent::setId($arg0);
         } else if (is_null($arg0)) {
             parent::setId($arg0);
+        } else if (is_string($arg0) && trim($arg0) == '') {
+            parent::setId(null);
         } else {
-            throw new \Exception('Invalid ID set: ' . var_export($arg0, true));
+            try {
+                throw new \Exception('Invalid ID set: ' . var_export($arg0, true));
+            } catch (\Exception $e) {
+                \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getTraceAsString());
+                throw $e;
+            }
         }
     }
 

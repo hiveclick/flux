@@ -30,7 +30,7 @@ class PxlAction extends BasicRestAction
         if ($pixel->getPage() == '') { $pixel->setPage('index.php'); }
         #\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($pixel, true));
         // Track the page name and find the offer associated with it
-        if ($pixel->getOffer()->getOfferId() > 0) {
+        if (\MongoId::isValid($pixel->getOffer()->getOfferId())) {
             $offer_page = new \Flux\OfferPage();
             $offer_page->setOffer($pixel->getOffer()->getOfferId());
             $offer_page->setPageName($pixel->getPage());

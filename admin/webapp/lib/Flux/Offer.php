@@ -40,9 +40,7 @@ class Offer extends Base\Offer {
 	        $this->default_campaign = new \Flux\Campaign();
     	    if (\MongoId::isValid($this->getDefaultCampaignId())) {
     	        $this->default_campaign->setId(new \MongoId($this->getDefaultCampaignId()));
-    	        \Mojavi\Logging\LoggerManager::error(__METHOD__ . ' :: ' . "QUERYING CAMPAIGN: " . $this->getDefaultCampaignId());
     	        $this->default_campaign->query();
-    	        \Mojavi\Logging\LoggerManager::error(__METHOD__ . ' :: ' . "QUERYING CAMPAIGN: " . var_export($this->default_campaign, true));
     	    }
 	    }
 	    return $this->default_campaign;

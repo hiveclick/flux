@@ -17,7 +17,7 @@
 	<h2><?php echo number_format($export->getNumRecords(), 0, null, ',') ?> records</h2>
 	<div class="help-block"><?php echo $export->getName() ?></div><p />
 	Split: 
-	<?php if ($export->getSplit()->getSplitId() > 0) { ?>
+	<?php if (\MongoId::isValid($export->getSplit()->getSplitId())) { ?>
 		<a href="/export/split?_id=<?php echo $export->getSplit()->getSplitId() ?>"><?php echo $export->getSplit()->getSplitName() ?></a>
 	<?php } else { ?>
 		<i class="text-muted">-- none --</i>

@@ -48,7 +48,7 @@ class SplitClearPidAction extends BasicRestAction
         $split_form = new \Flux\Split();
         $split_form->setId($input_form->getId());
         $split_form->query();
-        if ($split_form->getId() > 0) {
+        if (\MongoId::isValid($split_form->getId())) {
             $split_form->clearPid();
             $ajax_form->setRowsAffected(1);
             $ajax_form->setRecord($split_form);

@@ -61,7 +61,7 @@ class OfferAssetAction extends BasicRestAction
     			}
     		}
     	}
-    	if ($input_form->getId() > 0) {
+    	if (\MongoId::isValid($input_form->getId())) {
     	    return parent::executePut($input_form);
     	} else {
     	    return parent::executePost($input_form);

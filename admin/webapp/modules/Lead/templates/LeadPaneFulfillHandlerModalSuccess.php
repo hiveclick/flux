@@ -57,7 +57,7 @@ $('#lead_fulfill_manual_form').form(
 			if (data.record.fulfill_log_contents) {
 				$('#fulfill_log_contents').html(data.record.fulfill_log_contents);
 			}
-			if (data.record.fulfill_export_id && data.record.fulfill_export_id > 0) {
+			if (data.record.fulfill_export_id && data.record.fulfill_export_id != '') {
 				$('#fulfill_export_btn').attr('href', '/export/export?_id=' + data.record.fulfill_export_id);
 			} else {
 				$('#fulfill_export_btn').attr('href', '/export/export-search?name=<?php echo $lead->getId() ?>');

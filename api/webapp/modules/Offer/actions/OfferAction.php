@@ -39,7 +39,7 @@ class OfferAction extends BasicRestAction
         // Handle GET Requests
         /* @var $ajax_form BasicAjaxForm */
         $ajax_form = new BasicAjaxForm();
-        if ($input_form->getId() > 0) {
+        if (\MongoId::isValid($input_form->getId())) {
             $input_form->query();
             $ajax_form->setRecord($input_form);
         } else if (trim($input_form->getFolderName()) != '') {

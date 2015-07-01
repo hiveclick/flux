@@ -26,7 +26,7 @@ class ExportQueueAction extends BasicConsoleAction
             $export = new \Flux\Export();
             $export->populate($_REQUEST);
             $export->query();
-            if ($export->getId() > 0) {
+            if (\MongoId::isValid($export->getId())) {
                 $exporter = new \Flux\ExportQueueExporter();
                 $exporter->setExportId($export->getId());
                 $exporter->processExport();
