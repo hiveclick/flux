@@ -29,7 +29,7 @@ class UserAction extends BasicAction
 		$user = new User();
 		$user->setId($this->getContext()->getUser()->getUserDetails()->getId());
 		
-		if ($user->getId() > 0) {
+		if (\MongoId::isValid($user->getId())) {
 			$user->query();	
 		}
 		

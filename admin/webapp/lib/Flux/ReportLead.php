@@ -151,6 +151,8 @@ class ReportLead extends Base\ReportLead {
                 $this->client_id_array = array($arg0);
             }
             array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
+        } else if ($arg0 instanceof \MongoId) {
+            $this->client_id_array = array($arg0);
         }
         $this->addModifiedColumn("client_id_array");
         return $this;

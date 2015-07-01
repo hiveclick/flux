@@ -35,7 +35,7 @@ class IndexAction extends BasicAction
 	    $report_lead->setIgnorePagination(true);
 	    $daily_rev_items = $report_lead->queryAll(array(), true);
 	    
-	    /* @var $daily_rev_item \Flux\ReportClient */
+	    /* @var $daily_rev_item \Flux\ReportLead */
 	    foreach ($daily_rev_items as $daily_rev_item) {	        
 	        $monthly_rev += $daily_rev_item->getPayout();
 	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
