@@ -25,7 +25,7 @@
 								/* @var $client \Flux\Fulfillment */
 								foreach ($client->getFulfillments() AS $fulfillment) { 
 							?>
-								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split_queue->getSplit()->getSplit()->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName(), 'description' => $fulfillment->getDescription(), 'fulfillment_type' => $fulfillment->getExportType(), 'tracking_url' => $fulfillment->getTrackingUrl()))) ?>"><?php echo $fulfillment->getName() ?></option>
+								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split_queue->getSplit()->getSplit()->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$fulfillment->getId(), 'name' => $fulfillment->getName(), 'description' => $fulfillment->getDescription(), 'fulfillment_type' => $fulfillment->getExportType(), 'tracking_url' => $fulfillment->getTrackingUrl()))) ?>"><?php echo $fulfillment->getName() ?></option>
 							<?php } ?>
 						</optgroup>
 					<?php } ?>

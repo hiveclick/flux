@@ -79,7 +79,7 @@
         								/* @var $client \Flux\Fulfillment */
         								foreach ($client->getFulfillments() AS $fulfillment) { 
         							?>
-        								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
+        								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
         							<?php } ?>
         						</optgroup>
         					<?php } ?>

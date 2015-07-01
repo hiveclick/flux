@@ -79,7 +79,7 @@
 					<label class="control-label hidden-xs" for="name">Vertical</label>
 					<select id="vertical" name="vertical[vertical_id]" class="form-control selectize" placeholder="Vertical">
 						<?php foreach ($verticals as $vertical) { ?>
-							<option value="<?php echo $vertical->getId() ?>" <?php echo $offer->getVertical()->getVerticalId() == $vertical->getName() ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $vertical->getId(), 'name' => $vertical->getName(), 'description' => $vertical->getDescription()))) ?>"><?php echo $vertical->getName() ?></option>
+							<option value="<?php echo $vertical->getId() ?>" <?php echo $offer->getVertical()->getVerticalId() == $vertical->getName() ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$vertical->getId(), 'name' => $vertical->getName(), 'description' => $vertical->getDescription()))) ?>"><?php echo $vertical->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
@@ -136,7 +136,7 @@
         				        /* @var $split \Flux\Split */
         				        foreach ($splits as $split) {
         				    ?>
-        				        <option value="<?php echo $split->getId() ?>" <?php echo $offer->getSplit()->getSplitId() == $split->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription()))) ?>"><?php echo $split->getName() ?></option>
+        				        <option value="<?php echo $split->getId() ?>" <?php echo $offer->getSplit()->getSplitId() == $split->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription()))) ?>"><?php echo $split->getName() ?></option>
         				    <?php } ?>
         				</select>
             		</div>

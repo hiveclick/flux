@@ -29,7 +29,7 @@
 								<select id="setter_data_field_id-<?php echo $key ?>" name="offer_page_flows[<?php echo $offer_page_flow->getPosition() ?>][setters][<?php echo $key ?>][data_field_id]" class="setter_data_field_id">
 									<?php foreach(\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
 										<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-											<option <?php echo ($dataField->getId() == $setter->getDataFieldId()) ? "SELECTED=\"SELECTED\"" : "" ?> value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
+											<option <?php echo ($dataField->getId() == $setter->getDataFieldId()) ? "SELECTED=\"SELECTED\"" : "" ?> value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
 										<?php } ?>
 									<?php } ?>
 								</select>
@@ -74,14 +74,14 @@
 			<?php foreach (\Flux\DataField::retrieveActiveDataFields() AS $dataFieldId => $dataField) { ?>
 				<optgroup label="Data">
 				<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-					<option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
+					<option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
 				<?php } ?>
 				</optgroup>
 			<?php } ?>
 			<?php foreach (\Flux\DataField::retrieveActiveEvents() AS $dataFieldId => $dataField) { ?>
 				<optgroup label="Events">
 					<?php if ($dataField->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-						<option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
+						<option value="<?php echo $dataField->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$dataField->getId(), 'name' => $dataField->getName(), 'keyname' => $dataField->getKeyName(), 'description' => $dataField->getDescription(), 'request_names' => implode(", ", array_merge(array($dataField->getKeyName()), $dataField->getRequestName()))))) ?>"><?php echo $dataField->getName() ?></option>
 					<?php } ?>
 				</optgroup>
 			<?php } ?>

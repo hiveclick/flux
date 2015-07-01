@@ -24,22 +24,22 @@
 			</optgroup>
 			<optgroup label="Data Fields">
 				<?php foreach($default_data_fields AS $datafield) { ?>
-					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 				<?php } ?>
 			</optgroup>
 			<optgroup label="Derived Fields">
 				<?php foreach($derived_data_fields AS $datafield) { ?>
-					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 				<?php } ?>
 			</optgroup>
 			<optgroup label="Tracking Fields">
 				<?php foreach($tracking_data_fields AS $datafield) { ?>
-					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 				<?php } ?>
 			</optgroup>
 			<optgroup label="Event Fields">
 				<?php foreach($event_data_fields AS $datafield) { ?>
-					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+					<option value="<?php echo $datafield->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 				<?php } ?>
 			</optgroup>
 		</select>
@@ -77,22 +77,22 @@
 					</optgroup>
 					<optgroup label="Data Fields">
 						<?php foreach($default_data_fields AS $datafield) { ?>
-							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 						<?php } ?>
 					</optgroup>
 					<optgroup label="Derived Fields">
 						<?php foreach($derived_data_fields AS $datafield) { ?>
-							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 						<?php } ?>
 					</optgroup>
 					<optgroup label="Tracking Fields">
 						<?php foreach($tracking_data_fields AS $datafield) { ?>
-							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 						<?php } ?>
 					</optgroup>
 					<optgroup label="Event Fields">
 						<?php foreach($event_data_fields AS $datafield) { ?>
-							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => $datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
+							<option value="<?php echo $datafield->getId() ?>"<?php echo $datafield->getId() == $fulfillment_map->getDataFieldId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$datafield->getId(), 'name' => $datafield->getName(), 'keyname' => $datafield->getKeyName(), 'description' => $datafield->getDescription(), 'request_names' => implode(", ", array_merge(array($datafield->getKeyName()), $datafield->getRequestName()))))) ?>"><?php echo $datafield->getName() ?></option>
 						<?php } ?>
 					</optgroup>
 				</select>

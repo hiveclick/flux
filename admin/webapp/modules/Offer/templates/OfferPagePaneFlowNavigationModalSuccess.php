@@ -29,7 +29,7 @@
 							/* @var $page \Flux\OfferPage */
 							foreach ($offer_pages as $page) {
 						?>
-							<option value="<?php echo $page->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $page->getId(), 'name' => $page->getName(), 'description' => $page->getDescription(), 'page_name' => $page->getPageName(), 'preview_url' => $page->getPreviewUrl()))) ?>" <?php echo ($page->getId() == $offer_page_flow->getNavigation()->getDestinationOfferPageId()) ? 'SELECTED' : '' ?>><?php echo $page->getName() ?></option>
+							<option value="<?php echo $page->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$page->getId(), 'name' => $page->getName(), 'description' => $page->getDescription(), 'page_name' => $page->getPageName(), 'preview_url' => $page->getPreviewUrl()))) ?>" <?php echo ($page->getId() == $offer_page_flow->getNavigation()->getDestinationOfferPageId()) ? 'SELECTED' : '' ?>><?php echo $page->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>

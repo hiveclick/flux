@@ -20,7 +20,7 @@
                     /* @var $split \Flux\Split */
                     foreach ($splits as $split) {
                 ?>
-                    <option value="<?php echo $split->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => $split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription(), 'client_name' => $split->getFulfillment()->getFulfillment()->getClient()->getClientName(), 'fulfillment_name' => $split->getFulfillment()->getFulfillmentName()))) ?>"><?php echo $split->getName() ?></option>
+                    <option value="<?php echo $split->getId() ?>" data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$split->getId(), 'name' => $split->getName(), 'description' => $split->getDescription(), 'client_name' => $split->getFulfillment()->getFulfillment()->getClient()->getClientName(), 'fulfillment_name' => $split->getFulfillment()->getFulfillmentName()))) ?>"><?php echo $split->getName() ?></option>
                 <?php } ?>
             </select>
         </div>
