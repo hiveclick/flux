@@ -12,14 +12,14 @@
 			<div class="btn-group">
   				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+				    <li><a href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a></li>
 					<li><a data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a></li>
 				</ul>
 			</div>
 		</div>
 		<div class="hidden-sm hidden-xs">
-			<div class="btn-group" role="group">
-				<a class="btn btn-info" data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a>
-			</div>
+		    <a class="btn btn-info" href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a>
+			<a class="btn btn-info" data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a>
 		</div>
 	</div>
 	<h1><img class="img-thumbnail" src="/images/traffic-sources/<?php echo $campaign->getTrafficSource()->getTrafficSourceIcon() != '' ? $campaign->getTrafficSource()->getTrafficSourceIcon() : 'unknown' ?>_48.png" border="0" /> Campaign for <?php echo $campaign->getOffer()->getOfferName() ?> <small><?php echo $campaign->getClient()->getClientName() ?></small></h1>

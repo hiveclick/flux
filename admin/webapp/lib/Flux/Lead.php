@@ -135,14 +135,14 @@ class Lead extends Base\Lead {
 	function setCampaignIdArray($arg0) {
 		if (is_array($arg0)) {
 			$this->campaign_id_array = $arg0;
-			array_walk($this->campaign_id_array, function(&$val) { $val = trim($val); });
+			array_walk($this->campaign_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
 			if (strpos($arg0, ',') !== false) {
 				$this->campaign_id_array = explode(",", $arg0);
-				array_walk($this->campaign_id_array, function(&$val) { $val = trim($val); });
+				array_walk($this->campaign_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			} else {
 				$this->campaign_id_array = array($arg0);
-				array_walk($this->campaign_id_array, function(&$val) { $val = trim($val); });
+				array_walk($this->campaign_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
 		return $this;
@@ -200,6 +200,10 @@ class Lead extends Base\Lead {
 	    }
 	    if (count($this->getCampaignIdArray()) > 0) {
 	        $criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign.campaign_id'] = array('$in' => $this->getCampaignIdArray());
+	    }
+	    
+	    if (trim($this->getStartDate()) != '') {
+	        $criteria['modified'] = array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime($this->getStartDate())))), '$lte' => new \MongoDate(strtotime(date('m/d/Y 23:23:59', strtotime($this->getStartDate())))));
 	    }
 	    
 		if (trim($this->getKeywords()) != '') {

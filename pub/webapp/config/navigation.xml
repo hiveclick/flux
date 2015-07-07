@@ -2,26 +2,29 @@
 <nav>
 	<account>
         <label>Account</label>
-        <module>account</module>
-        <controller>user</controller>
+        <uri>/account/user</uri>
         <class>nav-primary</class>
 	</account>
 	<campaign>
         <label>Campaigns</label>
-        <module>campaign</module>
-        <controller>campaign-search</controller>
+        <uri>/campaign/campaign-search</uri>
         <class>nav-primary</class>
+        <pages>
+            <campaigns>
+                <label>Campaigns</label>
+                <uri>/campaign/campaign-search</uri>
+                <class>nav-secondary</class>
+            </campaigns>
+        </pages>
 	</campaign>
 	<reports>
         <label>Reporting</label>
-        <module>report</module>
-        <controller>click-report</controller>
+        <uri>/report/click-report</uri>
         <class>nav-primary</class>
         <pages>
             <dashboard>
                 <label>Dashboard</label>
-                <module>default</module>
-                <controller>index</controller>
+                <uri>/default/index</uri>
                 <class>nav-secondary</class>
             </dashboard>
             <spacer>
@@ -32,22 +35,30 @@
 			</spacer>
             <revenue>
                 <label>Revenue Report</label>
-                <module>report</module>
-                <controller>click-report</controller>
+                <uri>/report/click-report</uri>
                 <class>nav-secondary</class>
             </revenue>
             <leaddetail>
                 <label>Lead Report</label>
-                <module>report</module>
-                <controller>lead-report</controller>
+                <uri>/report/lead-report</uri>
                 <class>nav-secondary</class>
             </leaddetail>
+            <spacer2>
+				<label></label>
+				<module></module>
+				<controller></controller>
+				<class>nav-secondary</class>
+			</spacer2>
+			<callreport>
+                <label>Call Report</label>
+                <uri>http://retreaver.com/calls</uri>
+                <class>nav-secondary</class>
+            </callreport>
        </pages>
 	</reports>
 	<logout>
         <label>Logout</label>
-        <module>default</module>
-        <controller>logout</controller>
+        <uri>/default/logout</uri>
         <class>nav-primary</class>
     </logout>
 </nav>

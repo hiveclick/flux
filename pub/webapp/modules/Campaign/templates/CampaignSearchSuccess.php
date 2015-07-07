@@ -64,14 +64,14 @@ $(document).ready(function() {
 			if (value == '0') {
 				return '<span class="text-muted">' + $.number(value) + '</span>';
 			} else {
-				return $.number(value);
+				return '<a href="/campaign/campaign-leads?_id=' + dataContext._id + '&start_date=<?php echo date('m/d/Y') ?>">' + $.number(value) + '</a>';
 			}
 		}},
 		{id:'daily_conversions', name:'# conversions', field:'daily_conversions', sort_field:'daily_conversions', cssClass: 'text-center', def_value: ' ', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '0') {
 				return '<span class="text-muted">' + $.number(value) + '</span>';
 			} else {
-				return $.number(value);
+				return '<a href="/campaign/campaign-leads?_id=' + dataContext._id + '&start_date=<?php echo date('m/d/Y') ?>&required_fields[]=<?php echo \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME ?>">' + $.number(value) + '</a>';
 			}
 		}}
 	];

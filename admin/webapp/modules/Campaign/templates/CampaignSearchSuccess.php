@@ -83,7 +83,8 @@ $(document).ready(function() {
 			return ret_val;
 		}},
 		{id:'traffic_source', name:'&nbsp;', field:'traffic_source.traffic_source_icon', sort_field:'traffic_source.name', def_value: ' ', maxWidth:64, width:64, minWidth:64, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-        	return '<img class="img-thumbnail" src="/images/traffic-sources/' + (value != '' ? value : 'unknown') + '_48.png" width="32" border="0" />';
+			
+        	return '<img class="img-thumbnail" src="/images/traffic-sources/' + (value != null ? value : 'unknown') + '_48.png" width="32" border="0" />';
         }},
 		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', hidden: true, sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return '<a href="/client/client?_id=' + dataContext.client.client_id + '">' + value + '</a>';

@@ -68,8 +68,8 @@
         <script src="/scripts/switch/bootstrap-switch.min.js" type="text/javascript" ></script>
         
         <!-- Datetime picker used on the reports -->
-        <link href="/scripts/datepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-        <script src="/scripts/datepicker/bootstrap-datetimepicker.min.js" type="text/javascript" ></script>
+        <link href="/scripts/datepicker/css/datepicker.css" rel="stylesheet" type="text/css" />
+        <script src="/scripts/datepicker/js/bootstrap-datepicker.js" type="text/javascript" ></script>
 
         <!-- Number format plugin for formatting currency and numbers -->
         <script src="/scripts/jquery.number.min.js" type="text/javascript" ></script>
@@ -109,7 +109,7 @@
 						?>
 							<?php if ($page->hasChildren()) { ?>
 								<li class="dropdown">
-									<a class="hidden-xs dropdown-toggle <?php echo $page->getClass() ?>" data-hover="dropdown" data-delay="1000" data-close-others="true" role="button" href="/<?php echo $page->get('module') ?>/<?php echo $page->get('controller') ?><?php echo (count($page->get('params')) > 0) ? "?" : "" ?><?php echo http_build_query($page->get('params')) ?>"><?php echo $page->getLabel() ?><span class="caret"></span></a>
+									<a class="hidden-xs dropdown-toggle <?php echo $page->getClass() ?>" data-hover="dropdown" data-delay="1000" data-close-others="true" role="button" href="<?php echo $page->getHref() ?>"><?php echo $page->getLabel() ?><span class="caret"></span></a>
 									<a class="visible-xs dropdown-toggle" data-toggle="dropdown" role="button" href="#"><?php echo $page->getLabel() ?><span class="caret"></span></a>
 									<ul class="dropdown-menu" role="menu">
 									<?php
@@ -117,7 +117,7 @@
 										foreach ($page->getPages() as $child_page) {
 									?>
 										<?php if ($child_page->getLabel() != '') { ?>
-											<li><a href="/<?php echo $child_page->get('module') ?>/<?php echo $child_page->get('controller') ?><?php echo (count($child_page->get('params')) > 0) ? "?" : "" ?><?php echo http_build_query($child_page->get('params')) ?>" class="<?php echo $child_page->getClass() ?>"><?php echo $child_page->getLabel() ?></a></li>
+											<li><a href="<?php echo $child_page->getHref() ?>" class="<?php echo $child_page->getClass() ?>"><?php echo $child_page->getLabel() ?></a></li>
 										<?php } else { ?>
 											<li class="divider"></li>
 										<?php } ?>
@@ -125,7 +125,7 @@
 									</ul>
 								</li>
 							<?php } else { ?>
-								<li><a href="/<?php echo $page->get('module') ?>/<?php echo $page->get('controller') ?><?php echo (count($page->get('params')) > 0) ? "?" : "" ?><?php echo http_build_query($page->get('params')) ?>" role="button" aria-expanded="false"><?php echo $page->getLabel() ?></a></li>
+								<li><a href="<?php echo $page->getHref() ?>" role="button" aria-expanded="false"><?php echo $page->getLabel() ?></a></li>
 							<?php } ?>
 						<?php } ?>
 						</ul>

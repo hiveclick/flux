@@ -182,7 +182,7 @@ class SplitQueue extends Base\SplitQueue {
         } else if ($arg0 instanceof \MongoId) {
             $this->split_id_array = array($arg0);
         }
-        array_walk($this->split_id_array, function(&$value) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
+        array_walk($this->split_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
         return $this;
     }
     
