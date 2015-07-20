@@ -1,8 +1,8 @@
 /nbproject/*
 .dropbox
 .htaccess
-.DS_Store
-._.DS_Store
+*/.DS_Store
+*/._.DS_Store
 init/config.ini
 lib/config.php
 lib/cache/
