@@ -439,15 +439,17 @@ class LeadPayout extends BaseReport {
 		if (isset($results['result'])) {
 		    foreach ($results['result'] as $key => $result) {
 		        foreach ($ret_val as $key => $ret_result) {
-		            if ($ret_result['client_id'] == $result['client_id'] && $ret_result['offer_id'] == $result['offer_id']) {
+		            if ((string)$ret_result['client_id'] == (string)$result['client_id'] && (string)$ret_result['offer_id'] == (string)$result['offer_id']) {
 		                $ret_result['clicks'] = $result['clicks'];
 		                $ret_result['conversions'] = $result['conversions'];
 		                $ret_result['fulfilled'] = $result['fulfilled'];
-		                $ret_val[$key] = $ret_result;
+		                $ret_val[(string)$key] = $ret_result;
 		            }
 		        }
 		    }
 		}
+		
+		array_walk_recursive($ret_val, function(&$val) { if (\MongoId::isValid($val) && ($val instanceof \MongoId)) { $val = (string)$val; }});
 		
 		return $ret_val;
     }

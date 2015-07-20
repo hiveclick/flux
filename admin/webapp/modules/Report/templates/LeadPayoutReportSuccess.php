@@ -202,7 +202,8 @@ $(document).ready(function() {
             });
 
             $.each(client_entries, function(i, client_entry) {
-            	var tr = $('<tr />').attr('id', 'client_row_' + client_entry.client_id).appendTo($('#report_tbody'));
+                var row_id = 'client_row_' + client_entry.client_id;
+                var tr = $('<tr />').attr('id', row_id).appendTo($('#report_tbody'));
                 $('<td class="bg-warning" />').html(client_entry.client_name).appendTo(tr);
                 $('<td class="bg-warning text-center text-muted " />').html($.formatNumber(client_entry.clicks, {format:'#,##0'})).appendTo(tr);
                 $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.conversions, {format:'#,##0'})).appendTo(tr);
@@ -218,7 +219,7 @@ $(document).ready(function() {
             });
             
             var total_clicks = 0, total_conversions = 0, total_accepted_leads = 0, total_disqualified_leads = 0, total_duplicate_leads = 0, total_pending_leads = 0, total_revenue = 0, total_payout = 0;
-            $.each(data.entries, function(i, entry) {
+            $.each(data.entries, function(i, entry) {                
                 total_clicks += entry.clicks;
                 total_conversions += entry.conversions;
                 total_fulfilled += entry.fulfilled;
@@ -229,7 +230,8 @@ $(document).ready(function() {
                 total_revenue += entry.revenue;
                 total_payout += entry.payout;
 
-                var tr = $('<tr class="small" />').insertAfter($('#client_row_' + entry.client_id));
+                var row_id = '#client_row_' + entry.client_id;
+                var tr = $('<tr class="small" />').insertAfter($(row_id));
                 $('<td />').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + (entry.offer_name ? entry.offer_name : '<i>Offer Missing</i>')).appendTo(tr);
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.clicks, {format:'#,##0'})).appendTo(tr);
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions, {format:'#,##0'})).appendTo(tr);
