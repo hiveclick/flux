@@ -50,7 +50,9 @@
 <br/>
 <div class="col-md-8">
 	<div class="panel panel-default">
-		<div class="panel-heading">Data Information</div>
+		<div class="panel-heading">
+            Data Information
+	    </div>
 		<div class="panel-body">
             <dl class="dl-horizontal">
             <?php if ($lead->getValue('name') != '') { ?>
@@ -231,6 +233,8 @@
 	
 <!-- Add data field modal -->
 <div class="modal fade" id="add-data-field-modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
+<!-- Add complete lead modal -->
+<div class="modal fade" id="add-complete-modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <!-- Notes modal -->
 <div class="modal fade" id="note_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <!-- Add Note modal -->
@@ -240,8 +244,7 @@
 <!-- Fulfillment modal -->
 <div class="modal fade" id="fulfillment_modal"><div class="modal-lg modal-dialog"><div class="modal-content"></div></div></div>
 <!-- confirm delete modal -->
-<div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this lead?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
-
+<div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this lead?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div><div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div>
 
 <script>
 //<!--

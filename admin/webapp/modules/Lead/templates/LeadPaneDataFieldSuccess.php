@@ -92,6 +92,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-success btn-add-data_field"><span class="glyphicon glyphicon-plus"></span> Add Data Field</button>
+		<button type="button" class="btn btn-info btn-geo-lookup"><span class="glyphicon glyphicon-cloud-download"></span> Geo IP Lookup</button>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		<button type="submit" class="btn btn-primary">Save Changes</button>
 	</div>
@@ -100,51 +101,11 @@
 <!-- Dummy Data Field Div -->
 <div class="form-group row" style="display:none;" id="dummy_posting_url_data_field">
 	<div class="col-sm-6">
-		<select name="posting_url_data_field_name[dummy-dummy_id]" class="form-control selectize">
-			<optgroup label="Data Fields">
-				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-				?>
-					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) { ?>
-						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-			<optgroup label="Derived">
-			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-			?>
-				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED) { ?>
-					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-				<?php  } ?>
-			<?php } ?>
-			</optgroup>
-			<optgroup label="Tracking">
-				<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-						$data_field_set = $data_field->getDataFieldSet();
-						array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-				?>
-					<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) { ?>
-						<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-					<?php } ?>
-				<?php } ?>
-			</optgroup>
-			<optgroup label="Events">
-			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
-					$data_field_set = $data_field->getDataFieldSet();
-					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-			?>
-				<?php if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) { ?>
-					<option value="<?php echo $data_field->getKeyName() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName()))))) ?>"><?php echo $data_field->getName() ?> (<?php echo $data_field->getKeyName() ?>, <?php echo implode(", ", $data_field->getRequestName()) ?>)</option>
-				<?php  } ?>
-			<?php } ?>
-			</optgroup>
+		<select name="posting_url_data_field_name[dummy_id]" class="form-control selectize">
 		</select>
 	</div>
 	<div class="col-sm-5">
-		<textarea name="posting_url_data_field_value[dummy-dummy_id][]" class="form-control selectize-text" placeholder="Enter New Value" rows="3"></textarea>
+		<textarea name="posting_url_data_field_value[dummy_id][]" class="form-control selectize-text" placeholder="Enter New Value" rows="3"></textarea>
 	</div>
 	<div class="col-sm-1">
 		<button type="button" class="btn btn-sm btn-danger btn-remove-data_field">
@@ -163,6 +124,14 @@ $(document).ready(function() {
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,
+		options: [
+            <?php foreach($data_fields AS $data_fieldId => $data_field) { 
+                    $data_field_set = $data_field->getDataFieldSet();
+                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+            ?>
+            <?php echo json_encode(array('optgroup' => $data_field->getStorageType(), 'name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName())))) ?>,
+            <?php } ?>	
+        ],
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;
@@ -197,7 +166,9 @@ $(document).ready(function() {
 		},
 		onChange: function(value) {
 			if (!value.length) return;
-			var select_text = $(this.$dropdown).closest('.form-group').find('.selectize-text')[0].selectize;
+			if (!$(this.$dropdown).closest('.form-group').length) return;
+			var select_form_group = $(this.$dropdown).closest('.form-group');
+			var select_text = $('.selectize-text', select_form_group)[0].selectize;
 			var data = this.options[value];
 			select_text.clearOptions();
 			$(data.data_field_set).each(function(i, item) {
@@ -258,7 +229,66 @@ $(document).ready(function() {
 		select_text.refreshOptions();
 	});
 	*/
-	
+
+	$('.btn-geo-lookup').on('click', function() {
+	    $.rad.get('/api', { func: '/lead/lead-geo-lookup', 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
+		    if (data.record) {
+			    // Add the City dropdown	    
+    	    	var index_number = $('#data_field_posting_url_container > .form-group').length;
+    			var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
+    			$dataFieldRow.removeAttr('id');
+    			$dataFieldRow.html(function(i, oldHTML) {
+    				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+    				return oldHTML;
+    			});
+    			
+    			$('#data_field_posting_url_container').append($dataFieldRow);
+    			$select = $dataFieldRow.find('.selectize').selectize($selectize_options)[0].selectize;
+    			$select_text = $dataFieldRow.find('.selectize-text').selectize({
+    				valueField: 'value',
+    				labelField: 'name',
+    				searchField: ['name'],
+    				sortField: 'name',
+    				sortDirection: 'ASC',
+    				diacritics:true,
+    				create: true,
+    				createOnBlur: true
+    			})[0].selectize;
+    			$dataFieldRow.show('fast', function() {
+    				$select.setValue('cy');
+    				$select_text.addOption({name:data.record.city,value:data.record.city});
+    				$select_text.refreshOptions();
+    				$select_text.setValue(data.record.city);
+    			});
+
+    		    // Add the State dropdown	    
+    	    	var index_number = $('#data_field_posting_url_container > .form-group').length;
+    			var $dataFieldRow2 = $('#dummy_posting_url_data_field').clone(true);
+    			$dataFieldRow2.removeAttr('id');
+    			$dataFieldRow2.html(function(i, oldHTML) {
+    				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+    				return oldHTML;
+    			});
+    			
+    			$('#data_field_posting_url_container').append($dataFieldRow2);
+    			$select2 = $dataFieldRow2.find('.selectize').selectize($selectize_options)[0].selectize;
+    			$select_text2 = $dataFieldRow2.find('.selectize-text').selectize({
+    				valueField: 'value',
+    				labelField: 'name',
+    				searchField: ['name'],
+    				sortField: 'name',
+    				sortDirection: 'ASC',
+    				diacritics:true,
+    				create: true,
+    				createOnBlur: true
+    			})[0].selectize;
+    			$dataFieldRow2.show('fast', function() {
+    				$select2.setValue('st');
+    				$select_text2.setValue(data.record.state);
+    			});
+		    }
+	    });
+	});
 	
 	
 	// button to remove data fields

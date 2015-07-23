@@ -21,11 +21,14 @@ class SplitQueue extends MongoForm {
 	protected $is_error;
 	protected $last_attempt_time;
 	protected $next_attempt_time;
+	protected $next_cleanup_time;
 	protected $attempt_count;
 	protected $debug;
 	protected $queue_time;
 	protected $is_catch_all;
 	protected $is_unfulfillable;
+	
+	protected $expire_at;
 	
 	protected $attempts;
 	
@@ -224,7 +227,15 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setLastAttemptTime($arg0) {
-		$this->last_attempt_time = $arg0;
+	    if (is_null($arg0)) {
+	        $this->last_attempt_time = null;
+	    } else if (is_string($arg0)) {
+	        $this->last_attempt_time = new \MongoDate(strtotime($arg0));
+	    } else if (is_int($arg0)) {
+	        $this->last_attempt_time = new \MongoDate($arg0);
+	    } else if ($arg0 instanceof \MongoDate) {
+	        $this->last_attempt_time = $arg0;
+	    }
 		$this->addModifiedColumn('last_attempt_time');
 		return $this;
 	}
@@ -245,10 +256,49 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setNextAttemptTime($arg0) {
-		$this->next_attempt_time = $arg0;
+	    if (is_null($arg0)) {
+	        $this->next_attempt_time = null;
+	    } else if (is_string($arg0)) {
+	        $this->next_attempt_time = new \MongoDate(strtotime($arg0));
+	    } else if (is_int($arg0)) {
+	        $this->next_attempt_time = new \MongoDate($arg0);
+	    } else if ($arg0 instanceof \MongoDate) {
+	        $this->next_attempt_time = $arg0;
+	    }
 		$this->addModifiedColumn('next_attempt_time');
 		return $this;
 	}
+	
+	/**
+	 * Returns the next_cleanup_time
+	 * @return \MongoDate
+	 */
+	function getNextCleanupTime() {
+	    if (is_null($this->next_cleanup_time)) {
+	        $this->next_cleanup_time = new \MongoDate();
+	    }
+	    return $this->next_cleanup_time;
+	}
+	
+	/**
+	 * Sets the next_cleanup_time
+	 * @var \MongoDate
+	 */
+	function setNextCleanupTime($arg0) {
+	    if (is_null($arg0)) {
+	        $this->next_cleanup_time = null;
+	    } else if (is_string($arg0)) {
+	        $this->next_cleanup_time = new \MongoDate(strtotime($arg0));
+	    } else if (is_int($arg0)) {
+	        $this->next_cleanup_time = new \MongoDate($arg0);
+	    } else if ($arg0 instanceof \MongoDate) {
+	        $this->next_cleanup_time = $arg0;
+	    }
+	    $this->addModifiedColumn("next_cleanup_time");
+	    return $this;
+	}
+	
+	
 	
 	/**
 	 * Returns the queue_time
@@ -266,7 +316,15 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setQueueTime($arg0) {
-	    $this->queue_time = $arg0;
+	    if (is_null($arg0)) {
+	        $this->queue_time = null;
+	    } else if (is_string($arg0)) {
+	        $this->queue_time = new \MongoDate(strtotime($arg0));
+	    } else if (is_int($arg0)) {
+	        $this->queue_time = new \MongoDate($arg0);
+	    } else if ($arg0 instanceof \MongoDate) {
+	        $this->queue_time = $arg0;
+	    }
 	    $this->addModifiedColumn('queue_time');
 	    return $this;
 	}
@@ -291,6 +349,35 @@ class SplitQueue extends MongoForm {
 	        $this->debug = new \Flux\Link\SplitQueueDebug();
 	        $this->debug->setRequest($arg0);
 	    }
+	    return $this;
+	}
+	
+	/**
+	 * Returns the expire_at
+	 * @return \MongoDate|null
+	 */
+	function getExpireAt() {
+	    if (is_null($this->expire_at)) {
+	        $this->expire_at = null;
+	    }
+	    return $this->expire_at;
+	}
+	
+	/**
+	 * Sets the expire_at
+	 * @var \MongoDate|null
+	 */
+	function setExpireAt($arg0) {
+	    if (is_null($arg0)) {
+	        $this->expire_at = null;    
+	    } else if (is_string($arg0)) {
+	        $this->expire_at = new \MongoDate(strtotime($arg0));
+	    } else if (is_int($arg0)) {
+	        $this->expire_at = new \MongoDate($arg0);
+	    } else if ($arg0 instanceof \MongoDate) {
+	        $this->expire_at = $arg0;
+	    }
+	    $this->addModifiedColumn("expire_at");
 	    return $this;
 	}
 	
