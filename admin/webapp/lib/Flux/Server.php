@@ -330,7 +330,7 @@ class Server extends Base\Server {
 		if (ssh2_auth_password($con, $this->getRootUsername(), $this->getRootPassword()) !== false) {
 			return $con;
 		} else {
-			throw new \Exception('Cannot login to ' . $this->getAdminIpAddress() . ' using password');
+			throw new \Exception('Cannot login to ' . $this->getIpAddress() . ' using password');
 		}
 		
 		return null;
@@ -448,20 +448,17 @@ class Server extends Base\Server {
 	if (!file_exists(\$root_folder . "/lib")) {
 		mkdir(\$root_folder . "/lib");
 	}
-	if (!file_exists(\$root_folder . "/lib/cache")) {
-		mkdir(\$root_folder . "/lib/cache");
-	}
-	if (file_exists(\$docroot_folder . "/.cache/.config.php")) {
-		@unlink(\$docroot_folder . "/.cache/.config.php");
-	}
-	if (!file_exists(\$root_folder . "/docroot")) {
-		mkdir(\$root_folder . "/docroot");
-	}
-	if (!file_exists(\$docroot_folder)) {
+    if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
-	if (!file_exists(\$docroot_folder . '/.cache/')) {
+    if (!file_exists(\$root_folder . "/docroot")) {
+		mkdir(\$root_folder . "/docroot");
+	}
+	if (!file_exists(\$docroot_folder . "/.cache")) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
+	}
+	if (file_exists(\$docroot_folder . "/.cache/config.php")) {
+		@unlink(\$docroot_folder . "/.cache/config.php");
 	}
 	if (!file_exists(\$docroot_folder . '/img') && file_exists(\$root_folder . '/docroot/img')) {
 		symlink(\$root_folder . '/docroot/img', \$docroot_folder . '/img');
