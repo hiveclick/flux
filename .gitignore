@@ -1,4 +1,6 @@
 /nbproject/*
+.buildpath
+.settings
 .dropbox
 .htaccess
 .DS_Store
