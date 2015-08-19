@@ -1,0 +1,118 @@
+/* custom template */
+body {
+	font-family:verdana,arial,sans-serif;
+}
+
+/* Placeholder color */
+*::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #D8D8D8;
+}
+*:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #D8D8D8;
+   opacity:  1;
+}
+*::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #D8D8D8;
+   opacity:  1;
+}
+*:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #D8D8D8;
+}
+.form-control::-webkit-input-placeholder { color: #D8D8D8; }
+.form-control:-moz-placeholder { color: #D8D8D8; }
+.form-control::-moz-placeholder { color: #D8D8D8; }
+.form-control:-ms-input-placeholder { color: #D8D8D8; }
+
+/* fix for bootstrap panel and selectize */
+.panel, .panel-default {
+	overflow: visible; 
+}
+
+.word-break {
+	-ms-word-break: break-all;
+	word-break: break-all;
+
+	/* Non standard for webkit */
+	word-break: break-word;
+}
+
+/* adjust the contents on smaller devices */
+@media (max-width: 768px) {
+  .column .padding {
+    padding: 7px;
+  }
+}
+
+/* Adjust the progress bar margin */
+.table-condensed .progress { 
+	margin-bottom: 0px;
+}
+
+/* Add classes to selectize controls for loading */
+.selectize::before {
+	-moz-transition: opacity 0.2s;
+	-webkit-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+	content: ' ';
+	z-index: 2;
+	position: absolute;
+	display: block;
+	top: 8px;
+	right: 16px;
+	width: 16px;
+	height: 16px;
+	background: url(/images/spinner.gif);
+	background-size: 16px 16px;
+	opacity: 0;
+}
+.selectize.loading::before {
+	opacity: 0.4;
+}
+
+/* Set classes for showing a media object within a selectize drop down */
+
+.media .name,
+.selectize-dropdown .name,
+.selectize-input .name {
+	font-weight: bold;
+	margin-right: 5px;
+}
+.media .title,
+.selectize-dropdown .title,
+.selectize-input .title {
+	display: block;
+}
+
+.media .description,
+.selectize-dropdown .description,
+.selectize-input .description {
+	font-size: 12px;
+	display: block;
+	color: #a0a0a0;
+	width: 100%;
+	overflow: hidden;
+}
+
+.media .meta,
+.selectize-dropdown .meta,
+.selectize-input .meta {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: 10px;
+}
+
+.media .meta li,
+.selectize-dropdown .meta li,
+.selectize-input .meta li {
+	margin: 0;
+	padding: 0;
+	display: inline;
+	margin-right: 10px;
+}
+
+.media .meta li,
+.selectize-dropdown .meta li span,
+.selectize-input .meta li span {
+	font-weight: bold;
+}

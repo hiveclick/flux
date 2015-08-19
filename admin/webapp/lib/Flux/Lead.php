@@ -321,4 +321,36 @@ class Lead extends Base\Lead {
 		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.o' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.n' => 1), array('background' => true));
 		return true;
 	}
+	
+	/**
+	 * Helper method to find the derived city
+	 * @return string
+	 */
+	function getDerivedCity() {
+	    if ($this->getValue("cy") != "") {
+	        return $this->getValue("cy");
+	    }
+	    if ($this->getValue("zi") != "") {
+	        // do a lookup based on the zipcode
+	        $city = \Flux\Zip::lookupCity($this->getValue("zi"));
+	        return $city;
+	    }
+	    return "";
+	}
+	
+	/**
+	 * Helper method to find the derived state
+	 * @return string
+	 */
+	function getDerivedState() {
+	    if ($this->getValue("st") != "") {
+	        return $this->getValue("st");
+	    }
+	    if ($this->getValue("zi") != "") {
+	        // do a lookup based on the zipcode
+	        $state = \Flux\Zip::lookupState($this->getValue("zi"));
+	        return $state;
+	    }
+	    return "";
+	}
 }

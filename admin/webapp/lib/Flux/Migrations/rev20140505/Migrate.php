@@ -14,7 +14,7 @@ class Migrate extends Migration {
 		// Prepare first client
 		$client = new \Flux\Client();
 		$client = $client->query(array('status' => \Flux\Client::CLIENT_STATUS_ACTIVE), false);
-		if (is_null($client)) {
+		if ($client === false) {
 			/* @var $client \Flux\Client */
 		    $client = new \Flux\Client();
 			$client->setName('Administrator');
@@ -26,7 +26,7 @@ class Migrate extends Migration {
 		// Check if we have a first time user yet
 		$user = new \Flux\User();
 		$active_user = $user->query(array('status' => \Flux\User::USER_STATUS_ACTIVE), false);
-		if (is_null($active_user)) {
+		if ($active_user === false) {
 			// we don't have a user yet, let's create one
 		    /* @var $user \Flux\User */
 		    $user = new \Flux\User();
@@ -35,7 +35,7 @@ class Migrate extends Migration {
 			$user->setPassword('admin');
 			$user->setUserType(\Flux\User::USER_TYPE_ADMIN);
 			$user->setStatus(\Flux\User::USER_STATUS_ACTIVE);
-			$user->setClientId($client->getId());
+			$user->setClient($client->getId());
 			$user->setTimezone('America/Los_Angeles');
 			$user->insert();
 		}
