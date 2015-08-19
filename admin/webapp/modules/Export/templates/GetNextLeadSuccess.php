@@ -80,10 +80,10 @@
                                     <input type="text" class="form-control" name="area_code" value="<?php echo substr(preg_replace('/[^0-9]/', '', $split_queue->getLead()->getLead()->getValue('ph')), 0, 3) ?>" id="area_code" />
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" name="prefix_ph" value="<?php echo substr(preg_replace('/[^0-9]/', '', $split_queue->getLead()->getLead()->getValue('ph')), 3, 3) ?>" id="area_code" />
+                                    <input type="text" class="form-control" name="prefix_ph" value="<?php echo substr(preg_replace('/[^0-9]/', '', $split_queue->getLead()->getLead()->getValue('ph')), 3, 3) ?>" id="prefix_ph" />
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" name="suffix_ph" value="<?php echo substr(preg_replace('/[^0-9]/', '', $split_queue->getLead()->getLead()->getValue('ph')), 6) ?>" id="area_code" />
+                                    <input type="text" class="form-control" name="suffix_ph" value="<?php echo substr(preg_replace('/[^0-9]/', '', $split_queue->getLead()->getLead()->getValue('ph')), 6) ?>" id="suffix_ph" />
                                 </div>
                             </div>
                         </div>
