@@ -154,6 +154,16 @@ class User extends Base\User {
 	        throw new \Exception('The passwords do not match. Please check them.');
 	    }
 	}
+	
+	/**
+	 * Updates the password for this user
+	 * @return integer
+	 */
+	function updateToken() {
+	    $new_token = md5(strtotime('now'));
+        $this->setToken($new_token);
+        return $this->update();
+	}
 
 	/**
 	 * Attempts to login the user
@@ -161,7 +171,6 @@ class User extends Base\User {
 	 */
 	function tryLogin() {
 		$user = $this->query(array('email' => $this->getEmail(), 'password' => $this->getPassword(), 'status' => self::USER_STATUS_ACTIVE), false);
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($user, true));
 		if ($user === false) {
 			throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
 		}
@@ -169,6 +178,21 @@ class User extends Base\User {
 			$this->populate($user);
 		}
 		return $this;
+	}
+	
+	/**
+	 * Attempts to login the user with a token
+	 * @return Flux\User
+	 */
+	function tryTokenLogin() {
+	    $user = $this->query(array('token' => $this->getToken(), 'status' => self::USER_STATUS_ACTIVE), false);
+	    if ($user === false) {
+	        throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
+	    }
+	    if (!is_null($user) && \MongoId::isValid($user->getId())) {
+	        $this->populate($user);
+	    }
+	    return $this;
 	}
 
 	/**

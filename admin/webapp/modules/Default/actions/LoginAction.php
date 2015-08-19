@@ -32,6 +32,9 @@ class LoginAction extends BasicAction
 		$user->populate($_REQUEST);
 		$this->getContext()->getRequest()->setAttribute('user', $user);
 		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($_REQUEST, true));
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($_SERVER, true));
+		
 		// figure out where we want to go after we login
 		if (isset($_REQUEST['forward'])) {
 		    if ((strpos(strtolower($_REQUEST['forward']), "login") === false) && (strpos(strtolower($_REQUEST['forward']), "ajax") === false)) {
@@ -41,19 +44,38 @@ class LoginAction extends BasicAction
 	        }
 		} else if (isset($_REQUEST['module']) && isset($_REQUEST['action'])) {
 		    if ((strpos(strtolower($_REQUEST['action']), "login") === false) && (strpos(strtolower($_REQUEST['action']), "ajax") === false)) {
-                $redirect = '/' . $_REQUEST['module'] . '/' . $_REQUEST['action'];
+                $redirect = '/' . $_REQUEST['module'] . '/' . $_REQUEST['action'] . '?' . http_build_query($_GET, null, '&');
 		    } else {
 		        $redirect = '/index';
 		    }
 		}
 		
+		// Perform a token login if we have a token
+		if (isset($_REQUEST['token'])) {
+		    try {
+		        $user->tryTokenLogin();
+		        if (\MongoId::isValid($user->getId())) {
+		            // Successful token authentication
+		            setcookie('__cookie', (string)$user->getId(), (time() + 259200), "/", false);
+		            $this->getContext()->getUser()->setUserDetails($user);
+		            $this->getContext()->getUser()->setAuthenticated(true);
+		
+		            $this->getContext()->getController()->redirect($redirect);
+		            return View::NONE;
+		
+		        }
+		    } catch (\Exception $e) {
+		        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
+		    }
+		}
+		
 		// Perform a cookie login if we have a cookie
-		if (isset($_COOKIE['_' . strtolower(MO_APP_NAME) . "_cookie"])) {
-		    $user_id = $_COOKIE['_' . strtolower(MO_APP_NAME) . "_cookie"];
+		if (isset($_COOKIE['__cookie'])) {
+		    $user_id = $_COOKIE['__cookie'];
 		    $user->setId($user_id);
 		    $user->query();
 		    		    
-		    setcookie('_' . strtolower(MO_APP_NAME) . "_cookie", (string)$user->getId(), (time() + 259200), "/", false);
+		    setcookie('__cookie', (string)$user->getId(), (time() + 259200), "/", false);
 		    $this->getContext()->getUser()->setUserDetails($user);
 		    $this->getContext()->getUser()->setAuthenticated(true);
 		    
@@ -92,7 +114,7 @@ class LoginAction extends BasicAction
 			if ($this->getErrors()->isEmpty()) {
 				$this->getContext()->getUser()->setUserDetails($user);
 				$this->getContext()->getUser()->setAuthenticated(true);
-				setcookie('_' . strtolower(MO_APP_NAME) . "_cookie", (string)$user->getId(), (time() + 259200), "/", false);
+				setcookie('__cookie', (string)$user->getId(), (time() + 259200), "/", false);
 
 				$this->getContext()->getController()->redirect($redirect);
 				return View::NONE;

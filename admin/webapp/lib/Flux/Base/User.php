@@ -20,6 +20,7 @@ class User extends MongoForm {
 	protected $timezone;
 	protected $client;
 	protected $image_data;
+	protected $token;
 	
 	/**
 	 * Constructs new user
@@ -192,6 +193,27 @@ class User extends MongoForm {
 		$this->timezone = $arg0;
 		$this->addModifiedColumn('timezone');
 		return $this;
+	}
+	
+	/**
+	 * Returns the token
+	 * @return string
+	 */
+	function getToken() {
+	    if (is_null($this->token)) {
+	        $this->token = "";
+	    }
+	    return $this->token;
+	}
+	
+	/**
+	 * Sets the token
+	 * @var string
+	 */
+	function setToken($arg0) {
+	    $this->token = $arg0;
+	    $this->addModifiedColumn("token");
+	    return $this;
 	}
 	
 	/**

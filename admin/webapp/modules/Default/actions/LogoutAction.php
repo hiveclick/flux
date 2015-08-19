@@ -37,7 +37,7 @@ class LogoutAction extends BasicAction
 		$this->getContext()->getUser()->setAuthenticated(false);
 		$this->getContext()->getUser()->clearCredentials();
 		$this->getContext()->getUser()->clearAttributes();
-		setcookie('_' . strtolower(MO_APP_NAME) . "_cookie", "", 0, "/", false);
+		setcookie('__cookie', "", 0, "/", false);
 		$this->getContext()->getController()->redirect("/");
 		return View::NONE;
 	}

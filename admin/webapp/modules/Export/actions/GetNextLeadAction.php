@@ -38,6 +38,14 @@ class GetNextLeadAction extends BasicAction
 		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
 		return View::SUCCESS;
 	}
+	
+	/**
+	 * Returns whether the user needs to be logged in or not
+	 * @return boolean
+	 */
+	function isSecure() {
+	    return true;
+	}
 }
 
 ?>
