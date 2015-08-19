@@ -134,7 +134,11 @@
     		<div class="panel-body word-break">
     		    <div class="form-group">
                     <label for="_id">Id: </label>
-                    <input type="text" class="form-control" name="_id" value="<?php echo $split_queue->getLead()->getLeadId() ?>" id="_id" />
+                    <input type="text" class="form-control" name="_id" value="<?php echo $split_queue->getId() ?>" id="_id" />
+                </div>
+    		    <div class="form-group">
+                    <label for="lead_id">Lead Id: </label>
+                    <input type="text" class="form-control" name="lead_id" value="<?php echo $split_queue->getLead()->getLeadId() ?>" id="lead_id" />
                 </div>
                 <div class="form-group">
                     <label for="created">Created: </label>
