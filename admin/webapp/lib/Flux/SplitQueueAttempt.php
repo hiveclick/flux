@@ -13,6 +13,7 @@ class SplitQueueAttempt extends CommonForm {
     protected $is_error;
     protected $error_message;
     protected $response_time;
+    protected $screenshot;
     
     protected $lead;
     
@@ -282,6 +283,27 @@ class SplitQueueAttempt extends CommonForm {
      */
     function setAttemptIndex($arg0) {
         $this->attempt_index = (int)$arg0;
+        return $this;
+    }
+    
+    /**
+     * Returns the screenshot
+     * @return string
+     */
+    function getScreenshot() {
+        if (is_null($this->screenshot)) {
+            $this->screenshot = "";
+        }
+        return $this->screenshot;
+    }
+    
+    /**
+     * Sets the screenshot
+     * @var string
+     */
+    function setScreenshot($arg0) {
+        $this->screenshot = $arg0;
+        $this->addModifiedColumn("screenshot");
         return $this;
     }
 

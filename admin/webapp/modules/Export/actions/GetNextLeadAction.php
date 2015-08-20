@@ -31,9 +31,9 @@ class GetNextLeadAction extends BasicAction
 		
 		$criteria = array();
 		$criteria['split.split_id'] = array('$in' => $split_queue->getSplitIdArray());
-		$criteria['disposition'] = array('$in' => array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, \Flux\SplitQueue::DISPOSITION_PENDING));
+		$criteria['disposition'] = array('$in' => array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED));
 		
-		$split_queue = $split_queue->query($criteria, false);
+		$split_queue = $split_queue->findAndModify($criteria, array('$set' => array('disposition' => \Flux\SplitQueue::DISPOSITION_PROCESSING)), null, array('new' => true), true);
 		
 		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
 		return View::SUCCESS;

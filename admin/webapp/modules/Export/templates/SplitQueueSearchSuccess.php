@@ -70,6 +70,7 @@
 				    <select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
+				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_PROCESSING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PROCESSING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Processing</options>
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLABLE, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
@@ -151,6 +152,8 @@ $(document).ready(function() {
 					ret_val += '<div class="text-danger">Unfulfillable</div>';
 				} else if (value == 4) {
 					ret_val += '<div class="text-info">Already Fulfilled</div>';
+				} else if (value == 5) {
+					ret_val += '<div class="text-info">Processing</div>';
 				} else {
 					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
 				}
@@ -184,6 +187,7 @@ $(document).ready(function() {
 		}},
 		{id:'actions', name:'Flag Item', field:'_id', def_value: ' ', sortable:false, hidden: false, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div class="btn-group" role="group">';
+			ret_val += '<div class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Flag as Unfulfilled" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '<div class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Flag as Pending" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '<div class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Flag as Unfulfillable" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '<div class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Flag as Already Fulfilled" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';

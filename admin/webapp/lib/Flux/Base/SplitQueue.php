@@ -10,6 +10,7 @@ class SplitQueue extends MongoForm {
     const DISPOSITION_PENDING = 2;
     const DISPOSITION_UNFULFILLABLE = 3;
     const DISPOSITION_ALREADY_FULFILLED = 4;
+    const DISPOSITION_PROCESSING = 5;
     
 	protected $split;
 	protected $lead;

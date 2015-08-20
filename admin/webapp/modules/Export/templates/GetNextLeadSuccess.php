@@ -1,7 +1,6 @@
 <?php
 	/* @var $split_queue \Flux\SplitQueue */
 	$split_queue = $this->getContext()->getRequest()->getAttribute("split_queue", array());
-	$datafields = $this->getContext()->getRequest()->getAttribute("datafields", array());
 ?>
 <?php if (!$split_queue) { ?>
     <h1>No more leads on split</h1>

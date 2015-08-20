@@ -64,6 +64,9 @@
 <div class="help-block">You can view a lead on this screen and see how it was tracked</div>
 <br/>
 <div class="col-md-8">
+    <?php if ($split_queue->getIsError()) { ?>
+        <div class="alert alert-warning"><?php echo $split_queue->getErrorMessage() ?></div>
+    <?php } ?>
 	<div class="panel panel-default">
 		<div class="panel-heading">Data Information</div>
 		<div class="panel-body">
@@ -186,6 +189,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+					    <th width="90">Screenshot</th>
 						<th width="40%">Fulfillment</th>
 						<th class="text-center">Response</th>
 					</tr>
@@ -300,6 +304,10 @@ function loadAttempts() {
 	    $('#attempt_tbody').html('');
 	    $.each(data.record.attempts, function(i, item) {
 		    var tr = $('<tr />');
+		    td = $('<td />').appendTo(tr);
+		    if (item.screenshot && item.screenshot != '') {
+		    	  $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '"><img src="data:image/png;base64,' + item.screenshot + '" border="0" class="img-thumbnail img-responsive" width="90" /></a>').appendTo(td);
+		    }
 		    td = $('<td />').appendTo(tr);
 		    $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '">' + item.fulfillment.fulfillment_name + '</a>').appendTo(td);
 		    $('<div class="small">' + moment.unix(item.attempt_time.sec).calendar() + '</div>').appendTo(td);
