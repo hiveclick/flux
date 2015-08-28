@@ -63,7 +63,7 @@
     		</select>
 		</div>
 		<div class="form-group">
-            <textarea class="form-control <?php $report_lead->getDisposition() == \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ? 'hidden' : '' ?>" id="disposition_message" name="disposition_message" rows="2" placeholder="Enter an optional message if this payout is flagged as disqualified..."><?php echo $report_lead->getDispositionMessage() ?></textarea>
+            <textarea class="form-control <?php echo $report_lead->getDisposition() == \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ? 'hidden' : '' ?>" id="disposition_message" name="disposition_message" rows="2" placeholder="Enter an optional message if this payout is flagged as disqualified..."><?php echo $report_lead->getDispositionMessage() ?></textarea>
 		</div>
 		<hr />
 		<div class="form-group row">

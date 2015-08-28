@@ -12,7 +12,6 @@
 <form class="" id="split_form" method="PUT" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="func" value="/export/split" />
 	<input type="hidden" name="_id" value="<?php echo $split->getId() ?>" />
-	<input type="hidden" name="status" value="<?php echo \Flux\Split::SPLIT_STATUS_ACTIVE ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -34,6 +33,13 @@
 					<textarea name="description" id="description" class="form-control" placeholder="Enter Description..." rows="4" required><?php echo $split->getDescription() ?></textarea>
 				</div>
 				
+				<div class="form-group">
+					<label class="control-label" for="status">Mark this split as active or inactive</label>
+					<select name="status" id="status" placeholder="Set the status of this split">
+                        <option value="<?php echo \Flux\Split::SPLIT_STATUS_ACTIVE ?>" <?php echo $split->getStatus() == \Flux\Split::SPLIT_STATUS_ACTIVE ? 'selected' : '' ?>>This split is active and will be used</option>
+                        <option value="<?php echo \Flux\Split::SPLIT_STATUS_INACTIVE ?>" <?php echo $split->getStatus() == \Flux\Split::SPLIT_STATUS_INACTIVE ? 'selected' : '' ?>>This split is inactive and will NOT be used</option>
+					</select>
+				</div>
 				<hr />
 				<div class="help-block">Select what type of split this is</div>
 				
@@ -487,7 +493,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type,#fulfill_delay').selectize();
+	$('#offer_select,#fulfillment_id,#days,#start_hour,#end_hour,#split_type,#fulfill_delay,#status').selectize();
 
 	$('#split_form').form(function(data) {
 		$.rad.notify('Split Updated', 'The split has been updated in the system');

@@ -47,6 +47,9 @@
 <!-- Page Content -->
 
 <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
+    <?php if ($split->getStatus() == \Flux\Split::SPLIT_STATUS_INACTIVE) { ?>
+        <div class="alert alert-warning"><span class="glyphicon glyphicon-exclamation-sign"></span> This split is currently <i>inactive</i> and will not be run</div>
+    <?php } ?>
 	<div class="help-block"><?php echo $split->getDescription() ?></div>
 	<hr />
 	<h3>Validation</h3>

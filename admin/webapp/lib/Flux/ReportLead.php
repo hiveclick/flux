@@ -188,6 +188,19 @@ class ReportLead extends Base\ReportLead {
         $this->addModifiedColumn("disposition_array");
         return $this;
     }
+    
+    /**
+     * Queries entries by filters
+     */
+    function queryByLead() {
+        $criteria = array();
+        if (\MongoId::isValid($this->getLead()->getLeadId())) {
+            $criteria['lead.lead_id'] = $this->getLead()->getLeadId();
+        } else if (\MongoId::isValid($this->getId())) {
+            $criteria['lead.lead_id'] = $this->getId();
+        }
+        return parent::query($criteria, false);
+    }
    
     /**
      * Queries entries by filters

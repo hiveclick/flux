@@ -53,7 +53,11 @@ $(document).ready(function() {
  		}},
  		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
  			var ret_val = '<div style="line-height:16pt;">'
- 			ret_val += '<a href="/export/split?_id=' + dataContext._id + '">' + value + '</a>';
+ 	 		if (dataContext.status == '<?php echo \Flux\Split::SPLIT_STATUS_INACTIVE ?>') {
+ 	 			ret_val += '<a class="text-muted" href="/export/split?_id=' + dataContext._id + '"><i><span class="glyphicon glyphicon-exclamation-sign"></span> ' + value + ' <span class="small text-danger">(inactive)</span></i></a>';
+ 	 		} else {
+ 	 			ret_val += '<a href="/export/split?_id=' + dataContext._id + '">' + value + '</a>';
+ 	 		}
  			ret_val += '<div class="small text-muted">' + dataContext.description + '</div>';
  			ret_val += '</div>';
  			return ret_val;
@@ -98,6 +102,13 @@ $(document).ready(function() {
  			}
  			ret_val += '</div>';
  			return ret_val;
+ 		}},
+ 		{id:'status', name:'Status', field:'status', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
+ 			if (value == '<?php echo \Flux\Split::SPLIT_STATUS_INACTIVE ?>') {
+ 			    return '<i class="text-danger">inactive</i>';
+ 			} else {
+ 				return '<div class="text-muted">active</div>';
+ 			}
  		}},
  		{id:'fulfill_immediately', name:'Auto-Fulfillment', field:'fulfill_immediately', def_value: ' ', cssClass:'text-center', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
  			var ret_val = '<div style="line-height:16pt;">'
