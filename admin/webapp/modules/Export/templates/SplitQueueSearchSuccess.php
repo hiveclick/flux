@@ -105,13 +105,10 @@ $(document).ready(function() {
         	return ret_val;
         }},
 		{id:'lead_id', name:'Lead #', field:'lead.lead_id', sort_field:'lead.lead_id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/export/split-queue?_id=' + dataContext._id + '">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
+			ret_val += ' (Item #:<a href="/export/split-queue?_id=' + dataContext._id + '">' + dataContext._id + '</a>)';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
@@ -119,7 +116,15 @@ $(document).ready(function() {
 		{id:'split_id', name:'Split', field:'split.split_id', sort_field:'split.split_id', def_value: ' ', cssClass: 'text-center', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var split_id = (dataContext.split.split_id == undefined) ? 0 : dataContext.split.split_id;
 			var split_name = (dataContext.split.split_name == undefined) ? 0 : dataContext.split.split_name;
-			ret_val = '<a href="/export/split?_id=' + split_id + '">' + split_name + '</a>';
+			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
+			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
+			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/export/split?_id=' + split_id + '">' + split_name + '</a>';
+				ret_val += '<div class="small text-muted">';
+				ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
+				ret_val += '</div>';
+				ret_val += '</div>';
 			return ret_val;
 		}},
 		{id:'name', name:'Name', field:'lead_name', sort_field:'lead_name', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -191,6 +196,7 @@ $(document).ready(function() {
 			ret_val += '<div class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Flag as Pending" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '<div class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Flag as Unfulfillable" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '<div class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Flag as Already Fulfilled" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
+			ret_val += '<div class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Flag as Fulfilled" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></div>';
 			ret_val += '</div>';
 			return ret_val;
 		}}
