@@ -58,7 +58,7 @@ class Diablo extends BaseNetwork {
     						    array(
     						        '$setOnInsert' => array(
     						            'report_date' => $report_lead->getReportDate(),
-    						            'client' => $report_lead->getClient()
+    						            'client' => $report_lead->getClient()->toArray(true, true, true)
     						        ),
     						        '$set' => array(
     						            'lead' => $report_lead->getLead()->toArray(true, true, true),
