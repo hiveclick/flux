@@ -37,6 +37,14 @@
     		<div class="panel-heading">Data Information</div>
     		<div class="panel-body">
     		    <div class="form-group">
+                    <label for="name">Split: </label>
+                    <input type="text" class="form-control" name="split_id" value="<?php echo $split_queue->getSplit()->getSplitId() ?>" id="split_id" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Split Name: </label>
+                    <input type="text" class="form-control" name="split_name" value="<?php echo $split_queue->getSplit()->getSplitName() ?>" id="split_name" />
+                </div>
+    		    <div class="form-group">
                     <label for="name">Fullname: </label>
                     <input type="text" class="form-control" name="name" value="<?php echo $split_queue->getLead()->getLead()->getValue('name') ?>" id="name" />
                 </div>
