@@ -32,10 +32,11 @@ class Evo extends BaseNetwork {
             foreach ($revenue_response->click as $click_obj) {
                 // Store any offers not found into a separate array
                 $transaction_id = (string)$click_obj->SA0;
-                if (trim($transaction_id) != '') {
+                if (trim($transaction_id) != '' && \MongoId::isValid(trim($transaction_id))) {
                     /* @var $report_lead \Flux\ReportLead */
                     $report_lead = new \Flux\ReportLead();
                     $report_lead->setLead(trim($transaction_id));
+                    $report_lead->setClient($this->getClient()->getClientId());
                     $report_lead->setReportDate(new \MongoDate(strtotime($click_obj->TimeConversion)));
                     $report_lead->setRevenue(floatval($click_obj->SaleAmount));
                     $report_lead->setDisposition('Accepted');
@@ -46,7 +47,8 @@ class Evo extends BaseNetwork {
                         array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
                         array(
                             '$setOnInsert' => array(
-                                'report_date' => $report_lead->getReportDate()
+                                'report_date' => $report_lead->getReportDate(),
+                                'client' => $report_lead->getClienet()->getArray(true, true, true)
                             ),
                             '$set' => array(
                                 'lead' => $report_lead->getLead()->toArray(true, true, true),

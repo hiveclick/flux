@@ -42,9 +42,10 @@ class Diablo extends BaseNetwork {
 					$not_found_data = array('revenue' => 0, 'clicks' => 0, 'sales' => 0);
 					foreach ($revenue_response['data'] as $revenue_entry) {
 						$transaction_id = $revenue_entry["trxid"];
-						if (trim($transaction_id) != '') {
+						if (trim($transaction_id) != '' && \MongoId::isValid(trim($transaction_id))) {
     						/* @var $report_lead \Flux\ReportLead */
     						$report_lead = new \Flux\ReportLead();
+    						$report_lead->setClient($this->getClient()->getClientId());
     						$report_lead->setLead(trim($transaction_id));
     						$report_lead->setReportDate(new \MongoDate(strtotime($revenue_entry["date"])));
     						$report_lead->setRevenue(floatval($revenue_entry["revenue"]));
@@ -56,7 +57,8 @@ class Diablo extends BaseNetwork {
     						    array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
     						    array(
     						        '$setOnInsert' => array(
-    						            'report_date' => $report_lead->getReportDate()
+    						            'report_date' => $report_lead->getReportDate(),
+    						            'client' => $report_lead->getClient()
     						        ),
     						        '$set' => array(
     						            'lead' => $report_lead->getLead()->toArray(true, true, true),

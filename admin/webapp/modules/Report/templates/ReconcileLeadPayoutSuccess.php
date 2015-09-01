@@ -86,14 +86,16 @@ $(document).ready(function() {
 			
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id.$id + '">' + value.lead_name + '</a>';
-			ret_val += '<div class="small text-muted">' + dataContext.lead.email + '</div>';
+			if (dataContext.lead.email) {
+			    ret_val += '<div class="small text-muted">' + dataContext.lead.email + '</div>';
+			}
 			ret_val += '</div>';
 			return ret_val;
 		}},
 		{id:'client', name:'client', field:'client', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-			var client_name = (dataContext.client && dataContext.client.client_name != undefined) ? dataContext.client.client_name : '';
+			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 'no offer' : dataContext.lead.offer.offer_name;
+			var client_name = (dataContext.client && dataContext.client.client_name != undefined) ? dataContext.client.client_name : 'no client';
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">' + client_name + '</a>';
 			ret_val += '<div class="small text-muted"><a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a></div>';
@@ -115,9 +117,11 @@ $(document).ready(function() {
 			    } else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>) {
 			    	ret_val += '<a class="text-muted" data-toggle="modal" data-target="#edit_report_lead_modal" href="/report/reconcile-lead-payout-wizard?_id=' + dataContext._id.$id + '">Pending</a>';
 			    }
-				ret_val += '<div class="small text-muted">';
-				ret_val += dataContext.disposition_message;
-				ret_val += '</div>';
+			    if (dataContext.disposition_message) {
+			        ret_val += '<div class="small text-muted">';
+			        ret_val += dataContext.disposition_message;
+			        ret_val += '</div>';
+			    }
 				ret_val += '</div>';
 				return ret_val;
 		}},

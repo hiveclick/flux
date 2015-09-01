@@ -222,21 +222,21 @@ class ReportLead extends MongoForm {
             $this->lead = new \Flux\Link\Lead();
             $this->lead->populate($arg0);
             if (\MongoId::isValid($this->lead->getLeadId()) && $this->lead->getLeadName() == '') {
-                $this->lead->setLeadName($this->lead->getLead()->getId());
+                $this->lead->setLeadName((string)$this->lead->getLead()->getId());
             }
             $this->addModifiedColumn("lead");
         } else if (is_string($arg0) && \MongoId::isValid($arg0)) {
             $this->lead = new \Flux\Link\Lead();
             $this->lead->setLeadId($arg0);
             if (\MongoId::isValid($this->lead->getLeadId()) && $this->lead->getLeadName() == '') {
-                $this->lead->setLeadName($this->lead->getLead()->getId());
+                $this->lead->setLeadName((string)$this->lead->getLead()->getId());
             }
             $this->addModifiedColumn("lead");
         } else if ($arg0 instanceof \MongoId) {
             $this->lead = new \Flux\Link\Lead();
             $this->lead->setLeadId((string)$arg0);
             if (\MongoId::isValid($this->lead->getLeadId()) && $this->lead->getLeadName() == '') {
-                $this->lead->setLeadName($this->lead->getLead()->getId());
+                $this->lead->setLeadName((string)$this->lead->getLead()->getId());
             }
             $this->addModifiedColumn("lead");
         }

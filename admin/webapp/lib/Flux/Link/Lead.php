@@ -40,9 +40,9 @@ class Lead extends CommonForm {
 	    }
 		// Try to set the other fields
 		if (trim($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln')) != '') {
-            $this->setLeadName($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
+            $this->setLeadName((string)$this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
 		} else {
-		    $this->setLeadName($this->getLead()->getValue('name'));
+		    $this->setLeadName((string)$this->getLead()->getValue('name'));
 		}
 		$this->setEmail($this->getLead()->getValue('em'));
 		$this->setPhone($this->getLead()->getValue('ph'));
