@@ -53,7 +53,8 @@
 				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>">Today</option>
 				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ?>">Yesterday</option>
 				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>">Last 7 days</option>
-				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_30_DAYS ?>">Last 30 days</option>
+				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_MTD ?>">Month To Date</option>
+				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_MONTH ?>">Last Month</option>
 				    		<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM ?>">Custom</option>
 				    	</select>
 					</div>
@@ -110,6 +111,7 @@
             <th class="text-center">Clicks</th>
             <th class="text-center">Conversions</th>
             <th class="text-center">Fulfilled</th>
+            <th class="text-center">Pixel</th>
             <th class="text-center">CTR</th>
             <th class="text-center">Pending</th>
             <th class="text-center">Accepted</th>
@@ -127,6 +129,7 @@
             <th id="total_clicks" class="text-center text-muted"></th>
             <th id="total_conversions" class="text-center text-muted"></th>
             <th id="total_fulfilled" class="text-center text-muted"></th>
+            <th id="total_pixel" class="text-center text-muted"></th>
             <th id="total_ctr" class="text-center text-muted"></th>
             <th id="total_pending_leads" class="text-center text-muted"></th>
             <th id="total_accepted_leads" class="text-center text-success"></th>
@@ -176,6 +179,7 @@ $(document).ready(function() {
             	    	client_entry.clicks += entry.clicks;
             	    	client_entry.conversions += entry.conversions;
             	    	client_entry.fulfilled += entry.fulfilled;
+            	    	client_entry.pixel += entry.pixel;
             	    	client_entry.accepted_leads += entry.accepted_leads;
             	    	client_entry.disqualified_leads += entry.disqualified_leads;
             	    	client_entry.duplicate_leads += entry.duplicate_leads;
@@ -191,6 +195,7 @@ $(document).ready(function() {
                 	    clicks: entry.clicks,
             	    	conversions: entry.conversions,
             	    	fulfilled: entry.fulfilled,
+            	    	pixel: entry.pixel,
             	    	accepted_leads: entry.accepted_leads,
             	    	disqualified_leads: entry.disqualified_leads,
             	    	duplicate_leads: entry.duplicate_leads,
@@ -208,6 +213,7 @@ $(document).ready(function() {
                 $('<td class="bg-warning text-center text-muted " />').html($.formatNumber(client_entry.clicks, {format:'#,##0'})).appendTo(tr);
                 $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.conversions, {format:'#,##0'})).appendTo(tr);
                 $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.fulfilled, {format:'#,##0'})).appendTo(tr);
+                $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.pixel, {format:'#,##0'})).appendTo(tr);
                 $('<td class="bg-warning text-center text-muted" />').html($.formatNumber(client_entry.conversions / client_entry.clicks * 100, {format:'#,##0.00'}) + '%').appendTo(tr);
                 $('<td class="bg-warning text-center text-muted" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.pending_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
                 $('<td class="bg-warning text-center text-success" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?client_id_array[]=' + client_entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(client_entry.accepted_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
@@ -218,11 +224,12 @@ $(document).ready(function() {
                 $('<td class="bg-warning text-center" />').html($.formatNumber(((client_entry.revenue - client_entry.payout) / client_entry.revenue) * 100, {format:'#,##0.0'}) + '%').appendTo(tr);
             });
             
-            var total_clicks = 0, total_conversions = 0, total_accepted_leads = 0, total_disqualified_leads = 0, total_duplicate_leads = 0, total_pending_leads = 0, total_revenue = 0, total_payout = 0;
+            var total_clicks = 0, total_conversions = 0, total_pixel = 0, total_fulfilled = 0, total_accepted_leads = 0, total_disqualified_leads = 0, total_duplicate_leads = 0, total_pending_leads = 0, total_revenue = 0, total_payout = 0;
             $.each(data.entries, function(i, entry) {                
                 total_clicks += entry.clicks;
                 total_conversions += entry.conversions;
                 total_fulfilled += entry.fulfilled;
+                total_pixel += entry.pixel;
                 total_accepted_leads += entry.accepted_leads;
                 total_disqualified_leads += entry.disqualified_leads;
                 total_duplicate_leads += entry.duplicate_leads;
@@ -236,6 +243,7 @@ $(document).ready(function() {
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.clicks, {format:'#,##0'})).appendTo(tr);
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions, {format:'#,##0'})).appendTo(tr);
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.fulfilled, {format:'#,##0'})).appendTo(tr);
+                $('<td class="text-center text-muted" />').html($.formatNumber(entry.pixel, {format:'#,##0'})).appendTo(tr);
                 $('<td class="text-center text-muted" />').html($.formatNumber(entry.conversions / entry.clicks * 100, {format:'#,##0.00'}) + '%').appendTo(tr);
                 $('<td class="text-center text-muted" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.pending_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
                 $('<td class="text-center text-success" />').html('<a data-toggle="modal" data-target="#lead_payout_report_modal" href="/report/lead-payout-report-details?offer_id_array[]=' + entry.offer_id + '&client_id_array[]=' + entry.client_id + '&disposition_array[]=<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>&start_date=' + $('#start_time').val() + '&end_date=' + $('#end_time').val() + '&date_range=' + $('#date_range').val() +  '&keywords=' + $('#txtSearch').val() + '">' + $.formatNumber(entry.accepted_leads, {format:'#,##0'}) + '</a>').appendTo(tr);
@@ -249,6 +257,7 @@ $(document).ready(function() {
             $('#total_clicks').html($.formatNumber(total_clicks, {format:'#,##0'}));
             $('#total_conversions').html($.formatNumber(total_conversions, {format:'#,##0'}));
             $('#total_fulfilled').html($.formatNumber(total_fulfilled, {format:'#,##0'}));
+            $('#total_pixel').html($.formatNumber(total_pixel, {format:'#,##0'}));
             $('#total_ctr').html($.formatNumber(total_conversions / total_clicks * 100, {format:'#,##0.00'}) + '%');
             $('#total_accepted_leads').html($.formatNumber(total_accepted_leads, {format:'#,##0'}));
             $('#total_disqualified_leads').html($.formatNumber(total_disqualified_leads, {format:'#,##0'}));

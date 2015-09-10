@@ -98,13 +98,13 @@ class SplitPosition extends Base\SplitPosition {
 	 * Queries all records
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getSplitIdArray()) > 0) {
 			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
 		}
 		if ($this->getPosition() > 0) {
 			$criteria['position'] = $this->getPosition();
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 }

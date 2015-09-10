@@ -32,9 +32,6 @@ class LoginAction extends BasicAction
 		$user->populate($_REQUEST);
 		$this->getContext()->getRequest()->setAttribute('user', $user);
 		
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($_REQUEST, true));
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($_SERVER, true));
-		
 		// figure out where we want to go after we login
 		if (isset($_REQUEST['forward'])) {
 		    if ((strpos(strtolower($_REQUEST['forward']), "login") === false) && (strpos(strtolower($_REQUEST['forward']), "ajax") === false)) {

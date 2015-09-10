@@ -53,7 +53,7 @@ class Zip extends Base\Zip {
 	 * Queries a report column by it's name
 	 * @return Flux\ReportColumn
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 	    if (trim($this->getKeywords()) != '') {
 	        $search_params = array();
 	        $search_params[] = array('zipcode' => new \MongoRegex("/" . $this->getKeywords() . "/i"));
@@ -61,7 +61,7 @@ class Zip extends Base\Zip {
 	        $search_params[] = array('state' => new \MongoRegex("/" . $this->getKeywords() . "/i"));
 	        $criteria['$or'] = $search_params;
 	    }
-	    return parent::queryAll($criteria, $hydrate);
+	    return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

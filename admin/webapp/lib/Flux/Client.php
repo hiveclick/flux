@@ -105,11 +105,11 @@ class Client extends Base\Client {
 	 * Returns the offer based on the criteria
 	 * @return Flux\Offer
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 
 	/**

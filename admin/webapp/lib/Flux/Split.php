@@ -107,14 +107,14 @@ class Split extends Base\Split {
 	 * Returns the user based on the criteria
 	 * @return Flux\User
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 	    if ($this->getSplitType() > 0) {
 	        $criteria['split_type'] = $this->getSplitType();
 	    }
 	    if (trim($this->getName()) != '') {
 	        $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 	    }
-	    return parent::queryAll($criteria, $hydrate);
+	    return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

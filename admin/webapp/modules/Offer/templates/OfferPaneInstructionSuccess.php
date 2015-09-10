@@ -216,6 +216,9 @@ function buildPostingUrl() {
 	var campaign_key = $('[name=posting_url_campaign]').val();
 	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = campaign_key;
 	posting_params[<?php echo json_encode(\Flux\Lead::LEAD_CLEAR_FLAG); ?>] = 1;
+
+	pixel_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = campaign_key;
+	pixel_params['_id'] = 'SUBID';
 	
 
 	$('#data_field_posting_url_container .form-group').each(function() {
@@ -225,12 +228,13 @@ function buildPostingUrl() {
 	});
 
 	var query_string = $.param(posting_params);
+	var query_string_pixel = $.param(pixel_params);
 	var entire_post_url = '<?php echo (defined("MO_API_URL") ? MO_API_URL : "") . '/rt/post-lead?'; ?>';
 	var entire_url = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?'; ?>';
 	var entire_pixel = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/p?'; ?>';
 	$('[name=hostnpost_url]').val(entire_post_url + query_string);
 	$('[name=example_url]').val(entire_url + query_string);
-	$('[name=example_pixel]').val('<img src="' + entire_pixel + query_string + '" border="0" />');
+	$('[name=example_pixel]').val('<img src="' + entire_pixel + query_string_pixel + '" border="0" />');
 }
 //-->
 </script>

@@ -76,6 +76,7 @@ class DataField extends MongoForm {
 
 	const DATA_FIELD_EVENT_CONVERSION_NAME = 'conv';
 	const DATA_FIELD_EVENT_FULFILLED_NAME = 'fulfilled';
+	const DATA_FIELD_EVENT_PIXEL_NAME = 'pxl';
 
 	const DATA_FIELD_DEFAULT_CONTAINER = '_d';
 	const DATA_FIELD_EVENT_CONTAINER = '_e';

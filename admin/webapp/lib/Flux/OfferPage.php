@@ -74,14 +74,14 @@ class OfferPage extends Base\OfferPage {
 	 * Returns the offer based on the criteria
 	 * @return Flux\OfferPage
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if ($this->getPageName() != '') {
 			$criteria['page_name'] = $this->getPageName();
 		}
 		if (count($this->getOfferIdArray()) > 0) {
 			$criteria['offer.offer_id'] = array('$in' => $this->getOfferIdArray());
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 
 	/**

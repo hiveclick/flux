@@ -39,7 +39,7 @@ class Evo extends BaseNetwork {
                     $report_lead->setClient($this->getClient()->getClientId());
                     $report_lead->setReportDate(new \MongoDate(strtotime($click_obj->TimeConversion)));
                     $report_lead->setRevenue(floatval($click_obj->SaleAmount));
-                    $report_lead->setDisposition('Accepted');
+                    $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
                     $report_lead->setAccepted(true);
                     	
                     \Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);

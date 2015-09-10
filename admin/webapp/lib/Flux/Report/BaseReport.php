@@ -18,7 +18,8 @@ class BaseReport extends MongoForm {
 	const DATE_RANGE_LAST_10_MIN = 11;
 	const DATE_RANGE_MONTH = 12;
 	const DATE_RANGE_MTD = 13;
-	const DATE_RANGE_CUSTOM = 14;
+	const DATE_RANGE_LAST_MONTH = 14;
+	const DATE_RANGE_CUSTOM = 15;
 
 	const EVENT_WINDOW_EXCLUSIVE_ANY = 1;
 	const EVENT_WINDOW_EXCLUSIVE_EXCPLICIT = 2;
@@ -312,6 +313,7 @@ class BaseReport extends MongoForm {
 			self::DATE_RANGE_TODAY => 'Today',
 		    self::DATE_RANGE_MTD => 'Month To Date',
 		    self::DATE_RANGE_MONTH => 'Month',
+		    self::DATE_RANGE_LAST_MONTH => 'Last Month',
 			self::DATE_RANGE_LAST_48_HOURS => 'Last 48 Hours',
 			self::DATE_RANGE_LAST_24_HOURS => 'Last 24 Hours',
 			self::DATE_RANGE_LAST_12_HOURS => 'Last 12 Hours',
@@ -385,13 +387,21 @@ class BaseReport extends MongoForm {
 					$this->end_time = $end_time->setTime(23,59,59);
 					break;
 				case self::DATE_RANGE_MONTH:
-				    $start_time = new \DateTime("now", $timezone);
-				    $start_time->setTimestamp(strtotime($this->getStartTime()));
-				    $this->start_time = $start_time->setTime(0,0,0);
-				    $end_time = new \DateTime("now", $timezone);
-				    $end_time->setTimestamp(strtotime($this->getStartTime()->format('m/t/Y')));
+				    $end_time = new \DateTime('today', $timezone);
+				    $end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
 				    $this->end_time = $end_time->setTime(23,59,59);
+				    $start_time = new \DateTime("now", $timezone);
+				    $start_time->setTimestamp(strtotime($start_time->format('m/1/Y')));
+				    $this->start_time = $start_time->setTime(0,0,0);
 				    break;
+			    case self::DATE_RANGE_LAST_MONTH:
+			        $end_time = new \DateTime('today - 1 month', $timezone);
+			        $end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
+			        $this->end_time = $end_time->setTime(23,59,59);
+			        $start_time = new \DateTime("now", $timezone);
+			        $start_time->setTimestamp(strtotime($end_time->format('m/1/Y')));
+			        $this->start_time = $start_time->setTime(0,0,0);
+			        break;
 			    case self::DATE_RANGE_MTD:
 			        $end_time = new \DateTime('today', $timezone);
 			        $this->end_time = $end_time->setTime(23,59,59);

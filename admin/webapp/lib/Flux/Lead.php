@@ -194,7 +194,7 @@ class Lead extends Base\Lead {
 	 * Queries the leads
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 	    if (count($this->getOfferIdArray()) > 0) {
 	        $criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $this->getOfferIdArray());
 	    }
@@ -265,7 +265,7 @@ class Lead extends Base\Lead {
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
 		
 						
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

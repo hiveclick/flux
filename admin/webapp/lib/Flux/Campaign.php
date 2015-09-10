@@ -124,7 +124,7 @@ class Campaign extends Base\Campaign {
 	 * Returns the campaign based on the campaign key
 	 * @return Flux\Campaign
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 	    if (trim($this->getKeywords()) != '') {
 	        if (\MongoId::isValid(trim($this->getKeywords()))) {
 				$criteria['_id'] = new \MongoId($this->getKeywords());
@@ -147,7 +147,7 @@ class Campaign extends Base\Campaign {
 		if (count($this->getTrafficSourceIdArray()) > 0) {
 		    $criteria['traffic_source.traffic_source_id'] = array('$in' => $this->getTrafficSourceIdArray());
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 
 	/**

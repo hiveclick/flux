@@ -243,6 +243,30 @@ class ReportLead extends MongoForm {
         return $this;
     }
     
+    /**
+     * Inserts/Upserts the lead data
+     * @return boolean
+     */
+    function insert() {
+        $set_array = array('lead' => $this->getLead()->toArray(true, true, true));
+        if (in_array('accepted', $this->getModifiedColumns())) { $set_array['accepted'] = $this->getAccepted(); }
+        if (in_array('disposition', $this->getModifiedColumns())) { $set_array['disposition'] = $this->getDisposition(); }
+        if (in_array('disposition_message', $this->getModifiedColumns())) { $set_array['disposition_message'] = $this->getDispositionMessage(); }
+        if (in_array('revenue', $this->getModifiedColumns())) { $set_array['revenue'] = $this->getRevenue(); }
+        if (in_array('payout', $this->getModifiedColumns())) { $set_array['payout'] = $this->getPayout(); }
+        
+        return parent::updateMultiple(
+            array('lead.lead_id' => $this->getLead()->getLeadId(), 'report_date' => $this->getReportDate()),
+            array(
+                '$setOnInsert' => array(
+                    'report_date' => $this->getReportDate(),
+                    'client' => $this->getClient()->toArray(true, true, true)
+                ),
+                '$set' => $set_array
+            )
+        );
+    }
+    
     // +------------------------------------------------------------------------+
     // | HELPER METHODS															|
     // +------------------------------------------------------------------------+

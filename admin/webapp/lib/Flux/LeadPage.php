@@ -11,9 +11,9 @@ class LeadPage extends Base\LeadPage {
      * Returns the pages based on the criteria
      * @return Flux\LeadPage
      */
-    function queryAll(array $criteria = array(), $hydrate = true) {
+    function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
     	$criteria['lead.lead_id'] = $this->getLead()->getLeadId();
-    	return parent::queryAll($criteria, $hydrate);
+    	return parent::queryAll($criteria, $hydrate, $fields);
     }
     
     /**

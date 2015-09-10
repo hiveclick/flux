@@ -295,6 +295,8 @@ class LeadPayout extends BaseReport {
         $this->massageDates();
         $criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($this->getStartTime())), '$lte' => new \MongoDate(strtotime($this->getEndTime())));
                 
+        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . date('m/d/Y', strtotime($this->getStartTime())) . '-' . date('m/d/Y', strtotime($this->getEndTime())));
+        
 		$ops[] = array(
 			'$match' => $criteria
 		);
@@ -359,6 +361,7 @@ class LeadPayout extends BaseReport {
     		    $result['clicks'] = 0;
     		    $result['conversions'] = 0;
     		    $result['fulfilled'] = 0;
+    		    $result['pixel'] = 0;
     		    $ret_val[] = $result;
     		}
 		}
@@ -396,7 +399,8 @@ class LeadPayout extends BaseReport {
 		        'report_date' => '$created_time',
 		        'clicks' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME)), 1, 0)),
 		        'conversions' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME)), 1, 0)),
-		        'fulfilled' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME)), 1, 0))
+		        'fulfilled' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME)), 1, 0)),
+		        'pixel' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_PIXEL_NAME)), 1, 0))
 		    )
 		);
 		$ops[] = array(
@@ -412,7 +416,8 @@ class LeadPayout extends BaseReport {
 		        'report_date' => array('$max' => '$report_date'),
 		        'clicks' => array('$sum' => '$clicks'),
 		        'conversions' => array('$sum' => '$conversions'),
-		        'fulfilled' => array('$sum' => '$fulfilled')
+		        'fulfilled' => array('$sum' => '$fulfilled'),
+		        'pixel' => array('$sum' => '$pixel')
 		    )
 		);
 		$op_query = json_encode($ops);
@@ -443,6 +448,7 @@ class LeadPayout extends BaseReport {
 		                $ret_result['clicks'] = $result['clicks'];
 		                $ret_result['conversions'] = $result['conversions'];
 		                $ret_result['fulfilled'] = $result['fulfilled'];
+		                $ret_result['pixel'] = $result['pixel'];
 		                $ret_val[(string)$key] = $ret_result;
 		            }
 		        }
@@ -450,6 +456,8 @@ class LeadPayout extends BaseReport {
 		}
 		
 		array_walk_recursive($ret_val, function(&$val) { if (\MongoId::isValid($val) && ($val instanceof \MongoId)) { $val = (string)$val; }});
+		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($ret_val, true));
 		
 		return $ret_val;
     }

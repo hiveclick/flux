@@ -121,7 +121,7 @@ class User extends Base\User {
 	 * Returns the user based on the criteria
 	 * @return Flux\User
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (\MongoId::isValid($this->getClient()->getClientId())) {
 			$criteria['client.client_id'] = $this->getClient()->getClientId();
 		}
@@ -131,7 +131,7 @@ class User extends Base\User {
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 
 	/**

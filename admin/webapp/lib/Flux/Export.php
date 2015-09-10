@@ -194,7 +194,7 @@ class Export extends Base\Export {
 	 * Queries for a list of exports by client id
 	 * @return \Flux\Export
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getFulfillmentIdArray()) > 0) {
 			$criteria['fulfillment.fulfillment_id'] = array('$in' => $this->getFulfillmentIdArray());
 		}
@@ -207,7 +207,7 @@ class Export extends Base\Export {
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

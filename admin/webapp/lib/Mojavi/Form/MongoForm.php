@@ -104,9 +104,9 @@ abstract class MongoForm extends PageListForm {
      * @param array $criteria
      * @return MongoCursor
      */
-    public function queryAll(array $criteria = array(), $hydrate = true) {
+    public function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
         // Find our records
-        $records = $this->getCollection()->find($criteria);
+        $records = $this->getCollection()->find($criteria, $fields);
         
         // Handle sorting
         if ($this->getSort() != '-1') {

@@ -259,7 +259,7 @@ class Offer extends Base\Offer {
 	 * Returns the offer based on the criteria
 	 * @return Flux\Offer
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if ($this->getFolderName() != '') {
 			$criteria['folder_name'] = $this->getFolderName();
 		}
@@ -287,7 +287,7 @@ class Offer extends Base\Offer {
 		if (count($this->getStatusArray()) > 0) {
 			$criteria['status'] = array('$in' => $this->getStatusArray());
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 
 	/**

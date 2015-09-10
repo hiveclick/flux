@@ -21,7 +21,10 @@ class DateRangeForm extends PageListForm {
     const DATE_RANGE_LAST_4_HOURS = 9;
     const DATE_RANGE_LAST_1_HOURS = 10;
     const DATE_RANGE_LAST_10_MIN = 11;
-    const DATE_RANGE_CUSTOM = 12;
+    const DATE_RANGE_MONTH = 12;
+    const DATE_RANGE_MTD = 13;
+    const DATE_RANGE_LAST_MONTH = 14;
+	const DATE_RANGE_CUSTOM = 15;
     
     const DATE_FORMAT_MDY = "m/d/Y";
     const DATE_FORMAT_FULL = "m/d/Y g:i:s a";
@@ -49,6 +52,9 @@ class DateRangeForm extends PageListForm {
             self::DATE_RANGE_THIS_WEEK => 'This Week',
             self::DATE_RANGE_YESTERDAY => 'Yesterday',
             self::DATE_RANGE_TODAY => 'Today',
+            self::DATE_RANGE_MTD => 'Month To Date',
+            self::DATE_RANGE_MONTH => 'Month',
+            self::DATE_RANGE_LAST_MONTH => 'Last Month',
             self::DATE_RANGE_LAST_48_HOURS => 'Last 48 Hours',
             self::DATE_RANGE_LAST_24_HOURS => 'Last 24 Hours',
             self::DATE_RANGE_LAST_12_HOURS => 'Last 12 Hours',
@@ -192,6 +198,28 @@ class DateRangeForm extends PageListForm {
             case self::DATE_RANGE_TODAY:
                 $this->startDate = new \DateTime('today', $this->getTimezone());
                 $this->startDate->setTime(0,0,0);
+                break;
+            case self::DATE_RANGE_MONTH:
+                $start_time = new \DateTime("now", $this->getTimezone());
+                $start_time->setTimestamp(strtotime($this->getStartTime()));
+                $this->start_time = $start_time->setTime(0,0,0);
+                $end_time = new \DateTime("now", $this->getTimezone());
+                $end_time->setTimestamp(strtotime($this->getStartTime()->format('m/t/Y')));
+                $this->end_time = $end_time->setTime(23,59,59);
+                break;
+            case self::DATE_RANGE_MTD:
+                $end_time = new \DateTime('today', $this->getTimezone());
+                $this->end_time = $end_time->setTime(23,59,59);
+                $start_time = new \DateTime("now", $this->getTimezone());
+                $start_time->setTimestamp(strtotime($this->end_time->format('m/1/Y')));
+                $this->start_time = $start_time->setTime(0,0,0);
+                break;
+            case self::DATE_RANGE_LAST_MONTH:
+                $end_time = new \DateTime('today - 1 month', $this->getTimezone());
+                $end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
+                $this->end_time = $end_time->setTime(23,59,59);
+                $start_time->setTimestamp(strtotime($end_time->format('m/1/Y')));
+                $this->start_time = $start_time->setTime(0,0,0);
                 break;
             case self::DATE_RANGE_LAST_48_HOURS:
                 $this->startDate = new \DateTime('now - 48 hours', $this->getTimezone());

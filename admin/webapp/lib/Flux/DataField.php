@@ -268,7 +268,7 @@ class DataField extends Base\DataField {
 	 * Queries a report column by it's name
 	 * @return Flux\ReportColumn
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getStorageTypeArray()) > 0) {
 			$criteria['storage_type'] = array('$in' => $this->getStorageTypeArray());
 		}
@@ -286,7 +286,7 @@ class DataField extends Base\DataField {
 		if (!empty($this->getTags())) {
 			$criteria['tags'] = array('$in' => $this->getTags());
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

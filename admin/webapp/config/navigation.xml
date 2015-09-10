@@ -161,6 +161,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </reconcileleadpayout>
+            <importleadpayout>
+                <label>Import Lead Payouts</label>
+                <uri>/report/import-lead-payout</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </importleadpayout>
        </pages>
 	</reports>
 	<admin>

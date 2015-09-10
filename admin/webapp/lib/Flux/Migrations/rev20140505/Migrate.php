@@ -723,6 +723,27 @@ class Migrate extends Migration {
 		    );
 		    $dataField_conversion_id = $datafield->insert();
 		}
+		
+		/* @var $datafield \Flux\DataField */
+		$datafield = new \Flux\DataField();
+		$datafield->setName('Pixel');
+		$datafield->queryByName();
+		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
+		    $datafield->setName('Pixel');
+		    $datafield->setDescription('Time the pixel was fired from the advertiser site');
+		    $datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_PIXEL_NAME);
+		    $datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
+		    $datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT);
+		    $datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
+		    $datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
+		    $datafield->setRequestName('pxl');
+		    $datafield->setTags('events');
+		    $datafield->setDataFieldSet(
+		        array('name' => 'Yes', 'value' => "1"),
+		        array('name' => 'No', 'value' => "0")
+		    );
+		    $dataField_pixel_id = $datafield->insert();
+		}
 
 		StringTools::consoleWrite('   - DataField Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
 

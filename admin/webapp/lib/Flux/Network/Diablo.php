@@ -49,7 +49,7 @@ class Diablo extends BaseNetwork {
     						$report_lead->setLead(trim($transaction_id));
     						$report_lead->setReportDate(new \MongoDate(strtotime($revenue_entry["date"])));
     						$report_lead->setRevenue(floatval($revenue_entry["revenue"]));
-    						$report_lead->setDisposition('Accepted');
+    						$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
     						$report_lead->setAccepted(true);
     					    
     						\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);

@@ -7,11 +7,11 @@ class ExportQueue extends Base\ExportQueue {
 	 * Queries all records from a queue
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true) {
+	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (trim($this->getLead()->getLeadId()) != '') {
 			$criteria['lead.lead_id'] = trim($this->getLead()->getLeadId());
 		}
-		return parent::queryAll($criteria, $hydrate);
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**
