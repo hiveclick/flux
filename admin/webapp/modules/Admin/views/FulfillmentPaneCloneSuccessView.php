@@ -22,7 +22,7 @@ class FulfillmentPaneCloneSuccessView extends IndexBlankView
 	public function execute ()
 	{
 		parent::execute();
-		$this->setTitle('Clients');
+		$this->setTitle('Clone Fulfillment');
 	}
 
 }

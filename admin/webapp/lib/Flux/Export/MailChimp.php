@@ -36,12 +36,10 @@ class MailChimp extends GenericPost {
 	            
 	            $post_params = array(
 	                'email_address' => $params['email'],
-	                'status' => 'subscribed',
-	                'merge_fields' => array(
-	                    'FNAME' => isset($params['firstname']) ? $params['firstname'] : '',
-	                    'LNAME' => isset($params['lastname']) ? $params['lastname'] : ''
-	                )
+	                'status' => 'subscribed'
 	            );
+	            if (isset($params['email'])) { unset($params['email']); }
+	            $post_params['merge_fields'] = $params;
 	            
 	            $url = $url . '?' . http_build_query($post_params, null, '&');
 	            $split_queue_attempt->setRequest($url);
@@ -123,20 +121,14 @@ class MailChimp extends GenericPost {
 	    $url = 'https://' . substr($api_key, strpos($api_key, '-') + 1) . '.api.mailchimp.com/3.0/';
 	    $url .= '/lists/' . $this->getFulfillment()->getFulfillment()->getMailchimpList() . '/members/';
 	    
+	    
 	    $post_params = array(
 	        'email_address' => $params['email'],
-	        'status' => 'subscribed',
-	        'merge_fields' => array(
-	            'FNAME' => isset($params['firstname']) ? $params['firstname'] : '',
-	            'LNAME' => isset($params['lastname']) ? $params['lastname'] : '',
-	            'addr1' => isset($params['addr1']) ? $params['addr1'] : '',
-	            'addr2' => isset($params['addr2']) ? $params['addr2'] : '',
-	            'city' => isset($params['city']) ? $params['city'] : '',
-	            'state' => isset($params['state']) ? $params['state'] : '',
-	            'zip' => isset($params['zip']) ? $params['zip'] : '',
-	            'country' => isset($params['country']) ? $params['country'] : '',
-	        )
+	        'status' => 'subscribed'
 	    );
+	    
+	    if (isset($params['email'])) { unset($params['email']); }
+	    $post_params['merge_fields'] = $params;
 	    
 	    $curl_request = $url . '?' . http_build_query($params, null, '&');
 	    $split_queue_attempt->setRequest($curl_request);

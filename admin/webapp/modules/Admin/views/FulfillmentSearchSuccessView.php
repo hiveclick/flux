@@ -22,7 +22,7 @@ class FulfillmentSearchSuccessView extends AdminIndexView
 	public function execute ()
 	{
 		parent::execute();
-		$this->setTitle('Clients');
+		$this->setTitle('Fulfillments');
 	}
 
 }

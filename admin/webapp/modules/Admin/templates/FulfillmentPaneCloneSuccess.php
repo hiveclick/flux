@@ -65,6 +65,7 @@
 				
 				<hr />
 
+				<!-- FTP specific settings -->
 				<div id="clone_ftp_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_FTP ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the FTP credentials for the remote server</div>
 					<div class="form-group">
@@ -90,19 +91,38 @@
 					</div>
 				</div>
 
-				<div id="clone_post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
-					<div class="help-block">Enter the POST url and what to check in the result for a successful post</div>
+				<!-- POST specific settings -->
+				<div id="post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the POST url below.  Any POST parameters will be added to the mapping</div>
 					<div class="form-group">
-						<label class="control-label" for="parse_url">Post URL</label>
-						<textarea name="post_url" rows="4" class="form-control"><?php echo $fulfillment->getPostUrl() ?></textarea>
+						<label class="control-label" for="post_url">Post URL</label>
+						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
 					</div>
-		
 					<div class="form-group">
-						<label class="control-label" for="success_msg">Success String</label>
-						<textarea name="success_msg" class="form-control"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
+						<label class="control-label" for="post_url">Response success text</label>
+						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
+					</div>
+				</div>
+				
+				<!-- FORM FILL specific settings -->
+				<div id="formfill_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the TRACKING url below.  This is the url provided by the affiliate network that redirects you to the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="tracking_url">Tracking URL</label>
+						<textarea name="tracking_url" id="tracking_url" class="form-control" rows="4" placeholder="enter tracking url here..."><?php echo $fulfillment->getTrackingUrl() ?></textarea>
+					</div>
+					<div class="help-block">Enter the FORM POST url below.  You can retrieve this from viewing the source of the landing page</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Post URL</label>
+						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Response success text</label>
+						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getSuccessMsg() ?></textarea>
 					</div>
 				</div>
 			
+			    <!-- Email specific settings -->
 				<div id="clone_email_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_EMAIL ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter one or more email addresses below</div>
 					<div class="form-group">
@@ -111,6 +131,7 @@
 					</div>
 				</div>
 			
+			    <!-- INFUSIONSOFT specific settings -->
 				<div id="clone_infusionsoft_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the Infusionsoft domain name and api key found in the Infusionsoft Dashboard</div>
 					<div class="form-group">
@@ -121,6 +142,23 @@
 						<label class="control-label" for="infusionsoft_api_key">Api Key</label>
 						<textarea name="infusionsoft_api_key" id="clone_infusionsoft_api_key" class="form-control" rows="4" placeholder="enter your infusionsoft api key..."><?php echo $fulfillment->getInfusionsoftApiKey() ?></textarea>
 					</div>
+				</div>
+				
+				<!-- MAILCHIMP specific settings -->
+				<div id="mailchimp_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MAILCHIMP ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter your Mailchimp API key and the mailing list you want subscribers to be added to</div>					
+					<div class="form-group">
+						<label class="control-label" for="mailchimp_api_key">Api Key</label>
+						<textarea name="mailchimp_api_key" id="mailchimp_api_key" class="form-control" rows="4" placeholder="enter your mailchimp api key..."><?php echo $fulfillment->getMailchimpApiKey() ?></textarea><br />
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
+						<div class="row">
+                            <div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
+                            <div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
+						</div>
+					</div>
+					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade in" id="clone_scheduling">
@@ -209,6 +247,20 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$('#refresh_mc_lists').click(function() {
+        // Refresh the mailchimp lists based on the api key
+        $mc_api_key = $('#mailchimp_api_key').val();
+        $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+        $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+        	$select = $('#mailchimp_list').selectize()[0].selectize;
+        	$select.clearOptions();
+            data.data.forEach(function(item) {
+            	$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
+            });
+            $select.refreshOptions();
+        }, 'json');
+    });
 	
 	$('#clone_parse_url').click(function() {
 		$.rad.get('/api', { func: '/admin/build-post-url', 'post_url': $('#post_url').val() }, function(data) {

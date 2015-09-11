@@ -318,8 +318,9 @@ $(document).ready(function() {
 
     $('#refresh_mc_lists').click(function() {
         // Refresh the mailchimp lists based on the api key
-        $mc_api_key = $('#mailchimp_api_key').val();
-        $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://us11.api.mailchimp.com/2.0/' }, function(data) {
+    	$mc_api_key = $('#mailchimp_api_key').val();
+        $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+        $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
         	$select = $('#mailchimp_list').selectize()[0].selectize;
         	$select.clearOptions();
             data.data.forEach(function(item) {

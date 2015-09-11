@@ -320,7 +320,8 @@ $(document).ready(function() {
 
 function reloadMailchimpLists() {
 	$mc_api_key = $('#mailchimp_api_key').val();
-    $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://us11.api.mailchimp.com/2.0/' }, function(data) {
+    $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+    $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
     	$select = $('#mailchimp_list').selectize()[0].selectize;
     	$select.clearOptions();
         data.data.forEach(function(item) {
