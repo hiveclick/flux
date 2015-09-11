@@ -31,9 +31,12 @@ class ApiAction extends BasicAction
 			$ajax_form->setFunc($this->getContext()->getRequest()->getParameter('func', ''));
 			$ajax_form->setTimeout(300);
 			$url = $this->getContext()->getRequest()->getParameter('_api_url', MO_API_URL);
+			/* @var $response \Zend\Http\Response */
 			$response = $ajax_form->send($this->getContext()->getRequest(), $this->getContext()->getRequest()->getMethod(), $url);
 			$this->getContext()->getRequest()->setAttribute('response', $response);
 		} catch (Exception $e) {
+		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
+		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getTraceAsString());
 			$this->getErrors()->addError('error', $e->getMessage());
 		}
 		return View::SUCCESS;

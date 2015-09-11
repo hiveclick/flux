@@ -613,7 +613,7 @@
 	
 	$.rad.ajax.options = {
 		show_indicator: true,
-		check_response: true,
+		check_response: false,
 		login_form: false,
 		defaults: {
 			global: true,

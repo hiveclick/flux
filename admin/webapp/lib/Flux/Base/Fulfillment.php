@@ -41,6 +41,9 @@ class Fulfillment extends MongoForm {
 	
 	protected $infusionsoft_host;
 	protected $infusionsoft_api_key;
+	
+	protected $mailchimp_api_key;
+	protected $mailchimp_list;
 
 	protected $mapping;
 	protected $scheduling;
@@ -576,6 +579,48 @@ class Fulfillment extends MongoForm {
 		$this->ftp_folder = $arg0;
 		$this->addModifiedColumn('ftp_folder');
 		return $this;
+	}
+	
+	/**
+	 * Returns the mailchimp_api_key
+	 * @return string
+	 */
+	function getMailchimpApiKey() {
+	    if (is_null($this->mailchimp_api_key)) {
+	        $this->mailchimp_api_key = "";
+	    }
+	    return $this->mailchimp_api_key;
+	}
+	
+	/**
+	 * Sets the mailchimp_api_key
+	 * @var string
+	 */
+	function setMailchimpApiKey($arg0) {
+	    $this->mailchimp_api_key = $arg0;
+	    $this->addModifiedColumn("mailchimp_api_key");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the mailchimp_list
+	 * @return string
+	 */
+	function getMailchimpList() {
+	    if (is_null($this->mailchimp_list)) {
+	        $this->mailchimp_list = "";
+	    }
+	    return $this->mailchimp_list;
+	}
+	
+	/**
+	 * Sets the mailchimp_list
+	 * @var string
+	 */
+	function setMailchimpList($arg0) {
+	    $this->mailchimp_list = $arg0;
+	    $this->addModifiedColumn("mailchimp_list");
+	    return $this;
 	}
 	
 	/**

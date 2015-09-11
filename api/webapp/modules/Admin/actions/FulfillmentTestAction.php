@@ -63,7 +63,7 @@ class FulfillmentTestAction extends BasicRestAction
     	    }
     	}
     	
-        $input_form->setId(1);
+        $input_form->setId(new \MongoId());
         $ajax_form->setInsertId(1);
         $ajax_form->setRowsAffected(1);
         $ajax_form->setRecord($input_form);
