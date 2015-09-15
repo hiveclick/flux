@@ -28,7 +28,7 @@ class Split extends BaseDaemon
 			    $criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
 			}
 			
-			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name'] = array('$nin' => array(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME));
+			//$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name'] = array('$nin' => array(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME));
 			
 			// Add the offers to the criteria
 			if (count($split->getOffers()) > 0) {
@@ -144,11 +144,13 @@ class Split extends BaseDaemon
     					}
     					// Verify that this lead has not already been fulfilled
     					/* @var $lead_event \Flux\LeadEvent */
-    					foreach ($lead->getE() as $lead_event) {
-    					    if ($lead_event->getDataField()->getDataFieldKeyName() == \Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME) {
-    					        throw new \Exception('Validation failed on ALREADY FULFILLED check');
-    					    }
+    					/* @var $split_queue \Flux\SplitQueue */
+    					$split_queue = new \Flux\SplitQueue();
+    					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $lead->getId(), 'split.split_id' => $split->getId()));
+    					if (!is_null($existing_lead)) {
+    					    throw new \Exception('Validation failed on ALREADY FULFILLED check');
     					}
+    					
 					} catch (\Exception $e) {
 					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
 					    continue;
