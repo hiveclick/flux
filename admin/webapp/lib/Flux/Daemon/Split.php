@@ -184,7 +184,17 @@ class Split extends BaseDaemon
     					} else {
     					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
     					}
-					} else {
+					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) {
+					    // If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
+					    $existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
+					    if (is_null($existing_lead)) {
+					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+					        $split_queue->insert();
+					        $added_leads++;
+					    } else {
+					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+					    }  
+					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL) {
 					    // If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
 					    $existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId()));
 					    if (is_null($existing_lead)) {

@@ -10,6 +10,7 @@ class SplitQueue extends Base\SplitQueue {
     private $hide_unfulfillable;
     private $hide_fulfilled;
     private $hide_catch_all;
+    private $date_range;
     
     protected $test;
     
@@ -156,6 +157,29 @@ class SplitQueue extends Base\SplitQueue {
     }
     
     /**
+     * Returns the date_range
+     * @return integer
+     */
+    function getDateRange() {
+        if (is_null($this->date_range)) {
+            $this->date_range = \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS;
+        }
+        return $this->date_range;
+    }
+    
+    /**
+     * Sets the date_range
+     * @var integer
+     */
+    function setDateRange($arg0) {
+        $this->date_range = (int)$arg0;
+        $this->addModifiedColumn("date_range");
+        return $this;
+    }
+    
+    
+    
+    /**
      * Returns the split_id_array
      * @return array
      */
@@ -234,6 +258,11 @@ class SplitQueue extends Base\SplitQueue {
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getSplitIdArray()) > 0) {
 			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
+		}
+		if ($this->getDateRange() != \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM) {
+		    $date_range_form = new \Mojavi\Form\DateRangeForm();
+		    $date_range_form->setDateRange($this->getDateRange());
+		    $criteria['queue_time'] = array('$gte' => new \MongoDate($date_range_form->getStartDate()), '$lte' => new \MongoDate($date_range_form->getEndDate()));
 		}
 		if (count($this->getOfferIdArray()) > 0) {
 		    $criteria['lead.offer.offer_id'] = array('$in' => $this->getOfferIdArray());

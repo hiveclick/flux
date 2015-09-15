@@ -67,6 +67,16 @@
 					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
 				</div>
 				<div class="form-group text-left">
+				    <select class="form-control selectize" name="date_range" id="date_range" placeholder="Filter by date range">
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ? 'SELECTED' : '' ?>>Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ? 'SELECTED' : '' ?>>Yesterday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ? 'SELECTED' : '' ?>>Last 7 days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_MTD ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_MTD ? 'SELECTED' : '' ?>>Month To Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_30_DAYS ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_30_DAYS ? 'SELECTED' : '' ?>>Last 30 Days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+				        <option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM ?>" <?php echo $split_queue->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM ? 'SELECTED' : '' ?>>No Filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
+					</select>
+				</div>
+				<div class="form-group text-left">
 				    <select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
 				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
@@ -86,7 +96,7 @@
 //<!--
 $(document).ready(function() {
 
-    $('#disposition_array').selectize().on('change', function($val) {
+    $('#disposition_array,#date_range').selectize().on('change', function($val) {
     	$('#split_search_form').trigger('submit');
     });
 	
