@@ -460,15 +460,6 @@ class Server extends Base\Server {
 	if (file_exists(\$docroot_folder . "/.cache/config.php")) {
 		@unlink(\$docroot_folder . "/.cache/config.php");
 	}
-	if (!file_exists(\$docroot_folder . '/img') && file_exists(\$root_folder . '/docroot/img')) {
-		symlink(\$root_folder . '/docroot/img', \$docroot_folder . '/img');
-	}
-	if (!file_exists(\$docroot_folder . '/js') && file_exists(\$root_folder . '/docroot/js')) {
-		symlink(\$root_folder . '/docroot/js', \$docroot_folder . '/js');
-	}
-	if (!file_exists(\$docroot_folder . '/css') && file_exists(\$root_folder . '/docroot/css')) {
-		symlink(\$root_folder . '/docroot/css', \$docroot_folder . '/css');
-	}
 	chgrp(\$root_folder . "/lib", "{MO_CACHE_GROUP}");
 	chmod(\$root_folder . "/lib", 0775);
 	
@@ -498,6 +489,7 @@ EOL;
 		
 		$index_php_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/index.php");
 		$virtualhost_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/virtualhost");
+		$wp_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/wp-config.php");
 		$offer_key = (basename($this->getRootDir()) . (trim($offer->getFolderName()) != '' ? '.' : '') . trim($offer->getFolderName()));
 		
 		$install_php_contents = <<<EOL
@@ -510,38 +502,11 @@ EOL;
 	if (!file_exists(\$root_folder . "/docroot")) {
 		mkdir(\$root_folder . "/docroot");
 	}
-	if (!file_exists(\$root_folder . "/docroot/pages")) {
-		mkdir(\$root_folder . "/docroot/pages");
-	}
-	if (!file_exists(\$root_folder . "/docroot/js")) {
-		mkdir(\$root_folder . "/docroot/js");
-	}
-	if (!file_exists(\$root_folder . "/docroot/css")) {
-		mkdir(\$root_folder . "/docroot/css");
-	}
-	if (!file_exists(\$root_folder . "/docroot/img")) {
-		mkdir(\$root_folder . "/docroot/img");
-	}
-    if (!file_exists(\$root_folder . "/docroot/v1")) {
-		mkdir(\$root_folder . "/docroot/v1");
-	}
 	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
 	if (!file_exists(\$docroot_folder . '/.cache/')) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
-	}
-	if (!file_exists(\$docroot_folder . '/images') && file_exists(\$root_folder . '/docroot/images')) {
-		symlink(\$root_folder . '/docroot/images', \$docroot_folder . '/images');
-	}
-	if (!file_exists(\$docroot_folder . '/img') && file_exists(\$root_folder . '/docroot/img')) {
-		symlink(\$root_folder . '/docroot/img', \$docroot_folder . '/img');
-	}
-	if (!file_exists(\$docroot_folder . '/js') && file_exists(\$root_folder . '/docroot/js')) {
-		symlink(\$root_folder . '/docroot/js', \$docroot_folder . '/js');
-	}
-	if (!file_exists(\$docroot_folder . '/css') && file_exists(\$root_folder . '/docroot/css')) {
-		symlink(\$root_folder . '/docroot/css', \$docroot_folder . '/css');
 	}
 	\$cmd = "chown {MO_CACHE_USER}:{MO_CACHE_GROUP} \$docroot_folder -Rf";
 	shell_exec(\$cmd);
@@ -552,19 +517,21 @@ EOL;
 		$this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
 		$this->runRemoteCommand("php /tmp/offer_" . $offer->getId() . "_install.php");
 		
-		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/index.php ];then echo "1";else echo "0";fi')) == '0') {
-			$this->writeRemoteFile($index_php_contents, $this->getRootDir() . "/docroot/index.php");
+		// Now upload the wordpress tar and extract it only if wp-config.php doesn't exist
+		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/wp-config.php ];then echo "1";else echo "0";fi')) == '0') {
+    		$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/latest.tar.gz', $this->getDocrootDir() . '/latest.tar.gz');
+    		$this->runRemoteCommand('/bin/tar xzvf ' . $this->getDocrootDir() . '/latest.tar.gz -C ' . $this->getDocrootDir());
+    		$db_prefix = preg_replace("/[^a-zA-Z0-9]/", "", $this->getDomain());
+    		$db_prefix = preg_replace("/^www\\./", "", $db_prefix);
+    		$wp_contents = str_replace('[MYSQLUSERNAME]', $this->getMysqlUsername(), $wp_contents);
+    		$wp_contents = str_replace('[MYSQLPASSWORD]', $this->getMysqlPassword(), $wp_contents);
+    		$wp_contents = str_replace('[MYSQLDB]', $db_prefix, $wp_contents);
+    		$wp_contents = str_replace('[TABLEPREFIX]', 'wp_', $wp_contents);
+    		$this->writeRemoteFile($wp_contents, $this->getRootDir() . '/docroot/wp-config.php');
+    		
+    		$this->runRemoteCommand('/usr/bin/mysqladmin create ' . $db_prefix);    		
 		}
 		
-		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/pages/index.php ];then echo "1";else echo "0";fi')) == '0') {
-			$this->writeRemoteFile(file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/first_page.php"), $this->getRootDir() . "/docroot/pages/index.php");
-			$this->writeRemoteFile(file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/header.php"), $this->getRootDir() . "/docroot/pages/header.php");
-			$this->writeRemoteFile(file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/footer.php"), $this->getRootDir() . "/docroot/pages/footer.php");
-		}
-		
-		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/v1/index.php ];then echo "1";else echo "0";fi')) == '0') {
-			$this->writeRemoteFile(file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/v1_first_page.php"), $this->getRootDir() . "/docroot/v1/index.php");
-		}
 		return true;
 	}
 	

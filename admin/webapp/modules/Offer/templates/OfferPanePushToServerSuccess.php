@@ -65,7 +65,7 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-9">
-				<label class="control-label" for="modal_create_skeleton">Create skeleton folders</label>
+				<label class="control-label" for="modal_create_skeleton">Create Wordpress folders</label>
 				<small class="help-block">Instructs the server to generate a default site using pre-generated folders if they do not exist</small>
 			</div>
 			<div class="col-sm-2">

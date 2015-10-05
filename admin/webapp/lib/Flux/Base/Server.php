@@ -19,6 +19,10 @@ class Server extends MongoForm {
 	protected $root_username;
 	protected $root_password;
 	
+	protected $mysql_username;
+	protected $mysql_password;
+	protected $mysql_db;
+	
 	protected $ftp_username;
 	protected $ftp_password;
 	protected $use_passive_mode;
@@ -328,6 +332,69 @@ class Server extends MongoForm {
 		$this->web_group = $arg0;
 		$this->addModifiedColumn('web_group');
 		return $this;
+	}
+	
+	/**
+	 * Returns the mysql_username
+	 * @return string
+	 */
+	function getMysqlUsername() {
+	    if (is_null($this->mysql_username)) {
+	        $this->mysql_username = "root";
+	    }
+	    return $this->mysql_username;
+	}
+	
+	/**
+	 * Sets the mysql_username
+	 * @var string
+	 */
+	function setMysqlUsername($arg0) {
+	    $this->mysql_username = $arg0;
+	    $this->addModifiedColumn("mysql_username");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the mysql_password
+	 * @return string
+	 */
+	function getMysqlPassword() {
+	    if (is_null($this->mysql_password)) {
+	        $this->mysql_password = "";
+	    }
+	    return $this->mysql_password;
+	}
+	
+	/**
+	 * Sets the mysql_password
+	 * @var string
+	 */
+	function setMysqlPassword($arg0) {
+	    $this->mysql_password = $arg0;
+	    $this->addModifiedColumn("mysql_password");
+	    return $this;
+	}
+	
+	/**
+	 * Returns the mysql_db
+	 * @return string
+	 */
+	function getMysqlDb() {
+	    if (is_null($this->mysql_db)) {
+	        $this->mysql_db = "wordpress";
+	    }
+	    return $this->mysql_db;
+	}
+	
+	/**
+	 * Sets the mysql_db
+	 * @var string
+	 */
+	function setMysqlDb($arg0) {
+	    $this->mysql_db = $arg0;
+	    $this->addModifiedColumn("mysql_db");
+	    return $this;
 	}
 	
 	/**

@@ -17,6 +17,7 @@
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
 			<li role="presentation" class=""><a href="#ftp" role="tab" data-toggle="tab">FTP</a></li>
+			<li role="presentation" class=""><a href="#mysql" role="tab" data-toggle="tab">Mysql</a></li>
 			<li role="presentation" class=""><a href="#apache" role="tab" data-toggle="tab">Apache Setup</a></li>
 			<?php if (\MongoId::isValid($server->getId())) { ?>
 				<li role="presentation" class=""><a href="#apc" role="tab" data-toggle="tab">APC</a></li>
@@ -69,6 +70,24 @@
 					<label class="control-label hidden-xs" for="ftp_password">Password</label>
 					<input type="text" id="ftp_password" name="ftp_password" class="form-control" placeholder="FTP Password" value="<?php echo $server->getFtpPassword() ?>" />
 				</div>				
+			</div>
+			<div role="tabpanel" class="tab-pane fade in" id="mysql">
+				<div class="help-block">Setup MySQL/Wordpress access to this server</div>
+				
+				<div class="form-group">
+					<label class="control-label hidden-xs" for="mysql_username">Username</label>
+					<input type="text" id="mysql_username" name="mysql_username" class="form-control" placeholder="MySQL Username" value="<?php echo $server->getMysqlUsername() ?>" />
+				</div>
+
+				<div class="form-group">
+					<label class="control-label hidden-xs" for="mysql_password">Password</label>
+					<input type="text" id="mysql_password" name="mysql_password" class="form-control" placeholder="MySQL Password" value="<?php echo $server->getMysqlPassword() ?>" />
+				</div>		
+				
+				<div class="form-group">
+					<label class="control-label hidden-xs" for="mysql_db">Database Name</label>
+					<input type="text" id="mysql_db" name="mysql_db" class="form-control" placeholder="Wordpress Database name" value="<?php echo $server->getMysqlDb() ?>" />
+				</div>			
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="apache">
 				<div class="help-block">These settings are used to configure Apache and when pushing new files to the server</div>

@@ -56,6 +56,12 @@ $(document).ready(function() {
  		{id:'ftp_password', name:'ftp password', field:'ftp_password', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			return value;
  		}},
+ 		{id:'mysql_username', name:'mysql username', field:'mysql_username', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 			return value;
+ 		}},
+ 		{id:'mysql_password', name:'mysql password', field:'mysql_password', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+ 			return value;
+ 		}},
  		{id:'status', name:'status', field:'status', def_value: ' ', cssClass: 'text-center', maxWidth:120, width:120, minWidth:120, sortable:false, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			if (value == '<?php echo \Flux\Server::SERVER_STATUS_ACTIVE ?>') {
  				return '<span class="text-success">Active</span>';
