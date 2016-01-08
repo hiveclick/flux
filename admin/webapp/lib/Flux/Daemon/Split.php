@@ -34,7 +34,7 @@ class Split extends BaseDaemon
 			if (count($split->getOffers()) > 0) {
 				$offer_ids = $split->getOffers();
 				array_walk($offer_ids, function(&$value) { $value = $value->getId(); });
-				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $offer_ids);
+				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer._id'] = array('$in' => $offer_ids);
 			}
 			
 			// Add the filters to the criteria
@@ -146,9 +146,9 @@ class Split extends BaseDaemon
 						}
 						// Verify that this lead has not already been fulfilled
 						/* @var $lead_event \Flux\LeadEvent */
-						/* @var $split_queue \Flux\SplitQueue */
-						$split_queue = new \Flux\SplitQueue();
-						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $lead->getId(), 'split.split_id' => $split->getId()));
+						/* @var $lead_split \Flux\LeadSplit */
+						$lead_split = new \Flux\LeadSplit();
+						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead->getId(), 'split._id' => $split->getId()));
 						if (!is_null($existing_lead)) {
 							throw new \Exception('Validation failed on ALREADY FULFILLED check');
 						}
@@ -168,43 +168,43 @@ class Split extends BaseDaemon
 					   }   	
 					}
 					
-					/* @var $split_queue \Flux\SplitQueue */
-					$split_queue = new \Flux\SplitQueue($split->getId());
-					$split_queue->setLead($lead->getId());
-					$split_queue->setIsFulfilled(false);
-					$split_queue->setIsProcessing(false);
-					$split_queue->setIsError(false);
-					$split_queue->setErrorMessage('');
-					$split_queue->setNextAttemptTime(new \MongoDate());
-					$split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_UNFULFILLED);
+					/* @var $lead_split \Flux\LeadSplit */
+					$lead_split = new \Flux\LeadSplit();
+					$lead_split->setLead($lead->getId());
+					$lead_split->setIsFulfilled(false);
+					$lead_split->setIsProcessing(false);
+					$lead_split->setIsError(false);
+					$lead_split->setErrorMessage('');
+					$lead_split->setNextAttemptTime(new \MongoDate());
+					$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_UNFULFILLED);
 					
 					// If this split is normal, then we can add a lead to multiple splits
 					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
-						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getId()));
+						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId(), 'split._id' => $lead_split->getSplit()->getId()));
 						if (is_null($existing_lead)) {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-							$split_queue->insert();
+							$lead_split->insert();
 							$added_leads++;
 						} else {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
 						}
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) {
 						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
-						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getId()));
+						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId(), 'split._id' => $lead_split->getSplit()->getId()));
 						if (is_null($existing_lead)) {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-							$split_queue->insert();
+							$lead_split->insert();
 							$added_leads++;
 						} else {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
 						}  
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL) {
 						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
-						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId()));
+						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId()));
 						if (is_null($existing_lead)) {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-							$split_queue->setIsCatchAll(true);
-							$split_queue->insert();
+							$lead_split->setIsCatchAll(true);
+							$lead_split->insert();
 							$added_leads++;
 						} else {
 							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));

@@ -1,4 +1,231 @@
+use flux_admin;
+var counter = 0;
+db.split.find().forEach(function(obj) {
+	counter++;
+	if (obj.offers && obj.offers instanceof Array) {
+		obj.offers.forEach(function(item) {
+			if (item.offer_id) { item._id = item.offer_id; }
+			if (item.offer_name) { item.name = item.offer_name; }
+		});
+	}
+	
+	if (obj.filters && obj.filters instanceof Array) {
+		obj.filters.forEach(function(item) {
+			if (item.data_field_id) { item._id = item.data_field_id; }
+			if (item.data_field_name) { item.name = item.data_field_name; }
+		});
+	}
+	
+	if (obj.validators && obj.validators instanceof Array) {
+		obj.validators.forEach(function(item) {
+			if (item.data_field_id) { item._id = item.data_field_id; }
+			if (item.data_field_name) { item.name = item.data_field_name; }
+		});
+	}
+	
+	if (obj.fulfillment) {
+		if (obj.fulfillment.fulfillment_id) { obj.fulfillment._id = obj.fulfillment.fulfillment_id; }
+		if (obj.fulfillment.fulfillment_name) { obj.fulfillment.name = obj.fulfillment.fulfillment_name; }
+	}
+
+	db.split.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating split ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.fulfillment.find().forEach(function(obj) {
+	counter++;
+	if (obj.mapping && obj.mapping instanceof Array) {
+		obj.mapping.forEach(function(item) {
+			if (item.data_field) {
+				if (item.data_field.data_field_id) { item.data_field._id = item.data_field.data_field_id; }
+				if (item.data_field.data_field_name) { item.data_field.name = item.data_field.data_field_name; }
+			}
+		});
+	}
+	
+	if (obj.client) {
+		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
+		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
+	}
+
+	db.fulfillment.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating fulfillment ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.offer.find().forEach(function(obj) {
+	counter++;
+	if (obj.vertical) {
+		if (obj.vertical.vertical_id) { obj.vertical._id = obj.vertical.vertical_id; }
+		if (obj.vertical.vertical_name) { obj.vertical.name = obj.vertical.vertical_name; }
+	}
+	
+	if (obj.split) {
+		if (obj.split.split_id) { obj.split._id = obj.split.split_id; }
+		if (obj.split.split_name) { obj.split.name = obj.split.split_name; }
+	}
+	
+	if (obj.client) {
+		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
+		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
+	}
+
+	db.offer.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating offer ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.offer_page.find().forEach(function(obj) {
+	counter++;
+	if (obj.offer) {
+		if (obj.offer.offer_id) { obj.offer._id = obj.offer.offer_id; }
+		if (obj.offer.offer_name) { obj.offer.name = obj.offer.offer_name; }
+	}
+	
+	db.offer_page.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating offer page ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.campaign.find().forEach(function(obj) {
+	counter++;
+	if (obj.traffic_source) {
+		if (obj.traffic_source.traffic_source_id) { obj.traffic_source._id = obj.traffic_source.traffic_source_id; }
+		if (obj.traffic_source.traffic_source_name) { obj.traffic_source.name = obj.traffic_source.traffic_source_name; }
+	}
+	
+	if (obj.offer) {
+		if (obj.offer.offer_id) { obj.offer._id = obj.offer.offer_id; }
+		if (obj.offer.offer_name) { obj.offer.name = obj.offer.offer_name; }
+	}
+	
+	if (obj.client) {
+		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
+		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
+	}
+
+	db.campaign.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating campaign ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.report_lead.find().forEach(function(obj) {
+	counter++;
+	if (obj.lead) {
+		if (obj.lead.lead_id) { obj.lead._id = obj.lead.lead_id; }
+		if (obj.lead.lead_name) { obj.lead.name = obj.lead.lead_name; }
+
+		if (obj.lead.offer) {
+			if (obj.lead.offer.offer_id) { obj.lead.offer._id = obj.lead.offer.offer_id; }
+			if (obj.lead.offer.offer_name) { obj.lead.offer.name = obj.lead.offer.offer_name; }
+		}
+	
+		if (obj.lead.client) {
+			if (obj.lead.client.client_id) { obj.lead.client._id = obj.lead.client.client_id; }
+			if (obj.lead.client.client_name) { obj.lead.client.name = obj.lead.client.client_name; }
+		}
+		
+		if (obj.lead.campaign) {
+			if (obj.lead.campaign.campaign_id) { obj.lead.campaign._id = obj.lead.campaign.campaign_id; }
+			if (obj.lead.campaign.campaign_name) { obj.lead.campaign.name = obj.lead.campaign.campaign_name; }
+		}
+	}
+	
+	if (obj.client) {
+		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
+		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
+	}
+
+	db.report_lead.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating report lead ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.report_client.find().forEach(function(obj) {
+	counter++;
+	if (obj.client) {
+		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
+		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
+	}
+
+	db.report_client.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating report client ' + obj._id);
+	}
+});
+
+var counter = 0;
+db.saved_search.find().forEach(function(obj) {
+	counter++;
+	if (obj.user) {
+		if (obj.user.user_id) { obj.user._id = obj.user.user_id; }
+		if (obj.user.user_name) { obj.user.name = obj.user.user_name; }
+	}
+
+	db.saved_search.save(obj);
+
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating saved search ' + obj._id);
+	}
+});
+
 use flux_lead;
+
+var counter = 0;
+db.lead_split.find().forEach(function(obj) {
+	counter++;
+	if (obj.lead) {
+		if (obj.lead.lead_id) { obj.lead._id = obj.lead.lead_id; }
+		if (obj.lead.lead_name) { obj.lead.name = obj.lead.lead_name; }
+
+		if (obj.lead.offer) {
+			if (obj.lead.offer.offer_id) { obj.lead.offer._id = obj.lead.offer.offer_id; }
+			if (obj.lead.offer.offer_name) { obj.lead.offer.name = obj.lead.offer.offer_name; }
+		}
+	
+		if (obj.lead.client) {
+			if (obj.lead.client.client_id) { obj.lead.client._id = obj.lead.client.client_id; }
+			if (obj.lead.client.client_name) { obj.lead.client.name = obj.lead.client.client_name; }
+		}
+		
+		if (obj.lead.campaign) {
+			if (obj.lead.campaign.campaign_id) { obj.lead.campaign._id = obj.lead.campaign.campaign_id; }
+			if (obj.lead.campaign.campaign_name) { obj.lead.campaign.name = obj.lead.campaign.campaign_name; }
+		}
+	}
+	
+	if (obj.split) {
+		if (obj.split.split_id) { obj.split._id = obj.split.split_id; }
+		if (obj.split.split_name) { obj.split.name = obj.split.split_name; }
+	}
+	
+	db.lead_split.save(obj);
+	
+	if (counter % 100 == 0) {
+		print('[ ' + counter + ' ] Updating lead split ' + obj._id);
+	}
+});
+
 var counter = 0;
 db.lead.find().forEach(function(obj) {
 	counter++;
@@ -38,233 +265,7 @@ db.lead.find().forEach(function(obj) {
 	
 	db.lead.save(obj);
 	
-	if (counter % 100) {
+	if (counter % 100 == 0) {
 		print('[ ' + counter + ' ] Updating lead ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.lead_split.find().forEach(function(obj) {
-	counter++;
-	if (obj.lead) {
-		if (obj.lead.lead_id) { obj.lead._id = obj.lead.lead_id; }
-		if (obj.lead.lead_name) { obj.lead.name = obj.lead.lead_name; }
-
-		if (obj.lead.offer) {
-			if (obj.lead.offer.offer_id) { obj.lead.offer._id = obj.lead.offer.offer_id; }
-			if (obj.lead.offer.offer_name) { obj.lead.offer.name = obj.lead.offer.offer_name; }
-		}
-	
-		if (obj.lead.client) {
-			if (obj.lead.client.client_id) { obj.lead.client._id = obj.lead.client.client_id; }
-			if (obj.lead.client.client_name) { obj.lead.client.name = obj.lead.client.client_name; }
-		}
-		
-		if (obj.lead.campaign) {
-			if (obj.lead.campaign.campaign_id) { obj.lead.campaign._id = obj.lead.campaign.campaign_id; }
-			if (obj.lead.campaign.campaign_name) { obj.lead.campaign.name = obj.lead.campaign.campaign_name; }
-		}
-	}
-	
-	if (obj.split) {
-		if (obj.split.split_id) { obj.split._id = obj.split.split_id; }
-		if (obj.split.split_name) { obj.split.name = obj.split.split_name; }
-	}
-	
-	db.lead_split.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating lead split ' + obj._id);
-	}
-});
-
-use flux_admin;
-var counter = 0;
-db.split.find().forEach(function(obj) {
-	counter++;
-	if (obj.offers && obj.offers instanceof Array) {
-		obj.offers.forEach(function(item) {
-			if (item.offer_id) { item._id = item.offer_id; }
-			if (item.offer_name) { item.name = item.offer_name; }
-		});
-	}
-	
-	if (obj.filters && obj.filters instanceof Array) {
-		obj.filters.forEach(function(item) {
-			if (item.data_field_id) { item._id = item.data_field_id; }
-			if (item.data_field_name) { item.name = item.data_field_name; }
-		});
-	}
-	
-	if (obj.validators && obj.validators instanceof Array) {
-		obj.validators.forEach(function(item) {
-			if (item.data_field_id) { item._id = item.data_field_id; }
-			if (item.data_field_name) { item.name = item.data_field_name; }
-		});
-	}
-	
-	if (obj.fulfillment) {
-		if (obj.fulfillment.fulfillment_id) { obj.fulfillment._id = obj.fulfillment.fulfillment_id; }
-		if (obj.fulfillment.fulfillment_name) { obj.fulfillment.name = obj.fulfillment.fulfillment_name; }
-	}
-
-	db.split.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating split ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.fulfillment.find().forEach(function(obj) {
-	counter++;
-	if (obj.mapping && obj.mapping instanceof Array) {
-		obj.mapping.forEach(function(item) {
-			if (item.data_field) {
-				if (item.data_field.data_field_id) { item.data_field._id = item.data_field.data_field_id; }
-				if (item.data_field.data_field_name) { item.data_field.name = item.data_field.data_field_name; }
-			}
-		});
-	}
-	
-	if (obj.client) {
-		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
-		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
-	}
-
-	db.fulfillment.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating fulfillment ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.offer.find().forEach(function(obj) {
-	counter++;
-	if (obj.vertical) {
-		if (obj.vertical.vertical_id) { obj.vertical._id = obj.vertical.vertical_id; }
-		if (obj.vertical.vertical_name) { obj.vertical.name = obj.vertical.vertical_name; }
-	}
-	
-	if (obj.split) {
-		if (obj.split.split_id) { obj.split._id = obj.split.split_id; }
-		if (obj.split.split_name) { obj.split.name = obj.split.split_name; }
-	}
-	
-	if (obj.client) {
-		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
-		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
-	}
-
-	db.offer.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating offer ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.offer_page.find().forEach(function(obj) {
-	counter++;
-	if (obj.offer) {
-		if (obj.offer.offer_id) { obj.offer._id = obj.offer.offer_id; }
-		if (obj.offer.offer_name) { obj.offer.name = obj.offer.offer_name; }
-	}
-	
-	db.offer_page.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating offer page ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.campaign.find().forEach(function(obj) {
-	counter++;
-	if (obj.traffic_source) {
-		if (obj.traffic_source.traffic_source_id) { obj.traffic_source._id = obj.traffic_source.traffic_source_id; }
-		if (obj.traffic_source.traffic_source_name) { obj.traffic_source.name = obj.traffic_source.traffic_source_name; }
-	}
-	
-	if (obj.offer) {
-		if (obj.offer.offer_id) { obj.offer._id = obj.offer.offer_id; }
-		if (obj.offer.offer_name) { obj.offer.name = obj.offer.offer_name; }
-	}
-	
-	if (obj.client) {
-		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
-		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
-	}
-
-	db.campaign.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating campaign ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.report_lead.find().forEach(function(obj) {
-	counter++;
-	if (obj.lead) {
-		if (obj.lead.lead_id) { obj.lead._id = obj.lead.lead_id; }
-		if (obj.lead.lead_name) { obj.lead.name = obj.lead.lead_name; }
-
-		if (obj.lead.offer) {
-			if (obj.lead.offer.offer_id) { obj.lead.offer._id = obj.lead.offer.offer_id; }
-			if (obj.lead.offer.offer_name) { obj.lead.offer.name = obj.lead.offer.offer_name; }
-		}
-	
-		if (obj.lead.client) {
-			if (obj.lead.client.client_id) { obj.lead.client._id = obj.lead.client.client_id; }
-			if (obj.lead.client.client_name) { obj.lead.client.name = obj.lead.client.client_name; }
-		}
-		
-		if (obj.lead.campaign) {
-			if (obj.lead.campaign.campaign_id) { obj.lead.campaign._id = obj.lead.campaign.campaign_id; }
-			if (obj.lead.campaign.campaign_name) { obj.lead.campaign.name = obj.lead.campaign.campaign_name; }
-		}
-	}
-	
-	if (obj.client) {
-		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
-		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
-	}
-
-	db.report_lead.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating report lead ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.report_client.find().forEach(function(obj) {
-	counter++;
-	if (obj.client) {
-		if (obj.client.client_id) { obj.client._id = obj.client.client_id; }
-		if (obj.client.client_name) { obj.client.name = obj.client.client_name; }
-	}
-
-	db.report_client.save(obj);
-	
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating report client ' + obj._id);
-	}
-});
-
-var counter = 0;
-db.saved_search.find().forEach(function(obj) {
-	counter++;
-	if (obj.user) {
-		if (obj.user.user_id) { obj.user._id = obj.user.user_id; }
-		if (obj.user.user_name) { obj.user.name = obj.user.user_name; }
-	}
-
-	db.saved_search.save(obj);
-
-	if (counter % 100) {
-		print('[ ' + counter + ' ] Updating saved search ' + obj._id);
 	}
 });

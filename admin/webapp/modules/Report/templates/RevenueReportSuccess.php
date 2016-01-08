@@ -200,14 +200,13 @@ function loadRevenue() {
 				// Create an array of revenue by network				
 				rev_obj_found = false;
 				$.each(revenue_array, function(i, rev_obj) {
-					if (rev_obj.id == item.client.client_id.$id) {
+					if (rev_obj.id == item.client._id) {
 						rev_obj.revenue += parseFloat(item.revenue);
 						rev_obj_found = true;
 					}
 				});
 				if (!rev_obj_found) {
-					console.log(item.client.client_id);
-					rev_obj = {'id' : item.client.client_id.$id, 'name': item.client.client_name, 'color': item.client.client_color, 'revenue': parseFloat(item.revenue) };
+					rev_obj = {'id' : item.client._id, 'name': item.client.name, 'color': item.client.client_color, 'revenue': parseFloat(item.revenue) };
 					revenue_array.push(rev_obj);
 				}
 
