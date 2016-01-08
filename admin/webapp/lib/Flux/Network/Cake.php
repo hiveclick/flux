@@ -42,7 +42,7 @@ class Cake extends BaseNetwork {
 							$report_client->setRevenue(floatval($revenue_entry['revenue']));
 							\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 							$report_client->updateMultiple(
-								array('client.client_id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
+								array('client._id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
 								array(
 									'$setOnInsert' => array(
 										'report_date' => $report_client->getReportDate()
@@ -125,23 +125,25 @@ class Cake extends BaseNetwork {
 										$lead_split->setId($transaction_id);
 										$lead_split->query();
 										if (\MongoId::isValid($lead_split->getId())) {
-											$lead_split->setIsConfirmed(true);
-											$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);
-											$lead_split->setBounty(floatval($revenue_entry["revenue"]));
-											$lead_split->setConfirmedNote('Split confirmed by Cake sync on ' . date('m/d/Y'));
-											$lead_split->update();
+											if (floatval($revenue_entry["revenue"]) > 0) {
+												$lead_split->setIsConfirmed(true);
+												$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);
+												$lead_split->setBounty(floatval($revenue_entry["revenue"]));
+												$lead_split->setConfirmedNote('Split confirmed by Cake sync on ' . date('m/d/Y'));
+												$lead_split->update();
+											}
 											
 											/* @var $report_lead \Flux\ReportLead */
 											$report_lead = new \Flux\ReportLead();
-											$report_lead->setLead($lead_split->getLead()->getLeadId());
+											$report_lead->setLead($lead_split->getLead()->getId());
 											$report_lead->setClient($this->getClient()->getId());
 											$report_lead->setReportDate(new \MongoDate(strtotime($current_date)));
 											$report_lead->setRevenue(floatval($revenue_entry["revenue"]));
 											$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
 											$report_lead->setAccepted(true);
-											\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+											\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getName() . ' (' . $revenue_entry['sub_id'] . ') Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 											$report_lead->updateMultiple(
-												array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
+												array('lead._id' => $report_lead->getLead()->getId(), 'report_date' => $report_lead->getReportDate()),
 												array(
 													'$setOnInsert' => array(
 														'report_date' => $report_lead->getReportDate(),

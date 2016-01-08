@@ -49,7 +49,7 @@ class Lead extends BasicLink {
 		}
 		$this->setOffer($this->getLead()->getTracking()->getOffer()->getId());
 		$this->setClient($this->getLead()->getTracking()->getClient()->getId());
-		$this->setCampaign($this->getLead()->getTracking()->getCampaign()->getId());
+		$this->setCampaign($this->getLead()->getTracking()->getCampaign()->getCampaignName());
 		return $this;
 	}
 	

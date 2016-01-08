@@ -44,7 +44,7 @@ class Evo extends BaseNetwork {
 						
 					\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 					$report_lead->updateMultiple(
-						array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
+						array('lead._id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
 						array(
 							'$setOnInsert' => array(
 								'report_date' => $report_lead->getReportDate(),
@@ -122,7 +122,7 @@ class Evo extends BaseNetwork {
 				$report_client->setRevenue(floatval($entry['revenue']));
 				\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 				$report_client->updateMultiple(
-					array('client.client_id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
+					array('client._id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
 					array(
 						'$setOnInsert' => array(
 							'report_date' => $report_client->getReportDate()

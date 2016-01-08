@@ -30,8 +30,8 @@ class GetNextLeadAction extends BasicAction
 		$lead_split->populate($_REQUEST);
 		
 		$criteria = array();
-		if (\MongoId::isValid($lead_split->getLead()->getLeadId())) {
-			$criteria['lead._id'] = $lead_split->getLead()->getLeadId();
+		if (\MongoId::isValid($lead_split->getLead()->getId())) {
+			$criteria['lead._id'] = $lead_split->getLead()->getId();
 			$criteria['split._id'] = array('$in' => $lead_split->getSplitIdArray());
 		} else {
 			$criteria['split._id'] = array('$in' => $lead_split->getSplitIdArray());

@@ -556,7 +556,7 @@ $(document).ready(function() {
 			 
 			if (obj.is_confirmed) {
 				oldHTML = oldHTML.replace(/#CONFIRMEDCLASS#/g, 'panel-success');
-				oldHTML = oldHTML.replace(/#CONFIRMEDALERT#/g, ((obj.confirmed_note) ? '<div class="alert alert-success"><i class="fa fa-check"></i> ' + obj.confirmed_note + '</div>' : '<div class="alert alert-success"><i class="fa fa-check"></i> This fulfillment has been confirmed paid by the network</div>'));
+				oldHTML = oldHTML.replace(/#CONFIRMEDALERT#/g, ((obj.confirmed_note) ? '<div class="alert alert-success"><i class="fa fa-check"></i> ' + obj.confirmed_note + '</div>' : '<div class="alert alert-success"><i class="fa fa-check"></i> This fulfillment has been confirmed paid by the network for $' + $.number(obj.bounty, 2) + '</div>'));
 			} else {
 				oldHTML = oldHTML.replace(/#CONFIRMEDCLASS#/g, 'panel-default');
 				oldHTML = oldHTML.replace(/#CONFIRMEDALERT#/g, '');

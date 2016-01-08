@@ -91,10 +91,10 @@ $(document).ready(function() {
 	
 	var columns = [
 		{id:'_id', name:'Item #', field:'_id', sort_field:'_id', def_value: ' ', width:175, sortable:true, hidden:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var lead_id = (dataContext.lead._id == undefined) ? 0 : dataContext.lead._id;
-			var offer_id = (dataContext.lead.offer._id == undefined) ? 0 : dataContext.lead.offer._id;
-			var offer_name = (dataContext.lead.offer.name == undefined) ? 0 : dataContext.lead.offer.name;
-			var client_name = (dataContext.lead.client.name == undefined) ? 0 : dataContext.lead.client.name;
+			var lead_id = (dataContext.lead._id == undefined) ? '' : dataContext.lead._id;
+			var offer_id = (dataContext.lead.offer._id == undefined) ? '' : dataContext.lead.offer._id;
+			var offer_name = (dataContext.lead.offer.name == undefined) ? '' : dataContext.lead.offer.name;
+			var client_name = (dataContext.lead.client.name == undefined) ? '' : dataContext.lead.client.name;
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
@@ -113,11 +113,11 @@ $(document).ready(function() {
 			return ret_val;
 		}},
 		{id:'split_id', name:'Split', field:'split._id', sort_field:'split._id', def_value: ' ', cssClass: 'text-center', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var split_id = (dataContext.split._id == undefined) ? 0 : dataContext.split._id;
-			var split_name = (dataContext.split.name == undefined) ? 0 : dataContext.split.name;
-			var offer_id = (dataContext.lead.offer._id == undefined) ? 0 : dataContext.lead.offer._id;
-			var offer_name = (dataContext.lead.offer.name == undefined) ? 0 : dataContext.lead.offer.name;
-			var client_name = (dataContext.lead.client.name == undefined) ? 0 : dataContext.lead.client.name;
+			var split_id = (dataContext.split._id == undefined) ? '' : dataContext.split._id;
+			var split_name = (dataContext.split.name == undefined) ? '' : dataContext.split.name;
+			var offer_id = (dataContext.lead.offer._id == undefined) ? '' : dataContext.lead.offer._id;
+			var offer_name = (dataContext.lead.offer.name == undefined) ? '' : dataContext.lead.offer.name;
+			var client_name = (dataContext.lead.client.name == undefined) ? '' : dataContext.lead.client.name;
 			var ret_val = '<div style="line-height:16pt;">'
 				ret_val += '<a href="/export/split?_id=' + split_id + '">' + split_name + '</a>';
 				ret_val += '<div class="small text-muted">';
@@ -192,11 +192,11 @@ $(document).ready(function() {
 		}},
 		{id:'actions', name:'Flag Item', field:'_id', def_value: ' ', sortable:false, hidden: false, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div class="btn-group" role="group">';
-			ret_val += '<div class="btn btn-default" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>}"><span class="fa fa-flag" aria-hidden="true"></span></div>';
-			ret_val += '<div class="btn btn-warning" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>}"><span class="fa fa-flag" aria-hidden="true"></span></div>';
-			ret_val += '<div class="btn btn-danger" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE ?>}"><span class="fa fa-flag" aria-hidden="true"></span></div>';
-			ret_val += '<div class="btn btn-info" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>}"><span class="fa fa-flag" aria-hidden="true"></span></div>';
-			ret_val += '<div class="btn btn-success" data-data="{&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>}"><span class="fa fa-flag" aria-hidden="true"></span></div>';
+			ret_val += '<a href="javascript:changeDisposition({&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>});" class="btn btn-default"><span class="fa fa-flag" aria-hidden="true"></span></a>';
+			ret_val += '<a href="javascript:changeDisposition({&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>});" class="btn btn-warning"><span class="fa fa-flag" aria-hidden="true"></span></a>';
+			ret_val += '<a href="javascript:changeDisposition({&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE ?>});" class="btn btn-danger"><span class="fa fa-flag" aria-hidden="true"></span></a>';
+			ret_val += '<a href="javascript:changeDisposition({&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>});" class="btn btn-info"><span class="fa fa-flag" aria-hidden="true"></span></a>';
+			ret_val += '<a href="javascript:changeDisposition({&quot;_id&quot;:&quot;' + dataContext._id + '&quot;,&quot;disposition&quot;:<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>});" class="btn btn-success"><span class="fa fa-flag" aria-hidden="true"></span></a>';
 			ret_val += '</div>';
 			return ret_val;
 		}}
@@ -241,5 +241,11 @@ $(document).ready(function() {
 	$('#split_search_form').trigger('submit');
 	
 });
+
+function changeDisposition(obj) {
+	$.rad.put('/api', {func: '/lead/lead-split', disposition: obj.disposition, _id: obj._id}, function(data) {
+		$('#split_search_form').trigger('submit');
+	});
+}
 //-->
 </script>

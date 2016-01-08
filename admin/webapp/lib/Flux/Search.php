@@ -80,7 +80,7 @@ class Search extends Base\Search {
 			if (\MongoId::isValid($lead_split->getId())) {
 				/* @var $search \Flux\Search */
 				$search = new \Flux\Search();
-				$search->setName($lead_split->getLead()->getLeadId());
+				$search->setName($lead_split->getId());
 				$search->setDescription($lead_split->getLead()->getLeadName() . ' / ' . $lead_split->getLead()->getEmail());
 				$search->setMeta('Fulfilled to ' . $lead_split->getSplit()->getName());
 				$search->setUrl('/lead/lead?_id=' . $lead_split->getLead()->getLeadId() . '&tab=attempts');

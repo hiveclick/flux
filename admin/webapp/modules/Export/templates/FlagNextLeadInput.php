@@ -8,18 +8,22 @@
 	<input type="hidden" name="_id" value="<?php echo $lead_split->getId() ?>" />
 	<div class="form-group">
 		<label for="disposition">Select a disposition:</label>
-		<select name="disposition" id="disposition" class="form-control">
+		<select name="disposition" id="disposition" class="form-control" placeholder="Select a disposition for this lead...">
 			<option value="<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>">Flag as Fulfilled</option>
 			<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>">Flag as Pending</option>
 		</select>	
 	</div>
 	<div class="form-group">
 		<label for="response">Enter response:</label>
-		<textarea name="response" id="response" class="form-control"></textarea>
+		<textarea name="response" id="response" class="form-control" placeholder="Enter the response from the server (SUCCESS, ERROR, etc)..."></textarea>
 	</div>	
 	<div class="form-group">
 		<label for="error_message">Enter any error messages:</label>
-		<textarea name="error_message" id="error_message" class="form-control"></textarea>
+		<textarea name="error_message" id="error_message" class="form-control" placeholder="Enter any error messages..."></textarea>
+	</div>
+	<div class="form-group">
+		<label for="source">Enter the document source (for debugging purposes):</label>
+		<textarea name="source" id="source" class="form-control" placeholder="Enter the document source (for debugging purposes)..."></textarea>
 	</div>
 	<div class="form-group">
 		<label for="error_message">Upload screenshot of final page:</label>

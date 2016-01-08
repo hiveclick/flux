@@ -9,12 +9,12 @@
 </div>
 <form action="/api" id="lead_split_form" method="POST">
 	<input type="hidden" name="func" value="/lead/lead-split" />
-	<input type="hidden" name="lead[_id]" value="<?php echo $lead->getId() ?>" />
+	<input type="hidden" name="lead" value="<?php echo $lead->getId() ?>" />
 	<input type="hidden" name="disposition" value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" />
 	<div class="modal-body">
 		<div class="help-block">You can assign this lead to a split and then fulfill it on that split</div>
 		<div class="form-group">
-			<select name="split[_id]" id="split_id">
+			<select name="split" id="split_id">
 				<?php 
 					/* @var $split \Flux\Split */
 					foreach ($splits as $split) {
