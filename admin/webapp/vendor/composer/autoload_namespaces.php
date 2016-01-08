@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-	'Less' => array($vendorDir . '/oyejorge/less.php/lib'),
-	'Knp\\Snappy' => array($vendorDir . '/knplabs/knp-snappy/src'),
+    'Less' => array($vendorDir . '/oyejorge/less.php/lib'),
+    'Knp\\Snappy' => array($vendorDir . '/knplabs/knp-snappy/src'),
 );
