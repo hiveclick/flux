@@ -66,12 +66,13 @@
 					</div>
 					<div class="form-group text-left">
 						<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_PROCESSING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PROCESSING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Processing</options>
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLABLE, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
-							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_UNFULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PENDING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PROCESSING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PROCESSING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Processing</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_UNFULFILLABLE, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_CONFIRMED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_CONFIRMED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Confirmed</options>
 						</select>
 					</div>
 				</div>

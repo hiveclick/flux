@@ -30,7 +30,7 @@ class LeadSplitFulfilledTodaySearchAction extends BasicAction
 		$lead_split->populate($_REQUEST);
 		$lead_split->setDateRange(\Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY);
 		if (empty($lead_split->getDispositionArray())) {
-			$lead_split->setDispositionArray(array(\Flux\LeadSplit::DISPOSITION_FULFILLED, \Flux\LeadSplit::DISPOSITION_FAILOVER, \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE));
+			$lead_split->setDispositionArray(array(\Flux\LeadSplit::DISPOSITION_CONFIRMED, \Flux\LeadSplit::DISPOSITION_FULFILLED, \Flux\LeadSplit::DISPOSITION_FAILOVER, \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE));
 		}
 
 		/* @var $split Flux\Split */

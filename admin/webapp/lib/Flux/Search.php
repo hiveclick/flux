@@ -77,7 +77,7 @@ class Search extends Base\Search {
 			$lead_split = new \Flux\LeadSplit();
 			$lead_split->setId(new \MongoId($this->getKeywords()));
 			$lead_split->query();
-			if (\MongoId::isValid($lead_split->getId())) {
+			if (\MongoId::isValid($lead_split->getId()) && \MongoId::isValid($lead_split->getLead()->getId())) {
 				/* @var $search \Flux\Search */
 				$search = new \Flux\Search();
 				$search->setName($lead_split->getId());

@@ -85,7 +85,7 @@ class LeadSplit extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsFulfilled($arg0) {
-		$this->is_fulfilled = $arg0;
+		$this->is_fulfilled = (boolean)$arg0;
 		$this->addModifiedColumn('is_fulfilled');
 		return $this;
 	}
@@ -106,7 +106,7 @@ class LeadSplit extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsProcessing($arg0) {
-		$this->is_processing = $arg0;
+		$this->is_processing = (boolean)$arg0;
 		$this->addModifiedColumn('is_processing');
 		return $this;
 	}
@@ -148,7 +148,7 @@ class LeadSplit extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsUnfulfillable($arg0) {
-		$this->is_unfulfillable = $arg0;
+		$this->is_unfulfillable = (boolean)$arg0;
 		$this->addModifiedColumn("is_unfulfillable");
 		return $this;
 	}
@@ -169,7 +169,7 @@ class LeadSplit extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsError($arg0) {
-		$this->is_error = $arg0;
+		$this->is_error = (boolean)$arg0;
 		$this->addModifiedColumn('is_error');
 		return $this;
 	}
@@ -211,7 +211,7 @@ class LeadSplit extends MongoForm {
 	 * @var integer
 	 */
 	function setAttemptCount($arg0) {
-		$this->attempt_count = $arg0;
+		$this->attempt_count = (int)$arg0;
 		$this->addModifiedColumn('attempt_count');
 		return $this;
 	}

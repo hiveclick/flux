@@ -113,10 +113,11 @@ class Fulfill extends BaseDaemon
 					$lead_split_item->setErrorMessage('');
 					$lead_split_item->setDisposition(\Flux\LeadSplit::DISPOSITION_FULFILLED);
 					 
+					/* @var $lead \Flux\Lead */
+					$lead = $lead_split_item->getLead()->getLead();
+					
 					// Add a fulfilled event to the lead
 					if ($fulfillment->getTriggerFulfillmentFlag()) {
-						/* @var $lead \Flux\Lead */
-						$lead = $lead_split_item->getLead()->getLead();
 						$lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
 						$lead->update();
 					}

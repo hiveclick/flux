@@ -9,6 +9,7 @@
 <form id="lead_split_flag_disposition_form" action="/api" method="PUT">
 	<input type="hidden" name="func" value="/lead/lead-split" />
 	<input type="hidden" name="test" value="0" />
+	<input type="hidden" name="is_processing" value="0" />
 	<input type="hidden" name="_id" value="<?php echo $lead_split->getId() ?>" />
 	<div class="modal-body">
 		<div class="help-block">
