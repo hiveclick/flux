@@ -179,7 +179,7 @@ $(document).ready(function() {
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + value + '">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (<a href="/offer/offer?_id=' + dataContext._t.offer.offer_id + '">' + dataContext._t.offer.offer_name + '</a> on ' + dataContext._t.client.client_name + ')';
+			ret_val += ' (<a href="/offer/offer?_id=' + dataContext._t.offer._id + '">' + dataContext._t.offer.name + '</a> on ' + dataContext._t.client.name + ')';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
@@ -190,12 +190,14 @@ $(document).ready(function() {
 				var name = (dataContext._d.fn == undefined) ? '' : dataContext._d.fn;
 				name += (dataContext._d.ln == undefined) ? '' : (' ' + dataContext._d.ln);
 			}			
-			var email = (dataContext._d.em == undefined) ? '' : 'E: ' + dataContext._d.em;
+			var email = (dataContext._d.em == undefined || dataContext._d.em == '') ? '' : 'E: ' + dataContext._d.em;
 			var phone = (dataContext._d.ph1 == undefined) ? '' : ', P: ' + dataContext._d.ph1;
 			var ret_val = '<div style="line-height:16pt;">'
 				ret_val += '<a href="/lead/lead?_id=' + value + '">' + name + '</a>';
 				ret_val += '<div class="small text-muted">';
-				ret_val += ' (' + email + phone + ')';
+				if (email != '' || phone != '') {
+					ret_val += ' (' + email + phone + ')';
+				}
 				ret_val += '</div>';
 				ret_val += '</div>';
 				return ret_val;
@@ -214,13 +216,13 @@ $(document).ready(function() {
 					{id:'<?php echo $data_field->getKeyName() ?>', name:'<?php echo ucfirst(strtolower(preg_replace("/[^a-zA-Z0-9 ]/", "", $data_field->getName()))) ?>', field:'_t.<?php echo $data_field->getKeyName() ?>', hidden: true, def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 						<?php if ($data_field->getKeyName() == \Flux\DataField::DATA_FIELD_REF_CLIENT_ID) { ?>
 							if (value.client_name) {
-								return '<a href="/client/client?_id=' + value.client_id + '">' + value.client_name + '</a>';
+								return '<a href="/client/client?_id=' + value._id + '">' + value.name + '</a>';
 							} else {
 								return '<em class="text-muted">-- not set --</em>';
 							}
 						<?php } else if ($data_field->getKeyName() == \Flux\DataField::DATA_FIELD_REF_OFFER_ID) { ?>
 							if (value.offer_name) {
-								return '<a href="/offer/offer?_id=' + value.offer_id + '">' + value.offer_name + '</a>';
+								return '<a href="/offer/offer?_id=' + value._id + '">' + value.name + '</a>';
 							} else {
 								return '<em class="text-muted">-- not set --</em>';
 							}
@@ -232,7 +234,7 @@ $(document).ready(function() {
 					{id:'<?php echo $data_field->getKeyName() ?>', name:'<?php echo ucfirst(strtolower(preg_replace("/[^a-zA-Z0-9 ]/", "", $data_field->getName()))) ?>', field:'_e.<?php echo $data_field->getKeyName() ?>', hidden: true, def_value: ' ', sortable:false, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 						var ret_val;
 						$.each(dataContext._e, function(i, item) {
-							if (item.data_field.data_field_id == '<?php echo $data_field->getId() ?>') {
+							if (item.data_field._id == '<?php echo $data_field->getId() ?>') {
 								// This is our event
 									ret_val = '<div style="line-height:16pt;">'
 									if (item.v == '1') {

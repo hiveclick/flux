@@ -374,21 +374,21 @@ class Split extends MongoForm {
 			$fulfillment = new \Flux\Link\Fulfillment();
 			$fulfillment->populate($arg0);
 			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
-				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+				$fulfillment->setName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if (is_string($arg0)) {
 			$fulfillment = new \Flux\Link\Fulfillment();
-			$fulfillment->setFulfillmentId($arg0);
+			$fulfillment->setId($arg0);
 			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
-				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+				$fulfillment->setName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if ($arg0 instanceof \MongoId) {
 			$fulfillment = new \Flux\Link\Fulfillment();
-			$fulfillment->setFulfillmentId($arg0);
+			$fulfillment->setId($arg0);
 			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
-				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+				$fulfillment->setName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		}

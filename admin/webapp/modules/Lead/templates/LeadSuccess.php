@@ -188,6 +188,22 @@
 						<?php } ?>
 						</tbody>
 					</table>
+					<table class="table table-responsive table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Event</th>
+								<th>Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ($lead->getE() as $key => $value) { ?>
+								<tr>
+									<td><?php echo $value->getDataField()->getName() ?></td>
+									<td><?php echo date('m/d/Y g:i a', $value->getT()->sec) ?></td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="tracking">
@@ -300,6 +316,25 @@
 							<h5>Referrer</h5>
 							<?php echo urldecode($lead->getTracking()->getRef()) ?>
 						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row vertical-divider">
+							<?php
+								/* @var $event \Flux\LeadEvent */ 
+								foreach ($lead->getE() as $key => $event) { 
+							?>
+								<div class="col-md-3 text-center">
+									<span class="fa-stack fa-lg">
+										<i class="fa fa-circle fa-stack-2x"></i>
+										<i class="fa fa-stack-1x fa-inverse"><?php echo strtoupper(substr($event->getDataField()->getName(), 0, 1)) ?></i>
+									</span>
+									<div><?php echo $event->getDataField()->getName() ?></div>
+									<div class="text-muted"><?php echo date('m/d/Y g:i a', $event->getT()->sec) ?></div>
+								</div> 
+							<?php } ?>
+						</div> 
 					</div>
 				</div>
 			</div>

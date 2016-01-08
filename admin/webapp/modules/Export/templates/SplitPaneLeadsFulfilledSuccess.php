@@ -3,8 +3,8 @@
 	$lead_split = $this->getContext()->getRequest()->getAttribute('lead_split', array());
 ?>
 <div class="panel panel-primary">
-	<div id='split-lead-header' class='grid-header panel-heading clearfix'>
-		<form id="split-lead-form" method="GET" action="/api" class="form-inline">
+	<div id='split-lead-fulfilled-header' class='grid-header panel-heading clearfix'>
+		<form id="split-lead-fulfilled-form" method="GET" action="/api" class="form-inline">
 			<input type="hidden" name="func" value="/lead/lead-split" />
 			<input type="hidden" name="format" value="json" />
 			<input type="hidden" id="page" name="page" value="1" />
@@ -13,7 +13,7 @@
 			<input type="hidden" id="sord" name="sord" value="desc" />
 			<input type="hidden" name="split_id_array[]" value="<?php echo $lead_split->getSplit()->getSplitId() ?>" />
 			<div class="form-group text-left">
-				<select class="form-control" name="date_range" id="date_range" placeholder="Filter by date range">
+				<select class="form-control" name="date_range" id="date_range_fulfilled" placeholder="Filter by date range">
 					<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ? 'SELECTED' : '' ?>>Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
 					<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ? 'SELECTED' : '' ?>>Yesterday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
 					<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ? 'SELECTED' : '' ?>>Last 7 days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
@@ -23,7 +23,7 @@
 				</select>
 			</div>
 			<div class="form-group text-left">
-				<select class="form-control" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+				<select class="form-control" name="disposition_array[]" id="disposition_array_fulfilled" multiple placeholder="Filter by disposition">
 					<option value="<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_UNFULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
 					<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PENDING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
 					<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PROCESSING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PROCESSING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Processing</options>
@@ -35,13 +35,13 @@
 			</div>
 		</form>
 	</div>
-	<div id="split-lead-grid"></div>
-	<div id="split-lead-pager" class="panel-footer"></div>
+	<div id="split-lead-fulfilled-grid"></div>
+	<div id="split-lead-fulfilled-pager" class="panel-footer"></div>
 </div>
 <script>
 //<!--
 $(document).ready(function() {
-	var split_lead_columns = [
+	var split_lead_fulfilled_columns = [
  		{id:'_id', name:'Lead #', field:'_id', sort_field:'_id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			var split_id = (dataContext.split._id == undefined) ? '' : dataContext.split._id;
 			var split_name = (dataContext.split.name == undefined) ? '' : dataContext.split.name;
@@ -118,10 +118,10 @@ $(document).ready(function() {
 		}}	
  	];
 
- 	slick_grid = $('#split-lead-grid').slickGrid({
- 		pager: $('#split-lead-pager'),
- 		form: $('#split-lead-form'),
- 		columns: split_lead_columns,
+ 	slick_grid = $('#split-lead-fulfilled-grid').slickGrid({
+ 		pager: $('#split-lead-fulfilled-pager'),
+ 		form: $('#split-lead-fulfilled-form'),
+ 		columns: split_lead_fulfilled_columns,
  		useFilter: false,
  		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
  		pagingOptions: {
@@ -137,16 +137,16 @@ $(document).ready(function() {
  		}
  	});
 
- 	$('#date_range,#disposition_array').selectize().on('change', function() {
- 		$('#split-lead-form').trigger('submit');
+ 	$('#date_range_fulfilled,#disposition_array_fulfilled','#split-lead-fulfilled-form').selectize().on('change', function() {
+ 		$('#split-lead-fulfilled-form').trigger('submit');
  	});
 
  	$('#flag_lead_split_modal').on('hide.bs.modal', function(e) {
 		$(this).removeData('bs.modal');
-		$('#split-lead-form').trigger('submit');
+		$('#split-lead-fulfilled-form').trigger('submit');
 	});
 
- 	$('#split-lead-form').trigger('submit'); 	
+ 	$('#split-lead-fulfilled-form').trigger('submit'); 	
 });
 //-->
 </script>

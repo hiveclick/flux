@@ -91,10 +91,10 @@ $(document).ready(function() {
 	
 	var columns = [
 		{id:'_id', name:'Item #', field:'_id', sort_field:'_id', def_value: ' ', width:175, sortable:true, hidden:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var lead_id = (dataContext.lead.lead_id == undefined) ? 0 : dataContext.lead.lead_id;
-			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+			var lead_id = (dataContext.lead._id == undefined) ? 0 : dataContext.lead._id;
+			var offer_id = (dataContext.lead.offer._id == undefined) ? 0 : dataContext.lead.offer._id;
+			var offer_name = (dataContext.lead.offer.name == undefined) ? 0 : dataContext.lead.offer.name;
+			var client_name = (dataContext.lead.client.name == undefined) ? 0 : dataContext.lead.client.name;
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
@@ -103,21 +103,21 @@ $(document).ready(function() {
 			ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'lead_id', name:'Lead #', field:'lead.lead_id', sort_field:'lead.lead_id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'lead_id', name:'Lead #', field:'lead._id', sort_field:'lead._id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
-			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '&tab=attempts">' + value + '</a>';
+			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead._id + '&tab=attempts">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (Item #:<a href="/lead/lead?_id=' + dataContext.lead.lead_id + '&tab=attempts">' + dataContext.lead.lead_id + '</a>)';
+			ret_val += ' (Item #:<a href="/lead/lead?_id=' + dataContext.lead._id + '&tab=attempts">' + dataContext.lead._id + '</a>)';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'split_id', name:'Split', field:'split.split_id', sort_field:'split.split_id', def_value: ' ', cssClass: 'text-center', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var split_id = (dataContext.split.split_id == undefined) ? 0 : dataContext.split.split_id;
-			var split_name = (dataContext.split.split_name == undefined) ? 0 : dataContext.split.split_name;
-			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+		{id:'split_id', name:'Split', field:'split._id', sort_field:'split._id', def_value: ' ', cssClass: 'text-center', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var split_id = (dataContext.split._id == undefined) ? 0 : dataContext.split._id;
+			var split_name = (dataContext.split.name == undefined) ? 0 : dataContext.split.name;
+			var offer_id = (dataContext.lead.offer._id == undefined) ? 0 : dataContext.lead.offer._id;
+			var offer_name = (dataContext.lead.offer.name == undefined) ? 0 : dataContext.lead.offer.name;
+			var client_name = (dataContext.lead.client.name == undefined) ? 0 : dataContext.lead.client.name;
 			var ret_val = '<div style="line-height:16pt;">'
 				ret_val += '<a href="/export/split?_id=' + split_id + '">' + split_name + '</a>';
 				ret_val += '<div class="small text-muted">';
@@ -127,11 +127,11 @@ $(document).ready(function() {
 			return ret_val;
 		}},
 		{id:'name', name:'Name', field:'lead_name', sort_field:'lead_name', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var lead_id = (dataContext.lead.lead_id == undefined) ? 0 : dataContext.lead.lead_id;
+			var lead_id = (dataContext.lead._id == undefined) ? 0 : dataContext.lead._id;
 			var email = (dataContext.lead.email == '') ? '' : 'E: ' + dataContext.lead.email;
 			var phone = (dataContext.lead.phone == '') ? '' : ', P: ' + dataContext.lead.phone;
 			var ret_val = '<div style="line-height:16pt;">'
-				ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + dataContext.lead.lead_name + '</a>';
+				ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + dataContext.lead.name + '</a>';
 				ret_val += '<div class="small text-muted">';
 				ret_val += ' (' + email + phone + ')';
 				ret_val += '</div>';

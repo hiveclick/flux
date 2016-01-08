@@ -66,7 +66,7 @@
 			<li role="presentation"><a href="#tab_validation" aria-controls="validation" role="tab" data-toggle="tab">Validation</a></li>
 			<li role="presentation"><a href="#tab_fulfillment" aria-controls="fulfillment" role="tab" data-toggle="tab">Fulfillment</a></li>
 			<li role="presentation"><a href="#tab_leads" data-href="/export/split-pane-leads?split[split_id]=<?php echo $split->getId() ?>&date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_PROCESSING ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE ?>" aria-controls="leads" role="tab" data-toggle="tab">Pending Leads</a></li>
-			<li role="presentation"><a href="#tab_leads_fulfilled" data-href="/export/split-pane-leads?split[split_id]=<?php echo $split->getId() ?>&date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>" aria-controls="leads" role="tab" data-toggle="tab">Recent Fulfillments</a></li>
+			<li role="presentation"><a href="#tab_leads_fulfilled" data-href="/export/split-pane-leads-fulfilled?split[split_id]=<?php echo $split->getId() ?>&date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>&disposition_array[]=<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>" aria-controls="leads" role="tab" data-toggle="tab">Recent Fulfillments</a></li>
 		</ul>
 	
 		<!-- Tab panes -->
@@ -188,7 +188,7 @@
 						    	<span class="fa fa-cloud-upload fa-2x"></span>
 							</div>
 							<div class="media-body">
-								<h4 class="media-heading"><a href="/admin/fulfillment?_id=<?php echo $split->getFulfillment()->getFulfillmentId() ?>"><?php echo $split->getFulfillment()->getFulfillmentName() ?></a> <span class="small">($<?php echo number_format($split->getFulfillment()->getFulfillment()->getBounty(), 2, null, ',') ?>)</span></h4> 
+								<h4 class="media-heading"><a href="/admin/fulfillment?_id=<?php echo $split->getFulfillment()->getId() ?>"><?php echo $split->getFulfillment()->getName() ?></a> <span class="small">($<?php echo number_format($split->getFulfillment()->getFulfillment()->getBounty(), 2, null, ',') ?>)</span></h4> 
 						    	<div class="small"><?php echo $split->getFulfillment()->getFulfillment()->getDescription() ?></div>
 								<?php if ($split->getFulfillImmediately()) { ?>
 									<br />
@@ -279,7 +279,8 @@
 <div class="modal fade" id="edit_split_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 <!-- confirm delete modal -->
 <div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this split?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
-
+<!-- Flag Split modal -->
+<div class="modal fade" id="flag_lead_split_modal"><div class="modal-dialog"><div class="modal-content"></div></div></div>
 
 <script>
 //<!--
