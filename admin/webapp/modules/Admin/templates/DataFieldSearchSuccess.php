@@ -3,42 +3,51 @@
 	$datafield = $this->getContext()->getRequest()->getAttribute("datafield", array());
 	$tags = $this->getContext()->getRequest()->getAttribute("tags", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_datafield_modal" href="/admin/data-field-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Data Field</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/admin/data-field-search">Data Fields</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_datafield_modal" href="/admin/data-field-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Data Field</a>
+		</div>
+		<h1>Data Fields</h1>
 	</div>
-	<h1>Data Fields</h1>
-</div>
-<div class="help-block">Data Fields set what data can be collected on the offer pages via request names</div>
-<div class="panel panel-primary">
-	<div id='datafield-header' class='grid-header panel-heading clearfix'>
-		<form id="datafield_search_form" class="form-inline" method="GET" action="/api">
-			<input type="hidden" name="func" value="/admin/data-field">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="text-right">
-				<div class="form-group text-left">
-					<select class="form-control" name="storage_type_array[]" id="storage_type_array" placeholder="only display selected storage types" multiple>
-						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Default</option>
-						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Events</option>
-						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Tracking</option>
-						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Derived</option>
-					</select>
+	<div class="help-block">Data Fields set what data can be collected on the offer pages via request names</div>
+	<div class="panel panel-primary">
+		<div id='datafield-header' class='grid-header panel-heading clearfix'>
+			<form id="datafield_search_form" class="form-inline" method="GET" action="/api">
+				<input type="hidden" name="func" value="/admin/data-field">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="text-right">
+					<div class="form-group text-left">
+						<select class="form-control" name="storage_type_array[]" id="storage_type_array" placeholder="only display selected storage types" multiple>
+							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Default</option>
+							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Events</option>
+							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Tracking</option>
+							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DERIVED, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Derived</option>
+						</select>
+					</div>
+					<div class="form-group text-left">
+						<select class="form-control" name="tags[]" id="tags" placeholder="only display selected tags" multiple></select>
+					</div>
+					<div class="form-group text-left">
+						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
+					</div>				
 				</div>
-				<div class="form-group text-left">
-					<select class="form-control" name="tags[]" id="tags" placeholder="only display selected tags" multiple></select>
-				</div>
-				<div class="form-group text-left">
-					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
-				</div>				
-			</div>
-		</form>
+			</form>
+		</div>
+		<div id="datafield-grid"></div>
+		<div id="datafield-pager" class="panel-footer"></div>
 	</div>
-	<div id="datafield-grid"></div>
-	<div id="datafield-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit datafield modal -->
@@ -144,17 +153,17 @@ $(document).ready(function() {
 	$('#storage_type_array').selectize();
 
 	$('#tags').selectize({
-	    delimiter: ',',
-	    persist: true,
-	    searchField: ['name'],
-	    valueField: 'name',
-	    labelField: 'name',
-	    options: [
+		delimiter: ',',
+		persist: true,
+		searchField: ['name'],
+		valueField: 'name',
+		labelField: 'name',
+		options: [
 			{ name: "<?php echo implode('"}, {name: "', $tags) ?>" }
 		],
-	    create: function(input) {
-	        return {name: input}
-	    }
+		create: function(input) {
+			return {name: input}
+		}
 	});
 
 	$('#edit_datafield_modal').on('hide.bs.modal', function(e) {

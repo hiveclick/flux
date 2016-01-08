@@ -7,23 +7,23 @@ namespace Mojavi\Validator;
 class DateValidator extends Validator
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute this validator.
-     *
-     * @param mixed A file or parameter value/array.
-     * @param error An error message reference.
-     *
-     * @return bool true, if this validator executes successfully, otherwise
-     *              false.
-     */
-    public function execute (&$value, &$error)
-    {
+	/**
+	 * Execute this validator.
+	 *
+	 * @param mixed A file or parameter value/array.
+	 * @param error An error message reference.
+	 *
+	 * @return bool true, if this validator executes successfully, otherwise
+	 *			  false.
+	 */
+	public function execute (&$value, &$error)
+	{
 
-    }
+	}
 
 }
 

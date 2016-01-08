@@ -3,14 +3,14 @@ namespace Flux\Daemon;
 
 class Split extends BaseDaemon
 {
-    const DEBUG = false;
-    
+	const DEBUG = false;
+	
 	public function action() {
-	    if ($this->getPrimaryThread()) {
-	        // Update the last run time of this daemon
-	        $this->updateLastRunTime();
-	    }
-	    
+		if ($this->getPrimaryThread()) {
+			// Update the last run time of this daemon
+			$this->updateLastRunTime();
+		}
+		
 		$split = $this->getNextSplit();
 		if ($split instanceof \Flux\Split) {
 			$max_event_time = $split->getLastRunTime();
@@ -19,13 +19,13 @@ class Split extends BaseDaemon
 			
 			
 			if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
-			    $this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
-    			// Normal splits should find leads created since the last time they were run
-    			$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
+				$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
+				// Normal splits should find leads created since the last time they were run
+				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
 			} else {
-			    // Catch-all splits should be delayed for 1 hour to give the other splits time to accept the leads
-			    $this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', ($split->getLastRunTime()->sec - (2 * 60 * 60))) . ' and ' . date('m/d/Y g:i:s', strtotime('now - 1 hour')), array($this->pid, $split->getId()));
-			    $criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
+				// Catch-all splits should be delayed for 1 hour to give the other splits time to accept the leads
+				$this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', ($split->getLastRunTime()->sec - (2 * 60 * 60))) . ' and ' . date('m/d/Y g:i:s', strtotime('now - 1 hour')), array($this->pid, $split->getId()));
+				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
 			}
 			
 			//$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name'] = array('$nin' => array(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME));
@@ -33,7 +33,7 @@ class Split extends BaseDaemon
 			// Add the offers to the criteria
 			if (count($split->getOffers()) > 0) {
 				$offer_ids = $split->getOffers();
-				array_walk($offer_ids, function(&$value) { $value = $value->getOfferId(); });
+				array_walk($offer_ids, function(&$value) { $value = $value->getId(); });
 				$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer.offer_id'] = array('$in' => $offer_ids);
 			}
 			
@@ -52,24 +52,26 @@ class Split extends BaseDaemon
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_SET) {
 						$filter_criteria = array('$exists' => true);
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
-						$filter_criteria = array('$gte' => array_shift($filter->getDataFieldValue()));
+						$values = $filter->getDataFieldValue();
+						$filter_criteria = array('$gte' => array_shift($values));
 					} else if ($filter->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) {
-						$filter_criteria = array('$lte' => array_shift($filter->getDataFieldValue()));
+						$values = $filter->getDataFieldValue();
+						$filter_criteria = array('$lte' => array_shift($values));
 					}					
 					
 					if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT) {
 						$criteria[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $filter->getDataFieldKeyName()] = $filter_criteria;
 					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
-						$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . $data_field->getKeyName()] = $filter_criteria;
+						$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . $filter->getDataFieldKeyName()] = $filter_criteria;
 					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
-						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['data_field.data_field_id'] = $filter->getDataFieldId();
+						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['data_field.data_field_id'] = $filter->getId();
 						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['v'] = $filter_criteria;
 					}
 				}
 			}
 			
 			if (self::DEBUG) { 
-                $this->log(json_encode($criteria), array($this->pid, $split->getId()));
+				$this->log(json_encode($criteria), array($this->pid, $split->getId()));
 			}		
 			
 			/* @var $lead \Flux\Lead */
@@ -90,79 +92,79 @@ class Split extends BaseDaemon
 					$lead->populate($lead_doc);
 					
 					try {
-    					// Validate the lead before we proceed
-    					if (count($split->getValidators()) > 0) {
-    					    /* @var $validator \Flux\Link\DataField */
-    					    $data_field = new \Flux\DataField();
-        					foreach ($split->getValidators() as $validator) {
-            			        $value = $lead->getValue($validator->getDataField()->getKeyName());
-            			        $value = $validator->getDataField()->callMappingFunc($value, $lead);
-            			        if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) {
-            			            if (is_array($value) && empty(array_intersect($value, $validator->getDataFieldValue()))) {
-            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
-            		                } else if (is_string($value) && !in_array($value, $validator->getDataFieldValue())) {
-            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
-            		                }   
-            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) {
-            		                if (is_array($value) && !empty(array_intersect($value, $validator->getDataFieldValue()))) {
-            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
-            		                } else if (is_string($value) && in_array($value, $validator->getDataFieldValue())) {
-            		                    throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
-            		                }
-            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) {
-            			            if (is_string($value) && trim($value) == '') {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
-            			            } else if (is_array($value) && empty($value)) {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
-            			            }
-            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
-            			            if (is_array($validator->getDataFieldValue())) {
-            			                $values = $validator->getDataFieldValue();
-            			                $check_value = intval(array_shift($values));
-            			            } else {
-            			                $check_value = intval($validator->getDataFieldValue());
-            			            }
-            			            if (is_string($value) && intval($value) < $check_value) {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
-            			            } else if (is_array($value)) {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
-            			            }
-            			        } else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) {
-            			            if (is_array($validator->getDataFieldValue())) {
-            			                $values = $validator->getDataFieldValue();
-            			                $check_value = intval(array_shift($values));
-            			            } else {
-            			                $check_value = intval($validator->getDataFieldValue());
-            			            }
-            			            if (is_string($value) && intval($value) > $check_value) {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . $value . '\'');
-            			            } else if (is_array($value)) {
-            			                throw new \Exception('Validation failed on ' . $validator->getDataFieldName() . ' with value \'' . implode(", ", $value) . '\'');
-            			            }
-            			        }
-            			    }
-    					}
-    					// Verify that this lead has not already been fulfilled
-    					/* @var $lead_event \Flux\LeadEvent */
-    					/* @var $split_queue \Flux\SplitQueue */
-    					$split_queue = new \Flux\SplitQueue();
-    					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $lead->getId(), 'split.split_id' => $split->getId()));
-    					if (!is_null($existing_lead)) {
-    					    throw new \Exception('Validation failed on ALREADY FULFILLED check');
-    					}
-    					
+						// Validate the lead before we proceed
+						if (count($split->getValidators()) > 0) {
+							/* @var $validator \Flux\Link\DataField */
+							$data_field = new \Flux\DataField();
+							foreach ($split->getValidators() as $validator) {
+								$value = $lead->getValue($validator->getDataField()->getKeyName());
+								$value = $validator->getDataField()->callMappingFunc($value, $lead);
+								if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS) {
+									if (is_array($value) && empty(array_intersect($value, $validator->getDataFieldValue()))) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . implode(", ", $value) . '\'');
+									} else if (is_string($value) && !in_array($value, $validator->getDataFieldValue())) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . $value . '\'');
+									}   
+								} else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT) {
+									if (is_array($value) && !empty(array_intersect($value, $validator->getDataFieldValue()))) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . implode(", ", $value) . '\'');
+									} else if (is_string($value) && in_array($value, $validator->getDataFieldValue())) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . $value . '\'');
+									}
+								} else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_NOT_BLANK) {
+									if (is_string($value) && trim($value) == '') {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . $value . '\'');
+									} else if (is_array($value) && empty($value)) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . implode(", ", $value) . '\'');
+									}
+								} else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_GT) {
+									if (is_array($validator->getDataFieldValue())) {
+										$values = $validator->getDataFieldValue();
+										$check_value = intval(array_shift($values));
+									} else {
+										$check_value = intval($validator->getDataFieldValue());
+									}
+									if (is_string($value) && intval($value) < $check_value) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . $value . '\'');
+									} else if (is_array($value)) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . implode(", ", $value) . '\'');
+									}
+								} else if ($validator->getDataFieldCondition() == \Flux\Link\DataField::DATA_FIELD_CONDITION_IS_LT) {
+									if (is_array($validator->getDataFieldValue())) {
+										$values = $validator->getDataFieldValue();
+										$check_value = intval(array_shift($values));
+									} else {
+										$check_value = intval($validator->getDataFieldValue());
+									}
+									if (is_string($value) && intval($value) > $check_value) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . $value . '\'');
+									} else if (is_array($value)) {
+										throw new \Exception('Validation failed on ' . $validator->getName() . ' with value \'' . implode(", ", $value) . '\'');
+									}
+								}
+							}
+						}
+						// Verify that this lead has not already been fulfilled
+						/* @var $lead_event \Flux\LeadEvent */
+						/* @var $split_queue \Flux\SplitQueue */
+						$split_queue = new \Flux\SplitQueue();
+						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $lead->getId(), 'split.split_id' => $split->getId()));
+						if (!is_null($existing_lead)) {
+							throw new \Exception('Validation failed on ALREADY FULFILLED check');
+						}
+						
 					} catch (\Exception $e) {
-					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
-					    continue;
+						$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
+						continue;
 					}				
 					
 					// Find the max event time
 					/* @var $lead_event \Flux\LeadEvent */
 					foreach ($lead->getE() as $lead_event) {
-                        if ($lead_event->getT() instanceof \MongoDate) {
-                            if ($lead_event->getT()->sec > $max_event_time->sec) {
-					            $max_event_time = $lead_event->getT();
-                            }
+						if ($lead_event->getT() instanceof \MongoDate) {
+							if ($lead_event->getT()->sec > $max_event_time->sec) {
+								$max_event_time = $lead_event->getT();
+							}
 					   }   	
 					}
 					
@@ -178,35 +180,35 @@ class Split extends BaseDaemon
 					
 					// If this split is normal, then we can add a lead to multiple splits
 					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
-    					$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
-    					if (is_null($existing_lead)) {
-    					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-    					    $split_queue->insert();
-    					    $added_leads++;
-    					} else {
-    					    $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
-    					}
+						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getId()));
+						if (is_null($existing_lead)) {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$split_queue->insert();
+							$added_leads++;
+						} else {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+						}
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) {
-					    // If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
-					    $existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getSplitId()));
-					    if (is_null($existing_lead)) {
-					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-					        $split_queue->insert();
-					        $added_leads++;
-					    } else {
-					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
-					    }  
+						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
+						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId(), 'split.split_id' => $split_queue->getSplit()->getId()));
+						if (is_null($existing_lead)) {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$split_queue->insert();
+							$added_leads++;
+						} else {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+						}  
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL) {
-					    // If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
-					    $existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId()));
-					    if (is_null($existing_lead)) {
-					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
-					        $split_queue->setIsCatchAll(true);
-					        $split_queue->insert();
-					        $added_leads++;
-					    } else {
-					        $this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
-					    }  
+						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
+						$existing_lead = $split_queue->getCollection()->findOne(array('lead.lead_id' => $split_queue->getLead()->getLeadId()));
+						if (is_null($existing_lead)) {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$split_queue->setIsCatchAll(true);
+							$split_queue->insert();
+							$added_leads++;
+						} else {
+							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+						}  
 					}
 				}
 				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $added_leads)), array());

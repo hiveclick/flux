@@ -11,65 +11,65 @@ use Mojavi\Controller\Controller as Controller;
 abstract class Filter extends ParameterHolder
 {
 
-    // +-----------------------------------------------------------------------+
-    // | PRIVATE VARIABLES                                                     |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | PRIVATE VARIABLES													 |
+	// +-----------------------------------------------------------------------+
 
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute this filter.
-     *
-     * @param FilterChain A FilterChain instance.
-     *
-     * @return void
-     */
-    abstract function execute ($filterChain);
+	/**
+	 * Execute this filter.
+	 *
+	 * @param FilterChain A FilterChain instance.
+	 *
+	 * @return void
+	 */
+	abstract function execute ($filterChain);
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Retrieve the current application context.
-     *
-     * @return Context The current Context instance.
-     */
-    public function getContext ()
-    {
+	/**
+	 * Retrieve the current application context.
+	 *
+	 * @return Context The current Context instance.
+	 */
+	public function getContext ()
+	{
 
-        return Controller::getInstance()->getContext();
+		return Controller::getInstance()->getContext();
 
-    }
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Initialize this Filter.
-     *
-     * @param Context The current application context.
-     * @param array   An associative array of initialization parameters.
-     *
-     * @return bool true, if initialization completes successfully, otherwise
-     *              false.
-     *
-     * @throws <b>InitializationException</b> If an error occurs while
-     *                                        initializing this Filter.
-     */
-    public function initialize ($context, $parameters = null)
-    {
+	/**
+	 * Initialize this Filter.
+	 *
+	 * @param Context The current application context.
+	 * @param array   An associative array of initialization parameters.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *			  false.
+	 *
+	 * @throws <b>InitializationException</b> If an error occurs while
+	 *										initializing this Filter.
+	 */
+	public function initialize ($context, $parameters = null)
+	{
 
-        if ($parameters != null)
-        {
+		if ($parameters != null)
+		{
 
-            $this->parameters = array_merge($this->parameters, $parameters);
+			$this->parameters = array_merge($this->parameters, $parameters);
 
-        }
+		}
 
-        return true;
+		return true;
 
-    }
+	}
 
 }
 

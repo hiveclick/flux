@@ -24,7 +24,7 @@
 </div>
 <!-- Add breadcrumbs -->
 <ol class="breadcrumb">
-    <li><a href="/campaign/campaign-search">Campaigns</a></li>
+	<li><a href="/campaign/campaign-search">Campaigns</a></li>
 	<li><a href="/campaign/campaign?_id=<?php echo $lead->getTracking()->getCampaign()->getCampaignName() ?>">Campaign #<?php echo $lead->getTracking()->getCampaign()->getCampaignName() ?></a></li>
 	<li><a href="/campaign/campaign-leads?_id=<?php echo $lead->getTracking()->getCampaign()->getCampaignName() ?>">Leads</a></li>
 	<li class="active">Lead #<?php echo $lead->getId() ?></li>
@@ -37,8 +37,8 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Data Information</div>
 		<div class="panel-body">
-            <dl class="dl-horizontal">
-            <?php if ($lead->getValue('name') != '') { ?>
+			<dl class="dl-horizontal">
+			<?php if ($lead->getValue('name') != '') { ?>
 				  <dt>Name:</dt><dd><?php echo $lead->getValue('name') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($lead->getValue('fn') != '') { ?>
@@ -154,7 +154,7 @@
 				<dd><?php echo $lead->getId() ?></dd>
 				<dt>Created:</dt><dd><?php echo date('m/d/Y g:i:s a', $lead->getId()->getTimestamp()) ?></dd>
 				<?php if ($lead->getModified() instanceof \MongoDate) { ?>
-				    <dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $lead->getModified()->sec) ?></dd>
+					<dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $lead->getModified()->sec) ?></dd>
 				<?php } ?>
 			</dl>
 			<hr />

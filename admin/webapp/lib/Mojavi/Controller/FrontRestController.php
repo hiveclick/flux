@@ -4,7 +4,7 @@
  * application, but at the same time allow for any module and action combination
  * to be requested.
  *
- * @package    Mojavi
+ * @package	Mojavi
  * @subpackage Controller
  */
 namespace Mojavi\Controller;
@@ -12,70 +12,70 @@ namespace Mojavi\Controller;
 class FrontRestController extends FrontWebController
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Dispatch a request.
-     *
-     * This will determine which module and action to use by request parameters
-     * specified by the user.
-     *
-     * @return void
-     */
-    public function dispatch ()
-    {
-            // initialize the controller
-            $this->initialize();
+	/**
+	 * Dispatch a request.
+	 *
+	 * This will determine which module and action to use by request parameters
+	 * specified by the user.
+	 *
+	 * @return void
+	 */
+	public function dispatch ()
+	{
+			// initialize the controller
+			$this->initialize();
 
-            // get the application context
-            $context = $this->getContext();
+			// get the application context
+			$context = $this->getContext();
 
-            // determine our module and action
-            $moduleName = ucfirst($context->getRequest()
-                                  ->getParameter(MO_MODULE_ACCESSOR));
+			// determine our module and action
+			$moduleName = ucfirst($context->getRequest()
+								  ->getParameter(MO_MODULE_ACCESSOR));
 
-            $actionName = ucfirst($context->getRequest()
-                                  ->getParameter(MO_ACTION_ACCESSOR));
+			$actionName = ucfirst($context->getRequest()
+								  ->getParameter(MO_ACTION_ACCESSOR));
 
-            $moduleName = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $moduleName);
-            $moduleName = preg_replace_callback("/-([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $moduleName);
-            $actionName = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $actionName);
-            $actionName = preg_replace_callback("/-([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $actionName);
-                        
-            if ($moduleName == null)
-            {
+			$moduleName = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $moduleName);
+			$moduleName = preg_replace_callback("/-([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $moduleName);
+			$actionName = preg_replace_callback("/_([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $actionName);
+			$actionName = preg_replace_callback("/-([a-zA-Z0-9])/", function($matches) { return strtoupper($matches[1]); }, $actionName);
+						
+			if ($moduleName == null)
+			{
 
-                // no module has been specified
-                $moduleName = MO_DEFAULT_MODULE;
+				// no module has been specified
+				$moduleName = MO_DEFAULT_MODULE;
 
-            }
+			}
 
-            if ($actionName == null)
-            {
+			if ($actionName == null)
+			{
 
-                // no action has been specified
-                if ($this->actionExists($moduleName, 'Index'))
-                {
+				// no action has been specified
+				if ($this->actionExists($moduleName, 'Index'))
+				{
 
-                    // an Index action exists
-                    $actionName = 'Index';
+					// an Index action exists
+					$actionName = 'Index';
 
-                } else
-                {
+				} else
+				{
 
-                    // use the default action
-                    $actionName = MO_DEFAULT_ACTION;
+					// use the default action
+					$actionName = MO_DEFAULT_ACTION;
 
-                }
+				}
 
-            }
+			}
 
-            // make the first request
-            $this->forward($moduleName, $actionName);
+			// make the first request
+			$this->forward($moduleName, $actionName);
 
-    }
+	}
 
 }
 

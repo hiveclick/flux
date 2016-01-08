@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Campaign extends CommonForm {
+class Campaign extends BasicLink {
 	
-	protected $campaign_id;
-	protected $campaign_name;
 	protected $campaign_description;
 	
 	private $campaign;
@@ -16,10 +12,7 @@ class Campaign extends CommonForm {
 	 * @return integer
 	 */
 	function getCampaignId() {
-		if (is_null($this->campaign_id)) {
-			$this->campaign_id = null;
-		}
-		return $this->campaign_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -27,12 +20,7 @@ class Campaign extends CommonForm {
 	 * @var integer
 	 */
 	function setCampaignId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->campaign_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->campaign_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -40,10 +28,7 @@ class Campaign extends CommonForm {
 	 * @return string
 	 */
 	function getCampaignName() {
-		if (is_null($this->campaign_name)) {
-			$this->campaign_name = "";
-		}
-		return $this->campaign_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -51,8 +36,7 @@ class Campaign extends CommonForm {
 	 * @var string
 	 */
 	function setCampaignName($arg0) {
-		$this->campaign_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -60,10 +44,10 @@ class Campaign extends CommonForm {
 	 * @return string
 	 */
 	function getCampaignDescription() {
-	    if (is_null($this->campaign_description)) {
-	        $this->campaign_description = "";
-	    }
-	    return $this->campaign_description;
+		if (is_null($this->campaign_description)) {
+			$this->campaign_description = "";
+		}
+		return $this->campaign_description;
 	}
 	
 	/**
@@ -71,9 +55,9 @@ class Campaign extends CommonForm {
 	 * @var string
 	 */
 	function setCampaignDescription($arg0) {
-	    $this->campaign_description = $arg0;
-	    $this->addModifiedColumn("campaign_description");
-	    return $this;
+		$this->campaign_description = $arg0;
+		$this->addModifiedColumn("campaign_description");
+		return $this;
 	}
 	
 	/**
@@ -83,8 +67,10 @@ class Campaign extends CommonForm {
 	function getCampaign() {
 		if (is_null($this->campaign)) {
 			$this->campaign = new \Flux\Campaign();
-			$this->campaign->setId($this->getCampaignId());
-			$this->campaign->query();
+			if (\MongoId::isValid($this->getId())) {
+				$this->campaign->setId($this->getId());
+				$this->campaign->query();
+			}
 		}
 		return $this->campaign;
 	}

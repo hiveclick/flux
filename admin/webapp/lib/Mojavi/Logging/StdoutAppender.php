@@ -7,18 +7,18 @@ namespace Mojavi\Logging;
 class StdoutAppender extends FileAppender
 {
 
-    /**
-     * Initialize the object.
-     *
-     * @param array An array of parameters.
-     *
-     * @return mixed
-     */
-    public function initialize($params)
-    {
-        $params['file'] = 'php://stdout';
-        return parent::initialize($params);
-    }
+	/**
+	 * Initialize the object.
+	 *
+	 * @param array An array of parameters.
+	 *
+	 * @return mixed
+	 */
+	public function initialize($params)
+	{
+		$params['file'] = 'php://stdout';
+		return parent::initialize($params);
+	}
 
 }
 

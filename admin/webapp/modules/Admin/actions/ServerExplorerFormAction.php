@@ -25,38 +25,38 @@ class ServerExplorerFormAction extends BasicAction {
 		
 		$this->getContext()->getRequest()->setAttribute('server', $server);
 		$this->getContext()->getRequest()->setAttribute('servers', $servers);
-        return View::SUCCESS;
+		return View::SUCCESS;
 	}
-    
-    /**
-     * Returns the default view.  This view is used if the validation fails or if the method used in the form doesn't 
-     * match the list in getRequestMethods()
-     * @return integer
-     */
-    public function getDefaultView ()
-    {
-    	return View::SUCCESS;
-    }
-    
-    /**
-     * Sets the list of approved form methods that this action can service.
-     * @return int 	-	Request::GET - Indicates that this action serves only GET requests, or...
-     *             	- 	Request::POST - Indicates that this action serves only POST requests, or...
-     *			- 	Request::NONE - Indicates that this action serves no requests, or...
-     *			-	Request::POST | Request::GET  - Indicates that this action serves GET and POST requests
-     */
-    public function getRequestMethods ()
-    {
-        return Request::GET | Request::POST;
-    }
-    
-    /**
-     * Specifies whether the user must be authenticated (logged in) to use this action
-     * @return boolean
-     */
-    public function isSecure()
+	
+	/**
+	 * Returns the default view.  This view is used if the validation fails or if the method used in the form doesn't 
+	 * match the list in getRequestMethods()
+	 * @return integer
+	 */
+	public function getDefaultView ()
 	{
-    	return true;
-    }
+		return View::SUCCESS;
+	}
+	
+	/**
+	 * Sets the list of approved form methods that this action can service.
+	 * @return int 	-	Request::GET - Indicates that this action serves only GET requests, or...
+	 *			 	- 	Request::POST - Indicates that this action serves only POST requests, or...
+	 *			- 	Request::NONE - Indicates that this action serves no requests, or...
+	 *			-	Request::POST | Request::GET  - Indicates that this action serves GET and POST requests
+	 */
+	public function getRequestMethods ()
+	{
+		return Request::GET | Request::POST;
+	}
+	
+	/**
+	 * Specifies whether the user must be authenticated (logged in) to use this action
+	 * @return boolean
+	 */
+	public function isSecure()
+	{
+		return true;
+	}
 } 
 ?>

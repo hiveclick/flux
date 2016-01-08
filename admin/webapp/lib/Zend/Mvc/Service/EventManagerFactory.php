@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -15,19 +15,19 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class EventManagerFactory implements FactoryInterface
 {
-    /**
-     * Create an EventManager instance
-     *
-     * Creates a new EventManager instance, seeding it with a shared instance
-     * of SharedEventManager.
-     *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return EventManager
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $em = new EventManager();
-        $em->setSharedManager($serviceLocator->get('SharedEventManager'));
-        return $em;
-    }
+	/**
+	 * Create an EventManager instance
+	 *
+	 * Creates a new EventManager instance, seeding it with a shared instance
+	 * of SharedEventManager.
+	 *
+	 * @param  ServiceLocatorInterface $serviceLocator
+	 * @return EventManager
+	 */
+	public function createService(ServiceLocatorInterface $serviceLocator)
+	{
+		$em = new EventManager();
+		$em->setSharedManager($serviceLocator->get('SharedEventManager'));
+		return $em;
+	}
 }

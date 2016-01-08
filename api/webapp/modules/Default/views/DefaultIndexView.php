@@ -5,21 +5,21 @@ use Mojavi\View\BasicView;
 class DefaultIndexView extends BasicView
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any presentation logic and set template attributes.
-     *
-     * @return void
-     */
-    public function execute ()
-    {
-        parent::execute();
-        // set our template
-        $this->setTemplate('IndexSuccess.php');
+	/**
+	 * Execute any presentation logic and set template attributes.
+	 *
+	 * @return void
+	 */
+	public function execute ()
+	{
+		parent::execute();
+		// set our template
+		$this->setTemplate('IndexSuccess.php');
 
-    }
+	}
 
 }

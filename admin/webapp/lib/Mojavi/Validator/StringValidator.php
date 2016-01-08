@@ -7,120 +7,120 @@ namespace Mojavi\Validator;
  *
  * <b>Optional parameters:</b>
  *
- * # <b>insensitive</b>  - [false]              - Whether or not the value check
- *                                                against the array of values is
- *                                                case-insensitive. <b>Note:</b>
- *                                                When using this option, values
- *                                                in the values array must be
- *                                                entered in lower-case.
- * # <b>max</b>          - [none]               - Maximum string length.
- * # <b>max_error</b>    - [Input is too long]  - An error message to use when
- *                                                input is too long.
- * # <b>min</b>          - [none]               - Minimum string length.
- * # <b>min_error</b>    - [Input is too short] - An error message to use when
- *                                                input is too short.
- * # <b>values</b>       - [none]               - An array of values the input
- *                                                is allowed to match.
+ * # <b>insensitive</b>  - [false]			  - Whether or not the value check
+ *												against the array of values is
+ *												case-insensitive. <b>Note:</b>
+ *												When using this option, values
+ *												in the values array must be
+ *												entered in lower-case.
+ * # <b>max</b>		  - [none]			   - Maximum string length.
+ * # <b>max_error</b>	- [Input is too long]  - An error message to use when
+ *												input is too long.
+ * # <b>min</b>		  - [none]			   - Minimum string length.
+ * # <b>min_error</b>	- [Input is too short] - An error message to use when
+ *												input is too short.
+ * # <b>values</b>	   - [none]			   - An array of values the input
+ *												is allowed to match.
  * # <b>values_error</b> - [Invalid selection]  - An error message to use when
- *                                                input does not match a value
- *                                                listed in the values array.
+ *												input does not match a value
+ *												listed in the values array.
  */
 class StringValidator extends Validator
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute this validator.
-     *
-     * @param mixed A parameter value.
-     * @param error An error message reference.
-     *
-     * @return bool true, if this validator executes successfully, otherwise
-     *              false.
-     */
-    public function execute (&$value, &$error)
-    {
+	/**
+	 * Execute this validator.
+	 *
+	 * @param mixed A parameter value.
+	 * @param error An error message reference.
+	 *
+	 * @return bool true, if this validator executes successfully, otherwise
+	 *			  false.
+	 */
+	public function execute (&$value, &$error)
+	{
 
-        $min = $this->getParameter('min');
+		$min = $this->getParameter('min');
 
-        if ($min != null && strlen($value) < $min)
-        {
+		if ($min != null && strlen($value) < $min)
+		{
 
-            // too short
-            $error = $this->getParameter('min_error');
+			// too short
+			$error = $this->getParameter('min_error');
 
-            return false;
+			return false;
 
-        }
+		}
 
-        $max = $this->getParameter('max');
+		$max = $this->getParameter('max');
 
-        if ($max != null && strlen($value) > $max)
-        {
+		if ($max != null && strlen($value) > $max)
+		{
 
-            // too long
-            $error = $this->getParameter('max_error');
+			// too long
+			$error = $this->getParameter('max_error');
 
-            return false;
+			return false;
 
-        }
+		}
 
-        $values = $this->getParameter('values');
+		$values = $this->getParameter('values');
 
-        if ($values != null)
-        {
+		if ($values != null)
+		{
 
-            $insensitive = $this->getParameter('insensitive');
-            $lvalue      = ($insensitive) ? strtolower($value) : $value;
+			$insensitive = $this->getParameter('insensitive');
+			$lvalue	  = ($insensitive) ? strtolower($value) : $value;
 
-            if (!in_array($lvalue, $values))
-            {
+			if (!in_array($lvalue, $values))
+			{
 
-                // can't find a match
-                $error = $this->getParameter('values_error');
+				// can't find a match
+				$error = $this->getParameter('values_error');
 
-                return false;
+				return false;
 
-            }
+			}
 
-        }
+		}
 
-        return true;
+		return true;
 
-    }
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Initialize this validator.
-     *
-     * @param Context The current application context.
-     * @param array   An associative array of initialization parameters.
-     *
-     * @return bool true, if initialization completes successfully, otherwise
-     *              false.
-     */
-    public function initialize ($context, $parameters = null)
-    {
+	/**
+	 * Initialize this validator.
+	 *
+	 * @param Context The current application context.
+	 * @param array   An associative array of initialization parameters.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *			  false.
+	 */
+	public function initialize ($context, $parameters = null)
+	{
 
-        // set defaults
-        $this->setParameter('insensitive',  false);
-        $this->setParameter('max',          null);
-        $this->setParameter('max_error',    'Input is too long');
-        $this->setParameter('min',          null);
-        $this->setParameter('min_error',    'Input is too short');
-        $this->setParameter('values',       null);
-        $this->setParameter('values_error', 'Invalid selection');
+		// set defaults
+		$this->setParameter('insensitive',  false);
+		$this->setParameter('max',		  null);
+		$this->setParameter('max_error',	'Input is too long');
+		$this->setParameter('min',		  null);
+		$this->setParameter('min_error',	'Input is too short');
+		$this->setParameter('values',	   null);
+		$this->setParameter('values_error', 'Invalid selection');
 
-        // initialize parent
-        parent::initialize($context, $parameters);
+		// initialize parent
+		parent::initialize($context, $parameters);
 
-        return true;
+		return true;
 
-    }
+	}
 
 }
 

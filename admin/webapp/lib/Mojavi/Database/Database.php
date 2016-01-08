@@ -9,105 +9,105 @@ use Mojavi\Util\ParameterHolder as ParameterHolder;
  */
 abstract class Database extends ParameterHolder
 {
-    // +-----------------------------------------------------------------------+
-    // | PROTECTED VARIABLES                                                   |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | PROTECTED VARIABLES												   |
+	// +-----------------------------------------------------------------------+
 
-    protected
-        $connection = null,
-        $resource   = null;
-
-
-
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	protected
+		$connection = null,
+		$resource   = null;
 
 
-    /**
-     * Connect to the database.
-     *
-     * @throws <b>DatabaseException</b> If a connection could not be created.
-     */
 
-    abstract function connect ();
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    // -------------------------------------------------------------------------
 
-    /**
-     * Retrieve the database connection associated with this Database
-     * implementation.
-     *
-     * When this is executed on a Database implementation that isn't an
-     * abstraction layer, a copy of the resource will be returned.
-     *
-     * @return mixed A database connection.
-     *
-     * @throws <b>DatabaseException</b> If a connection could not be retrieved.
-     */
+	/**
+	 * Connect to the database.
+	 *
+	 * @throws <b>DatabaseException</b> If a connection could not be created.
+	 */
 
-    public function getConnection ()
-    {
-        if ($this->connection == null)
-        {
-            $this->connect();
-        }
-        return $this->connection;
-    }
+	abstract function connect ();
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Retrieve a raw database resource associated with this Database
-     * implementation.
-     *
-     * @return mixed A database resource.
-     *
-     * @throws <b>DatabaseException</b> If a resource could not be retrieved.
-     */
+	/**
+	 * Retrieve the database connection associated with this Database
+	 * implementation.
+	 *
+	 * When this is executed on a Database implementation that isn't an
+	 * abstraction layer, a copy of the resource will be returned.
+	 *
+	 * @return mixed A database connection.
+	 *
+	 * @throws <b>DatabaseException</b> If a connection could not be retrieved.
+	 */
 
-    public function getResource ()
-    {
-        if ($this->resource == null)
-        {
-            $this->connect();
-        }
-        return $this->resource;
-    }
+	public function getConnection ()
+	{
+		if ($this->connection == null)
+		{
+			$this->connect();
+		}
+		return $this->connection;
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Initialize this Database.
-     *
-     * @param array An associative array of initialization parameters.
-     *
-     * @return bool true, if initialization completes successfully, otherwise
-     *              false.
-     *
-     * @throws <b>InitializationException</b> If an error occurs while
-     *                                        initializing this Database.
-     */
+	/**
+	 * Retrieve a raw database resource associated with this Database
+	 * implementation.
+	 *
+	 * @return mixed A database resource.
+	 *
+	 * @throws <b>DatabaseException</b> If a resource could not be retrieved.
+	 */
 
-    public function initialize ($parameters = null)
-    {
-        if ($parameters != null)
-        {
-            $this->parameters = array_merge($this->parameters, $parameters);
-        }
-    }
+	public function getResource ()
+	{
+		if ($this->resource == null)
+		{
+			$this->connect();
+		}
+		return $this->resource;
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Execute the shutdown procedure.
-     *
-     * @return void
-     *
-     * @throws <b>DatabaseException</b> If an error occurs while shutting down
-     *                                 this database.
-     */
-    abstract function shutdown ();
+	/**
+	 * Initialize this Database.
+	 *
+	 * @param array An associative array of initialization parameters.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *			  false.
+	 *
+	 * @throws <b>InitializationException</b> If an error occurs while
+	 *										initializing this Database.
+	 */
+
+	public function initialize ($parameters = null)
+	{
+		if ($parameters != null)
+		{
+			$this->parameters = array_merge($this->parameters, $parameters);
+		}
+	}
+
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Execute the shutdown procedure.
+	 *
+	 * @return void
+	 *
+	 * @throws <b>DatabaseException</b> If an error occurs while shutting down
+	 *								 this database.
+	 */
+	abstract function shutdown ();
 
 }
 

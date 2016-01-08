@@ -180,10 +180,10 @@ class Server extends MongoForm {
 	 * @return string
 	 */
 	function getFtpUsername() {
-	    if (is_null($this->ftp_username)) {
-	        $this->ftp_username = "";
-	    }
-	    return $this->ftp_username;
+		if (is_null($this->ftp_username)) {
+			$this->ftp_username = "";
+		}
+		return $this->ftp_username;
 	}
 	
 	/**
@@ -191,9 +191,9 @@ class Server extends MongoForm {
 	 * @var string
 	 */
 	function setFtpUsername($arg0) {
-	    $this->ftp_username = $arg0;
-	    $this->addModifiedColumn("ftp_username");
-	    return $this;
+		$this->ftp_username = $arg0;
+		$this->addModifiedColumn("ftp_username");
+		return $this;
 	}
 	
 	/**
@@ -201,10 +201,10 @@ class Server extends MongoForm {
 	 * @return string
 	 */
 	function getFtpPassword() {
-	    if (is_null($this->ftp_password)) {
-	        $this->ftp_password = "";
-	    }
-	    return $this->ftp_password;
+		if (is_null($this->ftp_password)) {
+			$this->ftp_password = "";
+		}
+		return $this->ftp_password;
 	}
 	
 	/**
@@ -212,9 +212,9 @@ class Server extends MongoForm {
 	 * @var string
 	 */
 	function setFtpPassword($arg0) {
-	    $this->ftp_password = $arg0;
-	    $this->addModifiedColumn("ftp_password");
-	    return $this;
+		$this->ftp_password = $arg0;
+		$this->addModifiedColumn("ftp_password");
+		return $this;
 	}
 	
 	/**
@@ -222,10 +222,10 @@ class Server extends MongoForm {
 	 * @return boolean
 	 */
 	function getUsePassiveMode() {
-	    if (is_null($this->use_passive_mode)) {
-	        $this->use_passive_mode = false;
-	    }
-	    return $this->use_passive_mode;
+		if (is_null($this->use_passive_mode)) {
+			$this->use_passive_mode = false;
+		}
+		return $this->use_passive_mode;
 	}
 	
 	/**
@@ -233,9 +233,9 @@ class Server extends MongoForm {
 	 * @var boolean
 	 */
 	function setUsePassiveMode($arg0) {
-	    $this->use_passive_mode = $arg0;
-	    $this->addModifiedColumn('use_passive_mode');
-	    return $this;
+		$this->use_passive_mode = $arg0;
+		$this->addModifiedColumn('use_passive_mode');
+		return $this;
 	}
 
 	/**
@@ -339,10 +339,10 @@ class Server extends MongoForm {
 	 * @return string
 	 */
 	function getMysqlUsername() {
-	    if (is_null($this->mysql_username)) {
-	        $this->mysql_username = "root";
-	    }
-	    return $this->mysql_username;
+		if (is_null($this->mysql_username)) {
+			$this->mysql_username = "root";
+		}
+		return $this->mysql_username;
 	}
 	
 	/**
@@ -350,9 +350,9 @@ class Server extends MongoForm {
 	 * @var string
 	 */
 	function setMysqlUsername($arg0) {
-	    $this->mysql_username = $arg0;
-	    $this->addModifiedColumn("mysql_username");
-	    return $this;
+		$this->mysql_username = $arg0;
+		$this->addModifiedColumn("mysql_username");
+		return $this;
 	}
 	
 	/**
@@ -360,10 +360,10 @@ class Server extends MongoForm {
 	 * @return string
 	 */
 	function getMysqlPassword() {
-	    if (is_null($this->mysql_password)) {
-	        $this->mysql_password = "";
-	    }
-	    return $this->mysql_password;
+		if (is_null($this->mysql_password)) {
+			$this->mysql_password = "";
+		}
+		return $this->mysql_password;
 	}
 	
 	/**
@@ -371,9 +371,9 @@ class Server extends MongoForm {
 	 * @var string
 	 */
 	function setMysqlPassword($arg0) {
-	    $this->mysql_password = $arg0;
-	    $this->addModifiedColumn("mysql_password");
-	    return $this;
+		$this->mysql_password = $arg0;
+		$this->addModifiedColumn("mysql_password");
+		return $this;
 	}
 	
 	/**
@@ -381,10 +381,10 @@ class Server extends MongoForm {
 	 * @return string
 	 */
 	function getMysqlDb() {
-	    if (is_null($this->mysql_db)) {
-	        $this->mysql_db = "wordpress";
-	    }
-	    return $this->mysql_db;
+		if (is_null($this->mysql_db)) {
+			$this->mysql_db = "wordpress";
+		}
+		return $this->mysql_db;
 	}
 	
 	/**
@@ -392,9 +392,9 @@ class Server extends MongoForm {
 	 * @var string
 	 */
 	function setMysqlDb($arg0) {
-	    $this->mysql_db = $arg0;
-	    $this->addModifiedColumn("mysql_db");
-	    return $this;
+		$this->mysql_db = $arg0;
+		$this->addModifiedColumn("mysql_db");
+		return $this;
 	}
 	
 	/**

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -19,11 +19,11 @@ namespace Zend\Json;
  * Example:
  * <code>
  * $foo = array(
- *     'integer'  => 9,
- *     'string'   => 'test string',
- *     'function' => Zend\Json\Expr(
- *         'function () { window.alert("javascript function encoded by Zend\Json\Json") }'
- *     ),
+ *	 'integer'  => 9,
+ *	 'string'   => 'test string',
+ *	 'function' => Zend\Json\Expr(
+ *		 'function () { window.alert("javascript function encoded by Zend\Json\Json") }'
+ *	 ),
  * );
  *
  * Zend\Json\Json::encode($foo, false, array('enableJsonExprFinder' => true));
@@ -33,30 +33,30 @@ namespace Zend\Json;
  */
 class Expr
 {
-    /**
-     * Storage for javascript expression.
-     *
-     * @var string
-     */
-    protected $expression;
+	/**
+	 * Storage for javascript expression.
+	 *
+	 * @var string
+	 */
+	protected $expression;
 
-    /**
-     * Constructor
-     *
-     * @param  string $expression the expression to hold.
-     */
-    public function __construct($expression)
-    {
-        $this->expression = (string) $expression;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param  string $expression the expression to hold.
+	 */
+	public function __construct($expression)
+	{
+		$this->expression = (string) $expression;
+	}
 
-    /**
-     * Cast to string
-     *
-     * @return string holded javascript expression.
-     */
-    public function __toString()
-    {
-        return $this->expression;
-    }
+	/**
+	 * Cast to string
+	 *
+	 * @return string holded javascript expression.
+	 */
+	public function __toString()
+	{
+		return $this->expression;
+	}
 }

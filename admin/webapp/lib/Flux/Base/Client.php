@@ -64,10 +64,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getColor() {
-	    if (is_null($this->color)) {
-	        $this->color = "#000000";
-	    }
-	    return $this->color;
+		if (is_null($this->color)) {
+			$this->color = "#000000";
+		}
+		return $this->color;
 	}
 	
 	/**
@@ -75,9 +75,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setColor($arg0) {
-	    $this->color = $arg0;
-	    $this->addModifiedColumn("color");
-	    return $this;
+		$this->color = $arg0;
+		$this->addModifiedColumn("color");
+		return $this;
 	}
 
 	/**
@@ -211,10 +211,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getNetworkUrl() {
-	    if (is_null($this->network_url)) {
-	        $this->network_url = "";
-	    }
-	    return $this->network_url;
+		if (is_null($this->network_url)) {
+			$this->network_url = "";
+		}
+		return $this->network_url;
 	}
 	
 	/**
@@ -222,9 +222,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setNetworkUrl($arg0) {
-	    $this->network_url = $arg0;
-	    $this->addModifiedColumn('network_url');
-	    return $this;
+		$this->network_url = $arg0;
+		$this->addModifiedColumn('network_url');
+		return $this;
 	}
 	
 	/**
@@ -232,10 +232,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getNetworkUsername() {
-	    if (is_null($this->network_username)) {
-	        $this->network_username = "";
-	    }
-	    return $this->network_username;
+		if (is_null($this->network_username)) {
+			$this->network_username = "";
+		}
+		return $this->network_username;
 	}
 	
 	/**
@@ -243,9 +243,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setNetworkUsername($arg0) {
-	    $this->network_username = $arg0;
-	    $this->addModifiedColumn('network_username');
-	    return $this;
+		$this->network_username = $arg0;
+		$this->addModifiedColumn('network_username');
+		return $this;
 	}
 	
 	/**
@@ -253,10 +253,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getNetworkPassword() {
-	    if (is_null($this->network_password)) {
-	        $this->network_password = "";
-	    }
-	    return $this->network_password;
+		if (is_null($this->network_password)) {
+			$this->network_password = "";
+		}
+		return $this->network_password;
 	}
 	
 	/**
@@ -264,9 +264,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setNetworkPassword($arg0) {
-	    $this->network_password = $arg0;
-	    $this->addModifiedColumn('network_password');
-	    return $this;
+		$this->network_password = $arg0;
+		$this->addModifiedColumn('network_password');
+		return $this;
 	}
 	
 	/**
@@ -274,10 +274,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getReportingApiUrl() {
-	    if (is_null($this->reporting_api_url)) {
-	        $this->reporting_api_url = "";
-	    }
-	    return $this->reporting_api_url;
+		if (is_null($this->reporting_api_url)) {
+			$this->reporting_api_url = "";
+		}
+		return $this->reporting_api_url;
 	}
 	
 	/**
@@ -285,9 +285,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setReportingApiUrl($arg0) {
-	    $this->reporting_api_url = $arg0;
-	    $this->addModifiedColumn('reporting_api_url');
-	    return $this;
+		$this->reporting_api_url = $arg0;
+		$this->addModifiedColumn('reporting_api_url');
+		return $this;
 	}
 	
 	/**
@@ -295,10 +295,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getReportingApiToken() {
-	    if (is_null($this->reporting_api_token)) {
-	        $this->reporting_api_token = "";
-	    }
-	    return $this->reporting_api_token;
+		if (is_null($this->reporting_api_token)) {
+			$this->reporting_api_token = "";
+		}
+		return $this->reporting_api_token;
 	}
 	
 	/**
@@ -306,9 +306,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setReportingApiToken($arg0) {
-	    $this->reporting_api_token = $arg0;
-	    $this->addModifiedColumn('reporting_api_token');
-	    return $this;
+		$this->reporting_api_token = $arg0;
+		$this->addModifiedColumn('reporting_api_token');
+		return $this;
 	}
 	
 	/**
@@ -316,10 +316,10 @@ class Client extends MongoForm {
 	 * @return string
 	 */
 	function getReportingApiClass() {
-	    if (is_null($this->reporting_api_class)) {
-	        $this->reporting_api_class = "";
-	    }
-	    return $this->reporting_api_class;
+		if (is_null($this->reporting_api_class)) {
+			$this->reporting_api_class = "";
+		}
+		return $this->reporting_api_class;
 	}
 	
 	/**
@@ -327,9 +327,9 @@ class Client extends MongoForm {
 	 * @var string
 	 */
 	function setReportingApiClass($arg0) {
-	    $this->reporting_api_class = $arg0;
-	    $this->addModifiedColumn('reporting_api_class');
-	    return $this;
+		$this->reporting_api_class = $arg0;
+		$this->addModifiedColumn('reporting_api_class');
+		return $this;
 	}
 	
 	/**
@@ -337,11 +337,11 @@ class Client extends MongoForm {
 	 * @return boolean
 	 */
 	public static function ensureIndexes() {
-	    $client = new self();
-	    $client->getCollection()->ensureIndex(array('status' => 1, 'type' => 1), array('background' => true));
-	    $client->getCollection()->ensureIndex(array('email' => 1), array('background' => true, 'unique' => true));
-	    $client->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
-	    return true;
+		$client = new self();
+		$client->getCollection()->ensureIndex(array('status' => 1, 'type' => 1), array('background' => true));
+		$client->getCollection()->ensureIndex(array('email' => 1), array('background' => true, 'unique' => true));
+		$client->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
+		return true;
 	}
 
 	// +------------------------------------------------------------------------+

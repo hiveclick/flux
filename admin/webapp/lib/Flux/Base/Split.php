@@ -5,10 +5,10 @@ use Mojavi\Form\MongoForm;
 
 class Split extends MongoForm {
 
-    const SPLIT_TYPE_NORMAL = 1;
-    const SPLIT_TYPE_CATCH_ALL = 2;
-    const SPLIT_TYPE_HOST_POST = 3;
-    
+	const SPLIT_TYPE_NORMAL = 1;
+	const SPLIT_TYPE_CATCH_ALL = 2;
+	const SPLIT_TYPE_HOST_POST = 3;
+	
 	const SPLIT_STATUS_ACTIVE = 1;
 	const SPLIT_STATUS_INACTIVE = 2;
 	const SPLIT_STATUS_DELETED = 3;
@@ -26,6 +26,10 @@ class Split extends MongoForm {
 	protected $split_type;
 	protected $fulfill_immediately;
 	protected $fulfill_delay;
+	
+	protected $failover_enable;
+	protected $failover_split;
+	protected $failover_wait_time;
 
 	protected $send_type;
 	protected $offers;
@@ -78,10 +82,10 @@ class Split extends MongoForm {
 	 * @return integer
 	 */
 	function getSplitType() {
-	    if (is_null($this->split_type)) {
-	        $this->split_type = 0;
-	    }
-	    return $this->split_type;
+		if (is_null($this->split_type)) {
+			$this->split_type = 0;
+		}
+		return $this->split_type;
 	}
 	
 	/**
@@ -89,9 +93,9 @@ class Split extends MongoForm {
 	 * @var integer
 	 */
 	function setSplitType($arg0) {
-	    $this->split_type = (int)$arg0;
-	    $this->addModifiedColumn("split_type");
-	    return $this;
+		$this->split_type = (int)$arg0;
+		$this->addModifiedColumn("split_type");
+		return $this;
 	}
 	
 	/**
@@ -182,10 +186,10 @@ class Split extends MongoForm {
 	 * @return boolean
 	 */
 	function getFulfillImmediately() {
-	    if (is_null($this->fulfill_immediately)) {
-	        $this->fulfill_immediately = false;
-	    }
-	    return $this->fulfill_immediately;
+		if (is_null($this->fulfill_immediately)) {
+			$this->fulfill_immediately = false;
+		}
+		return $this->fulfill_immediately;
 	}
 	
 	/**
@@ -193,9 +197,9 @@ class Split extends MongoForm {
 	 * @var boolean
 	 */
 	function setFulfillImmediately($arg0) {
-	    $this->fulfill_immediately = (boolean)$arg0;
-	    $this->addModifiedColumn("fulfill_immediately");
-	    return $this;
+		$this->fulfill_immediately = (boolean)$arg0;
+		$this->addModifiedColumn("fulfill_immediately");
+		return $this;
 	}
 	
 	/**
@@ -203,10 +207,10 @@ class Split extends MongoForm {
 	 * @return integer
 	 */
 	function getFulfillDelay() {
-	    if (is_null($this->fulfill_delay)) {
-	        $this->fulfill_delay = 0;
-	    }
-	    return $this->fulfill_delay;
+		if (is_null($this->fulfill_delay)) {
+			$this->fulfill_delay = 0;
+		}
+		return $this->fulfill_delay;
 	}
 	
 	/**
@@ -214,10 +218,96 @@ class Split extends MongoForm {
 	 * @var integer
 	 */
 	function setFulfillDelay($arg0) {
-	    $this->fulfill_delay = (int)$arg0;
-	    $this->addModifiedColumn("fulfill_delay");
-	    return $this;
+		$this->fulfill_delay = (int)$arg0;
+		$this->addModifiedColumn("fulfill_delay");
+		return $this;
 	}
+	
+	/**
+	 * Returns the failover_enable
+	 * @return boolean
+	 */
+	function getFailoverEnable() {
+		if (is_null($this->failover_enable)) {
+			$this->failover_enable = false;
+		}
+		return $this->failover_enable;
+	}
+	
+	/**
+	 * Sets the failover_enable
+	 * @var boolean
+	 */
+	function setFailoverEnable($arg0) {
+		$this->failover_enable = (boolean)$arg0;
+		$this->addModifiedColumn("failover_enable");
+		return $this;
+	}
+	
+	/**
+	 * Returns the failover_wait_time
+	 * @return integer
+	 */
+	function getFailoverWaitTime() {
+		if (is_null($this->failover_wait_time)) {
+			$this->failover_wait_time = 0;
+		}
+		return $this->failover_wait_time;
+	}
+	
+	/**
+	 * Sets the failover_wait_time
+	 * @var integer
+	 */
+	function setFailoverWaitTime($arg0) {
+		$this->failover_wait_time = (int)$arg0;
+		$this->addModifiedColumn("failover_wait_time");
+		return $this;
+	}
+	
+	/**
+	 * Returns the failover_split
+	 * @return \Flux\Link\Split
+	 */
+	function getFailoverSplit() {
+		if (is_null($this->failover_split)) {
+			$this->failover_split = new \Flux\Link\Split();
+		}
+		return $this->failover_split;
+	}
+	
+	/**
+	 * Sets the failover_split
+	 * @var \Flux\Split
+	 */
+	function setFailoverSplit($arg0) {
+		if (is_array($arg0)) {
+			$split = new \Flux\Link\Split();
+			$split->populate($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->failover_split = $split;
+		} else if (is_string($arg0)) {
+			$split = new \Flux\Link\Split();
+			$split->setSplitId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->failover_split = $split;
+		} else if ($arg0 instanceof \MongoId) {
+			$split = new \Flux\Link\Split();
+			$split->setSplitId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->failover_split = $split;
+		}
+		$this->addModifiedColumn('failover_split');
+		return $this;
+	}
+	
+	
 
 	/**
 	 * Returns the offers
@@ -240,7 +330,7 @@ class Split extends MongoForm {
 			array_walk($this->offers, function(&$val, $key) { 
 				$offer = new \Flux\Link\Offer();
 				$offer->populate($val);
-				if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
+				if (\MongoId::isValid($offer->getId()) && $offer->getName() == '') {
 					$offer->setOfferName($offer->getOffer()->getName());
 				}
 				$val = $offer; 
@@ -253,7 +343,7 @@ class Split extends MongoForm {
 				array_walk($this->offers, function(&$val, $key) { 
 					$offer = new \Flux\Link\Offer();
 					$offer->setOfferId($val);
-					if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
+					if (\MongoId::isValid($offer->getId()) && $offer->getName() == '') {
 						$offer->setOfferName($offer->getOffer()->getName());
 					}
 					$val = $offer; 
@@ -283,24 +373,24 @@ class Split extends MongoForm {
 		if (is_array($arg0)) {
 			$fulfillment = new \Flux\Link\Fulfillment();
 			$fulfillment->populate($arg0);
-			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if (is_string($arg0)) {
 			$fulfillment = new \Flux\Link\Fulfillment();
 			$fulfillment->setFulfillmentId($arg0);
-			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if ($arg0 instanceof \MongoId) {
-		    $fulfillment = new \Flux\Link\Fulfillment();
-		    $fulfillment->setFulfillmentId($arg0);
-		    if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
-		        $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
-		    }
-		    $this->fulfillment = $fulfillment;
+			$fulfillment = new \Flux\Link\Fulfillment();
+			$fulfillment->setFulfillmentId($arg0);
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
+				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+			}
+			$this->fulfillment = $fulfillment;
 		}
 		$this->addModifiedColumn('fulfillment');
 		return $this;
@@ -327,13 +417,13 @@ class Split extends MongoForm {
 			array_walk($this->filters, function(&$val, $key) { 
 				$filter = new \Flux\Link\DataField();
 				$filter->populate($val);
-				if ($filter->getDataFieldKeyName() != '' && is_null($filter->getDataFieldId())) {
+				if ($filter->getDataFieldKeyName() != '' && is_null($filter->getId())) {
 					$filter->setDataFieldId($filter->getDataField()->getId());
 				}
-				if (\MongoId::isValid($filter->getDataFieldId()) && $filter->getDataFieldKeyName() == '') {
+				if (\MongoId::isValid($filter->getId()) && $filter->getDataFieldKeyName() == '') {
 					$filter->setDataFieldKeyName($filter->getDataField()->getKeyName());
 				}
-				if (\MongoId::isValid($filter->getDataFieldId()) && $filter->getDataFieldName() == '') {
+				if (\MongoId::isValid($filter->getId()) && $filter->getName() == '') {
 					$filter->setDataFieldName($filter->getDataField()->getName());
 				}
 				$val = $filter; 
@@ -346,10 +436,10 @@ class Split extends MongoForm {
 				array_walk($this->filters, function(&$val, $key) { 
 					$filter = new \Flux\Link\DataField();
 					$filter->setDataFieldKeyName($val);
-					if ($filter->getDataFieldKeyName() != '' && is_null($filter->getDataFieldId())) {
+					if ($filter->getDataFieldKeyName() != '' && is_null($filter->getId())) {
 						$filter->setDataFieldId($filter->getDataField()->getId());
 					}
-					if ($filter->getDataFieldKeyName() != '' && $filter->getDataFieldName() == '') {
+					if ($filter->getDataFieldKeyName() != '' && $filter->getName() == '') {
 						$filter->setDataFieldName($filter->getDataField()->getName());
 					}
 					$val = $filter; 
@@ -365,10 +455,10 @@ class Split extends MongoForm {
 	 * @return array
 	 */
 	function getValidators() {
-	    if (is_null($this->validators)) {
-	        $this->validators = array();
-	    }
-	    return $this->validators;
+		if (is_null($this->validators)) {
+			$this->validators = array();
+		}
+		return $this->validators;
 	}
 	
 	/**
@@ -376,42 +466,42 @@ class Split extends MongoForm {
 	 * @var array
 	 */
 	function setValidators($arg0) {
-	    if (is_array($arg0)) {
-	        $this->validators = $arg0;
-	        array_walk($this->validators, function(&$val, $key) {
-	            $validator = new \Flux\Link\DataField();
-	            $validator->populate($val);
-	            if ($validator->getDataFieldKeyName() != '' && is_null($validator->getDataFieldId())) {
-	                $validator->setDataFieldId($validator->getDataField()->getId());
-	            }
-	            if (\MongoId::isValid($validator->getDataFieldId()) && $validator->getDataFieldKeyName() == '') {
-	                $validator->setDataFieldKeyName($validator->getDataField()->getKeyName());
-	            }
-	            if (\MongoId::isValid($validator->getDataFieldId()) && $validator->getDataFieldName() == '') {
-	                $validator->setDataFieldName($validator->getDataField()->getName());
-	            }
-	            $val = $validator;
-	        });
-	    } else if (is_string($arg0)) {
-	        if (trim($arg0) == '') {
-	            $this->validators = array();
-	        } else if (is_string($arg0)) {
-	            $this->validators = implode(',', $arg0);
-	            array_walk($this->validators, function(&$val, $key) {
-	                $validator = new \Flux\Link\DataField();
-	                $validator->setDataFieldKeyName($val);
-	                if ($validator->getDataFieldKeyName() != '' && is_null($validator->getDataFieldId())) {
-	                    $validator->setDataFieldId($validator->getDataField()->getId());
-	                }
-	                if ($validator->getDataFieldKeyName() != '' && $validator->getDataFieldName() == '') {
-	                    $validator->setDataFieldName($validator->getDataField()->getName());
-	                }
-	                $val = $validator;
-	            });
-	        }
-	    }
-	    $this->addModifiedColumn('validators');
-	    return $this;
+		if (is_array($arg0)) {
+			$this->validators = $arg0;
+			array_walk($this->validators, function(&$val, $key) {
+				$validator = new \Flux\Link\DataField();
+				$validator->populate($val);
+				if ($validator->getDataFieldKeyName() != '' && is_null($validator->getId())) {
+					$validator->setDataFieldId($validator->getDataField()->getId());
+				}
+				if (\MongoId::isValid($validator->getId()) && $validator->getDataFieldKeyName() == '') {
+					$validator->setDataFieldKeyName($validator->getDataField()->getKeyName());
+				}
+				if (\MongoId::isValid($validator->getId()) && $validator->getName() == '') {
+					$validator->setDataFieldName($validator->getDataField()->getName());
+				}
+				$val = $validator;
+			});
+		} else if (is_string($arg0)) {
+			if (trim($arg0) == '') {
+				$this->validators = array();
+			} else if (is_string($arg0)) {
+				$this->validators = implode(',', $arg0);
+				array_walk($this->validators, function(&$val, $key) {
+					$validator = new \Flux\Link\DataField();
+					$validator->setDataFieldKeyName($val);
+					if ($validator->getDataFieldKeyName() != '' && is_null($validator->getId())) {
+						$validator->setDataFieldId($validator->getDataField()->getId());
+					}
+					if ($validator->getDataFieldKeyName() != '' && $validator->getName() == '') {
+						$validator->setDataFieldName($validator->getDataField()->getName());
+					}
+					$val = $validator;
+				});
+			}
+		}
+		$this->addModifiedColumn('validators');
+		return $this;
 	}
 	
 	/**
@@ -440,10 +530,10 @@ class Split extends MongoForm {
 	 * @return MongoDate
 	 */
 	function getLastQueueTime() {
-	    if (is_null($this->last_queue_time)) {
-	        $this->last_queue_time = null;
-	    }
-	    return $this->last_queue_time;
+		if (is_null($this->last_queue_time)) {
+			$this->last_queue_time = null;
+		}
+		return $this->last_queue_time;
 	}
 	
 	/**
@@ -451,8 +541,8 @@ class Split extends MongoForm {
 	 * @var MongoDate
 	 */
 	function setLastQueueTime($arg0) {
-	    $this->last_queue_time = $arg0;
-	    return $this;
+		$this->last_queue_time = $arg0;
+		return $this;
 	}
 	
 	/**
@@ -460,8 +550,8 @@ class Split extends MongoForm {
 	 * @return integer
 	 */
 	function getYesterdayCount() {
-	    $split_queue = new \Flux\SplitQueue($this->getId());
-	    return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime('yesterday')))), '$lt' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime('yesterday')))))));
+		$split_queue = new \Flux\SplitQueue($this->getId());
+		return $split_queue->count(array('split._id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00', strtotime('yesterday')))), '$lt' => new \MongoDate(strtotime(date('m/d/Y 23:59:59', strtotime('yesterday')))))));
 	}
 	
 	/**
@@ -470,7 +560,7 @@ class Split extends MongoForm {
 	 */
 	function getDailyCount() {
 	   $split_queue = new \Flux\SplitQueue($this->getId());
-	   return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00'))))));
+	   return $split_queue->count(array('split._id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y 00:00:00'))))));
 	}
 	
 	/**
@@ -478,8 +568,8 @@ class Split extends MongoForm {
 	 * @return integer
 	 */
 	function getHourlyCount() {
-	    $split_queue = new \Flux\SplitQueue($this->getId());
-	    return $split_queue->count(array('split.split_id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y h:00:00'))))));
+		$split_queue = new \Flux\SplitQueue($this->getId());
+		return $split_queue->count(array('split._id' => $this->getId(), 'queue_time' => array('$gte' => new \MongoDate(strtotime(date('m/d/Y h:00:00'))))));
 	}
 	
 	/**

@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Export extends CommonForm {
-	
-	protected $export_id;
-	protected $export_name;
+class Export extends BasicLink {
 	
 	private $export;
 	
@@ -15,10 +10,7 @@ class Export extends CommonForm {
 	 * @return integer
 	 */
 	function getExportId() {
-		if (is_null($this->export_id)) {
-			$this->export_id = null;
-		}
-		return $this->export_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class Export extends CommonForm {
 	 * @var integer
 	 */
 	function setExportId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->export_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->export_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class Export extends CommonForm {
 	 * @return string
 	 */
 	function getExportName() {
-		if (is_null($this->export_name)) {
-			$this->export_name = "";
-		}
-		return $this->export_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class Export extends CommonForm {
 	 * @var string
 	 */
 	function setExportName($arg0) {
-		$this->export_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

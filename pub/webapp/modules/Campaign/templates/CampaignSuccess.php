@@ -12,13 +12,13 @@
 			<div class="btn-group">
   				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Actions <span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-right" role="menu">
-				    <li><a href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a></li>
+					<li><a href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a></li>
 					<li><a data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a></li>
 				</ul>
 			</div>
 		</div>
 		<div class="hidden-sm hidden-xs">
-		    <a class="btn btn-info" href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a>
+			<a class="btn btn-info" href="/campaign/campaign-leads?_id=<?php echo $campaign->getId() ?>">view leads</a>
 			<a class="btn btn-info" data-toggle="modal" data-target="#instruction_modal" href="/campaign/campaign-pane-instruction?_id=<?php echo $campaign->getId() ?>">view instructions</a>
 		</div>
 	</div>
@@ -41,15 +41,15 @@
 			<div class="panel-heading">Click Traffic</div>
 			<div class="panel-body">
 				<div id="click_by_hour_div">
-            		<!--Divs that will hold each control and chart-->
-            		<div id="click_by_hour_chart_div" style="width:100%;height:250px">
-            			<div class="text-muted text-center">
-            				<span class="fa fa-spinner fa-spin"></span>
-            				Loading report data...
-            			</div>
-            		</div>
-            		<div id="click_by_hour_filter_div" style="width:100%;height:50px"></div>
-                </div>
+					<!--Divs that will hold each control and chart-->
+					<div id="click_by_hour_chart_div" style="width:100%;height:250px">
+						<div class="text-muted text-center">
+							<span class="fa fa-spinner fa-spin"></span>
+							Loading report data...
+						</div>
+					</div>
+					<div id="click_by_hour_filter_div" style="width:100%;height:50px"></div>
+				</div>
 			</div>
 		</div>
 
@@ -57,39 +57,39 @@
 			<div class="panel-heading">Conversion Traffic</div>
 			<div class="panel-body">
 				<div id="conversion_by_hour_div">
-            		<!--Divs that will hold each control and chart-->
-            		<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
-            			<div class="text-muted text-center">
-            				<span class="fa fa-spinner fa-spin"></span>
-            				Loading report data...
-            			</div>
-            		</div>
-            		<div id="conversion_by_hour_filter_div" style="width:100%;height:50px"></div>
-                </div>
+					<!--Divs that will hold each control and chart-->
+					<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
+						<div class="text-muted text-center">
+							<span class="fa fa-spinner fa-spin"></span>
+							Loading report data...
+						</div>
+					</div>
+					<div id="conversion_by_hour_filter_div" style="width:100%;height:50px"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 	
 	<!-- main col right -->
-    <div class="col-md-3 col-sm-3">
-        <ul class="list-group">
-            <li class="list-group-item active">Campaign Stats</li>
-            <li class="list-group-item">
-                <span class="badge"><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?></span>
-                Today's Clicks
-            </li>
-            <li class="list-group-item">
-                <span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
-                Today's Conversions
-            </li>
-        </ul>
-        <ul class="list-group">
-            <li class="list-group-item disabled">Landing Page Preview</li>
-            <li class="list-group-item text-center">
-                <img class="img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
-            </li>
-        </ul>
-    </div>
+	<div class="col-md-3 col-sm-3">
+		<ul class="list-group">
+			<li class="list-group-item active">Campaign Stats</li>
+			<li class="list-group-item">
+				<span class="badge"><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?></span>
+				Today's Clicks
+			</li>
+			<li class="list-group-item">
+				<span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
+				Today's Conversions
+			</li>
+		</ul>
+		<ul class="list-group">
+			<li class="list-group-item disabled">Landing Page Preview</li>
+			<li class="list-group-item text-center">
+				<img class="img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
+			</li>
+		</ul>
+	</div>
 </div>
 
 <!-- edit modal -->
@@ -117,8 +117,8 @@ function drawClickByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-	    chartType: "LineChart",
-	    options: {
+		chartType: "LineChart",
+		options: {
 			animation:{ duration: 250, easing: 'out' },
 			hAxis: {
 				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
@@ -129,19 +129,19 @@ function drawClickByHourChart(response) {
 			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
 			chartArea:{ left:'8%', top: '8%', width: '80%', height:'80%' }
 		},
-	    containerId: 'click_by_hour_chart_div'
-    });
-    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
-    dashboard.bind(chart_range_control, chart);
-    dashboard.draw(data); 
+		containerId: 'click_by_hour_chart_div'
+	});
+	var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+	dashboard.bind(chart_range_control, chart);
+	dashboard.draw(data); 
 }
 
 function drawConversionByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('conversion_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-	    chartType: "ColumnChart",
-	    options: {
+		chartType: "ColumnChart",
+		options: {
 			animation:{ duration: 250, easing: 'out' },
 			hAxis: {
 				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
@@ -154,11 +154,11 @@ function drawConversionByHourChart(response) {
 			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
 			chartArea:{ left:'8%', top: '8%', width: '80%', height:'80%' }
 		},
-	    containerId: 'conversion_by_hour_chart_div'
-    });
-    var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
-    dashboard.bind(chart_range_control, chart);
-    dashboard.draw(data); 
+		containerId: 'conversion_by_hour_chart_div'
+	});
+	var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
+	dashboard.bind(chart_range_control, chart);
+	dashboard.draw(data); 
 }
 //-->
 </script>

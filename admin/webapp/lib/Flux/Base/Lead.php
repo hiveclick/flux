@@ -33,6 +33,7 @@ class Lead extends MongoForm {
 	protected $_d; // array of internal data
 	protected $_e; // array of \Flux\LeadEvent
 	protected $_t; // \Flux\LeadTracking
+	protected $_s; // array of assigned splits
 	protected $notes;
 	protected $fulfill_log_contents;
 	protected $fulfill_export_id;
@@ -148,7 +149,7 @@ class Lead extends MongoForm {
 	 * @return array
 	 */
 	function getTracking() {
-	    return $this->getT();
+		return $this->getT();
 	}
 
 	/**
@@ -167,11 +168,11 @@ class Lead extends MongoForm {
 	 * @var array
 	 */
 	function setT($arg0) {
-	    if (is_array($arg0)) {
-	        $this->getTracking()->populate($arg0);
-	    } else if ($arg0 instanceof \Flux\LeadTracking) {
-	        $this->_t = $arg0;
-	    }
+		if (is_array($arg0)) {
+			$this->getTracking()->populate($arg0);
+		} else if ($arg0 instanceof \Flux\LeadTracking) {
+			$this->_t = $arg0;
+		}
 		$this->addModifiedColumn('_t');
 		return $this;
 	}
@@ -213,17 +214,47 @@ class Lead extends MongoForm {
 	 * @var array|object
 	 */
 	function setE($arg0) {
-	    if (is_array($arg0)) {
-	        $this->_e = $arg0;
-	        array_walk($this->_e, function(&$value) { 
-	               if (is_array($value)) { 
-	                   $tmp_value = new \Flux\LeadEvent();
-	                   $tmp_value->populate($value);
-	                   $value = $tmp_value;
-	               }
-	        });
-	    }
+		if (is_array($arg0)) {
+			$this->_e = $arg0;
+			array_walk($this->_e, function(&$value) { 
+				   if (is_array($value)) { 
+					   $tmp_value = new \Flux\LeadEvent();
+					   $tmp_value->populate($value);
+					   $value = $tmp_value;
+				   }
+			});
+		}
 		$this->addModifiedColumn('_e');
+		return $this;
+	}
+	
+	/**
+	 * Returns the _s
+	 * @return array
+	 */
+	function getS() {
+		if (is_null($this->_s)) {
+			$this->_s = array();
+		}
+		return $this->_s;
+	}
+	
+	/**
+	 * Sets the _s
+	 * @var array
+	 */
+	function setS($arg0) {
+		if (is_array($arg0)) {
+		   $this->_s = $arg0;
+		   array_walk($this->_s, function(&$value) {
+			   if (is_array($value)) {
+				   $tmp_value = new \Flux\LeadSplit();
+				   $tmp_value->populate($value);
+				   $value = $tmp_value;
+			   }
+		   });
+		}
+		$this->addModifiedColumn("_s");
 		return $this;
 	}
 
@@ -275,7 +306,7 @@ class Lead extends MongoForm {
 			} else if ($data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
 				// Next check if the value exists in the main data array
 				foreach ($this->getE() as $key => $event) {
-					if ($event->getDataField()->getDataFieldId() == $data_field->getId()) {
+					if ($event->getDataField()->getId() == $data_field->getId()) {
 						$ret_val = $event->getValue();   
 					}
 				}
@@ -290,28 +321,28 @@ class Lead extends MongoForm {
 			
 			// Cast the return value if we need to
 			if (!is_null($ret_val)) {		
-    			// Assign the default value if the data is not found
-    			if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && !is_array($ret_val)) {
-    			    if (is_string($ret_val)) {
-    			        return array($ret_val);
-    			    } else if (is_object($ret_val)) {
-    			        return json_decode(json_encode($ret_val));
-    			    }
-    			} else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && !is_string($ret_val)) {
-    			    if (is_array($ret_val)) {
-    			        return implode(",", $ret_val);
-    			    } else if (is_object($ret_val)) {
-    			        return json_encode($ret_val);
-    			    }
-    			} else {
-    			    return $ret_val;
-    			}
+				// Assign the default value if the data is not found
+				if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && !is_array($ret_val)) {
+					if (is_string($ret_val)) {
+						return array($ret_val);
+					} else if (is_object($ret_val)) {
+						return json_decode(json_encode($ret_val));
+					}
+				} else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && !is_string($ret_val)) {
+					if (is_array($ret_val)) {
+						return implode(",", $ret_val);
+					} else if (is_object($ret_val)) {
+						return json_encode($ret_val);
+					}
+				} else {
+					return $ret_val;
+				}
 			} else {
-			    if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && is_string($default_value)) {
-			        $default_value = array($default_value);
-			    } else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && is_array($default_value)) {
-			        $default_value = implode(", ", $default_value);
-			    }
+				if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY && is_string($default_value)) {
+					$default_value = array($default_value);
+				} else if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING && is_array($default_value)) {
+					$default_value = implode(", ", $default_value);
+				}
 			}
 		}
 		return $default_value;
@@ -378,7 +409,7 @@ class Lead extends MongoForm {
 	 * @return integer
 	 */
 	function updateNotes() {
-	    return parent::update(array(), array('$set' => array('notes' => $this->getNotes())));
+		return parent::update(array(), array('$set' => array('notes' => $this->getNotes())));
 	}
 	
 	/**
@@ -387,43 +418,43 @@ class Lead extends MongoForm {
 	 */
 	public function update($criteria_array = array(), $update_array = array(), $options_array = array('upsert' => true), $use_set_notation = false) {
   
-	    // First update the data array
-	    $data_criteria = array('_id' => $this->getId());
-	    $data_update = array('modified' => new \MongoDate());
-	    foreach ($this->getD() as $key => $value) {
-	        $data_update[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $key] = $value;
-	    }
-	    if (!empty($data_update)) {
-	        $this->getCollection()->update($data_criteria, array('$set' => $data_update), array('upsert' => true));
-	    }
-	    
-	    // Now update events
-	    foreach ($this->getE() as $lead_event) {
-	        try {
-	            $event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => $lead_event->getDataField()->getDataFieldId());
-	            $event_update = array('$set' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.v' => $lead_event->getValue(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.t' => $lead_event->getT()));
-	            $ret_val = $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
-	            if ($ret_val == 0) {
-	                throw new \Exception('The positional operator did not find the match needed from the query');
-	            }
-	        } catch (\Exception $e) {
-	            if (strpos($e->getMessage(), 'The positional operator did not find the match needed from the query') !== false) {
-	                // The domain group was not found, so push it
-	                $event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => array('$ne' => $lead_event->getDataField()->getDataFieldId()));
-	                $event_update = array('$addToSet' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => $lead_event->toArray(true, true, true)));
-	                $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
-	            } else {
-	                
-	            }
-	        }
-	    }
-	    
-	    // Now save the tracking data
-	    $tracking_criteria = array('_id' => $this->getId());
-	    $tracking_update = array('$set' => array('_t' => $this->getTracking()->toArray(true, true, true)));
-	    $this->getCollection()->update($tracking_criteria, $tracking_update, array('upsert' => true));
-	    
-	    return true;
+		// First update the data array
+		$data_criteria = array('_id' => $this->getId());
+		$data_update = array('modified' => new \MongoDate());
+		foreach ($this->getD() as $key => $value) {
+			$data_update[\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $key] = $value;
+		}
+		if (!empty($data_update)) {
+			$this->getCollection()->update($data_criteria, array('$set' => $data_update), array('upsert' => true));
+		}
+		
+		// Now update events
+		foreach ($this->getE() as $lead_event) {
+			try {
+				$event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => $lead_event->getDataField()->getId());
+				$event_update = array('$set' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.v' => $lead_event->getValue(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.$.t' => $lead_event->getT()));
+				$ret_val = $this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
+				if ($ret_val == 0) {
+					throw new \Exception('The positional operator did not find the match needed from the query');
+				}
+			} catch (\Exception $e) {
+				if (strpos($e->getMessage(), 'The positional operator did not find the match needed from the query') !== false) {
+					// The domain group was not found, so push it
+					$event_criteria = array('_id' => $this->getId(), \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_id' => array('$ne' => $lead_event->getDataField()->getId()));
+					$event_update = array('$addToSet' => array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER => $lead_event->toArray(true, true, true)));
+					$this->getCollection()->update($event_criteria, $event_update, array('upsert' => true));
+				} else {
+					
+				}
+			}
+		}
+		
+		// Now save the tracking data
+		$tracking_criteria = array('_id' => $this->getId());
+		$tracking_update = array('$set' => array('_t' => $this->getTracking()->toArray(true, true, true)));
+		$this->getCollection()->update($tracking_criteria, $tracking_update, array('upsert' => true));
+		
+		return true;
 	}
 	
 	/**
@@ -433,34 +464,34 @@ class Lead extends MongoForm {
 	 */
 	protected function addEvent($event_key, $value = 1) {
 		if (is_string($event_key)) {
-		    $lead_event = new \Flux\LeadEvent();
-		    $lead_event->setDataField($event_key);
-		    $lead_event->setValue($value);
-		    $lead_event->setT(new \MongoDate());
-		    $lead_event->setClient($this->getTracking()->getClient()->getClientId());
-		    $lead_event->setOffer($this->getTracking()->getOffer()->getOfferId());
-		    
-		    // Find the payout and revenue
-		    /* @todo change this from an array to an object */
-		    /*
-		    $offer_events = $this->getTracking()->getOffer()->getOffer()->getEvents();
-		    $payout = 0.00;
-		    $revenue = 0.00;
-		    foreach ($offer_events as $offer_event) {
-		        if ($offer_event['event_id'] == $event_key) {
-		            if (isset($offer_event['field']) && $offer_event['field'] == 'payout' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
-		                $payout = $offer_event['value'];
-		            }
-		            if (isset($offer_event['field']) && $offer_event['field'] == 'revenue' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
-		                $revenue = $offer_event['value'];
-		            }
-		        }
-		    }
-		    */
-		    
-		    $events = $this->getE();
-		    $events[] = $lead_event;
-		    $this->setE($events);
+			$lead_event = new \Flux\LeadEvent();
+			$lead_event->setDataField($event_key);
+			$lead_event->setValue($value);
+			$lead_event->setT(new \MongoDate());
+			$lead_event->setClient($this->getTracking()->getClient()->getId());
+			$lead_event->setOffer($this->getTracking()->getOffer()->getId());
+			
+			// Find the payout and revenue
+			/* @todo change this from an array to an object */
+			/*
+			$offer_events = $this->getTracking()->getOffer()->getOffer()->getEvents();
+			$payout = 0.00;
+			$revenue = 0.00;
+			foreach ($offer_events as $offer_event) {
+				if ($offer_event['event_id'] == $event_key) {
+					if (isset($offer_event['field']) && $offer_event['field'] == 'payout' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
+						$payout = $offer_event['value'];
+					}
+					if (isset($offer_event['field']) && $offer_event['field'] == 'revenue' && isset($offer_event['value']) && floatval($offer_event['value']) > 0) {
+						$revenue = $offer_event['value'];
+					}
+				}
+			}
+			*/
+			
+			$events = $this->getE();
+			$events[] = $lead_event;
+			$this->setE($events);
 		}
 		return $this;
 	}
@@ -471,9 +502,9 @@ class Lead extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$lead = new \Flux\Lead();
-		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
-		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.client.client_id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
-		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
+		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer._id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
+		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.client._id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer._id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
+		$lead->getCollection()->ensureIndex(array(\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer._id' => 1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t' => -1, \Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name' => 1), array('background' => true));
 		return true;
 	}
 }

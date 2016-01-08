@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -16,242 +16,242 @@ use SplDoublyLinkedList;
  */
 class DefinitionList extends SplDoublyLinkedList implements Definition\DefinitionInterface
 {
-    /**
-     * @param Definition\DefinitionInterface|Definition\DefinitionInterface[] $definitions
-     */
-    public function __construct($definitions)
-    {
-        if (!is_array($definitions)) {
-            $definitions = array($definitions);
-        }
-        foreach ($definitions as $definition) {
-            $this->push($definition);
-        }
-    }
+	/**
+	 * @param Definition\DefinitionInterface|Definition\DefinitionInterface[] $definitions
+	 */
+	public function __construct($definitions)
+	{
+		if (!is_array($definitions)) {
+			$definitions = array($definitions);
+		}
+		foreach ($definitions as $definition) {
+			$this->push($definition);
+		}
+	}
 
-    /**
-     * Add definitions
-     *
-     * @param  Definition\DefinitionInterface $definition
-     * @param  bool                           $addToBackOfList
-     * @return void
-     */
-    public function addDefinition(Definition\DefinitionInterface $definition, $addToBackOfList = true)
-    {
-        if ($addToBackOfList) {
-            $this->push($definition);
-        } else {
-            $this->unshift($definition);
-        }
-    }
+	/**
+	 * Add definitions
+	 *
+	 * @param  Definition\DefinitionInterface $definition
+	 * @param  bool						   $addToBackOfList
+	 * @return void
+	 */
+	public function addDefinition(Definition\DefinitionInterface $definition, $addToBackOfList = true)
+	{
+		if ($addToBackOfList) {
+			$this->push($definition);
+		} else {
+			$this->unshift($definition);
+		}
+	}
 
-    /**
-     * @param  string       $type
-     * @return Definition\DefinitionInterface[]
-     */
-    public function getDefinitionsByType($type)
-    {
-        $definitions = array();
-        foreach ($this as $definition) {
-            if ($definition instanceof $type) {
-                $definitions[] = $definition;
-            }
-        }
+	/**
+	 * @param  string	   $type
+	 * @return Definition\DefinitionInterface[]
+	 */
+	public function getDefinitionsByType($type)
+	{
+		$definitions = array();
+		foreach ($this as $definition) {
+			if ($definition instanceof $type) {
+				$definitions[] = $definition;
+			}
+		}
 
-        return $definitions;
-    }
+		return $definitions;
+	}
 
-    /**
-     * Get definition by type
-     *
-     * @param  string                         $type
-     * @return Definition\DefinitionInterface
-     */
-    public function getDefinitionByType($type)
-    {
-        foreach ($this as $definition) {
-            if ($definition instanceof $type) {
-                return $definition;
-            }
-        }
+	/**
+	 * Get definition by type
+	 *
+	 * @param  string						 $type
+	 * @return Definition\DefinitionInterface
+	 */
+	public function getDefinitionByType($type)
+	{
+		foreach ($this as $definition) {
+			if ($definition instanceof $type) {
+				return $definition;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @param  string                              $class
-     * @return bool|Definition\DefinitionInterface
-     */
-    public function getDefinitionForClass($class)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                return $definition;
-            }
-        }
+	/**
+	 * @param  string							  $class
+	 * @return bool|Definition\DefinitionInterface
+	 */
+	public function getDefinitionForClass($class)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				return $definition;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @param  string                              $class
-     * @return bool|Definition\DefinitionInterface
-     */
-    public function forClass($class)
-    {
-        return $this->getDefinitionForClass($class);
-    }
+	/**
+	 * @param  string							  $class
+	 * @return bool|Definition\DefinitionInterface
+	 */
+	public function forClass($class)
+	{
+		return $this->getDefinitionForClass($class);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getClasses()
-    {
-        $classes = array();
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            $classes = array_merge($classes, $definition->getClasses());
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getClasses()
+	{
+		$classes = array();
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			$classes = array_merge($classes, $definition->getClasses());
+		}
 
-        return $classes;
-    }
+		return $classes;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasClass($class)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                return true;
-            }
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function hasClass($class)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getClassSupertypes($class)
-    {
-        $supertypes = array();
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                $supertypes = array_merge($supertypes, $definition->getClassSupertypes($class));
-                if ($definition instanceof Definition\PartialMarker) {
-                    continue;
-                }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getClassSupertypes($class)
+	{
+		$supertypes = array();
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				$supertypes = array_merge($supertypes, $definition->getClassSupertypes($class));
+				if ($definition instanceof Definition\PartialMarker) {
+					continue;
+				}
 
-                return $supertypes;
-            }
-        }
-        return $supertypes;
-    }
+				return $supertypes;
+			}
+		}
+		return $supertypes;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getInstantiator($class)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                $value = $definition->getInstantiator($class);
-                if ($value === null && $definition instanceof Definition\PartialMarker) {
-                    continue;
-                }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getInstantiator($class)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				$value = $definition->getInstantiator($class);
+				if ($value === null && $definition instanceof Definition\PartialMarker) {
+					continue;
+				}
 
-                return $value;
-            }
-        }
+				return $value;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasMethods($class)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                if ($definition->hasMethods($class) === false && $definition instanceof Definition\PartialMarker) {
-                    continue;
-                }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function hasMethods($class)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				if ($definition->hasMethods($class) === false && $definition instanceof Definition\PartialMarker) {
+					continue;
+				}
 
-                return $definition->hasMethods($class);
-            }
-        }
+				return $definition->hasMethods($class);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasMethod($class, $method)
-    {
-        if (!$this->hasMethods($class)) {
-            return false;
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function hasMethod($class, $method)
+	{
+		if (!$this->hasMethods($class)) {
+			return false;
+		}
 
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class) && $definition->hasMethod($class, $method)) {
-                return true;
-            }
-        }
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class) && $definition->hasMethod($class, $method)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getMethods($class)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        $methods = array();
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class)) {
-                if (!$definition instanceof Definition\PartialMarker) {
-                    return array_merge($definition->getMethods($class), $methods);
-                }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getMethods($class)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		$methods = array();
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class)) {
+				if (!$definition instanceof Definition\PartialMarker) {
+					return array_merge($definition->getMethods($class), $methods);
+				}
 
-                $methods = array_merge($definition->getMethods($class), $methods);
-            }
-        }
+				$methods = array_merge($definition->getMethods($class), $methods);
+			}
+		}
 
-        return $methods;
-    }
+		return $methods;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasMethodParameters($class, $method)
-    {
-        $methodParameters = $this->getMethodParameters($class, $method);
+	/**
+	 * {@inheritDoc}
+	 */
+	public function hasMethodParameters($class, $method)
+	{
+		$methodParameters = $this->getMethodParameters($class, $method);
 
-        return ($methodParameters !== array());
-    }
+		return ($methodParameters !== array());
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getMethodParameters($class, $method)
-    {
-        /** @var $definition Definition\DefinitionInterface */
-        foreach ($this as $definition) {
-            if ($definition->hasClass($class) && $definition->hasMethod($class, $method) && $definition->hasMethodParameters($class, $method)) {
-                return $definition->getMethodParameters($class, $method);
-            }
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getMethodParameters($class, $method)
+	{
+		/** @var $definition Definition\DefinitionInterface */
+		foreach ($this as $definition) {
+			if ($definition->hasClass($class) && $definition->hasMethod($class, $method) && $definition->hasMethodParameters($class, $method)) {
+				return $definition->getMethodParameters($class, $method);
+			}
+		}
 
-        return array();
-    }
+		return array();
+	}
 }

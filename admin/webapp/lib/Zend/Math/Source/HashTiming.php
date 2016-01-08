@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -52,62 +52,62 @@ use SecurityLib\Strength;
 class HashTiming implements RandomLib\Source
 {
 
-    /**
-     * Return an instance of Strength indicating the strength of the source
-     *
-     * @return Strength An instance of one of the strength classes
-     */
-    public static function getStrength()
-    {
-        return new Strength(Strength::VERYLOW);
-    }
+	/**
+	 * Return an instance of Strength indicating the strength of the source
+	 *
+	 * @return Strength An instance of one of the strength classes
+	 */
+	public static function getStrength()
+	{
+		return new Strength(Strength::VERYLOW);
+	}
 
-    /**
-     * Generate a random string of the specified size
-     *
-     * @param int $size The size of the requested random string
-     *
-     * @return string A string of the requested size
-     */
-    public function generate($size)
-    {
-        $result         = '';
-        $entropy        = '';
-        $msec_per_round = 400;
-        $bits_per_round = 2;
-        $total          = $size;
-        $hash_length    = 20;
+	/**
+	 * Generate a random string of the specified size
+	 *
+	 * @param int $size The size of the requested random string
+	 *
+	 * @return string A string of the requested size
+	 */
+	public function generate($size)
+	{
+		$result		 = '';
+		$entropy		= '';
+		$msec_per_round = 400;
+		$bits_per_round = 2;
+		$total		  = $size;
+		$hash_length	= 20;
 
-        while (strlen($result) < $size) {
-            $bytes  = ($total > $hash_length)? $hash_length : $total;
-            $total -= $bytes;
-            for ($i=1; $i < 3; $i++) {
-                $t1   = microtime(true);
-                $seed = mt_rand();
-                for ($j=1; $j < 50; $j++) {
-                    $seed = sha1($seed);
-                }
-                $t2 = microtime(true);
-                $entropy .= $t1 . $t2;
-            }
-            $div = (int) (($t2 - $t1) * 1000000);
-            if ($div <= 0) {
-                $div = 400;
-            }
-            $rounds = (int) ($msec_per_round * 50 / $div);
-            $iter = $bytes * (int) (ceil(8 / $bits_per_round));
-            for ($i = 0; $i < $iter; $i ++) {
-                $t1 = microtime();
-                $seed = sha1(mt_rand());
-                for ($j = 0; $j < $rounds; $j++) {
-                   $seed = sha1($seed);
-                }
-                $t2 = microtime();
-                $entropy .= $t1 . $t2;
-            }
-            $result .= sha1($entropy, true);
-        }
-        return substr($result, 0, $size);
-    }
+		while (strlen($result) < $size) {
+			$bytes  = ($total > $hash_length)? $hash_length : $total;
+			$total -= $bytes;
+			for ($i=1; $i < 3; $i++) {
+				$t1   = microtime(true);
+				$seed = mt_rand();
+				for ($j=1; $j < 50; $j++) {
+					$seed = sha1($seed);
+				}
+				$t2 = microtime(true);
+				$entropy .= $t1 . $t2;
+			}
+			$div = (int) (($t2 - $t1) * 1000000);
+			if ($div <= 0) {
+				$div = 400;
+			}
+			$rounds = (int) ($msec_per_round * 50 / $div);
+			$iter = $bytes * (int) (ceil(8 / $bits_per_round));
+			for ($i = 0; $i < $iter; $i ++) {
+				$t1 = microtime();
+				$seed = sha1(mt_rand());
+				for ($j = 0; $j < $rounds; $j++) {
+				   $seed = sha1($seed);
+				}
+				$t2 = microtime();
+				$entropy .= $t1 . $t2;
+			}
+			$result .= sha1($entropy, true);
+		}
+		return substr($result, 0, $size);
+	}
 
 }

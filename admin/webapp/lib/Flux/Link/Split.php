@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Split extends CommonForm {
-	
-	protected $split_id;
-	protected $split_name;
+class Split extends BasicLink {
 	
 	private $split;
 	
@@ -15,10 +10,7 @@ class Split extends CommonForm {
 	 * @return integer
 	 */
 	function getSplitId() {
-		if (is_null($this->split_id)) {
-			$this->split_id = null;
-		}
-		return $this->split_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class Split extends CommonForm {
 	 * @var integer
 	 */
 	function setSplitId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->split_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->split_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class Split extends CommonForm {
 	 * @return string
 	 */
 	function getSplitName() {
-		if (is_null($this->split_name)) {
-			$this->split_name = "";
-		}
-		return $this->split_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class Split extends CommonForm {
 	 * @var string
 	 */
 	function setSplitName($arg0) {
-		$this->split_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -61,7 +44,7 @@ class Split extends CommonForm {
 	function getSplit() {
 		if (is_null($this->split)) {
 			$this->split = new \Flux\Split();
-			$this->split->setId($this->getSplitId());
+			$this->split->setId($this->getId());
 			$this->split->query();
 		}
 		return $this->split;

@@ -51,8 +51,8 @@ class SplitPosition extends Base\SplitPosition {
 			
 			// First, find an export linked to this split for today
 			$export = new \Flux\Export();
-			$export->setSplit($this->getSplit()->getSplitId());
-			$export->setFulfillment($this->getFulfillment()->getFulfillmentId());
+			$export->setSplit($this->getSplit()->getId());
+			$export->setFulfillment($this->getFulfillment()->getId());
 			$export->setIsRunning(false);
 			$export->setIsComplete(false);
 			$export = $export->queryBySplitAndFulfillment();
@@ -60,14 +60,14 @@ class SplitPosition extends Base\SplitPosition {
 			if ($export === false) {
 				// Create a new export
 				$export = new \Flux\Export();
-				$export->setName('Export for ' . $this->getSplit()->getSplitName() . ' on ' . date('m/d/Y'));
-				$export->setSplit($this->getSplit()->getSplitId());
-				$export->setFulfillment($this->getFulfillment()->getFulfillmentId());
+				$export->setName('Export for ' . $this->getSplit()->getName() . ' on ' . date('m/d/Y'));
+				$export->setSplit($this->getSplit()->getId());
+				$export->setFulfillment($this->getFulfillment()->getId());
 				$export->setExportDate(new \MongoDate());
 				$insert_id = $export->insert();
 				$export->setId($insert_id);
 			} else if (($export->getName()) == '') {
-				$export->setName('Export for ' . $this->getSplit()->getSplitName() . ' on ' . date('m/d/Y'));
+				$export->setName('Export for ' . $this->getSplit()->getName() . ' on ' . date('m/d/Y'));
 				$export->update();
 			}
 			
@@ -89,7 +89,7 @@ class SplitPosition extends Base\SplitPosition {
 	function canReceiveLead($lead) {
 		/* @var $export_class \Flux\Export\ExportAbstract */
 		$export_class = $this->getFulfillment()->getFulfillment()->getExportClass();
-		$export_class->setSplit($this->getSplit()->getSplitId());
+		$export_class->setSplit($this->getSplit()->getId());
 		$export_class->setSplitPosition($this->getId());
 		return $export_class->canReceiveLead($lead);
 	}
@@ -100,7 +100,7 @@ class SplitPosition extends Base\SplitPosition {
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getSplitIdArray()) > 0) {
-			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
+			$criteria['split._id'] = array('$in' => $this->getSplitIdArray());
 		}
 		if ($this->getPosition() > 0) {
 			$criteria['position'] = $this->getPosition();

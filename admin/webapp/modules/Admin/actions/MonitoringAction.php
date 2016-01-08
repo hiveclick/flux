@@ -26,12 +26,12 @@ class MonitoringAction extends BasicAction
 	 */
 	public function execute ()
 	{
-	    /* @var $server_monitor \Flux\ServerMonitor */
-	    $server_monitor = new \Flux\ServerMonitor();
-	    $server_monitor->discoverMetrics();
-	    
-	    $this->getContext()->getRequest()->setAttribute('server_monitor', $server_monitor);
-	    
+		/* @var $server_monitor \Flux\ServerMonitor */
+		$server_monitor = new \Flux\ServerMonitor();
+		$server_monitor->discoverMetrics();
+		
+		$this->getContext()->getRequest()->setAttribute('server_monitor', $server_monitor);
+		
 		return View::SUCCESS;
 	}
 }

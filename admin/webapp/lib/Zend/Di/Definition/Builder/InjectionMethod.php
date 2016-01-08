@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -16,106 +16,106 @@ use Zend\Di\Di;
  */
 class InjectionMethod
 {
-    /**
-     * @var string|null
-     */
-    protected $name = null;
+	/**
+	 * @var string|null
+	 */
+	protected $name = null;
 
-    /**
-     * @var array
-     */
-    protected $parameters = array();
+	/**
+	 * @var array
+	 */
+	protected $parameters = array();
 
-    /**
-     * @param  string|null $name
-     * @return self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+	/**
+	 * @param  string|null $name
+	 * @return self
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return null|string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
 
-    /**
-     * @param  string          $name
-     * @param  string|null     $class
-     * @param  mixed|null      $isRequired
-     * @param  mixed|null      $default
-     * @return InjectionMethod
-     */
-    public function addParameter($name, $class = null, $isRequired = null, $default = null)
-    {
-        $this->parameters[] = array(
-            $name,
-            $class,
-            self::detectMethodRequirement($isRequired),
-            $default,
-        );
+	/**
+	 * @param  string		  $name
+	 * @param  string|null	 $class
+	 * @param  mixed|null	  $isRequired
+	 * @param  mixed|null	  $default
+	 * @return InjectionMethod
+	 */
+	public function addParameter($name, $class = null, $isRequired = null, $default = null)
+	{
+		$this->parameters[] = array(
+			$name,
+			$class,
+			self::detectMethodRequirement($isRequired),
+			$default,
+		);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
+	/**
+	 * @return array
+	 */
+	public function getParameters()
+	{
+		return $this->parameters;
+	}
 
-    /**
-     *
-     * @param mixed $requirement
-     * @return int
-     */
-    public static function detectMethodRequirement($requirement)
-    {
-        if (is_bool($requirement)) {
-            return $requirement ? Di::METHOD_IS_REQUIRED : Di::METHOD_IS_OPTIONAL;
-        }
+	/**
+	 *
+	 * @param mixed $requirement
+	 * @return int
+	 */
+	public static function detectMethodRequirement($requirement)
+	{
+		if (is_bool($requirement)) {
+			return $requirement ? Di::METHOD_IS_REQUIRED : Di::METHOD_IS_OPTIONAL;
+		}
 
-        if (null === $requirement) {
-            //This is mismatch to ClassDefinition::addMethod is it ok ? is optional?
-            return Di::METHOD_IS_REQUIRED;
-        }
+		if (null === $requirement) {
+			//This is mismatch to ClassDefinition::addMethod is it ok ? is optional?
+			return Di::METHOD_IS_REQUIRED;
+		}
 
-        if (is_int($requirement)) {
-            return $requirement;
-        }
+		if (is_int($requirement)) {
+			return $requirement;
+		}
 
-        if (is_string($requirement)) {
-            switch (strtolower($requirement)) {
-                default:
-                case "require":
-                case "required":
-                    return Di::METHOD_IS_REQUIRED;
-                    break;
-                case "aware":
-                    return Di::METHOD_IS_AWARE;
-                    break;
-                case "optional":
-                    return Di::METHOD_IS_OPTIONAL;
-                    break;
-                case "constructor":
-                    return Di::METHOD_IS_CONSTRUCTOR;
-                    break;
-                case "instantiator":
-                    return Di::METHOD_IS_INSTANTIATOR;
-                    break;
-                case "eager":
-                    return Di::METHOD_IS_EAGER;
-                    break;
-            }
-        }
-        return 0;
-    }
+		if (is_string($requirement)) {
+			switch (strtolower($requirement)) {
+				default:
+				case "require":
+				case "required":
+					return Di::METHOD_IS_REQUIRED;
+					break;
+				case "aware":
+					return Di::METHOD_IS_AWARE;
+					break;
+				case "optional":
+					return Di::METHOD_IS_OPTIONAL;
+					break;
+				case "constructor":
+					return Di::METHOD_IS_CONSTRUCTOR;
+					break;
+				case "instantiator":
+					return Di::METHOD_IS_INSTANTIATOR;
+					break;
+				case "eager":
+					return Di::METHOD_IS_EAGER;
+					break;
+			}
+		}
+		return 0;
+	}
 }

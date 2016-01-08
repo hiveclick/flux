@@ -264,7 +264,7 @@ class BaseReport extends MongoForm {
 	 * @param integer $offer_id
 	 */
 	public function addOfferId($offer_id) {
-		$tmp_array = $this->getOfferId();
+		$tmp_array = $this->getId();
 		$tmp_array[] = (int)$offer_id;
 		$this->setOfferId($tmp_array);
 	}
@@ -274,7 +274,7 @@ class BaseReport extends MongoForm {
 	 * @param unknown $campaign_id
 	 */
 	public function addCampaignId($campaign_id) {
-		$tmp_array = $this->getCampaignId();
+		$tmp_array = $this->getId();
 		$tmp_array[] = (int)$campaign_id;
 		$this->setCampaignId($tmp_array);
 	}
@@ -311,9 +311,9 @@ class BaseReport extends MongoForm {
 			self::DATE_RANGE_THIS_WEEK => 'This Week',
 			self::DATE_RANGE_YESTERDAY => 'Yesterday',
 			self::DATE_RANGE_TODAY => 'Today',
-		    self::DATE_RANGE_MTD => 'Month To Date',
-		    self::DATE_RANGE_MONTH => 'Month',
-		    self::DATE_RANGE_LAST_MONTH => 'Last Month',
+			self::DATE_RANGE_MTD => 'Month To Date',
+			self::DATE_RANGE_MONTH => 'Month',
+			self::DATE_RANGE_LAST_MONTH => 'Last Month',
 			self::DATE_RANGE_LAST_48_HOURS => 'Last 48 Hours',
 			self::DATE_RANGE_LAST_24_HOURS => 'Last 24 Hours',
 			self::DATE_RANGE_LAST_12_HOURS => 'Last 12 Hours',
@@ -387,28 +387,28 @@ class BaseReport extends MongoForm {
 					$this->end_time = $end_time->setTime(23,59,59);
 					break;
 				case self::DATE_RANGE_MONTH:
-				    $end_time = new \DateTime('today', $timezone);
-				    $end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
-				    $this->end_time = $end_time->setTime(23,59,59);
-				    $start_time = new \DateTime("now", $timezone);
-				    $start_time->setTimestamp(strtotime($start_time->format('m/1/Y')));
-				    $this->start_time = $start_time->setTime(0,0,0);
-				    break;
-			    case self::DATE_RANGE_LAST_MONTH:
-			        $end_time = new \DateTime('today - 1 month', $timezone);
-			        $end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
-			        $this->end_time = $end_time->setTime(23,59,59);
-			        $start_time = new \DateTime("now", $timezone);
-			        $start_time->setTimestamp(strtotime($end_time->format('m/1/Y')));
-			        $this->start_time = $start_time->setTime(0,0,0);
-			        break;
-			    case self::DATE_RANGE_MTD:
-			        $end_time = new \DateTime('today', $timezone);
-			        $this->end_time = $end_time->setTime(23,59,59);
-			        $start_time = new \DateTime("now", $timezone);
-			        $start_time->setTimestamp(strtotime($this->end_time->format('m/1/Y')));
-			        $this->start_time = $start_time->setTime(0,0,0);
-			        break;
+					$end_time = new \DateTime('today', $timezone);
+					$end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
+					$this->end_time = $end_time->setTime(23,59,59);
+					$start_time = new \DateTime("now", $timezone);
+					$start_time->setTimestamp(strtotime($start_time->format('m/1/Y')));
+					$this->start_time = $start_time->setTime(0,0,0);
+					break;
+				case self::DATE_RANGE_LAST_MONTH:
+					$end_time = new \DateTime('today - 1 month', $timezone);
+					$end_time->setTimestamp(strtotime($end_time->format('m/t/Y')));
+					$this->end_time = $end_time->setTime(23,59,59);
+					$start_time = new \DateTime("now", $timezone);
+					$start_time->setTimestamp(strtotime($end_time->format('m/1/Y')));
+					$this->start_time = $start_time->setTime(0,0,0);
+					break;
+				case self::DATE_RANGE_MTD:
+					$end_time = new \DateTime('today', $timezone);
+					$this->end_time = $end_time->setTime(23,59,59);
+					$start_time = new \DateTime("now", $timezone);
+					$start_time->setTimestamp(strtotime($this->end_time->format('m/1/Y')));
+					$this->start_time = $start_time->setTime(0,0,0);
+					break;
 				case self::DATE_RANGE_LAST_48_HOURS:
 					$this->start_time = new \DateTime('-48 hours', $timezone);
 					$this->end_time = new \DateTime('now', $timezone);
@@ -434,8 +434,8 @@ class BaseReport extends MongoForm {
 					$this->end_time = new \DateTime('now', $timezone);
 					break;
 				case self::DATE_RANGE_CUSTOM:
-				    $end_time = new \DateTime($this->getEndTime());
-				    $this->end_time = $end_time->setTime(23,59,59);
+					$end_time = new \DateTime($this->getEndTime());
+					$this->end_time = $end_time->setTime(23,59,59);
 			}
 		}
 

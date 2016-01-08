@@ -1,5 +1,5 @@
 <?php
-    /* @var $revenue_report \Flux\ReportLead */
+	/* @var $revenue_report \Flux\ReportLead */
 	$report_lead = $this->getContext()->getRequest()->getAttribute('report_lead', array());
 	$clients = $this->getContext()->getRequest()->getAttribute('clients', array());
 ?>
@@ -19,16 +19,16 @@
 <form id="import_lead_payout_confirm_form" method="GET" class="form-inline" action="/api">
 	<input type="hidden" name="func" value="/report/import-lead-payout">
 	<input type="hidden" name="format" value="json" />
-    <div class="help-block"><b>2)</b> Leads below have been verified and payouts will be imported</div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Lead</th>
-                <th>Payout</th>
-            </tr>
-        </thead>
-        <tbody id="payout_table"></tbody>
-    </table>
+	<div class="help-block"><b>2)</b> Leads below have been verified and payouts will be imported</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Lead</th>
+				<th>Payout</th>
+			</tr>
+		</thead>
+		<tbody id="payout_table"></tbody>
+	</table>
 </form>
 
 
@@ -40,14 +40,14 @@
 //<!--
 $('#import_lead_payout_form').form(function(data) {
 	console.log(data);
-    if (data.entries) {
-        data.entries.each(function(item) {
-            tr = $('<tr />');
-            $('<td><input type="text" name="lead_payout_array[][lead_id]" value="' + item.lead_id + '" /></td>').appendTo(tr);
-            $('<td><input type="text" name="lead_payout_array[][payout]" value="' + item.payout + '" /></td>').appendTo(tr);
-            tr.appendTo($('#payout_table'));
-        });
-    }
+	if (data.entries) {
+		data.entries.each(function(item) {
+			tr = $('<tr />');
+			$('<td><input type="text" name="lead_payout_array[][lead_id]" value="' + item.lead_id + '" /></td>').appendTo(tr);
+			$('<td><input type="text" name="lead_payout_array[][payout]" value="' + item.payout + '" /></td>').appendTo(tr);
+			tr.appendTo($('#payout_table'));
+		});
+	}
 });
 //-->
 </script>

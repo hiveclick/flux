@@ -7,22 +7,22 @@ namespace Mojavi\Logging;
 class PatternLayout extends Layout
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Format a message.
-     *
-     * @param Message A Message instance.
-     *
-     * @return string A formatted message.
-     */
-    public function & format ($message)
-    {
-        $msgString = sprintf('%s', $message->__toString());
-        return $msgString;
-    }
+	/**
+	 * Format a message.
+	 *
+	 * @param Message A Message instance.
+	 *
+	 * @return string A formatted message.
+	 */
+	public function & format ($message)
+	{
+		$msgString = sprintf('%s', $message->__toString());
+		return $msgString;
+	}
 
 }
 

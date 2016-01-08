@@ -5,10 +5,6 @@
 	$splits = $this->getContext()->getRequest()->getAttribute("splits", array());
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 ?>
-<div class="page-header">
-   <h1>Pending Catch-All Leads</h1>
-</div>
-	
 <!-- Add breadcrumbs -->
 <ol class="breadcrumb">
 	<li><a href="/export/split-search">Splits</a></li>
@@ -17,91 +13,100 @@
 	<?php } ?>
 	<li class="active">View Catch-All Leads</li>
 </ol>
-<div class="panel panel-primary">
-	<div id='split-header' class='grid-header panel-heading clearfix'>
-		<form id="split_search_form" method="GET" class="form-inline" action="/api">
-			<input type="hidden" name="func" value="/export/split-queue">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="_id" />
-			<input type="hidden" id="sord" name="sord" value="desc" />
-			<input type="hidden" id="sord" name="is_catch_all" value="1" />
-			<div class="text-right">
-			    <div class="form-group text-left">
-					<select class="form-control selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
-						<optgroup label="Normal Splits">
-						<?php
-							/* @var $split \Flux\Split */ 
-							foreach ($splits as $split) { 
-						?>
-						    <?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) { ?>
-                                <option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
-							<?php } ?>
-						<?php } ?>
-						</optgroup>
-						<optgroup label="Host & Post Splits">
-						<?php
-							/* @var $split \Flux\Split */ 
-							foreach ($splits as $split) { 
-						?>
-                            <?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) { ?>
-                                <option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
-							<?php } ?>
-						<?php } ?>
-						</optgroup>
-					</select>
-				</div>
-				<div class="form-group text-left">
-					<select class="form-control selectize" name="offer_id_array[]" id="split_queue_spy_offer_id" multiple placeholder="Filter by offer">
-						<?php
-							/* @var $offer \Flux\Offer */ 
-							foreach ($offers as $offer) { 
-						?>
-							<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $split_queue->getOfferIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectUrl(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
-						<?php } ?>
-					</select>
-				</div>
-				<div class="form-group text-left">
-					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
-				</div>
-				<div class="form-group text-left">
-				    <select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
-				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
-				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
-				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
-				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLABLE, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
-				        <option value="<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
-					</select>
-				</div>
-			</div>
-		</form>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+	   <h1>Pending Catch-All Leads</h1>
 	</div>
-	<div id="split-grid"></div>
-	<div id="split-pager" class="panel-footer"></div>
+	
+
+	<div class="panel panel-primary">
+		<div id='split-header' class='grid-header panel-heading clearfix'>
+			<form id="split_search_form" method="GET" class="form-inline" action="/api">
+				<input type="hidden" name="func" value="/export/split-queue">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="_id" />
+				<input type="hidden" id="sord" name="sord" value="desc" />
+				<input type="hidden" id="sord" name="is_catch_all" value="1" />
+				<div class="text-right">
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
+							<optgroup label="Normal Splits">
+							<?php
+								/* @var $split \Flux\Split */ 
+								foreach ($splits as $split) { 
+							?>
+								<?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) { ?>
+									<option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
+								<?php } ?>
+							<?php } ?>
+							</optgroup>
+							<optgroup label="Host & Post Splits">
+							<?php
+								/* @var $split \Flux\Split */ 
+								foreach ($splits as $split) { 
+							?>
+								<?php if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) { ?>
+									<option value="<?php echo $split->getId() ?>" <?php echo in_array($split->getId(), $split_queue->getSplitIdArray()) ? "selected" : "" ?>><?php echo $split->getName() ?></option>
+								<?php } ?>
+							<?php } ?>
+							</optgroup>
+						</select>
+					</div>
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="offer_id_array[]" id="split_queue_spy_offer_id" multiple placeholder="Filter by offer">
+							<?php
+								/* @var $offer \Flux\Offer */ 
+								foreach ($offers as $offer) { 
+							?>
+								<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $split_queue->getOfferIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectUrl(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
+							<?php } ?>
+						</select>
+					</div>
+					<div class="form-group text-left">
+						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
+					</div>
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
+							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_PENDING, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
+							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
+							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_UNFULFILLABLE, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
+							<option value="<?php echo \Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\SplitQueue::DISPOSITION_ALREADY_FULFILLED, $split_queue->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div id="split-grid"></div>
+		<div id="split-pager" class="panel-footer"></div>
+	</div>
 </div>
 <script>
 //<!--
 $(document).ready(function() {
 
 	$('#disposition_array').selectize().on('change', function($val) {
-    	$('#split_search_form').trigger('submit');
-    });
+		$('#split_search_form').trigger('submit');
+	});
 	
 	var columns = [
-        {id:'_id', name:'Item #', field:'_id', sort_field:'_id', def_value: ' ', width:175, sortable:true, hidden:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-        	var lead_id = (dataContext.lead.lead_id == undefined) ? 0 : dataContext.lead.lead_id;
-        	var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
-        	var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
-        	var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
-        	var ret_val = '<div style="line-height:16pt;">'
-        	ret_val += '<a href="/export/split-queue?_id=' + value + '">' + value + '</a>';
-        	ret_val += '<div class="small text-muted">';
-        	ret_val += ' (Lead #<a href="/lead/lead?_id=' + lead_id + '">' + lead_id + '</a> - <a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
-        	ret_val += '</div>';
-        	ret_val += '</div>';
-        	return ret_val;
-        }},
+		{id:'_id', name:'Item #', field:'_id', sort_field:'_id', def_value: ' ', width:175, sortable:true, hidden:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var lead_id = (dataContext.lead.lead_id == undefined) ? 0 : dataContext.lead.lead_id;
+			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
+			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
+			var client_name = (dataContext.lead.client.client_name == undefined) ? 0 : dataContext.lead.client.client_name;
+			var ret_val = '<div style="line-height:16pt;">'
+			ret_val += '<a href="/export/split-queue?_id=' + value + '">' + value + '</a>';
+			ret_val += '<div class="small text-muted">';
+			ret_val += ' (Lead #<a href="/lead/lead?_id=' + lead_id + '">' + lead_id + '</a> - <a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
+			ret_val += '</div>';
+			ret_val += '</div>';
+			return ret_val;
+		}},
 		{id:'lead_id', name:'Lead #', field:'lead.lead_id', sort_field:'lead.lead_id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var offer_id = (dataContext.lead.offer.offer_id == undefined) ? 0 : dataContext.lead.offer.offer_id;
 			var offer_name = (dataContext.lead.offer.offer_name == undefined) ? 0 : dataContext.lead.offer.offer_name;
@@ -146,11 +151,11 @@ $(document).ready(function() {
 				} else {
 					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
 				}
-    			if (dataContext.error_message != '') {
-    				ret_val +=  '<div class="text-danger small">' + dataContext.error_message + '</div>';
-    			} else {
-    				ret_val +=  '<div class="text-muted small">no errors</div>';
-    			}
+				if (dataContext.error_message != '') {
+					ret_val +=  '<div class="text-danger small">' + dataContext.error_message + '</div>';
+				} else {
+					ret_val +=  '<div class="text-muted small">no errors</div>';
+				}
 				ret_val += '</div>';
 				return ret_val;
 		}},
@@ -172,17 +177,17 @@ $(document).ready(function() {
 			if (dataContext.is_unfulfillable) {
 				return '<i class="text-danger">Marked Unfulfillable</i>';
 			} else {
-    			var ret_val = '<div style="line-height:16pt;">'
-    				if (value != null) {
-    					ret_val += moment.unix(value.sec).calendar() + ' (' + dataContext.attempt_count + ' attempts)';
-    				} else {
-    					ret_val += '<i class="text-muted">Not Attempted Yet</i>';
-    				}
-    				ret_val += '<div class="small text-muted">';
-    				ret_val += (' Next Attempt: ' + moment.unix(dataContext.next_attempt_time.sec).calendar());
-    				ret_val += '</div>';
-    				ret_val += '</div>';
-    				return ret_val;
+				var ret_val = '<div style="line-height:16pt;">'
+					if (value != null) {
+						ret_val += moment.unix(value.sec).calendar() + ' (' + dataContext.attempt_count + ' attempts)';
+					} else {
+						ret_val += '<i class="text-muted">Not Attempted Yet</i>';
+					}
+					ret_val += '<div class="small text-muted">';
+					ret_val += (' Next Attempt: ' + moment.unix(dataContext.next_attempt_time.sec).calendar());
+					ret_val += '</div>';
+					ret_val += '</div>';
+					return ret_val;
 			}
 		}}
 	];
@@ -216,15 +221,15 @@ $(document).ready(function() {
 	});
 	
 	$('#split_queue_spy_offer_id').selectize({
-    	valueField: '_id',
-    	dropdownWidthOffset: 250,
+		valueField: '_id',
+		dropdownWidthOffset: 250,
 		allowEmptyOption: true,
 		labelField: 'name',
 		searchField: ['name'],
 		optgroups: [
-		    <?php foreach ($verticals as $vertical) { ?>
-		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
-            <?php } ?>
+			<?php foreach ($verticals as $vertical) { ?>
+			{ label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
+			<?php } ?>
 		],
 		render: {
 			item: function(item, escape) {

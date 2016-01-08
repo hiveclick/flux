@@ -35,9 +35,9 @@ class GoogleChart extends CommonForm {
 		$tmp_array = $this->getRowData();
 		$header_cols = $this->getCols();
 		if ($date instanceof \DateTime) {
-		    $date_key = $date->format('m/d/Y H:00:00');
+			$date_key = $date->format('m/d/Y H:00:00');
 		} else {
-		    $date_key = $date;
+			$date_key = $date;
 		}
 		if (isset($tmp_array[$date_key])) {
 			foreach ($header_cols as $key => $header_col) {
@@ -51,11 +51,11 @@ class GoogleChart extends CommonForm {
 			$col_counter = 0;
 			foreach ($this->getColumnData() as $key => $column) {
 				if ($col_counter == 0) {
-				    if ($date instanceof \DateTime) {
+					if ($date instanceof \DateTime) {
 					   $row_data[0] = array('v' => 'Date(' . $date->format('Y') . ',' . ($date->format('m') - 1) . ',' . $date->format('d,H,0,0,0') . ')');
-				    } else {
-				        $row_data[0] = array('v' => $date, 'f' => null);
-				    }
+					} else {
+						$row_data[0] = array('v' => $date, 'f' => null);
+					}
 				} else if ($col_key == $column['label']) {
 					$row_data[$col_counter] = array('v' => $value, 'f' => $formatted_value);
 				} else {
@@ -147,7 +147,7 @@ class GoogleChart extends CommonForm {
 	}	
 	
 	/********************************************/
-	/*             Private functions            */
+	/*			 Private functions			*/
 	/********************************************/
 	/**
 	 * Returns the _col_data

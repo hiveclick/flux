@@ -40,66 +40,66 @@ namespace Crossjoin\Browscap\Updater;
 class Local
 extends AbstractUpdater
 {
-    /**
-     * Name of the update method, used in the user agent for the request,
-     * for browscap download statistics. Has to be overwritten by the
-     * extending class.
-     *
-     * @var string
-     */
-    protected $updateMethod = 'local';
+	/**
+	 * Name of the update method, used in the user agent for the request,
+	 * for browscap download statistics. Has to be overwritten by the
+	 * extending class.
+	 *
+	 * @var string
+	 */
+	protected $updateMethod = 'local';
 
-    /**
-     * Options for the updater. The array should be overwritten,
-     * containing all options as keys, set to the default value.
-     *
-     * @var array
-     */
-    protected $options = array(
-        'LocalFile' => null,
-    );
+	/**
+	 * Options for the updater. The array should be overwritten,
+	 * containing all options as keys, set to the default value.
+	 *
+	 * @var array
+	 */
+	protected $options = array(
+		'LocalFile' => null,
+	);
 
-    /**
-     * Gets the current browscap version (time stamp)
-     *
-     * @return int
-     */
-    public function getBrowscapVersion()
-    {
-        $file = $this->getOption('LocalFile');
-        if ($file === null) {
-            throw new \Exception("Option 'LocalFile' not set.");
-        }
-        if (!is_readable($file)) {
-            throw new \Exception("File '$file' set in option 'LocalFile' is not readable.");
-        }
-        return (int)filemtime($file);
-    }
+	/**
+	 * Gets the current browscap version (time stamp)
+	 *
+	 * @return int
+	 */
+	public function getBrowscapVersion()
+	{
+		$file = $this->getOption('LocalFile');
+		if ($file === null) {
+			throw new \Exception("Option 'LocalFile' not set.");
+		}
+		if (!is_readable($file)) {
+			throw new \Exception("File '$file' set in option 'LocalFile' is not readable.");
+		}
+		return (int)filemtime($file);
+	}
 
-    /**
-     * Gets the current browscap version number (if possible for the source)
-     *
-     * @return int|null
-     */
-    public function getBrowscapVersionNumber()
-    {
-        return null;
-    }
+	/**
+	 * Gets the current browscap version number (if possible for the source)
+	 *
+	 * @return int|null
+	 */
+	public function getBrowscapVersionNumber()
+	{
+		return null;
+	}
 
-    /**
-     * Gets the browscap data of the used source type
-     *
-     * @return string
-     */
-    public function getBrowscapSource()
-    {
-        $file = $this->getOption('LocalFile');
-        if ($file === null) {
-            throw new \Exception("Option 'LocalFile' not set.");
-        }
-        if (!is_readable($file)) {
-            throw new \Exception("File '$file' set in option 'LocalFile' is not readable.");
-        }
-        return file_get_contents($file);
-    }
+	/**
+	 * Gets the browscap data of the used source type
+	 *
+	 * @return string
+	 */
+	public function getBrowscapSource()
+	{
+		$file = $this->getOption('LocalFile');
+		if ($file === null) {
+			throw new \Exception("Option 'LocalFile' not set.");
+		}
+		if (!is_readable($file)) {
+			throw new \Exception("File '$file' set in option 'LocalFile' is not readable.");
+		}
+		return file_get_contents($file);
+	}
 }

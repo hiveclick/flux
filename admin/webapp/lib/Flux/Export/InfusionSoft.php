@@ -22,10 +22,10 @@ class InfusionSoft extends ExportAbstract {
 		
 	/**
 	 * Sends the leads and returns the results
-	 * @param array|MongoCursor $split_queue_attempts
+	 * @param array|MongoCursor $lead_split_attempts
 	 * @return boolean
 	 */
-	function send($split_queue_attempts, $is_test = false) {
+	function send($lead_split_attempts, $is_test = false) {
 		$ret_val = array();
 		
 		// Now setup multi curl
@@ -34,13 +34,13 @@ class InfusionSoft extends ExportAbstract {
 		// Include the Novak Solutions infusionsoft library
 		require_once(MO_WEBAPP_DIR . '/vendor/novaksolutions/infusionsoft-php-sdk/Infusionsoft/infusionsoft.php');
 		
-		foreach ($split_queue_attempts as $cursor_item) {
-			/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-			$split_queue_attempt = new \Flux\SplitQueueAttempt();
-			$split_queue_attempt->populate($cursor_item);
-			$split_queue_attempt->setStartTime(microtime(true));
+		foreach ($lead_split_attempts as $cursor_item) {
+			/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
+			$lead_split_attempt = new \Flux\LeadSplitAttempt();
+			$lead_split_attempt->populate($cursor_item);
+			$lead_split_attempt->setStartTime(microtime(true));
 
-			$params = $split_queue_attempt->mergeLead();
+			$params = $lead_split_attempt->mergeLead();
 			$api_key = '';
 			$infusion_host = '';
 			$tags = array();
@@ -66,30 +66,30 @@ class InfusionSoft extends ExportAbstract {
 			}
 			
 			if (!$is_test) {
-    			\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getFulfillment()->getFulfillment()->getInfusionsoftHost(), $this->getFulfillment()->getFulfillment()->getInfusionsoftApiKey(), 443));			
-    			$contact_id = \Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
-    			
-    			$split_queue_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
-    			$split_queue_attempt->setResponse('SUCCESS: ' . $contact_id);
-        		$split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-        		$split_queue_attempt->setIsError(false);
+				\Infusionsoft_AppPool::setDefaultApp(new \Infusionsoft_App($this->getFulfillment()->getFulfillment()->getInfusionsoftHost(), $this->getFulfillment()->getFulfillment()->getInfusionsoftApiKey(), 443));			
+				$contact_id = \Infusionsoft_ContactService::addWithDupCheck($contact->toArray(), 'Email');
+				
+				$lead_split_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
+				$lead_split_attempt->setResponse('SUCCESS: ' . $contact_id);
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setIsError(false);
 			
-    			// Now add tags to the contact
-    			if (count($tags) > 0) {
-    				foreach ($tags as $tag_id) {
-    					\Infusionsoft_ContactService::addToGroup($contact_id, $tag_id);
-    				}
-    			}
-    			
-    			\Infusionsoft_AppPool::clearApps();
+				// Now add tags to the contact
+				if (count($tags) > 0) {
+					foreach ($tags as $tag_id) {
+						\Infusionsoft_ContactService::addToGroup($contact_id, $tag_id);
+					}
+				}
+				
+				\Infusionsoft_AppPool::clearApps();
 			} else {
-			    $split_queue_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
-			    $split_queue_attempt->setResponse('SUCCESSFUL TEST');
-			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-			    $split_queue_attempt->setIsError(false);
+				$lead_split_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
+				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setIsError(false);
 			}
 			
-			$ret_val[] = $split_queue_attempt;
+			$ret_val[] = $lead_split_attempt;
 		}
 
 		return $ret_val;

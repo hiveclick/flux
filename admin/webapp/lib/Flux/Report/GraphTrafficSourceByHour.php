@@ -5,10 +5,10 @@ use Mojavi\Form\GoogleChart;
 
 class GraphTrafficSourceByHour extends GoogleChart {
 	
-    private $campaigns;
-    private $offer_id_array;
-    private $group_type;
-    
+	private $campaigns;
+	private $offer_id_array;
+	private $group_type;
+	
 	/**
 	 * Runs the report and stores the data
 	 * @return boolean
@@ -25,14 +25,14 @@ class GraphTrafficSourceByHour extends GoogleChart {
 			}
 		}
 		foreach ($header_col_names as $header_col_name) {
-		    if (trim($header_col_name) != '') {
-			     $this->addColumn(null, $header_col_name, 'number');
-		    }
+			if (trim($header_col_name) != '') {
+				 $this->addColumn(null, $header_col_name, 'number');
+			}
 		}
 		
 		if (count($this->getCols()) == 1) {
-		    // We have not data, so use dummy data
-		    $this->addColumn(null, 'No Data', 'number');
+			// We have not data, so use dummy data
+			$this->addColumn(null, 'No Data', 'number');
 		}
 		
 		// Add default rows for each hour and each offer
@@ -91,7 +91,7 @@ class GraphTrafficSourceByHour extends GoogleChart {
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
 						),
-					    'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME
+						'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME
 					)
 				)
 			)
@@ -104,11 +104,11 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		);
 		
 		if (count($this->getOfferIdArray()) > 0) {
-		    $ops[] = array(
-		    		'$match' => array(
-		    				\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => array('$in' => $this->getOfferIdArray())
-		    		)
-		    );
+			$ops[] = array(
+					'$match' => array(
+							\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer._id' => array('$in' => $this->getOfferIdArray())
+					)
+			);
 		}
 		
 		$ops[] = array(
@@ -116,8 +116,8 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		);
 		
 		$ops[] = array('$match' => array(
-		    '_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
-		    '_e.t' => array(
+			'_e.data_field.name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
+			'_e.t' => array(
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
 			)
@@ -128,11 +128,11 @@ class GraphTrafficSourceByHour extends GoogleChart {
 			'event_date' => array('$substr' => 
 								array('$_e.t', 0, 13)
 							),
-			'event_offer' => '$_e.offer.offer_id',
+			'event_offer' => '$_e.offer._id',
 			'event_name' => '$_e.data_field.data_field_key_name',
-			'offer_name' => '$_t.offer.offer_name',
-		    'campaign_name' => '$_t.campaign.campaign_name',
-		    'campaign_id' => '$_t.campaign.campaign_id',
+			'offer_name' => '$_t.offer.name',
+			'campaign_name' => '$_t.campaign.name',
+			'campaign_id' => '$_t.campaign._id',
 			'subid' => '$_t.s1',
 			'clicks' => 1
 		));
@@ -145,8 +145,8 @@ class GraphTrafficSourceByHour extends GoogleChart {
 						'date' => '$event_date'
 				),
 				'offer_name' => array('$max' => '$offer_name'),
-			    'campaign_name' => array('$max' => '$campaign_name'),
-			    'campaign_id' => array('$max' => '$campaign_id'),
+				'campaign_name' => array('$max' => '$campaign_name'),
+				'campaign_id' => array('$max' => '$campaign_id'),
 				'event_name' => array('$max' => '$event_name'),
 				'event_date' => array('$max' => '$event_date'),
 				'clicks' => array('$sum' => 1)
@@ -171,43 +171,43 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		$op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		$op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		#\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
-        
+		
 		
 		$traffic_source_aggregate = array();
 		$results = $lead->getCollection()->aggregate($ops);
 		foreach ($results['result'] as $result) {
-		    if (($campaign = $this->getCampaign($result['campaign_id'])) != null) {
-		        
-		        if (isset($traffic_source_aggregate[$result['event_date']])) {
-		            if (isset($traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()])) {
-		                $traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()]['clicks'] += (int)$result['clicks'];
-		            } else {
-		                $traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getTrafficSourceName()] = array(
-		                    'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
-		                    'traffic_source_id' => $campaign->getTrafficSource()->getTrafficSourceId(),
-		                    'clicks' => (int)$result['clicks'],
-		                    'event_date' => $result['event_date']
-		                );
-		            }
-		        } else {
-		            $traffic_source_aggregate[$result['event_date']] = array($campaign->getTrafficSource()->getTrafficSourceName() => array(
-		                'traffic_source_name' => $campaign->getTrafficSource()->getTrafficSourceName(),
-		                'traffic_source_id' => $campaign->getTrafficSource()->getTrafficSourceId(),
-		                'clicks' => (int)$result['clicks'],
-		                'event_date' => $result['event_date']
-		            ));
-		        }
-		        
-		    } else {
-		        \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Campaign not found: " . $result['campaign_id'] . '/' . $result['event_date'] . ': ' . $result['clicks']);
-		    }
+			if (($campaign = $this->getCampaign($result['campaign_id'])) != null) {
+				
+				if (isset($traffic_source_aggregate[$result['event_date']])) {
+					if (isset($traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getName()])) {
+						$traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getName()]['clicks'] += (int)$result['clicks'];
+					} else {
+						$traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getName()] = array(
+							'name' => $campaign->getTrafficSource()->getName(),
+							'_id' => $campaign->getTrafficSource()->getId(),
+							'clicks' => (int)$result['clicks'],
+							'event_date' => $result['event_date']
+						);
+					}
+				} else {
+					$traffic_source_aggregate[$result['event_date']] = array($campaign->getTrafficSource()->getName() => array(
+						'name' => $campaign->getTrafficSource()->getName(),
+						'_id' => $campaign->getTrafficSource()->getId(),
+						'clicks' => (int)$result['clicks'],
+						'event_date' => $result['event_date']
+					));
+				}
+				
+			} else {
+				\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Campaign not found: " . $result['campaign_id'] . '/' . $result['event_date'] . ': ' . $result['clicks']);
+			}
 		}
 		
 		$ret_val = array();
 		foreach ($traffic_source_aggregate as $key => $traffic_source_aggregate_date) {
-		    foreach ($traffic_source_aggregate_date as $key_date => $traffic_source_aggregate_data) {
-		        $ret_val[] = $traffic_source_aggregate_data;
-		    }
+			foreach ($traffic_source_aggregate_date as $key_date => $traffic_source_aggregate_data) {
+				$ret_val[] = $traffic_source_aggregate_data;
+			}
 		}
 
 		return $ret_val;
@@ -248,12 +248,12 @@ class GraphTrafficSourceByHour extends GoogleChart {
 	 * @return array
 	 */
 	function getCampaigns() {
-	    if (is_null($this->campaigns)) {
-	        $campaign = new \Flux\Campaign();
-	        $campaign->setIgnorePagination(true);
-	        $this->campaigns = $campaign->queryAll();
-	    }
-	    return $this->campaigns;
+		if (is_null($this->campaigns)) {
+			$campaign = new \Flux\Campaign();
+			$campaign->setIgnorePagination(true);
+			$this->campaigns = $campaign->queryAll();
+		}
+		return $this->campaigns;
 	}
 	
 	/**
@@ -261,12 +261,12 @@ class GraphTrafficSourceByHour extends GoogleChart {
 	 * @return array
 	 */
 	function getCampaign($campaign_id) {
-	    foreach ($this->getCampaigns() as $campaign) {
-	        if ($campaign->getId() == $campaign_id) {
-	            return $campaign;
-	        }
-	    }
-	    return null;
+		foreach ($this->getCampaigns() as $campaign) {
+			if ($campaign->getId() == $campaign_id) {
+				return $campaign;
+			}
+		}
+		return null;
 	}
 		
 }

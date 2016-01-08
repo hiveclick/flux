@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -18,100 +18,100 @@ use ArrayObject;
 class Cookie extends ArrayObject implements HeaderInterface
 {
 
-    protected $encodeValue = true;
+	protected $encodeValue = true;
 
-    public static function fromSetCookieArray(array $setCookies)
-    {
-        $nvPairs = array();
-        /* @var $setCookie SetCookie */
-        foreach ($setCookies as $setCookie) {
-            if (!$setCookie instanceof SetCookie) {
-                throw new Exception\InvalidArgumentException(__CLASS__ . '::' . __METHOD__ . ' requires an array of SetCookie objects');
-            }
-            if (array_key_exists($setCookie->getName(), $nvPairs)) {
-                throw new Exception\InvalidArgumentException('Two cookies with the same name were provided to ' . __CLASS__ . '::' . __METHOD__);
-            }
+	public static function fromSetCookieArray(array $setCookies)
+	{
+		$nvPairs = array();
+		/* @var $setCookie SetCookie */
+		foreach ($setCookies as $setCookie) {
+			if (!$setCookie instanceof SetCookie) {
+				throw new Exception\InvalidArgumentException(__CLASS__ . '::' . __METHOD__ . ' requires an array of SetCookie objects');
+			}
+			if (array_key_exists($setCookie->getName(), $nvPairs)) {
+				throw new Exception\InvalidArgumentException('Two cookies with the same name were provided to ' . __CLASS__ . '::' . __METHOD__);
+			}
 
-            $nvPairs[$setCookie->getName()] = $setCookie->getValue();
-        }
-        return new static($nvPairs);
-    }
+			$nvPairs[$setCookie->getName()] = $setCookie->getValue();
+		}
+		return new static($nvPairs);
+	}
 
-    public static function fromString($headerLine)
-    {
-        $header = new static();
+	public static function fromString($headerLine)
+	{
+		$header = new static();
 
-        list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
+		list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
 
-        // check to ensure proper header type for this factory
-        if (strtolower($name) !== 'cookie') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Server string: "' . $name . '"');
-        }
+		// check to ensure proper header type for this factory
+		if (strtolower($name) !== 'cookie') {
+			throw new Exception\InvalidArgumentException('Invalid header line for Server string: "' . $name . '"');
+		}
 
-        $nvPairs = preg_split('#;\s*#', $value);
+		$nvPairs = preg_split('#;\s*#', $value);
 
-        $arrayInfo = array();
-        foreach ($nvPairs as $nvPair) {
-            $parts = explode('=', $nvPair, 2);
-            if (count($parts) != 2) {
-                throw new Exception\RuntimeException('Malformed Cookie header found');
-            }
-            list($name, $value) = $parts;
-            $arrayInfo[$name] = urldecode($value);
-        }
+		$arrayInfo = array();
+		foreach ($nvPairs as $nvPair) {
+			$parts = explode('=', $nvPair, 2);
+			if (count($parts) != 2) {
+				throw new Exception\RuntimeException('Malformed Cookie header found');
+			}
+			list($name, $value) = $parts;
+			$arrayInfo[$name] = urldecode($value);
+		}
 
-        $header->exchangeArray($arrayInfo);
+		$header->exchangeArray($arrayInfo);
 
-        return $header;
-    }
+		return $header;
+	}
 
-    public function __construct(array $array = array())
-    {
-        parent::__construct($array, ArrayObject::ARRAY_AS_PROPS);
-    }
+	public function __construct(array $array = array())
+	{
+		parent::__construct($array, ArrayObject::ARRAY_AS_PROPS);
+	}
 
-    public function setEncodeValue($encodeValue)
-    {
-        $this->encodeValue = (bool) $encodeValue;
-        return $this;
-    }
+	public function setEncodeValue($encodeValue)
+	{
+		$this->encodeValue = (bool) $encodeValue;
+		return $this;
+	}
 
-    public function getEncodeValue()
-    {
-        return $this->encodeValue;
-    }
+	public function getEncodeValue()
+	{
+		return $this->encodeValue;
+	}
 
-    public function getFieldName()
-    {
-        return 'Cookie';
-    }
+	public function getFieldName()
+	{
+		return 'Cookie';
+	}
 
-    public function getFieldValue()
-    {
-        $nvPairs = array();
+	public function getFieldValue()
+	{
+		$nvPairs = array();
 
-        foreach ($this as $name => $value) {
-            $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
-        }
+		foreach ($this as $name => $value) {
+			$nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
+		}
 
-        return implode('; ', $nvPairs);
-    }
+		return implode('; ', $nvPairs);
+	}
 
-    public function toString()
-    {
-        return 'Cookie: ' . $this->getFieldValue();
-    }
+	public function toString()
+	{
+		return 'Cookie: ' . $this->getFieldValue();
+	}
 
-    /**
-     * Get the cookie as a string, suitable for sending as a "Cookie" header in an
-     * HTTP request
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
-    }
+	/**
+	 * Get the cookie as a string, suitable for sending as a "Cookie" header in an
+	 * HTTP request
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->toString();
+	}
 
 
 }

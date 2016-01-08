@@ -24,32 +24,32 @@ class GenericManual extends ExportAbstract {
 	 * @param array|MongoCursor $split_queue_items
 	 * @return boolean
 	 */
-	function send($split_queue_attempts, $is_test = false) {
-	    if ($is_test) {
-	        // If this is just a test, then do basic formatting, then exit
-	        foreach ($split_queue_attempts as $split_queue_attempt) {
-	            $params = $split_queue_attempt->mergeLead();
-	            $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
-	             
-	            $url = $url . '?' . http_build_query($params, null, '&');
-	            $split_queue_attempt->setRequest($url);
-	            $split_queue_attempt->setResponse('SUCCESSFUL TEST');
-	            $split_queue_attempt->setIsError(false);
-	            $split_queue_attempt->setAttemptTime(new \MongoDate());
-	            $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-	        }
-	        
-	        return $split_queue_attempts;
-	    }
-	    // If this is just a test, then do basic formatting, then exit
-	    foreach ($split_queue_attempts as $split_queue_attempt) {
-	        $split_queue_attempt->setStartTime(microtime(true));
-	        $split_queue_attempt->setResponse('MANUALLY FULFILLED');
-	        $split_queue_attempt->setIsError(false);
-	        $split_queue_attempt->setAttemptTime(new \MongoDate());
-	        $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-	    }
-	     
-	    return $split_queue_attempts;
+	function send($lead_split_attempts, $is_test = false) {
+		if ($is_test) {
+			// If this is just a test, then do basic formatting, then exit
+			foreach ($lead_split_attempts as $lead_split_attempt) {
+				$params = $lead_split_attempt->mergeLead();
+				$url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
+				 
+				$url = $url . '?' . http_build_query($params, null, '&');
+				$lead_split_attempt->setRequest($url);
+				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
+				$lead_split_attempt->setIsError(false);
+				$lead_split_attempt->setAttemptTime(new \MongoDate());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+			}
+			
+			return $lead_split_attempts;
+		}
+		// If this is just a test, then do basic formatting, then exit
+		foreach ($lead_split_attempts as $lead_split_attempt) {
+			$lead_split_attempt->setStartTime(microtime(true));
+			$lead_split_attempt->setResponse('MANUALLY FULFILLED');
+			$lead_split_attempt->setIsError(false);
+			$lead_split_attempt->setAttemptTime(new \MongoDate());
+			$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+		}
+		 
+		return $lead_split_attempts;
 	}
 }

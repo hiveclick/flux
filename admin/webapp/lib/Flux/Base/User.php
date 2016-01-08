@@ -200,10 +200,10 @@ class User extends MongoForm {
 	 * @return string
 	 */
 	function getToken() {
-	    if (is_null($this->token)) {
-	        $this->token = "";
-	    }
-	    return $this->token;
+		if (is_null($this->token)) {
+			$this->token = "";
+		}
+		return $this->token;
 	}
 	
 	/**
@@ -211,9 +211,9 @@ class User extends MongoForm {
 	 * @var string
 	 */
 	function setToken($arg0) {
-	    $this->token = $arg0;
-	    $this->addModifiedColumn("token");
-	    return $this;
+		$this->token = $arg0;
+		$this->addModifiedColumn("token");
+		return $this;
 	}
 	
 	/**
@@ -235,24 +235,24 @@ class User extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if ($arg0 instanceof \MongoId) {
-		    $client = $this->getClient();
-		    $client->setClientId($arg0);
-		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
-		        $client->setClientName($client->getClient()->getName());
-		    }
-		    $this->client = $client;
+			$client = $this->getClient();
+			$client->setClientId($arg0);
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
+				$client->setClientName($client->getClient()->getName());
+			}
+			$this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -267,10 +267,10 @@ class User extends MongoForm {
 	 * @return boolean
 	 */
 	public static function ensureIndexes() {
-	    $user = new self();
-	    $user->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
-	    $user->getCollection()->ensureIndex(array('email' => 1), array('background' => true));
-	    $user->getCollection()->ensureIndex(array('status' => 1, "type" => 1), array('background' => true));
-	    return true;
+		$user = new self();
+		$user->getCollection()->ensureIndex(array('client._id' => 1), array('background' => true));
+		$user->getCollection()->ensureIndex(array('email' => 1), array('background' => true));
+		$user->getCollection()->ensureIndex(array('status' => 1, "type" => 1), array('background' => true));
+		return true;
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -16,18 +16,18 @@ use Zend\Soap\Wsdl;
  */
 interface ComplexTypeStrategyInterface
 {
-    /**
-     * Method accepts the current WSDL context file.
-     *
-     * @param Wsdl $context
-     */
-    public function setContext(Wsdl $context);
+	/**
+	 * Method accepts the current WSDL context file.
+	 *
+	 * @param Wsdl $context
+	 */
+	public function setContext(Wsdl $context);
 
-    /**
-     * Create a complex type based on a strategy
-     *
-     * @param  string $type
-     * @return string XSD type
-     */
-    public function addComplexType($type);
+	/**
+	 * Create a complex type based on a strategy
+	 *
+	 * @param  string $type
+	 * @return string XSD type
+	 */
+	public function addComplexType($type);
 }

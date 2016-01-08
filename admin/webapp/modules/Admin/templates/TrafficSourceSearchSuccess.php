@@ -2,30 +2,39 @@
 	/* @var $traffic_source \Flux\TrafficSource */
 	$traffic_source = $this->getContext()->getRequest()->getAttribute("traffice_source", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_traffic_source_modal" href="/admin/traffic-source-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Traffic Source</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/admin/traffic-source-search">Traffic Sources</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_traffic_source_modal" href="/admin/traffic-source-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Traffic Source</a>
+		</div>
+		<h1>Traffic Sources</h1>
 	</div>
-	<h1>Traffic Sources</h1>
-</div>
-<div class="help-block">Traffic sources categorize where incoming leads originate from.  Sample traffic sources are Google Adwords, Facebook, and TrafficVance</div>
-<br/>
-<div class="panel panel-primary">
-    <div id='traffic-source-header' class='grid-header panel-heading clearfix'>
-		<form id="traffic-source_search_form" method="GET" action="/api">
-			<input type="hidden" name="func" value="/admin/traffic-source">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="pull-right">
-				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
-			</div>
-		</form>
+	<div class="help-block">Traffic sources categorize where incoming leads originate from.  Sample traffic sources are Google Adwords, Facebook, and TrafficVance</div>
+	<br/>
+	<div class="panel panel-primary">
+		<div id='traffic-source-header' class='grid-header panel-heading clearfix'>
+			<form id="traffic-source_search_form" method="GET" action="/api">
+				<input type="hidden" name="func" value="/admin/traffic-source">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="pull-right">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
+			</form>
+		</div>
+		<div id="traffic-source-grid"></div>
+		<div id="traffic-source-pager" class="panel-footer"></div>
 	</div>
-	<div id="traffic-source-grid"></div>
-	<div id="traffic-source-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit traffic-source modal -->
@@ -39,17 +48,17 @@ $(document).ready(function() {
 			return value;
 		}},
 		{id:'icon', name:'icon', field:'icon', def_value: ' ', sortable:true, minWidth: 64, width: 64, maxWidth: 64, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-		    if (value != '') {
-    			var ret_val = '<div>'
-    				ret_val += '<img src="/images/traffic-sources/' + value + '_48.png" border="0" class="img-thumbnail" />';
-    				ret_val += '</div>';
-    				return ret_val;
-		    } else {
-		    	var ret_val = '<div>'
+			if (value != '') {
+				var ret_val = '<div>'
+					ret_val += '<img src="/images/traffic-sources/' + value + '_48.png" border="0" class="img-thumbnail" />';
+					ret_val += '</div>';
+					return ret_val;
+			} else {
+				var ret_val = '<div>'
 					ret_val += '<img src="/images/traffic-sources/unknown_48.png" border="0" class="img-thumbnail" />';
 					ret_val += '</div>';
 					return ret_val;
-		    }
+			}
 		}},
 		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
@@ -72,11 +81,11 @@ $(document).ready(function() {
 
 	slick_grid = $('#traffic-source-grid').slickGrid({
   		pager: $('#traffic-source-pager'),
-  	    form: $('#traffic-source_search_form'),
+  		form: $('#traffic-source_search_form'),
   		columns: columns,
   		useFilter: false,
   		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
-  	    pagingOptions: {
+  		pagingOptions: {
   			pageSize: <?php echo \Flux\Preferences::getPreference('items_per_page', 25) ?>,
   			pageNum: 1
   		},
@@ -101,8 +110,8 @@ $(document).ready(function() {
   	$('#traffic-source_search_form').trigger('submit');
 
 	$('#edit_traffic_source_modal').on('hide.bs.modal', function(e) {
-    	$(this).removeData('bs.modal');
-    });
+		$(this).removeData('bs.modal');
+	});
 });
 //-->
 </script>

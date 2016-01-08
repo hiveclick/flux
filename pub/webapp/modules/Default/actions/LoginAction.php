@@ -35,32 +35,32 @@ class LoginAction extends BasicAction
 		
 		// figure out where we want to go after we login
 		if (isset($_REQUEST['forward'])) {
-		    if ((strpos(strtolower($_REQUEST['forward']), "login") === false) && (strpos(strtolower($_REQUEST['forward']), "ajax") === false)) {
-		        $redirect = $_REQUEST['forward'];
-	        } else {
-	            $redirect = '/index';
-	        }
+			if ((strpos(strtolower($_REQUEST['forward']), "login") === false) && (strpos(strtolower($_REQUEST['forward']), "ajax") === false)) {
+				$redirect = $_REQUEST['forward'];
+			} else {
+				$redirect = '/index';
+			}
 		} else if (isset($_REQUEST['module']) && isset($_REQUEST['action'])) {
-		    if ((strpos(strtolower($_REQUEST['action']), "login") === false) && (strpos(strtolower($_REQUEST['action']), "ajax") === false)) {
-                $redirect = '/' . $_REQUEST['module'] . '/' . $_REQUEST['action'];
-		    } else {
-		        $redirect = '/index';
-		    }
+			if ((strpos(strtolower($_REQUEST['action']), "login") === false) && (strpos(strtolower($_REQUEST['action']), "ajax") === false)) {
+				$redirect = '/' . $_REQUEST['module'] . '/' . $_REQUEST['action'];
+			} else {
+				$redirect = '/index';
+			}
 		}
 		
 		// Perform a cookie login if we have a cookie
 		if (isset($_COOKIE['_' . strtolower(MO_APP_NAME) . "_cookie"])) {
-		    $user_id = $_COOKIE['_' . strtolower(MO_APP_NAME) . "_cookie"];
-		    $user->setId($user_id);
-		    $user->query();
-		    		    
-		    setcookie('_' . strtolower(MO_APP_NAME) . "_cookie", (string)$user->getId(), (time() + 259200), "/", false);
-		    $this->getContext()->getUser()->setUserDetails($user);
-		    $this->getContext()->getUser()->setAuthenticated(true);
-		    
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Redirecting to " . $redirect);
-		    $this->getContext()->getController()->redirect($redirect);
-		    return View::NONE;
+			$user_id = $_COOKIE['_' . strtolower(MO_APP_NAME) . "_cookie"];
+			$user->setId($user_id);
+			$user->query();
+						
+			setcookie('_' . strtolower(MO_APP_NAME) . "_cookie", (string)$user->getId(), (time() + 259200), "/", false);
+			$this->getContext()->getUser()->setUserDetails($user);
+			$this->getContext()->getUser()->setAuthenticated(true);
+			
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Redirecting to " . $redirect);
+			$this->getContext()->getController()->redirect($redirect);
+			return View::NONE;
 		}
 		
 		// Perform a normal login

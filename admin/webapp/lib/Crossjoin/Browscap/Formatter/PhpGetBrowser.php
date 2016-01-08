@@ -45,32 +45,32 @@ namespace Crossjoin\Browscap\Formatter;
 class PhpGetBrowser
 extends AbstractFormatter
 {
-    public function __construct()
-    {
-        $this->settings = new \stdClass();
-    }
+	public function __construct()
+	{
+		$this->settings = new \stdClass();
+	}
 
-    /**
-     * Sets the data (done by the parser)
-     *
-     * @param array $settings
-     */
-    public function setData(array $settings)
-    {
-        $this->settings = new \stdClass();
-        foreach ($settings as $key => $value) {
-            $key = strtolower($key);
-            $this->settings->$key = $value;
-        }
-    }
+	/**
+	 * Sets the data (done by the parser)
+	 *
+	 * @param array $settings
+	 */
+	public function setData(array $settings)
+	{
+		$this->settings = new \stdClass();
+		foreach ($settings as $key => $value) {
+			$key = strtolower($key);
+			$this->settings->$key = $value;
+		}
+	}
 
-    /**
-     * Gets the data (in the preferred format)
-     *
-     * @return \stdClass
-     */
-    public function getData()
-    {
-        return $this->settings;
-    }
+	/**
+	 * Gets the data (in the preferred format)
+	 *
+	 * @return \stdClass
+	 */
+	public function getData()
+	{
+		return $this->settings;
+	}
 }

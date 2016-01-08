@@ -1,19 +1,24 @@
+# Ignore Mac Files
 /nbproject/*
+
+# Ignore Zend files
 .buildpath
 .settings
 .dropbox
 .htaccess
 .DS_Store
 ._.DS_Store
+
+# Ignore library files
 init/config.ini
-lib/config.php
-lib/cache/
 admin/webapp/cache/*
 api/webapp/cache/*
 api/webapp/lib/*
 api/webapp/lib/Zend
 api/webapp/lib/Mojavi
 api/webapp/lib/Flux
+
+# Ignore config files
 admin/webapp/config.php
 admin/webapp/config/databases.ini
 admin/webapp/config/factories.ini
@@ -24,3 +29,10 @@ api/webapp/config/databases.ini
 api/webapp/config/factories.ini
 api/webapp/config/logging.ini
 api/webapp/config/settings.ini
+
+# Ignore vendor files
+admin/webapp/vendor/ioki
+admin/webapp/vendor/knplabs
+admin/webapp/vendor/novaksolutions
+admin/webapp/vendor/oyejorge
+admin/webapp/vendor/twbs

@@ -22,34 +22,34 @@ class IndexAction extends BasicAction
 	 */
 	public function execute ()
 	{
-	    $today_rev = 0;
-	    $yesterday_rev = 0;
-	    $monthly_rev = 0;
-	    
-	    /* @var $report_lead Flux\ReportLead */
-	    $report_lead = new \Flux\ReportLead();
-	    $report_lead->setStartDate(date('m/01/Y'));
-	    $report_lead->setEndDate(date('m/t/Y'));
-	    $report_lead->setDispositionArray(array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED));
-	    $report_lead->setClientIdArray($this->getContext()->getUser()->getUserDetails()->getClient()->getClientId());
-	    $report_lead->setIgnorePagination(true);
-	    $daily_rev_items = $report_lead->queryAll(array(), true);
-	    
-	    /* @var $daily_rev_item \Flux\ReportLead */
-	    foreach ($daily_rev_items as $daily_rev_item) {	        
-	        $monthly_rev += $daily_rev_item->getPayout();
-	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
-	            $today_rev += $daily_rev_item->getPayout();
-	        }
-	        if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y', strtotime('yesterday'))) {
-	            $yesterday_rev += $daily_rev_item->getPayout();
-	        }
-	    }
-	    
-	    $this->getContext()->getRequest()->setAttribute("today_revenue", $today_rev);
-	    $this->getContext()->getRequest()->setAttribute("yesterday_revenue", $yesterday_rev);
-	    $this->getContext()->getRequest()->setAttribute("monthly_revenue", $monthly_rev);
-	    
+		$today_rev = 0;
+		$yesterday_rev = 0;
+		$monthly_rev = 0;
+		
+		/* @var $report_lead Flux\ReportLead */
+		$report_lead = new \Flux\ReportLead();
+		$report_lead->setStartDate(date('m/01/Y'));
+		$report_lead->setEndDate(date('m/t/Y'));
+		$report_lead->setDispositionArray(array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED));
+		$report_lead->setClientIdArray($this->getContext()->getUser()->getUserDetails()->getClient()->getClientId());
+		$report_lead->setIgnorePagination(true);
+		$daily_rev_items = $report_lead->queryAll(array(), true);
+		
+		/* @var $daily_rev_item \Flux\ReportLead */
+		foreach ($daily_rev_items as $daily_rev_item) {			
+			$monthly_rev += $daily_rev_item->getPayout();
+			if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y')) {
+				$today_rev += $daily_rev_item->getPayout();
+			}
+			if (date('m/d/Y', $daily_rev_item->getReportDate()->sec) == date('m/d/Y', strtotime('yesterday'))) {
+				$yesterday_rev += $daily_rev_item->getPayout();
+			}
+		}
+		
+		$this->getContext()->getRequest()->setAttribute("today_revenue", $today_rev);
+		$this->getContext()->getRequest()->setAttribute("yesterday_revenue", $yesterday_rev);
+		$this->getContext()->getRequest()->setAttribute("monthly_revenue", $monthly_rev);
+		
 		return View::SUCCESS;
 	}
 	

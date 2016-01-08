@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -15,55 +15,55 @@ use Zend\Stdlib\ArrayUtils;
 
 class JsonModel extends ViewModel
 {
-    /**
-     * JSON probably won't need to be captured into a
-     * a parent container by default.
-     *
-     * @var string
-     */
-    protected $captureTo = null;
+	/**
+	 * JSON probably won't need to be captured into a
+	 * a parent container by default.
+	 *
+	 * @var string
+	 */
+	protected $captureTo = null;
 
-    /**
-     * JSONP callback (if set, wraps the return in a function call)
-     *
-     * @var string
-     */
-    protected $jsonpCallback = null;
+	/**
+	 * JSONP callback (if set, wraps the return in a function call)
+	 *
+	 * @var string
+	 */
+	protected $jsonpCallback = null;
 
-    /**
-     * JSON is usually terminal
-     *
-     * @var bool
-     */
-    protected $terminate = true;
+	/**
+	 * JSON is usually terminal
+	 *
+	 * @var bool
+	 */
+	protected $terminate = true;
 
-    /**
-     * Set the JSONP callback function name
-     *
-     * @param  string $callback
-     * @return JsonModel
-     */
-    public function setJsonpCallback($callback)
-    {
-        $this->jsonpCallback = $callback;
-        return $this;
-    }
+	/**
+	 * Set the JSONP callback function name
+	 *
+	 * @param  string $callback
+	 * @return JsonModel
+	 */
+	public function setJsonpCallback($callback)
+	{
+		$this->jsonpCallback = $callback;
+		return $this;
+	}
 
-    /**
-     * Serialize to JSON
-     *
-     * @return string
-     */
-    public function serialize()
-    {
-        $variables = $this->getVariables();
-        if ($variables instanceof Traversable) {
-            $variables = ArrayUtils::iteratorToArray($variables);
-        }
+	/**
+	 * Serialize to JSON
+	 *
+	 * @return string
+	 */
+	public function serialize()
+	{
+		$variables = $this->getVariables();
+		if ($variables instanceof Traversable) {
+			$variables = ArrayUtils::iteratorToArray($variables);
+		}
 
-        if (null !== $this->jsonpCallback) {
-            return $this->jsonpCallback.'('.Json::encode($variables).');';
-        }
-        return Json::encode($variables);
-    }
+		if (null !== $this->jsonpCallback) {
+			return $this->jsonpCallback.'('.Json::encode($variables).');';
+		}
+		return Json::encode($variables);
+	}
 }

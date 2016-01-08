@@ -25,17 +25,22 @@ class GetNextLeadAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\SplitQueue */
-		$split_queue = new \Flux\SplitQueue();
-		$split_queue->populate($_REQUEST);
+		/* @var $offer Flux\LeadSplit */
+		$lead_split = new \Flux\LeadSplit();
+		$lead_split->populate($_REQUEST);
 		
 		$criteria = array();
-		$criteria['split.split_id'] = array('$in' => $split_queue->getSplitIdArray());
-		$criteria['disposition'] = array('$in' => array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED));
+		if (\MongoId::isValid($lead_split->getLead()->getLeadId())) {
+			$criteria['lead.lead_id'] = $lead_split->getLead()->getLeadId();
+			$criteria['split.split_id'] = array('$in' => $lead_split->getSplitIdArray());
+		} else {
+			$criteria['split.split_id'] = array('$in' => $lead_split->getSplitIdArray());
+			$criteria['disposition'] = array('$in' => array(\Flux\LeadSplit::DISPOSITION_UNFULFILLED));
+		}
 		
-		$split_queue = $split_queue->findAndModify($criteria, array('$set' => array('disposition' => \Flux\SplitQueue::DISPOSITION_PROCESSING)), null, array('new' => true), true);
+		$lead_split = $lead_split->findAndModify($criteria, array('$set' => array('disposition' => \Flux\LeadSplit::DISPOSITION_PROCESSING)), null, array('new' => true), true);
 		
-		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
+		$this->getContext()->getRequest()->setAttribute("lead_split", $lead_split);
 		return View::SUCCESS;
 	}
 	
@@ -44,7 +49,7 @@ class GetNextLeadAction extends BasicAction
 	 * @return boolean
 	 */
 	function isSecure() {
-	    return true;
+		return true;
 	}
 }
 

@@ -29,12 +29,12 @@
 			
 		<div class="form-group">
 			<select name="icon" id="icon" style="width:165px;">
-                <option value="adwords" <?php echo ($traffic_source->getIcon() == 'adwords') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Google', 'value' => 'adwords', 'description' => 'Google Adwords', 'icon' => 'adwords'))) ?>">Google</option>
-                <option value="yahoo" <?php echo ($traffic_source->getIcon() == 'yahoo') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Yahoo', 'value' => 'yahoo', 'description' => 'Yahoo Ad Manager', 'icon' => 'yahoo'))) ?>">Yahoo</option>
-                <option value="bing" <?php echo ($traffic_source->getIcon() == 'bing') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Bing', 'value' => 'bing', 'description' => 'Bing Ad Manager', 'icon' => 'bing'))) ?>">Bing</option>
-                <option value="fb" <?php echo ($traffic_source->getIcon() == 'fb') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Facebook', 'value' => 'fb', 'description' => 'Facebook Ads', 'icon' => 'fb'))) ?>">Facebook</option>
-                <option value="trafficvance" <?php echo ($traffic_source->getIcon() == 'trafficvance') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'TrafficVance', 'value' => 'trafficvance', 'description' => 'TrafficVance Banner Exchange', 'icon' => 'trafficvance'))) ?>">TrafficVance</option>
-                <option value="email" <?php echo ($traffic_source->getIcon() == 'email') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Obmedia', 'value' => 'email', 'description' => 'Obmedia Email Platform', 'icon' => 'email'))) ?>">Obmedia</option>
+				<option value="adwords" <?php echo ($traffic_source->getIcon() == 'adwords') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Google', 'value' => 'adwords', 'description' => 'Google Adwords', 'icon' => 'adwords'))) ?>">Google</option>
+				<option value="yahoo" <?php echo ($traffic_source->getIcon() == 'yahoo') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Yahoo', 'value' => 'yahoo', 'description' => 'Yahoo Ad Manager', 'icon' => 'yahoo'))) ?>">Yahoo</option>
+				<option value="bing" <?php echo ($traffic_source->getIcon() == 'bing') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Bing', 'value' => 'bing', 'description' => 'Bing Ad Manager', 'icon' => 'bing'))) ?>">Bing</option>
+				<option value="fb" <?php echo ($traffic_source->getIcon() == 'fb') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Facebook', 'value' => 'fb', 'description' => 'Facebook Ads', 'icon' => 'fb'))) ?>">Facebook</option>
+				<option value="trafficvance" <?php echo ($traffic_source->getIcon() == 'trafficvance') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'TrafficVance', 'value' => 'trafficvance', 'description' => 'TrafficVance Banner Exchange', 'icon' => 'trafficvance'))) ?>">TrafficVance</option>
+				<option value="email" <?php echo ($traffic_source->getIcon() == 'email') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Obmedia', 'value' => 'email', 'description' => 'Obmedia Email Platform', 'icon' => 'email'))) ?>">Obmedia</option>
 			</select>
 		</div>
 
@@ -74,24 +74,24 @@ $(document).ready(function() {
 	}, {keep_form:1});
 
 	$('#icon').selectize({
-    	valueField: 'value',
+		valueField: 'value',
 		labelField: 'name',
 		searchField: ['name', 'description'],
 		dropdownWidthOffset: 200,
 		render: {
 			item: function(item, escape) {
-	            return '<div class="text-center" style="margin-right:25px;">' +
-	                '<img class="img-thumbnail text-center" src="/images/traffic-sources/' + escape(item.icon) + '_128.png" border="0" />' +
-	            '</div>';
+				return '<div class="text-center" style="margin-right:25px;">' +
+					'<img class="img-thumbnail text-center" src="/images/traffic-sources/' + escape(item.icon) + '_128.png" border="0" />' +
+				'</div>';
 			},
 			option: function(item, escape) {
 				return '<div class="text-center col-md-4">' +
-			    '<img class="img-thumbnail text-center" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />' +
-                '</div>';
+				'<img class="img-thumbnail text-center" src="/images/traffic-sources/' + escape(item.icon) + '_48.png" border="0" />' +
+				'</div>';
 			}
 		}
 
-    });
+	});
 });
 
 <?php if (\MongoId::isValid($traffic_source->getId())) { ?>

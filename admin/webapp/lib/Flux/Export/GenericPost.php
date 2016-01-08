@@ -59,11 +59,11 @@ class GenericPost extends ExportAbstract {
 	/**
 	 * Sets the requests
 	 * @var string
-	 * @var $split_queue_attempt \Flux\SplitQueueAttempt
+	 * @var $lead_split_attempt \Flux\SplitQueueAttempt
 	 */
-	function addRequest($resource, $split_queue_attempt) {
+	function addRequest($resource, $lead_split_attempt) {
 		$tmp_array = $this->getRequests();
-		$tmp_array[$resource] = $split_queue_attempt;
+		$tmp_array[$resource] = $lead_split_attempt;
 		$this->setRequests($tmp_array);
 	}
 	
@@ -94,13 +94,13 @@ class GenericPost extends ExportAbstract {
 	 * @param $export_queue_item \Flux\ExportQueue
 	 * @return resource
 	 */
-	function prepareCurlRequest($split_queue_attempt) {
+	function prepareCurlRequest($lead_split_attempt) {
 		$start_time = microtime(true);
-		$params = $split_queue_attempt->mergeLead();
-		$url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
+		$params = $lead_split_attempt->mergeLead();
+		$url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
 
 		$curl_request = $url . '?' . http_build_query($params, null, '&');
-		$split_queue_attempt->setRequest($curl_request);
+		$lead_split_attempt->setRequest($curl_request);
 		
 		// Setup Curl for this request
 		$ch = curl_init();
@@ -126,26 +126,26 @@ class GenericPost extends ExportAbstract {
 	
 	/**
 	 * Merges the response with the lead
-	 * @param $split_queue_attempt Flux\SplitQueueAttempt
+	 * @param $lead_split_attempt Flux\SplitQueueAttempt
 	 * @param $response string
 	 * @return boolean
 	 */
-	function mergeResponse($split_queue_attempt, $response) {
-		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-		$split_queue_attempt->setResponse($response);
-		$split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
+	function mergeResponse($lead_split_attempt, $response) {
+		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
+		$lead_split_attempt->setResponse($response);
+		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
-    		if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
-    			$split_queue_attempt->setIsError(false);
-    		} else {
-    		    $split_queue_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
-    			$split_queue_attempt->setIsError(true);
-    		}
+			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
+				$lead_split_attempt->setIsError(false);
+			} else {
+				$lead_split_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
+				$lead_split_attempt->setIsError(true);
+			}
 		} else {
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Missing SuccessMsg on " . $this->getFulfillment()->getFulfillmentName() . " for " . $split_queue_attempt->getSplitQueue()->getSplitQueue()->getSplit()->getSplitName());
-		    $split_queue_attempt->setIsError(false);
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Missing SuccessMsg on " . $this->getFulfillment()->getName() . " for " . $lead_split_attempt->getSplitQueue()->getSplitQueue()->getSplit()->getName());
+			$lead_split_attempt->setIsError(false);
 		}
-		return $split_queue_attempt;
+		return $lead_split_attempt;
 	}
 	
 	/**
@@ -153,39 +153,39 @@ class GenericPost extends ExportAbstract {
 	 * @param array|MongoCursor $split_queue_items
 	 * @return boolean
 	 */
-	function send($split_queue_attempts, $is_test = false) {
-	    if ($is_test) {
-	        // If this is just a test, then do basic formatting, then exit
-	        foreach ($split_queue_attempts as $split_queue_attempt) {
-	            $params = $split_queue_attempt->mergeLead();
-	            $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
-	             
-	            $url = $url . '?' . http_build_query($params, null, '&');
-	            $split_queue_attempt->setRequest($url);
-	            $split_queue_attempt->setResponse('SUCCESSFUL TEST');
-	            $split_queue_attempt->setIsError(false);
-	            $split_queue_attempt->setAttemptTime(new \MongoDate());
-	            $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-	            $split_queue_attempt->setIsError(false);
-	        }
-	        
-	        return $split_queue_attempts;
-	    }
-	    
-	    // If this is not a test, then do the real thing
+	function send($lead_split_attempts, $is_test = false) {
+		if ($is_test) {
+			// If this is just a test, then do basic formatting, then exit
+			foreach ($lead_split_attempts as $lead_split_attempt) {
+				$params = $lead_split_attempt->mergeLead();
+				$url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
+				 
+				$url = $url . '?' . http_build_query($params, null, '&');
+				$lead_split_attempt->setRequest($url);
+				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
+				$lead_split_attempt->setIsError(false);
+				$lead_split_attempt->setAttemptTime(new \MongoDate());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setIsError(false);
+			}
+			
+			return $lead_split_attempts;
+		}
+		
+		// If this is not a test, then do the real thing
 		$ret_val = array();
 		
 		// Now setup multi curl
 		$mh = curl_multi_init();
 		
-		foreach ($split_queue_attempts as $cursor_item) {
-			$split_queue_attempt = new \Flux\SplitQueueAttempt();
-			$split_queue_attempt->populate($cursor_item);
-			$split_queue_attempt->setStartTime(microtime(true));
+		foreach ($lead_split_attempts as $cursor_item) {
+			$lead_split_attempt = new \Flux\LeadSplitAttempt();
+			$lead_split_attempt->populate($cursor_item);
+			$lead_split_attempt->setStartTime(microtime(true));
 			// Prepare the cURL request
-			$ch = $this->prepareCurlRequest($split_queue_attempt);
+			$ch = $this->prepareCurlRequest($lead_split_attempt);
 			$key = (string)$ch;
-			$this->addRequest($key, $split_queue_attempt);
+			$this->addRequest($key, $lead_split_attempt);
 			curl_multi_add_handle($mh, $ch);
 		}
 
@@ -204,9 +204,9 @@ class GenericPost extends ExportAbstract {
 				while (($info = curl_multi_info_read($mh)) !== false) {
 					$resource = (string)$info['handle'];
 					$response = curl_multi_getcontent($info['handle']);
-					if (($split_queue_attempt = $this->getRequest($resource)) !== false) {
-						if ($this->mergeResponse($split_queue_attempt, $response)) {
-							$ret_val[] = $split_queue_attempt;
+					if (($lead_split_attempt = $this->getRequest($resource)) !== false) {
+						if ($this->mergeResponse($lead_split_attempt, $response)) {
+							$ret_val[] = $lead_split_attempt;
 						}
 						$this->removeRequest($resource);
 					}

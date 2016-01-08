@@ -25,12 +25,12 @@ class User extends Base\User {
 	 */
 	function setClientIdArray($arg0) {
 	   if (is_array($arg0)) {
-            $this->client_id_array = $arg0;
-	    } else if (is_string($arg0)) {
-	        $this->client_id_array = array($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->client_id_array = array($arg0);
-	    }
+			$this->client_id_array = $arg0;
+		} else if (is_string($arg0)) {
+			$this->client_id_array = array($arg0);
+		} else if ($arg0 instanceof \MongoId) {
+			$this->client_id_array = array($arg0);
+		}
 		array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
@@ -78,10 +78,10 @@ class User extends Base\User {
 	 * @return string
 	 */
 	function getNewPassword() {
-	    if (is_null($this->new_password)) {
-	        $this->new_password = "";
-	    }
-	    return $this->new_password;
+		if (is_null($this->new_password)) {
+			$this->new_password = "";
+		}
+		return $this->new_password;
 	}
 	
 	/**
@@ -89,8 +89,8 @@ class User extends Base\User {
 	 * @var string
 	 */
 	function setNewPassword($arg0) {
-	    $this->new_password = $arg0;
-	    return $this;
+		$this->new_password = $arg0;
+		return $this;
 	}
 	
 	/**
@@ -98,10 +98,10 @@ class User extends Base\User {
 	 * @return string
 	 */
 	function getNewPasswordConfirm() {
-	    if (is_null($this->new_password_confirm)) {
-	        $this->new_password_confirm = "";
-	    }
-	    return $this->new_password_confirm;
+		if (is_null($this->new_password_confirm)) {
+			$this->new_password_confirm = "";
+		}
+		return $this->new_password_confirm;
 	}
 	
 	/**
@@ -109,8 +109,8 @@ class User extends Base\User {
 	 * @var string
 	 */
 	function setNewPasswordConfirm($arg0) {
-	    $this->new_password_confirm = $arg0;
-	    return $this;
+		$this->new_password_confirm = $arg0;
+		return $this;
 	}
 
 	// +------------------------------------------------------------------------+
@@ -122,11 +122,11 @@ class User extends Base\User {
 	 * @return Flux\User
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
-		if (\MongoId::isValid($this->getClient()->getClientId())) {
-			$criteria['client.client_id'] = $this->getClient()->getClientId();
+		if (\MongoId::isValid($this->getClient()->getId())) {
+			$criteria['client._id'] = $this->getClient()->getId();
 		}
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
@@ -139,7 +139,7 @@ class User extends Base\User {
 	 * @return Flux\User
 	 */
 	function queryAllByClient() {
-		return $this->queryAll(array('client.client_id' => $this->getClient()->getClientId()));
+		return $this->queryAll(array('client._id' => $this->getClient()->getId()));
 	}
 	
 	/**
@@ -147,12 +147,12 @@ class User extends Base\User {
 	 * @return integer
 	 */
 	function updatePassword() {
-	    if ($this->getNewPassword() == $this->getNewPasswordConfirm()) {
-	        $this->setPassword($this->getNewPassword());
-	        return $this->update();
-	    } else {
-	        throw new \Exception('The passwords do not match. Please check them.');
-	    }
+		if ($this->getNewPassword() == $this->getNewPasswordConfirm()) {
+			$this->setPassword($this->getNewPassword());
+			return $this->update();
+		} else {
+			throw new \Exception('The passwords do not match. Please check them.');
+		}
 	}
 	
 	/**
@@ -160,9 +160,9 @@ class User extends Base\User {
 	 * @return integer
 	 */
 	function updateToken() {
-	    $new_token = md5(strtotime('now'));
-        $this->setToken($new_token);
-        return $this->update();
+		$new_token = md5(strtotime('now'));
+		$this->setToken($new_token);
+		return $this->update();
 	}
 
 	/**
@@ -185,14 +185,14 @@ class User extends Base\User {
 	 * @return Flux\User
 	 */
 	function tryTokenLogin() {
-	    $user = $this->query(array('token' => $this->getToken(), 'status' => self::USER_STATUS_ACTIVE), false);
-	    if ($user === false) {
-	        throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
-	    }
-	    if (!is_null($user) && \MongoId::isValid($user->getId())) {
-	        $this->populate($user);
-	    }
-	    return $this;
+		$user = $this->query(array('token' => $this->getToken(), 'status' => self::USER_STATUS_ACTIVE), false);
+		if ($user === false) {
+			throw new \Exception('Your login credentials are not correct.  Please check your username and/or password');
+		}
+		if (!is_null($user) && \MongoId::isValid($user->getId())) {
+			$this->populate($user);
+		}
+		return $this;
 	}
 
 	/**

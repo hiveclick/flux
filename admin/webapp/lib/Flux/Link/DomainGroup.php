@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class DomainGroup extends CommonForm {
+class DomainGroup extends BasicLink {
 	
-	protected $domain_group_id;
-	protected $domain_group_name;
 	protected $record_count;
 	
 	private $domain_group;
@@ -16,10 +12,7 @@ class DomainGroup extends CommonForm {
 	 * @return integer
 	 */
 	function getDomainGroupId() {
-		if (is_null($this->domain_group_id)) {
-			$this->domain_group_id = null;
-		}
-		return $this->domain_group_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -27,12 +20,7 @@ class DomainGroup extends CommonForm {
 	 * @var integer
 	 */
 	function setDomainGroupId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->domain_group_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->domain_group_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -40,10 +28,7 @@ class DomainGroup extends CommonForm {
 	 * @return string
 	 */
 	function getDomainGroupName() {
-		if (is_null($this->domain_group_name)) {
-			$this->domain_group_name = "";
-		}
-		return $this->domain_group_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -51,8 +36,7 @@ class DomainGroup extends CommonForm {
 	 * @var string
 	 */
 	function setDomainGroupName($arg0) {
-		$this->domain_group_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

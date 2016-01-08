@@ -44,155 +44,155 @@ namespace Crossjoin\Browscap;
  */
 class Browscap
 {
-    /**
-     * Current version of the class.
-     */
-    const VERSION = '0.1';
+	/**
+	 * Current version of the class.
+	 */
+	const VERSION = '0.1';
 
-    /**
-     * Updater to use
-     *
-     * @var \Crossjoin\Browscap\Updater\AbstractUpdater
-     */
-    protected static $updater;
+	/**
+	 * Updater to use
+	 *
+	 * @var \Crossjoin\Browscap\Updater\AbstractUpdater
+	 */
+	protected static $updater;
 
-    /**
-     * Parser to use
-     *
-     * @var \Crossjoin\Browscap\Parser\AbstractParser
-     */
-    protected static $parser;
+	/**
+	 * Parser to use
+	 *
+	 * @var \Crossjoin\Browscap\Parser\AbstractParser
+	 */
+	protected static $parser;
 
-    /**
-     * Formatter to use
-     *
-     * @var \Crossjoin\Browscap\Formatter\AbstractFormatter
-     */
-    protected static $formatter;
+	/**
+	 * Formatter to use
+	 *
+	 * @var \Crossjoin\Browscap\Formatter\AbstractFormatter
+	 */
+	protected static $formatter;
 
-    /**
-     * Probability in percent that the update check is done
-     *
-     * @var float
-     */
-    protected $updateProbability = 1.0;
+	/**
+	 * Probability in percent that the update check is done
+	 *
+	 * @var float
+	 */
+	protected $updateProbability = 1.0;
 
-    /**
-     * Checks the given/detected user agent and returns a
-     * formatter instance with the detected settings
-     *
-     * @param string $user_agent
-     * @return \Crossjoin\Browscap\Formatter\AbstractFormatter
-     */
-    public function getBrowser($user_agent = null)
-    {
-        // automatically detect the useragent
-        if ($user_agent === null) {
-            if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                $user_agent = $_SERVER['HTTP_USER_AGENT'];
-            } else {
-                $user_agent = '';
-            }
-        }
+	/**
+	 * Checks the given/detected user agent and returns a
+	 * formatter instance with the detected settings
+	 *
+	 * @param string $user_agent
+	 * @return \Crossjoin\Browscap\Formatter\AbstractFormatter
+	 */
+	public function getBrowser($user_agent = null)
+	{
+		// automatically detect the useragent
+		if ($user_agent === null) {
+			if (isset($_SERVER['HTTP_USER_AGENT'])) {
+				$user_agent = $_SERVER['HTTP_USER_AGENT'];
+			} else {
+				$user_agent = '';
+			}
+		}
 
-        // check for update first
-        if (mt_rand(1, floor((100 / $this->updateProbability))) === 1) {
-            self::getParser()->update();
-        }
+		// check for update first
+		if (mt_rand(1, floor((100 / $this->updateProbability))) === 1) {
+			self::getParser()->update();
+		}
 
-        // try to get browser data
-        $return = self::getParser()->getBrowser($user_agent);
+		// try to get browser data
+		$return = self::getParser()->getBrowser($user_agent);
 
-        // if not found, there has to be a problem with the source data,
-        // because normally defualt browser data are returned,
-        // so set the probability to 100%, to force an update.
-        if ($return === null && $this->updateProbability < 100) {
-            $updateProbability = $this->updateProbability;
-            $this->updateProbability = 100;
-            $return = $this->getBrowser($user_agent);
-            $this->updateProbability = $updateProbability;
-        }
+		// if not found, there has to be a problem with the source data,
+		// because normally defualt browser data are returned,
+		// so set the probability to 100%, to force an update.
+		if ($return === null && $this->updateProbability < 100) {
+			$updateProbability = $this->updateProbability;
+			$this->updateProbability = 100;
+			$return = $this->getBrowser($user_agent);
+			$this->updateProbability = $updateProbability;
+		}
 
-        // if return is still NULL, updates are disabled... in this
-        // case we return an empty formatter instance
-        if ($return === null) {
-            $return = self::getFormatter();
-        }
+		// if return is still NULL, updates are disabled... in this
+		// case we return an empty formatter instance
+		if ($return === null) {
+			$return = self::getFormatter();
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 
-    /**
-     * Set theformatter instance to use for the getBrowser() result
-     *
-     * @param \Crossjoin\Browscap\Formatter\AbstractFormatter $formatter
-     */
-    public static function setFormatter(Formatter\AbstractFormatter $formatter)
-    {
-        self::$formatter = $formatter;
-    }
+	/**
+	 * Set theformatter instance to use for the getBrowser() result
+	 *
+	 * @param \Crossjoin\Browscap\Formatter\AbstractFormatter $formatter
+	 */
+	public static function setFormatter(Formatter\AbstractFormatter $formatter)
+	{
+		self::$formatter = $formatter;
+	}
 
-    /**
-     * @return Formatter\AbstractFormatter
-     */
-    public static function getFormatter()
-    {
-        if (self::$formatter === null) {
-            self::setFormatter(new Formatter\PhpGetBrowser());
-        }
-        return self::$formatter;
-    }
+	/**
+	 * @return Formatter\AbstractFormatter
+	 */
+	public static function getFormatter()
+	{
+		if (self::$formatter === null) {
+			self::setFormatter(new Formatter\PhpGetBrowser());
+		}
+		return self::$formatter;
+	}
 
-    /**
-     * Sets the parser instance to use
-     *
-     * @param \Crossjoin\Browscap\Parser\AbstractParser $parser
-     */
-    public static function setParser(Parser\AbstractParser $parser)
-    {
-        self::$parser = $parser;
-    }
+	/**
+	 * Sets the parser instance to use
+	 *
+	 * @param \Crossjoin\Browscap\Parser\AbstractParser $parser
+	 */
+	public static function setParser(Parser\AbstractParser $parser)
+	{
+		self::$parser = $parser;
+	}
 
-    /**
-     * @return Parser\AbstractParser
-     */
-    public static function getParser()
-    {
-        if (self::$parser === null) {
-            // generators are supported from PHP 5.5, so select the correct parser version to use
-            // (the version without generators requires about 2-3x the memory and is a bit slower)
-            if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
-                self::setParser(new Parser\Ini());
-            } else {
-                self::setParser(new Parser\IniLt55());
-            }
-        }
-        return self::$parser;
-    }
+	/**
+	 * @return Parser\AbstractParser
+	 */
+	public static function getParser()
+	{
+		if (self::$parser === null) {
+			// generators are supported from PHP 5.5, so select the correct parser version to use
+			// (the version without generators requires about 2-3x the memory and is a bit slower)
+			if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
+				self::setParser(new Parser\Ini());
+			} else {
+				self::setParser(new Parser\IniLt55());
+			}
+		}
+		return self::$parser;
+	}
 
-    /**
-     * Sets the updater instance to use
-     *
-     * @param \Crossjoin\Browscap\Updater\AbstractUpdater $updater
-     */
-    public static function setUpdater(Updater\AbstractUpdater $updater)
-    {
-        self::$updater = $updater;
-    }
+	/**
+	 * Sets the updater instance to use
+	 *
+	 * @param \Crossjoin\Browscap\Updater\AbstractUpdater $updater
+	 */
+	public static function setUpdater(Updater\AbstractUpdater $updater)
+	{
+		self::$updater = $updater;
+	}
 
-    /**
-     * Gets the updater instance (and itits the default one, if not set)
-     *
-     * @return \Crossjoin\Browscap\Updater\AbstractUpdater
-     */
-    public static function getUpdater()
-    {
-        if (self::$updater === null) {
-            $updater = Updater\FactoryUpdater::getInstance();
-            if ($updater !== null) {
-                self::setUpdater($updater);
-            }
-        }
-        return self::$updater;
-    }
+	/**
+	 * Gets the updater instance (and itits the default one, if not set)
+	 *
+	 * @return \Crossjoin\Browscap\Updater\AbstractUpdater
+	 */
+	public static function getUpdater()
+	{
+		if (self::$updater === null) {
+			$updater = Updater\FactoryUpdater::getInstance();
+			if ($updater !== null) {
+				self::setUpdater($updater);
+			}
+		}
+		return self::$updater;
+	}
 }

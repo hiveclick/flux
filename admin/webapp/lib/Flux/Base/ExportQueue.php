@@ -55,12 +55,12 @@ class ExportQueue extends MongoForm {
 			}
 			$this->export = $export;
 		} else if ($arg0 instanceof \MongoId) {
-		    $export = $this->getExport();
-		    $export->setExportId($arg0);
-		    if (\MongoId::isValid($export->getExportId()) && $export->getExportName() == "") {
-		        $export->setExportName($export->getExport()->getName());
-		    }
-		    $this->export = $export;
+			$export = $this->getExport();
+			$export->setExportId($arg0);
+			if (\MongoId::isValid($export->getExportId()) && $export->getExportName() == "") {
+				$export->setExportName($export->getExport()->getName());
+			}
+			$this->export = $export;
 		}
 		$this->setCollectionName('export_queue');
 		$this->addModifiedColumn('export');

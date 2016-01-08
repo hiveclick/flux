@@ -21,20 +21,20 @@ class Generic extends ExportAbstract {
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array|MongoCursor $split_queue_attempts
+	 * @param array|MongoCursor $lead_split_attempts
 	 * @return boolean
 	 */
-	function send($split_queue_attempts, $is_test = false) {
-	    foreach ($split_queue_attempts as $split_queue_attempt) {
-	        $params = $split_queue_attempt->mergeLead();
-	        $url = $split_queue_attempt->getFulfillment()->getFulfillment()->getPostUrl();
-	        
-	        $url = $url . '?' . http_build_query($params, null, '&');
-	        $split_queue_attempt->setRequest($url);
-	        $split_queue_attempt->setResponse('SUCCESSFUL TEST');
-	        $split_queue_attempt->setIsError(false);
-	    }
-		return $split_queue_attempts;
+	function send($lead_split_attempts, $is_test = false) {
+		foreach ($lead_split_attempts as $lead_split_attempt) {
+			$params = $lead_split_attempt->mergeLead();
+			$url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
+			
+			$url = $url . '?' . http_build_query($params, null, '&');
+			$lead_split_attempt->setRequest($url);
+			$lead_split_attempt->setResponse('SUCCESSFUL TEST');
+			$lead_split_attempt->setIsError(false);
+		}
+		return $lead_split_attempts;
 	}
 }
 ?>

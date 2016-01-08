@@ -35,14 +35,14 @@ class ClientWizardAction extends BasicAction
 		$network_handlers = array();
 		$files = scandir(MO_LIB_DIR . "/Flux/Network/");
 		foreach ($files as $file) {
-		    if (strpos($file, '.') === 0) { continue; }
-		    if (strpos($file, 'Abstract') !== false) { continue; }
-		    if (trim($file) == 'Generic.php') { continue; }
-		    if (trim($file) == '') { continue; }
-		    $class_name = substr($file, 0, strpos($file, '.php'));
-		    $full_class_name = '\\Flux\\Network\\' . $class_name;
-		    $class_instance = new $full_class_name();
-		    $network_handlers[$class_name] = $class_instance;
+			if (strpos($file, '.') === 0) { continue; }
+			if (strpos($file, 'Abstract') !== false) { continue; }
+			if (trim($file) == 'Generic.php') { continue; }
+			if (trim($file) == '') { continue; }
+			$class_name = substr($file, 0, strpos($file, '.php'));
+			$full_class_name = '\\Flux\\Network\\' . $class_name;
+			$class_instance = new $full_class_name();
+			$network_handlers[$class_name] = $class_instance;
 		}
 		
 		$this->getContext()->getRequest()->setAttribute("client", $client);

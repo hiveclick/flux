@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class User extends CommonForm {
-	
-	protected $user_id;
-	protected $user_name;
+class User extends BasicLink {
 	
 	private $user;
 	
@@ -15,10 +10,7 @@ class User extends CommonForm {
 	 * @return integer
 	 */
 	function getUserId() {
-		if (is_null($this->user_id)) {
-			$this->user_id = null;
-		}
-		return $this->user_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class User extends CommonForm {
 	 * @var integer
 	 */
 	function setUserId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->user_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->user_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class User extends CommonForm {
 	 * @return string
 	 */
 	function getUserName() {
-		if (is_null($this->user_name)) {
-			$this->user_name = "";
-		}
-		return $this->user_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class User extends CommonForm {
 	 * @var string
 	 */
 	function setUserName($arg0) {
-		$this->user_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

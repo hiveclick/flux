@@ -14,183 +14,183 @@ use Mojavi\Config\ConfigCache as ConfigCache;
 class ExecutionFilter extends Filter
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute this filter.
-     *
-     * @param FilterChain The filter chain.
-     *
-     * @return void
-     *
-     * @throws <b>InitializeException</b> If an error occurs during view
-     *                                    initialization.
-     * @throws <b>ViewException</b>       If an error occurs while executing
-     *                                    the view.
-     */
-    public function execute ($filterChain)
-    {
+	/**
+	 * Execute this filter.
+	 *
+	 * @param FilterChain The filter chain.
+	 *
+	 * @return void
+	 *
+	 * @throws <b>InitializeException</b> If an error occurs during view
+	 *									initialization.
+	 * @throws <b>ViewException</b>	   If an error occurs while executing
+	 *									the view.
+	 */
+	public function execute ($filterChain)
+	{
 
-        static
-            $context,
-            $controller,
-            $validatorManager;
+		static
+			$context,
+			$controller,
+			$validatorManager;
 
-        if (!isset($context))
-        {
+		if (!isset($context))
+		{
 
-            // get the context and controller
-            $context    = $this->getContext();
-            $controller = $context->getController();
+			// get the context and controller
+			$context	= $this->getContext();
+			$controller = $context->getController();
 
-            // create validator manager
-            $validatorManager = new ValidatorManager();
-            $validatorManager->initialize($context);
+			// create validator manager
+			$validatorManager = new ValidatorManager();
+			$validatorManager->initialize($context);
 
-        } else
-        {
+		} else
+		{
 
-            // clear the validator manager for reuse
-            $validatorManager->clear();
+			// clear the validator manager for reuse
+			$validatorManager->clear();
 
-        }
+		}
 
-        // get the current action instance
-        $actionEntry    = $controller->getActionStack()->getLastEntry();
-        $actionInstance = $actionEntry->getActionInstance();
+		// get the current action instance
+		$actionEntry	= $controller->getActionStack()->getLastEntry();
+		$actionInstance = $actionEntry->getActionInstance();
 
-        // get the current action information
-        $moduleName = $context->getModuleName();
-        $actionName = $context->getActionName();
+		// get the current action information
+		$moduleName = $context->getModuleName();
+		$actionName = $context->getActionName();
 
-        // get the request method
-        $method = $context->getRequest()->getMethod();
+		// get the request method
+		$method = $context->getRequest()->getMethod();
 
-        if (($actionInstance->getRequestMethods() & $method) != $method)
-        {
+		if (($actionInstance->getRequestMethods() & $method) != $method)
+		{
 
-            // this action will skip validation/execution for this method
-            // get the default view
-            $viewName = $actionInstance->getDefaultView();
+			// this action will skip validation/execution for this method
+			// get the default view
+			$viewName = $actionInstance->getDefaultView();
 
-        } else
-        {
+		} else
+		{
 
-            // set default validated status
-            $validated = true;
+			// set default validated status
+			$validated = true;
 
-            // get the current action validation configuration
-            $validationConfig = MO_MODULE_DIR . '/' . $moduleName .
-                                '/validate/' . $actionName . '.ini';
+			// get the current action validation configuration
+			$validationConfig = MO_MODULE_DIR . '/' . $moduleName .
+								'/validate/' . $actionName . '.ini';
 
-            if (is_readable($validationConfig))
-            {
+			if (is_readable($validationConfig))
+			{
 
-                // load validation configuration
-                // do NOT use require_once
-                $validationConfig = 'modules/' . $moduleName .
-                                    '/validate/' . $actionName . '.ini';
+				// load validation configuration
+				// do NOT use require_once
+				$validationConfig = 'modules/' . $moduleName .
+									'/validate/' . $actionName . '.ini';
 
-                require(ConfigCache::checkConfig($validationConfig));
+				require(ConfigCache::checkConfig($validationConfig));
 
-            }
+			}
 
-            // manually load validators
-            $actionInstance->registerValidators($validatorManager);
+			// manually load validators
+			$actionInstance->registerValidators($validatorManager);
 
-            // process validators
-            $validated = $validatorManager->execute();
+			// process validators
+			$validated = $validatorManager->execute();
 
-            // process manual validation
-            if ($validated && $actionInstance->validate())
-            {
+			// process manual validation
+			if ($validated && $actionInstance->validate())
+			{
 
-                // execute the action
-                $viewName = $actionInstance->execute();
+				// execute the action
+				$viewName = $actionInstance->execute();
 
-            } else
-            {
+			} else
+			{
 
-                // validation failed
-                $viewName = $actionInstance->handleError();
+				// validation failed
+				$viewName = $actionInstance->handleError();
 
-            }
+			}
 
-        }
+		}
 
-        if ($viewName != View::NONE)
-        {
+		if ($viewName != View::NONE)
+		{
 
-            if (is_array($viewName))
-            {
+			if (is_array($viewName))
+			{
 
-                // we're going to use an entirely different action for this view
-                $moduleName = $viewName[0];
-                $viewName   = $viewName[1];
+				// we're going to use an entirely different action for this view
+				$moduleName = $viewName[0];
+				$viewName   = $viewName[1];
 
-            } else
-            {
+			} else
+			{
 
-                // use a view related to this action
-                $viewName = $actionName . $viewName;
+				// use a view related to this action
+				$viewName = $actionName . $viewName;
 
-            }
+			}
 
-            // display this view
-            if (!$controller->viewExists($moduleName, $viewName))
-            {
+			// display this view
+			if (!$controller->viewExists($moduleName, $viewName))
+			{
 
-                // the requested view doesn't exist
-                $file = MO_MODULE_DIR . '/' . $moduleName . '/views/' .
-                        $viewName . 'View.php';
+				// the requested view doesn't exist
+				$file = MO_MODULE_DIR . '/' . $moduleName . '/views/' .
+						$viewName . 'View.php';
 
-                $error = 'Module "%s" does not contain the view "%sView" or ' .
-                         'the file "%s" is unreadable';
+				$error = 'Module "%s" does not contain the view "%sView" or ' .
+						 'the file "%s" is unreadable';
 
-                $error = sprintf($error, $moduleName, $viewName, $file);
+				$error = sprintf($error, $moduleName, $viewName, $file);
 
-                throw new ViewException($error);
+				throw new ViewException($error);
 
-            }
+			}
 
-            // get the view instance
-            $viewInstance = $controller->getView($moduleName, $viewName);
+			// get the view instance
+			$viewInstance = $controller->getView($moduleName, $viewName);
 
-            // initialize the view
-            if ($viewInstance->initialize($context))
-            {
+			// initialize the view
+			if ($viewInstance->initialize($context))
+			{
 
-                // view initialization completed successfully
-                $viewInstance->execute();
+				// view initialization completed successfully
+				$viewInstance->execute();
 
-                // render the view and if data is returned, stick it in the
-                // action entry which was retrieved from the execution chain
-                $viewData =& $viewInstance->render();
+				// render the view and if data is returned, stick it in the
+				// action entry which was retrieved from the execution chain
+				$viewData =& $viewInstance->render();
 
-                if ($controller->getRenderMode() == View::RENDER_VAR)
-                {
+				if ($controller->getRenderMode() == View::RENDER_VAR)
+				{
 
-                    $actionEntry->setPresentation($viewData);
+					$actionEntry->setPresentation($viewData);
 
-                }
+				}
 
-            } else
-            {
+			} else
+			{
 
-                // view failed to initialize
-                $error = 'View initialization failed for module "%s", ' .
-                         'view "%sView"';
-                $error = sprintf($error, $moduleName, $viewName);
+				// view failed to initialize
+				$error = 'View initialization failed for module "%s", ' .
+						 'view "%sView"';
+				$error = sprintf($error, $moduleName, $viewName);
 
-                throw new InitializationException($error);
+				throw new InitializationException($error);
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
 }
 

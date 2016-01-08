@@ -20,17 +20,17 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/css/login.css">
 </head>
 <body>
-    <div class="container">
-        <br />
-        <div class="hidden-xs">
-            <br /><br /><br /><br /><br />
-        </div>
-        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-            <?php echo $template["content"] ?>
-        </div>
-        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-            <div class="text-center small" style="color:white;">flux lead management &copy;2015</div>
-        </div>
-    </div>
+	<div class="container">
+		<br />
+		<div class="hidden-xs">
+			<br /><br /><br /><br /><br />
+		</div>
+		<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+			<?php echo $template["content"] ?>
+		</div>
+		<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+			<div class="text-center small" style="color:white;">flux lead management &copy;2015</div>
+		</div>
+	</div>
 </body>
 </html>

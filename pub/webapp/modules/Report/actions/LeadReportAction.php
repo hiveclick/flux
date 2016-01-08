@@ -26,7 +26,7 @@ class LeadReportAction extends BasicAction
 	 */
 	public function execute ()
 	{		
-	    /* @var $report_lead Flux\ReportLead */
+		/* @var $report_lead Flux\ReportLead */
 		$report_lead = new \Flux\ReportLead();
 		$report_lead->setReportDate(new \MongoDate(strtotime(date('m/01/Y'))));
 		$report_lead->populate($_GET);

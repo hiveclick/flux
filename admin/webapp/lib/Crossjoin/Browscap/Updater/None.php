@@ -39,33 +39,33 @@ namespace Crossjoin\Browscap\Updater;
 class None
 extends AbstractUpdater
 {
-    /**
-     * Gets the current browscap version (time stamp)
-     *
-     * @return int
-     */
-    public function getBrowscapVersion()
-    {
-        return 0;
-    }
+	/**
+	 * Gets the current browscap version (time stamp)
+	 *
+	 * @return int
+	 */
+	public function getBrowscapVersion()
+	{
+		return 0;
+	}
 
-    /**
-     * Gets the current browscap version number (if possible for the source)
-     *
-     * @return int|null
-     */
-    public function getBrowscapVersionNumber()
-    {
-        return null;
-    }
+	/**
+	 * Gets the current browscap version number (if possible for the source)
+	 *
+	 * @return int|null
+	 */
+	public function getBrowscapVersionNumber()
+	{
+		return null;
+	}
 
-    /**
-     * Gets the browscap data of the used source type
-     *
-     * @return string
-     */
-    public function getBrowscapSource()
-    {
-        return '';
-    }
+	/**
+	 * Gets the browscap data of the used source type
+	 *
+	 * @return string
+	 */
+	public function getBrowscapSource()
+	{
+		return '';
+	}
 }

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -14,25 +14,25 @@ namespace Zend\EventManager;
  */
 interface SharedEventManagerAwareInterface
 {
-    /**
-     * Inject a SharedEventManager instance
-     *
-     * @param  SharedEventManagerInterface $sharedEventManager
-     * @return SharedEventManagerAwareInterface
-     */
-    public function setSharedManager(SharedEventManagerInterface $sharedEventManager);
+	/**
+	 * Inject a SharedEventManager instance
+	 *
+	 * @param  SharedEventManagerInterface $sharedEventManager
+	 * @return SharedEventManagerAwareInterface
+	 */
+	public function setSharedManager(SharedEventManagerInterface $sharedEventManager);
 
-    /**
-     * Get shared collections container
-     *
-     * @return SharedEventManagerInterface
-     */
-    public function getSharedManager();
+	/**
+	 * Get shared collections container
+	 *
+	 * @return SharedEventManagerInterface
+	 */
+	public function getSharedManager();
 
-    /**
-     * Remove any shared collections
-     *
-     * @return void
-     */
-    public function unsetSharedManager();
+	/**
+	 * Remove any shared collections
+	 *
+	 * @return void
+	 */
+	public function unsetSharedManager();
 }

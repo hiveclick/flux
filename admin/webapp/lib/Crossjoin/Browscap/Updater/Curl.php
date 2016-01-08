@@ -39,43 +39,43 @@ namespace Crossjoin\Browscap\Updater;
 class Curl
 extends AbstractUpdaterRemote
 {
-    /**
-     * Name of the update method, used in the user agent for the request,
-     * for browscap download statistics. Has to be overwritten by the
-     * extending class.
-     *
-     * @var string
-     */
-    protected $updateMethod = 'cURL';
+	/**
+	 * Name of the update method, used in the user agent for the request,
+	 * for browscap download statistics. Has to be overwritten by the
+	 * extending class.
+	 *
+	 * @var string
+	 */
+	protected $updateMethod = 'cURL';
 
-    /**
-     * Options for the updater. The array should be overwritten,
-     * containing all options as keys, set to the default value.
-     *
-     * @var array
-     */
-    protected $options = array(
-        'ConnectTimeout' => 5,
-    );
+	/**
+	 * Options for the updater. The array should be overwritten,
+	 * containing all options as keys, set to the default value.
+	 *
+	 * @var array
+	 */
+	protected $options = array(
+		'ConnectTimeout' => 5,
+	);
 
-    /**
-     * Gets the data from a given URL (or false on failure)
-     *
-     * @param string $url
-     * @return string|boolean
-     */
-    protected function getRemoteData($url)
-    {
-        $ch = curl_init($url);
+	/**
+	 * Gets the data from a given URL (or false on failure)
+	 *
+	 * @param string $url
+	 * @return string|boolean
+	 */
+	protected function getRemoteData($url)
+	{
+		$ch = curl_init($url);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->getOption('ConnectTimeout'));
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->getUserAgent());
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->getOption('ConnectTimeout'));
+		curl_setopt($ch, CURLOPT_USERAGENT, $this->getUserAgent());
 
-        $response = curl_exec($ch);
+		$response = curl_exec($ch);
 
-        curl_close($ch);
+		curl_close($ch);
 
-        return $response;
-    }
+		return $response;
+	}
 }

@@ -31,7 +31,7 @@ class Client extends Base\Client {
 	function getUsers() {
 		if (is_null($this->users)) {
 			$user = new \Flux\User();
-			$user->getClient()->setClientId($this->getId());
+			$user->getClient()->setId($this->getId());
 			$this->users = $user->queryAllByClient();
 		}
 		return $this->users;
@@ -44,7 +44,7 @@ class Client extends Base\Client {
 	function getAdvertiserOffers() {
 		if (is_null($this->advertiser_offers)) {
 			$offer = new \Flux\Offer();
-			$offer->getClient()->setClientId($this->getId());
+			$offer->getClient()->setId($this->getId());
 			$this->advertiser_offers = $offer->queryAllByClient();
 		}
 		return $this->advertiser_offers;
@@ -57,7 +57,7 @@ class Client extends Base\Client {
 	function getPublisherCampaigns() {
 		if (is_null($this->publisher_campaigns)) {
 			$campaign = new \Flux\Campaign();
-			$campaign->getClient()->setClientId($this->getId());
+			$campaign->getClient()->setId($this->getId());
 			$this->publisher_campaigns = $campaign->queryAllByClient();
 		}
 		return $this->publisher_campaigns;
@@ -84,18 +84,18 @@ class Client extends Base\Client {
 	 * @return \Flux\Network\BaseNetwork
 	 */
 	function getReportingApiClassInstance() {
-	    $api_class_name = "\\" . $this->getReportingApiClass();
-	    if (class_exists($api_class_name)) {
-            $api_class = new $api_class_name();
-	    } else {
-	        $api_class = new \Flux\Network\BaseNetwork();
-	    }
-	    $api_class->setClient($this->getId());
-	    $api_class->setApiToken($this->getReportingApiToken());
-	    $api_class->setApiUrl($this->getReportingApiUrl());
-	    $api_class->setNetworkUsername($this->getNetworkUsername());
-	    $api_class->setNetworkPassword($this->getNetworkPassword());
-	    return $api_class;
+		$api_class_name = "\\" . $this->getReportingApiClass();
+		if (class_exists($api_class_name)) {
+			$api_class = new $api_class_name();
+		} else {
+			$api_class = new \Flux\Network\BaseNetwork();
+		}
+		$api_class->setClient($this->getId());
+		$api_class->setApiToken($this->getReportingApiToken());
+		$api_class->setApiUrl($this->getReportingApiUrl());
+		$api_class->setNetworkUsername($this->getNetworkUsername());
+		$api_class->setNetworkPassword($this->getNetworkPassword());
+		return $api_class;
 	}
 
 	// +------------------------------------------------------------------------+

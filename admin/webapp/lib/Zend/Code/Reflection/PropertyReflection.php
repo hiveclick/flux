@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -15,97 +15,97 @@ use Zend\Code\Scanner\AnnotationScanner;
 use Zend\Code\Scanner\CachingFileScanner;
 
 /**
- * @todo       implement line numbers
+ * @todo	   implement line numbers
  */
 class PropertyReflection extends PhpReflectionProperty implements ReflectionInterface
 {
-    /**
-     * @var AnnotationScanner
-     */
-    protected $annotations;
+	/**
+	 * @var AnnotationScanner
+	 */
+	protected $annotations;
 
-    /**
-     * Get declaring class reflection object
-     *
-     * @return ClassReflection
-     */
-    public function getDeclaringClass()
-    {
-        $phpReflection  = parent::getDeclaringClass();
-        $zendReflection = new ClassReflection($phpReflection->getName());
-        unset($phpReflection);
+	/**
+	 * Get declaring class reflection object
+	 *
+	 * @return ClassReflection
+	 */
+	public function getDeclaringClass()
+	{
+		$phpReflection  = parent::getDeclaringClass();
+		$zendReflection = new ClassReflection($phpReflection->getName());
+		unset($phpReflection);
 
-        return $zendReflection;
-    }
+		return $zendReflection;
+	}
 
-    /**
-     * Get DocBlock comment
-     *
-     * @return string|false False if no DocBlock defined
-     */
-    public function getDocComment()
-    {
-        return parent::getDocComment();
-    }
+	/**
+	 * Get DocBlock comment
+	 *
+	 * @return string|false False if no DocBlock defined
+	 */
+	public function getDocComment()
+	{
+		return parent::getDocComment();
+	}
 
-    /**
-     * @return false|DocBlockReflection
-     */
-    public function getDocBlock()
-    {
-        if (!($docComment = $this->getDocComment())) {
-            return false;
-        }
+	/**
+	 * @return false|DocBlockReflection
+	 */
+	public function getDocBlock()
+	{
+		if (!($docComment = $this->getDocComment())) {
+			return false;
+		}
 
-        $docBlockReflection = new DocBlockReflection($docComment);
+		$docBlockReflection = new DocBlockReflection($docComment);
 
-        return $docBlockReflection;
-    }
+		return $docBlockReflection;
+	}
 
-    /**
-     * @param  AnnotationManager $annotationManager
-     * @return AnnotationScanner
-     */
-    public function getAnnotations(AnnotationManager $annotationManager)
-    {
-        if (null !== $this->annotations) {
-            return $this->annotations;
-        }
+	/**
+	 * @param  AnnotationManager $annotationManager
+	 * @return AnnotationScanner
+	 */
+	public function getAnnotations(AnnotationManager $annotationManager)
+	{
+		if (null !== $this->annotations) {
+			return $this->annotations;
+		}
 
-        if (($docComment = $this->getDocComment()) == '') {
-            return false;
-        }
+		if (($docComment = $this->getDocComment()) == '') {
+			return false;
+		}
 
-        $class              = $this->getDeclaringClass();
-        $cachingFileScanner = $this->createFileScanner($class->getFileName());
-        $nameInformation    = $cachingFileScanner->getClassNameInformation($class->getName());
+		$class			  = $this->getDeclaringClass();
+		$cachingFileScanner = $this->createFileScanner($class->getFileName());
+		$nameInformation	= $cachingFileScanner->getClassNameInformation($class->getName());
 
-        if (!$nameInformation) {
-            return false;
-        }
+		if (!$nameInformation) {
+			return false;
+		}
 
-        $this->annotations  = new AnnotationScanner($annotationManager, $docComment, $nameInformation);
+		$this->annotations  = new AnnotationScanner($annotationManager, $docComment, $nameInformation);
 
-        return $this->annotations;
-    }
+		return $this->annotations;
+	}
 
-    public function toString()
-    {
-        return $this->__toString();
-    }
+	public function toString()
+	{
+		return $this->__toString();
+	}
 
-    /**
-     * Creates a new FileScanner instance.
-     *
-     * By having this as a seperate method it allows the method to be overridden
-     * if a different FileScanner is needed.
-     *
-     * @param  string $filename
-     *
-     * @return CachingFileScanner
-     */
-    protected function createFileScanner($filename)
-    {
-        return new CachingFileScanner($filename);
-    }
+	/**
+	 * Creates a new FileScanner instance.
+	 *
+	 * By having this as a seperate method it allows the method to be overridden
+	 * if a different FileScanner is needed.
+	 *
+	 * @param  string $filename
+	 *
+	 * @return CachingFileScanner
+	 */
+	protected function createFileScanner($filename)
+	{
+		return new CachingFileScanner($filename);
+	}
 }

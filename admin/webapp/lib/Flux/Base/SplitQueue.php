@@ -5,13 +5,13 @@ use Mojavi\Form\MongoForm;
 
 class SplitQueue extends MongoForm {
 
-    const DISPOSITION_UNFULFILLED = 0;
-    const DISPOSITION_FULFILLED = 1;
-    const DISPOSITION_PENDING = 2;
-    const DISPOSITION_UNFULFILLABLE = 3;
-    const DISPOSITION_ALREADY_FULFILLED = 4;
-    const DISPOSITION_PROCESSING = 5;
-    
+	const DISPOSITION_UNFULFILLED = 0;
+	const DISPOSITION_FULFILLED = 1;
+	const DISPOSITION_PENDING = 2;
+	const DISPOSITION_UNFULFILLABLE = 3;
+	const DISPOSITION_ALREADY_FULFILLED = 4;
+	const DISPOSITION_PROCESSING = 5;
+	
 	protected $split;
 	protected $lead;
 	
@@ -49,10 +49,10 @@ class SplitQueue extends MongoForm {
 	 * @return integer
 	 */
 	function getDisposition() {
-	    if (is_null($this->disposition)) {
-	        $this->disposition = self::DISPOSITION_UNFULFILLED;
-	    }
-	    return $this->disposition;
+		if (is_null($this->disposition)) {
+			$this->disposition = self::DISPOSITION_UNFULFILLED;
+		}
+		return $this->disposition;
 	}
 	
 	/**
@@ -60,9 +60,9 @@ class SplitQueue extends MongoForm {
 	 * @var integer
 	 */
 	function setDisposition($arg0) {
-	    $this->disposition = (int)$arg0;
-	    $this->addModifiedColumn("disposition");
-	    return $this;
+		$this->disposition = (int)$arg0;
+		$this->addModifiedColumn("disposition");
+		return $this;
 	}
 	
 	/**
@@ -112,10 +112,10 @@ class SplitQueue extends MongoForm {
 	 * @return boolean
 	 */
 	function getIsCatchAll() {
-	    if (is_null($this->is_catch_all)) {
-	        $this->is_catch_all = false;
-	    }
-	    return $this->is_catch_all;
+		if (is_null($this->is_catch_all)) {
+			$this->is_catch_all = false;
+		}
+		return $this->is_catch_all;
 	}
 	
 	/**
@@ -123,9 +123,9 @@ class SplitQueue extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsCatchAll($arg0) {
-	    $this->is_catch_all = (boolean)$arg0;
-	    $this->addModifiedColumn("is_catch_all");
-	    return $this;
+		$this->is_catch_all = (boolean)$arg0;
+		$this->addModifiedColumn("is_catch_all");
+		return $this;
 	}
 	
 	/**
@@ -133,10 +133,10 @@ class SplitQueue extends MongoForm {
 	 * @return boolean
 	 */
 	function getIsUnfulfillable() {
-	    if (is_null($this->is_unfulfillable)) {
-	        $this->is_unfulfillable = false;
-	    }
-	    return $this->is_unfulfillable;
+		if (is_null($this->is_unfulfillable)) {
+			$this->is_unfulfillable = false;
+		}
+		return $this->is_unfulfillable;
 	}
 	
 	/**
@@ -144,9 +144,9 @@ class SplitQueue extends MongoForm {
 	 * @var boolean
 	 */
 	function setIsUnfulfillable($arg0) {
-	    $this->is_unfulfillable = $arg0;
-	    $this->addModifiedColumn("is_unfulfillable");
-	    return $this;
+		$this->is_unfulfillable = $arg0;
+		$this->addModifiedColumn("is_unfulfillable");
+		return $this;
 	}
 	
 	/**
@@ -228,15 +228,15 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setLastAttemptTime($arg0) {
-	    if (is_null($arg0)) {
-	        $this->last_attempt_time = null;
-	    } else if (is_string($arg0)) {
-	        $this->last_attempt_time = new \MongoDate(strtotime($arg0));
-	    } else if (is_int($arg0)) {
-	        $this->last_attempt_time = new \MongoDate($arg0);
-	    } else if ($arg0 instanceof \MongoDate) {
-	        $this->last_attempt_time = $arg0;
-	    }
+		if (is_null($arg0)) {
+			$this->last_attempt_time = null;
+		} else if (is_string($arg0)) {
+			$this->last_attempt_time = new \MongoDate(strtotime($arg0));
+		} else if (is_int($arg0)) {
+			$this->last_attempt_time = new \MongoDate($arg0);
+		} else if ($arg0 instanceof \MongoDate) {
+			$this->last_attempt_time = $arg0;
+		}
 		$this->addModifiedColumn('last_attempt_time');
 		return $this;
 	}
@@ -257,15 +257,15 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setNextAttemptTime($arg0) {
-	    if (is_null($arg0)) {
-	        $this->next_attempt_time = null;
-	    } else if (is_string($arg0)) {
-	        $this->next_attempt_time = new \MongoDate(strtotime($arg0));
-	    } else if (is_int($arg0)) {
-	        $this->next_attempt_time = new \MongoDate($arg0);
-	    } else if ($arg0 instanceof \MongoDate) {
-	        $this->next_attempt_time = $arg0;
-	    }
+		if (is_null($arg0)) {
+			$this->next_attempt_time = null;
+		} else if (is_string($arg0)) {
+			$this->next_attempt_time = new \MongoDate(strtotime($arg0));
+		} else if (is_int($arg0)) {
+			$this->next_attempt_time = new \MongoDate($arg0);
+		} else if ($arg0 instanceof \MongoDate) {
+			$this->next_attempt_time = $arg0;
+		}
 		$this->addModifiedColumn('next_attempt_time');
 		return $this;
 	}
@@ -275,10 +275,10 @@ class SplitQueue extends MongoForm {
 	 * @return \MongoDate
 	 */
 	function getNextCleanupTime() {
-	    if (is_null($this->next_cleanup_time)) {
-	        $this->next_cleanup_time = new \MongoDate();
-	    }
-	    return $this->next_cleanup_time;
+		if (is_null($this->next_cleanup_time)) {
+			$this->next_cleanup_time = new \MongoDate();
+		}
+		return $this->next_cleanup_time;
 	}
 	
 	/**
@@ -286,17 +286,17 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setNextCleanupTime($arg0) {
-	    if (is_null($arg0)) {
-	        $this->next_cleanup_time = null;
-	    } else if (is_string($arg0)) {
-	        $this->next_cleanup_time = new \MongoDate(strtotime($arg0));
-	    } else if (is_int($arg0)) {
-	        $this->next_cleanup_time = new \MongoDate($arg0);
-	    } else if ($arg0 instanceof \MongoDate) {
-	        $this->next_cleanup_time = $arg0;
-	    }
-	    $this->addModifiedColumn("next_cleanup_time");
-	    return $this;
+		if (is_null($arg0)) {
+			$this->next_cleanup_time = null;
+		} else if (is_string($arg0)) {
+			$this->next_cleanup_time = new \MongoDate(strtotime($arg0));
+		} else if (is_int($arg0)) {
+			$this->next_cleanup_time = new \MongoDate($arg0);
+		} else if ($arg0 instanceof \MongoDate) {
+			$this->next_cleanup_time = $arg0;
+		}
+		$this->addModifiedColumn("next_cleanup_time");
+		return $this;
 	}
 	
 	
@@ -306,10 +306,10 @@ class SplitQueue extends MongoForm {
 	 * @return \MongoDate
 	 */
 	function getQueueTime() {
-	    if (is_null($this->queue_time)) {
-	        $this->queue_time = new \MongoDate();
-	    }
-	    return $this->queue_time;
+		if (is_null($this->queue_time)) {
+			$this->queue_time = new \MongoDate();
+		}
+		return $this->queue_time;
 	}
 	
 	/**
@@ -317,17 +317,17 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate
 	 */
 	function setQueueTime($arg0) {
-	    if (is_null($arg0)) {
-	        $this->queue_time = null;
-	    } else if (is_string($arg0)) {
-	        $this->queue_time = new \MongoDate(strtotime($arg0));
-	    } else if (is_int($arg0)) {
-	        $this->queue_time = new \MongoDate($arg0);
-	    } else if ($arg0 instanceof \MongoDate) {
-	        $this->queue_time = $arg0;
-	    }
-	    $this->addModifiedColumn('queue_time');
-	    return $this;
+		if (is_null($arg0)) {
+			$this->queue_time = null;
+		} else if (is_string($arg0)) {
+			$this->queue_time = new \MongoDate(strtotime($arg0));
+		} else if (is_int($arg0)) {
+			$this->queue_time = new \MongoDate($arg0);
+		} else if ($arg0 instanceof \MongoDate) {
+			$this->queue_time = $arg0;
+		}
+		$this->addModifiedColumn('queue_time');
+		return $this;
 	}
 	
 	/**
@@ -335,10 +335,10 @@ class SplitQueue extends MongoForm {
 	 * @return string
 	 */
 	function getDebug() {
-	    if (is_null($this->debug)) {
-	        $this->debug = new \Flux\Link\SplitQueueDebug();
-	    }
-	    return $this->debug;
+		if (is_null($this->debug)) {
+			$this->debug = new \Flux\Link\SplitQueueDebug();
+		}
+		return $this->debug;
 	}
 	
 	/**
@@ -346,11 +346,11 @@ class SplitQueue extends MongoForm {
 	 * @var string
 	 */
 	function setDebug($arg0) {
-	    if (is_string($arg0)) {
-	        $this->debug = new \Flux\Link\SplitQueueDebug();
-	        $this->debug->setRequest($arg0);
-	    }
-	    return $this;
+		if (is_string($arg0)) {
+			$this->debug = new \Flux\Link\SplitQueueDebug();
+			$this->debug->setRequest($arg0);
+		}
+		return $this;
 	}
 	
 	/**
@@ -358,10 +358,10 @@ class SplitQueue extends MongoForm {
 	 * @return \MongoDate|null
 	 */
 	function getExpireAt() {
-	    if (is_null($this->expire_at)) {
-	        $this->expire_at = null;
-	    }
-	    return $this->expire_at;
+		if (is_null($this->expire_at)) {
+			$this->expire_at = null;
+		}
+		return $this->expire_at;
 	}
 	
 	/**
@@ -369,17 +369,17 @@ class SplitQueue extends MongoForm {
 	 * @var \MongoDate|null
 	 */
 	function setExpireAt($arg0) {
-	    if (is_null($arg0)) {
-	        $this->expire_at = null;    
-	    } else if (is_string($arg0)) {
-	        $this->expire_at = new \MongoDate(strtotime($arg0));
-	    } else if (is_int($arg0)) {
-	        $this->expire_at = new \MongoDate($arg0);
-	    } else if ($arg0 instanceof \MongoDate) {
-	        $this->expire_at = $arg0;
-	    }
-	    $this->addModifiedColumn("expire_at");
-	    return $this;
+		if (is_null($arg0)) {
+			$this->expire_at = null;	
+		} else if (is_string($arg0)) {
+			$this->expire_at = new \MongoDate(strtotime($arg0));
+		} else if (is_int($arg0)) {
+			$this->expire_at = new \MongoDate($arg0);
+		} else if ($arg0 instanceof \MongoDate) {
+			$this->expire_at = $arg0;
+		}
+		$this->addModifiedColumn("expire_at");
+		return $this;
 	}
 	
 	/**
@@ -401,24 +401,24 @@ class SplitQueue extends MongoForm {
 		if (is_array($arg0)) {
 			$split = $this->getSplit();
 			$split->populate($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
 		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
 		} else if ($arg0 instanceof \MongoId) {
-		    $split = $this->getSplit();
-		    $split->setSplitId($arg0);
-		    if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
-		        $split->setSplitName($split->getSplit()->getName());
-		    }
-		    $this->split = $split;
+			$split = $this->getSplit();
+			$split->setSplitId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->split = $split;
 		}
 		$this->addModifiedColumn('split');
 		return $this;
@@ -429,10 +429,10 @@ class SplitQueue extends MongoForm {
 	 * @return array
 	 */
 	function getAttempts() {
-	    if (is_null($this->attempts)) {
-	        $this->attempts = array();
-	    }
-	    return $this->attempts;
+		if (is_null($this->attempts)) {
+			$this->attempts = array();
+		}
+		return $this->attempts;
 	}
 	
 	/**
@@ -440,28 +440,28 @@ class SplitQueue extends MongoForm {
 	 * @var array
 	 */
 	function setAttempts($arg0) {
-	    if (is_array($arg0)) {
-	        $this->attempts = array();
-	        foreach ($arg0 as $attempt) {
-    			$split_queue_attempt = new \Flux\SplitQueueAttempt();
-    			$split_queue_attempt->populate($attempt);
-    			array_push($this->attempts, $split_queue_attempt);
-	        }
-	        
-	        // Sort the attempts from latest to earliest
-	        uasort($this->attempts, function($a, $b) {
-	            if ($a->getAttemptTime()->sec > $b->getAttemptTime()->sec) {
-	                return -1;
-	            } else {
-	                return 1;
-	            }
-	        });
-	        
-	        // Only allow the last 10 attempts
-	        $this->attempts = array_slice($this->attempts, 0, 5);
+		if (is_array($arg0)) {
+			$this->attempts = array();
+			foreach ($arg0 as $attempt) {
+				$split_queue_attempt = new \Flux\SplitQueueAttempt();
+				$split_queue_attempt->populate($attempt);
+				array_push($this->attempts, $split_queue_attempt);
+			}
+			
+			// Sort the attempts from latest to earliest
+			uasort($this->attempts, function($a, $b) {
+				if ($a->getAttemptTime()->sec > $b->getAttemptTime()->sec) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+			
+			// Only allow the last 10 attempts
+			$this->attempts = array_slice($this->attempts, 0, 5);
 		}
 		$this->addModifiedColumn('attempts');
-	    return $this;
+		return $this;
 	}
 	
 	/**
@@ -469,23 +469,23 @@ class SplitQueue extends MongoForm {
 	 * @var array
 	 */
 	function addAttempt($arg0) {
-	    if (is_array($arg0)) {
-	        /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-            $split_queue_attempt = new \Flux\SplitQueueAttempt();
-            $split_queue_attempt->populate($arg0);
-            
-            // Add the attempt to the array
-            $attempts = $this->getAttempts();
-            array_push($attempts, $split_queue_attempt);
-            $this->setAttempts($attempts);
-	    } else if ($arg0 instanceof \Flux\SplitQueueAttempt) {
-	        // Add the attempt to the array
-	        $attempts = $this->getAttempts();
-	        array_push($attempts, $arg0);
-	        $this->setAttempts($attempts);
-	    }
-	    $this->addModifiedColumn('attempts');
-	    return $this;
+		if (is_array($arg0)) {
+			/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
+			$split_queue_attempt = new \Flux\SplitQueueAttempt();
+			$split_queue_attempt->populate($arg0);
+			
+			// Add the attempt to the array
+			$attempts = $this->getAttempts();
+			array_push($attempts, $split_queue_attempt);
+			$this->setAttempts($attempts);
+		} else if ($arg0 instanceof \Flux\SplitQueueAttempt) {
+			// Add the attempt to the array
+			$attempts = $this->getAttempts();
+			array_push($attempts, $arg0);
+			$this->setAttempts($attempts);
+		}
+		$this->addModifiedColumn('attempts');
+		return $this;
 	}
 	
 	/**
@@ -527,7 +527,7 @@ class SplitQueue extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$split_queue = new self();
-		$split_queue->getCollection()->ensureIndex(array('split_id' => 1), array('background' => true));
+		$split_queue->getCollection()->ensureIndex(array('split._id' => 1), array('background' => true));
 		return true;
 	}
 }

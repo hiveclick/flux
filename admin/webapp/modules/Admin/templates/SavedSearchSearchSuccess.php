@@ -2,29 +2,38 @@
 	/* @var $saved_search \Flux\SavedSearch */
 	$saved_search = $this->getContext()->getRequest()->getAttribute("saved_search", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Saved Search</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/admin/saved-search-search">Saved Searches</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Saved Search</a>
+		</div>
+	   <h1>Saved Searches</h1>
 	</div>
-   <h1>Saved Searches</h1>
-</div>
-<div class="help-block">You can save custom searches here and use them throughout the system.</div>
-<div class="panel panel-primary">
-	<div id='saved-search-header' class='grid-header panel-heading clearfix'>
-		<form id="saved-search_search_form" method="GET" action="/api">
-			<input type="hidden" name="func" value="/admin/saved-search">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="pull-right">
-				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
-			</div>
-		</form>
+	<div class="help-block">You can save custom searches here and use them throughout the system.</div>
+	<div class="panel panel-primary">
+		<div id='saved-search-header' class='grid-header panel-heading clearfix'>
+			<form id="saved-search_search_form" method="GET" action="/api">
+				<input type="hidden" name="func" value="/admin/saved-search">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="pull-right">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
+			</form>
+		</div>
+		<div id="saved-search-grid"></div>
+		<div id="saved-search-pager" class="panel-footer"></div>
 	</div>
-	<div id="saved-search-grid"></div>
-	<div id="saved-search-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit saved-search modal -->
@@ -42,13 +51,13 @@ $(document).ready(function() {
  		}},
  		{id:'search_type', name:'type', field:'search_type', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
  			if (value == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>') {
- 			    return 'Lead';
+ 				return 'Lead';
  			} else if (value == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>') {
- 			    return 'Offer';
+ 				return 'Offer';
  			} else if (value == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>') {
- 			    return 'Campaign';
+ 				return 'Campaign';
  	 		} else {
- 			    return '<i class="text-muted">Unknown Type (' + value + ')</i>'
+ 				return '<i class="text-muted">Unknown Type (' + value + ')</i>'
  			}
  		}},
  		{id:'owner', name:'owner', field:'user.user_name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -59,7 +68,7 @@ $(document).ready(function() {
  	 	 			ret_val += '</div>';
  	 	 			return ret_val;
  	 		} else { 
- 	 		    return value;
+ 	 			return value;
  	 		}
  		}}
  	];

@@ -16,15 +16,15 @@
 					<li><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>">add/change data</a></li>
 					<li class="divider"></li>
 					<?php if ($split_queue->getIsCatchAll()) { ?>
-                        <li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a></li>
-                    <?php } else { ?>
-                        <li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a></li>
-                    <?php } ?>
+						<li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a></li>
+					<?php } else { ?>
+						<li><a data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a></li>
+					<?php } ?>
 					<li class="divider"></li>
 					<?php if ($split_queue->getIsCatchAll()) { ?>
-					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
+						<li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
 					<?php } else { ?>
-					    <li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
+						<li><a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>"><span class="text-danger">flag lead</span></a></li>
 					<?php } ?>   
 				</ul>
 			</div>
@@ -38,17 +38,17 @@
 				<a class="btn btn-info" data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>">add/change data</a>
 			</div>
 			<div class="btn-group" role="group">
-			    <?php if ($split_queue->getIsCatchAll()) { ?>
-				    <a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a>
+				<?php if ($split_queue->getIsCatchAll()) { ?>
+					<a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-assign?_id=<?php echo $split_queue->getId() ?>">assign to split</a>
 				<?php } else { ?>
-				    <a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a>
+					<a class="btn btn-info" data-toggle="modal" data-target="#fulfillment_modal" href="/export/split-queue-pane-fulfill?_id=<?php echo $split_queue->getId() ?>">fulfill lead</a>
 				<?php } ?>
 			</div>
 			<?php if ($split_queue->getIsCatchAll()) { ?>
-                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
-            <?php } else { ?>
-                <a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
-            <?php } ?>
+				<a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
+			<?php } else { ?>
+				<a data-toggle="modal" data-target="#unfulfillable_modal" href="/export/split-queue-pane-mark-unfulfillable?_id=<?php echo $split_queue->getId() ?>" class="btn btn-danger">flag lead</a>
+			<?php } ?>
 		</div>
 	</div>
 	<h1>View Queue Item <small><?php echo $split_queue->getId() ?></small></h1>
@@ -64,14 +64,14 @@
 <div class="help-block">You can view a lead on this screen and see how it was tracked</div>
 <br/>
 <div class="col-md-8">
-    <?php if ($split_queue->getIsError()) { ?>
-        <div class="alert alert-warning"><?php echo $split_queue->getErrorMessage() ?></div>
-    <?php } ?>
+	<?php if ($split_queue->getIsError()) { ?>
+		<div class="alert alert-warning"><?php echo $split_queue->getErrorMessage() ?></div>
+	<?php } ?>
 	<div class="panel panel-default">
 		<div class="panel-heading">Data Information</div>
 		<div class="panel-body">
-            <dl class="dl-horizontal">
-            <?php if ($split_queue->getLead()->getLead()->getValue('name') != '') { ?>
+			<dl class="dl-horizontal">
+			<?php if ($split_queue->getLead()->getLead()->getValue('name') != '') { ?>
 				  <dt><a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $split_queue->getLead()->getLeadId() ?>&data_field_id=<?php echo \Flux\DataField::retrieveDataFieldFromKeyName('name')->getId() ?>">Name:</a></dt><dd><?php echo $split_queue->getLead()->getLead()->getValue('name') ?>&nbsp;</dd>
 			<?php } ?>
 			<?php if ($split_queue->getLead()->getLead()->getValue('fn') != '') { ?>
@@ -181,7 +181,7 @@
 	</div>
 </div>
 <div class="col-md-4">
-    <div class="panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-heading">
 			Fulfillment Attempts
 		</div>
@@ -189,7 +189,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-					    <th width="90">Screenshot</th>
+						<th width="90">Screenshot</th>
 						<th width="40%">Fulfillment</th>
 						<th class="text-center">Response</th>
 					</tr>
@@ -210,7 +210,7 @@
 				<dd><a href="/lead/lead?_id=<?php echo $split_queue->getLead()->getLeadId() ?>"><?php echo $split_queue->getLead()->getLeadId() ?></a></dd>
 				<dt>Created:</dt><dd><?php echo date('m/d/Y g:i:s a', $split_queue->getId()->getTimestamp()) ?></dd>
 				<?php if ($split_queue->getLead()->getLead()->getModified() instanceof \MongoDate) { ?>
-				    <dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $split_queue->getLead()->getLead()->getModified()->sec) ?></dd>
+					<dt>Updated:</dt><dd><?php echo date('m/d/Y g:i:s a', $split_queue->getLead()->getLead()->getModified()->sec) ?></dd>
 				<?php } ?>
 			</dl>
 			<hr />
@@ -289,31 +289,31 @@ $(document).ready(function() {
 	});
 
 	$('#add-data-field-modal').on('hide.bs.modal', function(e) {
-    	$(this).removeData('bs.modal');
-    });
+		$(this).removeData('bs.modal');
+	});
 
 	$('#attempt_modal').on('hide.bs.modal', function(e) {
-    	$(this).removeData('bs.modal');
-    });
+		$(this).removeData('bs.modal');
+	});
 
 	loadAttempts();
 });
 
 function loadAttempts() {
 	$.rad.get('/api', { func: '/export/split-queue', _id: '<?php echo $split_queue->getId() ?>' }, function(data) {
-	    $('#attempt_tbody').html('');
-	    $.each(data.record.attempts, function(i, item) {
-		    var tr = $('<tr />');
-		    td = $('<td />').appendTo(tr);
-		    if (item.screenshot && item.screenshot != '') {
-		    	  $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '"><img src="data:image/png;base64,' + item.screenshot + '" border="0" class="img-thumbnail img-responsive" width="90" /></a>').appendTo(td);
-		    }
-		    td = $('<td />').appendTo(tr);
-		    $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '">' + item.fulfillment.fulfillment_name + '</a>').appendTo(td);
-		    $('<div class="small">' + moment.unix(item.attempt_time.sec).calendar() + '</div>').appendTo(td);
-		    td = $('<td class="text-center small ' + (item.is_error ? "text-danger" : "text-success") + '">' + (item.is_error ? item.error_message : 'no errors') + '</td>').appendTo(tr);
-		    tr.appendTo($('#attempt_tbody'));
-	    });
+		$('#attempt_tbody').html('');
+		$.each(data.record.attempts, function(i, item) {
+			var tr = $('<tr />');
+			td = $('<td />').appendTo(tr);
+			if (item.screenshot && item.screenshot != '') {
+				  $('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '"><img src="data:image/png;base64,' + item.screenshot + '" border="0" class="img-thumbnail img-responsive" width="90" /></a>').appendTo(td);
+			}
+			td = $('<td />').appendTo(tr);
+			$('<a data-toggle="modal" data-target="#attempt_modal" href="/export/split-queue-pane-attempt?_id=<?php echo $split_queue->getId() ?>&index=' + i + '">' + item.fulfillment.fulfillment_name + '</a>').appendTo(td);
+			$('<div class="small">' + moment.unix(item.attempt_time.sec).calendar() + '</div>').appendTo(td);
+			td = $('<td class="text-center small ' + (item.is_error ? "text-danger" : "text-success") + '">' + (item.is_error ? item.error_message : 'no errors') + '</td>').appendTo(tr);
+			tr.appendTo($('#attempt_tbody'));
+		});
 	});
 }
 //-->

@@ -23,28 +23,7 @@
 $(document).ready(function() {
 	// submit the form
 	$('#lead_note_form').form(function(data) {
-		$.rad.notify('Note Saved', 'The note has been added to the lead successfully.');
-		$.rad.get('/api', { func: '/lead/lead', _id: '<?php echo $lead->getId() ?>' }, function(data) {
-			if (data.record && data.record.notes) {
-				$('#note_tbody').html('');
-				locale_date = '';
-				notes = data.record.notes;
-				notes.reverse();
-				$.each(notes, function(i, note) {
-					note_date = new Date(note.t.sec * 1000);
-					tr = $('<tr />');
-					if (note_date.toLocaleDateString() != locale_date) {
-						locale_date = note_date.toLocaleDateString();
-						tr.append('<td>' + note_date.toLocaleDateString() + '</td>');
-					} else {
-						tr.append('<td>&nbsp;</td>');
-					}
-					tr.append('<td>' + note_date.toLocaleTimeString() + '</td>');
-					tr.append('<td style="word-break:break-word;">' + note.note + '</td>');
-					$('#note_tbody').append(tr);
-				});
-			}
-		});		
+		$('#notes').trigger('add', data.record);
 	},{keep_form:true});
 });
 //-->

@@ -24,10 +24,10 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function getFiles() {
-	    if (is_null($this->files)) {
-	        $this->files = $this->downloadFiles();
-	    }
-	    return $this->files;
+		if (is_null($this->files)) {
+			$this->files = $this->downloadFiles();
+		}
+		return $this->files;
 	}
 	
 	/**
@@ -35,10 +35,10 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function getFolderName() {
-	    if (is_null($this->folder_name)) {
-	        $this->folder_name = "";
-	    }
-	    return $this->folder_name;
+		if (is_null($this->folder_name)) {
+			$this->folder_name = "";
+		}
+		return $this->folder_name;
 	}
 	
 	/**
@@ -46,18 +46,18 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function setFolderName($arg0) {
-	    if (strpos($arg0, '/') === 0) {
-	        $this->folder_name = substr($arg0, 1);
-	    } else if (strpos($arg0, './') === 0) {
-	        $this->folder_name = substr($arg0, 2);
-	    } else if (strpos($arg0, '../') === 0) {
-	        $this->folder_name = substr($arg0, 3);
-	    } else if (strpos($arg0, '.') === 0) {
-	        $this->folder_name = substr($arg0, 1);
-	    } else {
-	       $this->folder_name = $arg0;
-	    }
-	    return $this;
+		if (strpos($arg0, '/') === 0) {
+			$this->folder_name = substr($arg0, 1);
+		} else if (strpos($arg0, './') === 0) {
+			$this->folder_name = substr($arg0, 2);
+		} else if (strpos($arg0, '../') === 0) {
+			$this->folder_name = substr($arg0, 3);
+		} else if (strpos($arg0, '.') === 0) {
+			$this->folder_name = substr($arg0, 1);
+		} else {
+		   $this->folder_name = $arg0;
+		}
+		return $this;
 	}
 	
 	/**
@@ -65,10 +65,10 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function getHtmlInputElementId() {
-	    if (is_null($this->html_input_element_id)) {
-	        $this->html_input_element_id = "";
-	    }
-	    return $this->html_input_element_id;
+		if (is_null($this->html_input_element_id)) {
+			$this->html_input_element_id = "";
+		}
+		return $this->html_input_element_id;
 	}
 	
 	/**
@@ -76,9 +76,9 @@ class Server extends Base\Server {
 	 * @var string
 	 */
 	function setHtmlInputElementId($arg0) {
-	    $this->html_input_element_id = $arg0;
-	    $this->addModifiedColumn('html_input_element_id');
-	    return $this;
+		$this->html_input_element_id = $arg0;
+		$this->addModifiedColumn('html_input_element_id');
+		return $this;
 	}
 
 	/**
@@ -303,7 +303,7 @@ class Server extends Base\Server {
 	 * @return resource
 	 */
 	function connect() {
-	    $con = null;
+		$con = null;
 		if (!$this->getForceIpConnection()) {
 			if (trim($this->getHostname()) != '') {
 				if (($con = ssh2_connect($this->getHostname())) === false) {
@@ -324,7 +324,7 @@ class Server extends Base\Server {
 			}
 		}
 		if (is_null($con)) {
-		    throw new \Exception('Cannot connect to remote host ' . $this->getIpAddress());
+			throw new \Exception('Cannot connect to remote host ' . $this->getIpAddress());
 		}
 		
 		if (ssh2_auth_password($con, $this->getRootUsername(), $this->getRootPassword()) !== false) {
@@ -375,14 +375,14 @@ class Server extends Base\Server {
 	 * @return string
 	 */
 	function readRemoteFile($dest) {
-	    $temporary_name = tempnam("/tmp/", "remote");
-	    if (!@ssh2_scp_recv($this->getSshSession(), $dest, $temporary_name)) {
+		$temporary_name = tempnam("/tmp/", "remote");
+		if (!@ssh2_scp_recv($this->getSshSession(), $dest, $temporary_name)) {
 			throw new \Exception("Could not find " . $dest . " on remote server.");
 		}
 		if (file_exists($temporary_name)) {
-		    return file_get_contents($temporary_name);
+			return file_get_contents($temporary_name);
 		} else {
-		    return false;
+			return false;
 		}
 	}
 
@@ -423,21 +423,21 @@ class Server extends Base\Server {
 			throw new \Exception('Cannot save to the default docroot directory, please set an appropriate subdirectory');
 		}
 		
-	    $init_php_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/init.php");
-	    $config_ini_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/config.ini");
-	    $offer_key = $offer->getId();
-	    
-	    $config_ini_contents = str_replace("[[FE_LIB]]", "/home/fluxfe/frontend/webapp/lib", $config_ini_contents);
-	    if (defined("MO_API_URL")) {
-	    	$config_ini_contents = str_replace("[[API_URL]]", MO_API_URL, $config_ini_contents);
-	    } else {
-	    	/* @todo setup global api url somewhere and use that instead */
-	    	$config_ini_contents = str_replace("[[API_URL]]", 'http://api.flux.local', $config_ini_contents);
-	    }
-	    $config_ini_contents = str_replace("[[OFFER_KEY]]", $offer_key, $config_ini_contents);
-	    $config_ini_contents = str_replace("[[COOKIE_NAME]]", 'flux_' . $offer->getId(), $config_ini_contents);
-	    $config_ini_contents = str_replace("[[DEFAULT_CAMPAIGN]]", $offer->getDefaultCampaignId(), $config_ini_contents);
-	    
+		$init_php_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/init.php");
+		$config_ini_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/config.ini");
+		$offer_key = $offer->getId();
+		
+		$config_ini_contents = str_replace("[[FE_LIB]]", "/home/fluxfe/frontend/webapp/lib", $config_ini_contents);
+		if (defined("MO_API_URL")) {
+			$config_ini_contents = str_replace("[[API_URL]]", MO_API_URL, $config_ini_contents);
+		} else {
+			/* @todo setup global api url somewhere and use that instead */
+			$config_ini_contents = str_replace("[[API_URL]]", 'http://api.flux.local', $config_ini_contents);
+		}
+		$config_ini_contents = str_replace("[[OFFER_KEY]]", $offer_key, $config_ini_contents);
+		$config_ini_contents = str_replace("[[COOKIE_NAME]]", 'flux_' . $offer->getId(), $config_ini_contents);
+		$config_ini_contents = str_replace("[[DEFAULT_CAMPAIGN]]", $offer->getDefaultCampaignId(), $config_ini_contents);
+		
 		$install_php_contents = <<<EOL
 <?php
 	\$root_folder = "{$this->getRootDir()}";
@@ -448,10 +448,10 @@ class Server extends Base\Server {
 	if (!file_exists(\$root_folder . "/lib")) {
 		mkdir(\$root_folder . "/lib");
 	}
-    if (!file_exists(\$docroot_folder)) {
+	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
 	}
-    if (!file_exists(\$root_folder . "/docroot")) {
+	if (!file_exists(\$root_folder . "/docroot")) {
 		mkdir(\$root_folder . "/docroot");
 	}
 	if (!file_exists(\$docroot_folder . "/.cache")) {
@@ -468,12 +468,12 @@ class Server extends Base\Server {
 	\$cmd = "chmod 0775 \$docroot_folder -Rf";
 	shell_exec(\$cmd);
 EOL;
-	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
-	    $this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
-	    $this->runRemoteCommand("php /tmp/offer_" . $offer->getId() . "_install.php");
-	    
-	    $this->writeRemoteFile($init_php_contents, $this->getRootDir() . "/lib/init.php");
-	    $this->writeRemoteFile($config_ini_contents, $this->getDocrootDir() . "/config.ini");
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
+		$this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
+		$this->runRemoteCommand("php /tmp/offer_" . $offer->getId() . "_install.php");
+		
+		$this->writeRemoteFile($init_php_contents, $this->getRootDir() . "/lib/init.php");
+		$this->writeRemoteFile($config_ini_contents, $this->getDocrootDir() . "/config.ini");
 	}
 
 	/**
@@ -519,17 +519,17 @@ EOL;
 		
 		// Now upload the wordpress tar and extract it only if wp-config.php doesn't exist
 		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/wp-config.php ];then echo "1";else echo "0";fi')) == '0') {
-    		$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/latest.tar.gz', $this->getDocrootDir() . '/latest.tar.gz');
-    		$this->runRemoteCommand('/bin/tar xzvf ' . $this->getDocrootDir() . '/latest.tar.gz -C ' . $this->getDocrootDir());
-    		$db_prefix = preg_replace("/[^a-zA-Z0-9]/", "", $this->getDomain());
-    		$db_prefix = preg_replace("/^www\\./", "", $db_prefix);
-    		$wp_contents = str_replace('[MYSQLUSERNAME]', $this->getMysqlUsername(), $wp_contents);
-    		$wp_contents = str_replace('[MYSQLPASSWORD]', $this->getMysqlPassword(), $wp_contents);
-    		$wp_contents = str_replace('[MYSQLDB]', $db_prefix, $wp_contents);
-    		$wp_contents = str_replace('[TABLEPREFIX]', 'wp_', $wp_contents);
-    		$this->writeRemoteFile($wp_contents, $this->getRootDir() . '/docroot/wp-config.php');
-    		
-    		$this->runRemoteCommand('/usr/bin/mysqladmin create ' . $db_prefix);    		
+			$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/latest.tar.gz', $this->getDocrootDir() . '/latest.tar.gz');
+			$this->runRemoteCommand('/bin/tar xzvf ' . $this->getDocrootDir() . '/latest.tar.gz -C ' . $this->getDocrootDir());
+			$db_prefix = preg_replace("/[^a-zA-Z0-9]/", "", $this->getDomain());
+			$db_prefix = preg_replace("/^www\\./", "", $db_prefix);
+			$wp_contents = str_replace('[MYSQLUSERNAME]', $this->getMysqlUsername(), $wp_contents);
+			$wp_contents = str_replace('[MYSQLPASSWORD]', $this->getMysqlPassword(), $wp_contents);
+			$wp_contents = str_replace('[MYSQLDB]', $db_prefix, $wp_contents);
+			$wp_contents = str_replace('[TABLEPREFIX]', 'wp_', $wp_contents);
+			$this->writeRemoteFile($wp_contents, $this->getRootDir() . '/docroot/wp-config.php');
+			
+			$this->runRemoteCommand('/usr/bin/mysqladmin create ' . $db_prefix);			
 		}
 		
 		return true;
@@ -541,12 +541,12 @@ EOL;
 	 * @return boolean
 	 */
 	function clearConfigCache($offer) {
-	    $cmd = 'if [ -f ' . $this->getDocrootDir() . '/.cache/config.php ];then rm ' . $this->getDocrootDir() . '/.cache/config.php;fi';
-	    
-	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending request to " . $this->getHostname() . ': ' . $cmd);
-        $this->runRemoteCommand($cmd);	
-	    
-        return true;
+		$cmd = 'if [ -f ' . $this->getDocrootDir() . '/.cache/config.php ];then rm ' . $this->getDocrootDir() . '/.cache/config.php;fi';
+		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Sending request to " . $this->getHostname() . ': ' . $cmd);
+		$this->runRemoteCommand($cmd);	
+		
+		return true;
 	}
 	
 	/**
@@ -596,7 +596,7 @@ EOL;
 		$virtualhost_contents = str_replace("[DOMAIN2]", str_replace('www.', '', $this->getDomain()), $virtualhost_contents);		
 
 		if (trim($this->runRemoteCommand('if [ -f /etc/httpd/conf.d/' . $offer_key . '.conf ];then echo "1";else echo "0";fi')) == '0') {
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Writing virtualhost file: " . '/etc/httpd/conf.d/' . $offer_key . '.conf');
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Writing virtualhost file: " . '/etc/httpd/conf.d/' . $offer_key . '.conf');
 			$this->writeRemoteFile($virtualhost_contents, '/etc/httpd/conf.d/' . $offer_key . '.conf');
 		} else if ($this->getForceOverwrite()) {
 			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Writing virtualhost file: " . '/etc/httpd/conf.d/' . $offer_key . '.conf');
@@ -617,20 +617,20 @@ EOL;
 	 * @return resource|null
 	 */
 	function getFtpConnection() {
-	    if (is_null($this->_connection_id)) {
-	        $this->_connection_id = @ftp_connect($this->getHostname(), 21, 5);
-	        if ($this->_connection_id !== false) {
-	            if (is_null($this->_connection_id)) {
-	                throw new \Exception('Cannot connect to ftp "' . $this->getHostname() . '" because the _connection_id is null');
-	            }
-	            if (!@ftp_login($this->_connection_id, $this->getFtpUsername(), $this->getFtpPassword())) {
-	                throw new \Exception('We are able to connect to "' . $this->getHostname() . '", but cannot login using the username "' . $this->getFtpUsername() . '" and password');
-	            }
-	        } else {
-	            throw new \Exception('Cannot connect to "' . $this->getHostname() . '", check the hostname and that <code>vsftpd</code> is running');
-	        }
-	    }
-	    return $this->_connection_id;
+		if (is_null($this->_connection_id)) {
+			$this->_connection_id = @ftp_connect($this->getHostname(), 21, 5);
+			if ($this->_connection_id !== false) {
+				if (is_null($this->_connection_id)) {
+					throw new \Exception('Cannot connect to ftp "' . $this->getHostname() . '" because the _connection_id is null');
+				}
+				if (!@ftp_login($this->_connection_id, $this->getFtpUsername(), $this->getFtpPassword())) {
+					throw new \Exception('We are able to connect to "' . $this->getHostname() . '", but cannot login using the username "' . $this->getFtpUsername() . '" and password');
+				}
+			} else {
+				throw new \Exception('Cannot connect to "' . $this->getHostname() . '", check the hostname and that <code>vsftpd</code> is running');
+			}
+		}
+		return $this->_connection_id;
 	}
 	
 	/**
@@ -648,40 +648,40 @@ EOL;
 	 * @return array
 	 */
 	private function downloadFiles() {
-	    try {
-	        $connection = $this->getFtpConnection();
-	        	
-	        // Strip the first slash from folder names
-	        if (strpos($this->getFolderName(), '/') === 0) {
-	            $folder_name = substr($this->getFolderName(), 1);
-	        } else {
-	            $folder_name = $this->getFolderName();
-	        }
-	        	
-	        // Enable passive mode
-	        if ($this->getUsePassiveMode()) {
-	            ftp_pasv($connection, true);
-	        }
-	        	
-	        // Pull down the list of files
-	        $raw_list = ftp_rawlist($connection, $folder_name);
-	        if (is_array($raw_list)) {
-	            $file_list = array();
-	            foreach ($raw_list as $list_item) {
-	                $chunks = preg_split("/\s+/", $list_item);
-	                list($item['rights'], $item['number'], $item['user'], $item['group'], $item['size'], $item['month'], $item['day'], $item['time']) = $chunks;
-	                $item['type'] = $chunks[0]{0} === 'd' ? 'directory' : 'file';
-	                array_splice($chunks, 0, 8);
-	                $filename = implode(" ", $chunks);
-	                // Apply a file filter if we have one
-                    $file_list[$filename] = $item;
-	            }
-	            return $file_list;
-	        }
-	    } catch (\Exception $e) {
-	        throw $e;
-	    }
-	    return array();
+		try {
+			$connection = $this->getFtpConnection();
+				
+			// Strip the first slash from folder names
+			if (strpos($this->getFolderName(), '/') === 0) {
+				$folder_name = substr($this->getFolderName(), 1);
+			} else {
+				$folder_name = $this->getFolderName();
+			}
+				
+			// Enable passive mode
+			if ($this->getUsePassiveMode()) {
+				ftp_pasv($connection, true);
+			}
+				
+			// Pull down the list of files
+			$raw_list = ftp_rawlist($connection, $folder_name);
+			if (is_array($raw_list)) {
+				$file_list = array();
+				foreach ($raw_list as $list_item) {
+					$chunks = preg_split("/\s+/", $list_item);
+					list($item['rights'], $item['number'], $item['user'], $item['group'], $item['size'], $item['month'], $item['day'], $item['time']) = $chunks;
+					$item['type'] = $chunks[0]{0} === 'd' ? 'directory' : 'file';
+					array_splice($chunks, 0, 8);
+					$filename = implode(" ", $chunks);
+					// Apply a file filter if we have one
+					$file_list[$filename] = $item;
+				}
+				return $file_list;
+			}
+		} catch (\Exception $e) {
+			throw $e;
+		}
+		return array();
 	}
 	
 	/**

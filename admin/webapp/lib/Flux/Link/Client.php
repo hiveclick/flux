@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Client extends CommonForm {
+class Client extends BasicLink {
 	
-	protected $client_id;
-	protected $client_name;
 	protected $client_color;
 	
 	private $client;
@@ -16,10 +12,7 @@ class Client extends CommonForm {
 	 * @return integer
 	 */
 	function getClientId() {
-		if (is_null($this->client_id)) {
-			$this->client_id = null;
-		}
-		return $this->client_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -27,11 +20,7 @@ class Client extends CommonForm {
 	 * @var integer
 	 */
 	function setClientId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->client_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->client_id = $arg0;
-	    }
+		parent::setId($arg0);
 		$this->setClientColor($this->getClient()->getColor());
 		return $this;
 	}
@@ -41,10 +30,7 @@ class Client extends CommonForm {
 	 * @return string
 	 */
 	function getClientName() {
-		if (is_null($this->client_name)) {
-			$this->client_name = "";
-		}
-		return $this->client_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -52,8 +38,7 @@ class Client extends CommonForm {
 	 * @var string
 	 */
 	function setClientName($arg0) {
-		$this->client_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -61,10 +46,10 @@ class Client extends CommonForm {
 	 * @return string
 	 */
 	function getClientColor() {
-	    if (is_null($this->client_color)) {
-	        $this->client_color = "#000000";
-	    }
-	    return $this->client_color;
+		if (is_null($this->client_color)) {
+			$this->client_color = "#000000";
+		}
+		return $this->client_color;
 	}
 	
 	/**
@@ -72,9 +57,9 @@ class Client extends CommonForm {
 	 * @var string
 	 */
 	function setClientColor($arg0) {
-	    $this->client_color = $arg0;
-	    $this->addModifiedColumn("client_color");
-	    return $this;
+		$this->client_color = $arg0;
+		$this->addModifiedColumn("client_color");
+		return $this;
 	}
 	
 	/**
@@ -84,7 +69,7 @@ class Client extends CommonForm {
 	function getClient() {
 		if (is_null($this->client)) {
 			$this->client = new \Flux\Client();
-			$this->client->setId($this->getClientId());
+			$this->client->setId($this->getId());
 			$this->client->query();
 		}
 		return $this->client;

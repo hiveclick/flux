@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class TrafficSource extends CommonForm {
+class TrafficSource extends BasicLink {
 	
-	protected $traffic_source_id;
-	protected $traffic_source_name;
 	protected $traffic_source_icon;
 	protected $record_count;
 	
@@ -17,10 +13,7 @@ class TrafficSource extends CommonForm {
 	 * @return integer
 	 */
 	function getTrafficSourceId() {
-		if (is_null($this->traffic_source_id)) {
-			$this->traffic_source_id = null;
-		}
-		return $this->traffic_source_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -28,12 +21,7 @@ class TrafficSource extends CommonForm {
 	 * @var integer
 	 */
 	function setTrafficSourceId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->traffic_source_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->traffic_source_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -41,10 +29,7 @@ class TrafficSource extends CommonForm {
 	 * @return string
 	 */
 	function getTrafficSourceName() {
-		if (is_null($this->traffic_source_name)) {
-			$this->traffic_source_name = "";
-		}
-		return $this->traffic_source_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -52,8 +37,7 @@ class TrafficSource extends CommonForm {
 	 * @var string
 	 */
 	function setTrafficSourceName($arg0) {
-		$this->traffic_source_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -61,10 +45,10 @@ class TrafficSource extends CommonForm {
 	 * @return string
 	 */
 	function getTrafficSourceIcon() {
-	    if (is_null($this->traffic_source_icon)) {
-	        $this->traffic_source_icon = "";
-	    }
-	    return $this->traffic_source_icon;
+		if (is_null($this->traffic_source_icon)) {
+			$this->traffic_source_icon = "";
+		}
+		return $this->traffic_source_icon;
 	}
 	
 	/**
@@ -72,8 +56,8 @@ class TrafficSource extends CommonForm {
 	 * @var string
 	 */
 	function setTrafficSourceIcon($arg0) {
-	    $this->traffic_source_icon = $arg0;
-	    return $this;
+		$this->traffic_source_icon = $arg0;
+		return $this;
 	}
 	
 	/**
@@ -103,7 +87,7 @@ class TrafficSource extends CommonForm {
 	function getTrafficSource() {
 		if (is_null($this->traffic_source)) {
 			$this->traffic_source = new \Flux\TrafficSource();
-			$this->traffic_source->setId($this->getTrafficSourceId());
+			$this->traffic_source->setId($this->getId());
 			$this->traffic_source->query();
 		}
 		return $this->traffic_source;

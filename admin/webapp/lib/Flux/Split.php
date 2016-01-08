@@ -5,8 +5,44 @@ class Split extends Base\Split {
 
 	private $position;
 	private $pid_split;
+	private $offer_id_array;
 	protected $pid_time_split;
 
+	/**
+	 * Returns the offer_id_array
+	 * @return array
+	 */
+	function getOfferIdArray() {
+		if (is_null($this->offer_id_array)) {
+			$this->offer_id_array = array();
+		}
+		return $this->offer_id_array;
+	}
+	
+	/**
+	 * Sets the offer_id_array
+	 * @var array
+	 */
+	function setOfferIdArray($arg0) {
+		if (is_array($arg0)) {
+			$this->offer_id_array = $arg0;
+		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
+			$this->offer_id_array = array($arg0);
+		} else if ($arg0 instanceof \MongoId) {
+			$this->offer_id_array = array($arg0);
+		}
+		array_walk($this->offer_id_array, function(&$value) {
+			if (is_string($value) && \MongoId::isValid($value)) {
+				$value = new \MongoId($value);
+			} 
+		});
+		
+		$this->addModifiedColumn("offer_id_array");
+		return $this;
+	}
+	
+	
+	
 	/**
 	 * Returns true if the offer id is selected
 	 * @return boolean
@@ -14,7 +50,7 @@ class Split extends Base\Split {
 	function isOfferSelected($offer_id) {
 		/* @var $offer \Flux\Link\Offer */
 		foreach ($this->getOffers() as $offer) {
-			if ($offer->getOfferId() == $offer_id) {
+			if ($offer->getId() == $offer_id) {
 				return true;
 			}
 		}
@@ -83,10 +119,10 @@ class Split extends Base\Split {
 	 * @return \MongoDate
 	 */
 	function getPidTimeSplit() {
-	    if (is_null($this->pid_time_split)) {
-	        $this->pid_time_split = new \MongoDate();
-	    }
-	    return $this->pid_time_split;
+		if (is_null($this->pid_time_split)) {
+			$this->pid_time_split = new \MongoDate();
+		}
+		return $this->pid_time_split;
 	}
 	
 	/**
@@ -94,9 +130,9 @@ class Split extends Base\Split {
 	 * @var \MongoDate
 	 */
 	function setPidTimeSplit($arg0) {
-	    $this->pid_time_split = $arg0;
-	    $this->addModifiedColumn("pid_time_split");
-	    return $this;
+		$this->pid_time_split = $arg0;
+		$this->addModifiedColumn("pid_time_split");
+		return $this;
 	}
 	
 	// +------------------------------------------------------------------------+
@@ -108,13 +144,16 @@ class Split extends Base\Split {
 	 * @return Flux\User
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
-	    if ($this->getSplitType() > 0) {
-	        $criteria['split_type'] = $this->getSplitType();
-	    }
-	    if (trim($this->getName()) != '') {
-	        $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
-	    }
-	    return parent::queryAll($criteria, $hydrate, $fields);
+		if ($this->getSplitType() > 0) {
+			$criteria['split_type'] = $this->getSplitType();
+		}
+		if (trim($this->getName()) != '') {
+			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
+		}
+		if (count($this->getOfferIdArray()) > 0) {
+			$criteria['offers._id'] = array('$in' => $this->getOfferIdArray());
+		}
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 	/**

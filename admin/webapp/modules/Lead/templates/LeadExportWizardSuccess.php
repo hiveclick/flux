@@ -5,9 +5,9 @@
 	$campaigns = $this->getContext()->getRequest()->getAttribute("campaigns", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 	if (trim($lead->getKeywords()) == '') {
-	    $selected_columns = array(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
+		$selected_columns = array(\Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME);
 	} else {
-	    $selected_columns = array();
+		$selected_columns = array();
 	}
 	$selected_headers = array('fn','ln','em','ph','addr','cy','st','zi');
 ?>
@@ -60,26 +60,26 @@
 		<div class="form-group">
 			<label>Filter leads by date: </label>
 			<div class="row">
-			    <div class="col-md-6">
-                    <input type="text" class="form-control" id="start_date" name="start_date" value="" placeholder="since the dinosaurs..." />
-                </div>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" id="end_date" name="end_date" value="" placeholder="end of the universe..." />
-                </div>
+				<div class="col-md-6">
+					<input type="text" class="form-control" id="start_date" name="start_date" value="" placeholder="since the dinosaurs..." />
+				</div>
+				<div class="col-md-6">
+					<input type="text" class="form-control" id="end_date" name="end_date" value="" placeholder="end of the universe..." />
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label>How many leads do you want to export</label>
 			<select class="form-control selectize" name="items_per_page" id="items_per_page" placeholder="How many leads do you want to export...">
-			    <optgroup label="Export all leads">
-			        <option value="0">Export all leads</option>
-			    </optgroup>
-			    <optgroup label="Export selected leads">
-    				<option value="25">25</option>
-    				<option value="50">50</option>
-    				<option value="100">100</option>
-    				<option value="200">200</option>
-    				<option value="500">500</option>
+				<optgroup label="Export all leads">
+					<option value="0">Export all leads</option>
+				</optgroup>
+				<optgroup label="Export selected leads">
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+					<option value="200">200</option>
+					<option value="500">500</option>
 				</optgroup>
 			</select>
 		</div>
@@ -87,7 +87,7 @@
 		<div class="form-group">
 			<label>Choose the columns you want included in this export</label>
 			<select class="form-control selectize" name="headers[]" id="headers" multiple placeholder="Select the column headers">
-			    <?php
+				<?php
 					/* @var $data_field \Flux\DataField */ 
 					foreach($data_fields AS $data_field) { 
 				?>
@@ -113,7 +113,7 @@
 //<!--
 $(document).ready(function() {
 	// submit the form
-    $('#start_date,#end_date').datepicker();
+	$('#start_date,#end_date').datepicker();
 	
 	$('#headers,#required_fields','#lead_export_form').selectize({
 		valueField: 'key_name',
@@ -122,29 +122,29 @@ $(document).ready(function() {
 		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
-				var label = item.name || item.key;            
-	            return '<div">' + escape(label) + '</div>';
+				var label = item.name || item.key;			
+				return '<div">' + escape(label) + '</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +
-	            '</div>';
+				});				
+				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +
+				'</div>';
 			}
 		}
 	});
 
 	<?php foreach ($selected_headers as $header_col) { ?>
-        $('#headers').selectize()[0].selectize.addItem('<?php echo $header_col; ?>');
+		$('#headers').selectize()[0].selectize.addItem('<?php echo $header_col; ?>');
 	<?php } ?>
 
 	$('#offer_id_array','#lead_export_form').selectize({
@@ -160,15 +160,15 @@ $(document).ready(function() {
 		create: true,
 		render: {
 			item: function(item, escape) {
-	            return '<div>' + escape(item.campaign_key) + '</div>';
+				return '<div>' + escape(item.campaign_key) + '</div>';
 			},
 			option: function(item, escape) {
 				return '<div style="padding-right:25px;">' +
-	                '<b>' + escape(item.campaign_key) + '</b>' +
-	                '<span class="pull-right label label-success">' + (item.client_name ? escape(item.client_name) : 'Unknown') + '</span>' + 
-	    	        '<br />' +
-	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
-	            '</div>';
+					'<b>' + escape(item.campaign_key) + '</b>' +
+					'<span class="pull-right label label-success">' + (item.client_name ? escape(item.client_name) : 'Unknown') + '</span>' + 
+					'<br />' +
+					(item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+				'</div>';
 			}
 		}
 	});

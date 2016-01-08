@@ -41,41 +41,41 @@ namespace Crossjoin\Browscap\Updater;
 class FileGetContents
 extends AbstractUpdaterRemote
 {
-    /**
-     * Name of the update method, used in the user agent for the request,
-     * for browscap download statistics. Has to be overwritten by the
-     * extending class.
-     *
-     * @var string
-     */
-    protected $updateMethod = 'URL-wrapper';
+	/**
+	 * Name of the update method, used in the user agent for the request,
+	 * for browscap download statistics. Has to be overwritten by the
+	 * extending class.
+	 *
+	 * @var string
+	 */
+	protected $updateMethod = 'URL-wrapper';
 
-    /**
-     * Options for the updater. The array should be overwritten,
-     * containing all options as keys, set to the default value.
-     *
-     * @var array
-     */
-    protected $options = array(
-    );
+	/**
+	 * Options for the updater. The array should be overwritten,
+	 * containing all options as keys, set to the default value.
+	 *
+	 * @var array
+	 */
+	protected $options = array(
+	);
 
-    public function __construct($options = null)
-    {
-        parent::__construct($options);
+	public function __construct($options = null)
+	{
+		parent::__construct($options);
 
-        if ((bool)(int)ini_get('allow_url_fopen') === false) {
-            throw new \Exception("Please activate 'allow_url_fopen'.");
-        }
-    }
+		if ((bool)(int)ini_get('allow_url_fopen') === false) {
+			throw new \Exception("Please activate 'allow_url_fopen'.");
+		}
+	}
 
-    /**
-     * Gets the data from a given URL (or false on failure)
-     *
-     * @param string $url
-     * @return string|boolean
-     */
-    protected function getRemoteData($url)
-    {
-        return file_get_contents($url);
-    }
+	/**
+	 * Gets the data from a given URL (or false on failure)
+	 *
+	 * @param string $url
+	 * @return string|boolean
+	 */
+	protected function getRemoteData($url)
+	{
+		return file_get_contents($url);
+	}
 }

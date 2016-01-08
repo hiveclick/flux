@@ -6,64 +6,73 @@
 	$verticals = $this->getContext()->getRequest()->getAttribute("verticals", array());
 	$offers = $this->getContext()->getRequest()->getAttribute("offers", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-	    <a id="save_search_btn" data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" class="btn btn-info">Save Search</a>
-		<a href="/campaign/campaign-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Campaign</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/campaign/campaign-search">Campaigns</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a id="save_search_btn" data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" class="btn btn-info">Save Search</a>
+			<a href="/campaign/campaign-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Campaign</a>
+		</div>
+		<h1>Campaigns</h1>
 	</div>
-	<h1>Campaigns</h1>
-</div>
-<div class="help-block">These are all the campaigns assigned to the clients and offers</div>
-<div class="panel panel-primary">
-	<div id='campaign-header' class='grid-header panel-heading clearfix'>
-		<form id="campaign_search_form" class="form-inline" method="GET" action="/api">
-			<input type="hidden" name="func" value="/campaign/campaign">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="text-right">
-				<div class="form-group text-left">
-					<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
-						
-					</select>
+	<div class="help-block">These are all the campaigns assigned to the clients and offers</div>
+	<div class="panel panel-primary">
+		<div id='campaign-header' class='grid-header panel-heading clearfix'>
+			<form id="campaign_search_form" class="form-inline" method="GET" action="/api">
+				<input type="hidden" name="func" value="/campaign/campaign">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="text-right">
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
+							
+						</select>
+					</div>
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+							<optgroup label="Administrators">
+							<?php
+								/* @var $client \Flux\Client */ 
+								foreach ($clients as $client) { 
+							?>
+								<?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+									<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+								<?php } ?>
+							<?php } ?>
+							</optgroup>
+							<optgroup label="Affiliates">
+							<?php
+								/* @var $client \Flux\Client */ 
+								foreach ($clients as $client) { 
+							?>
+								<?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+									<option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
+								<?php } ?>
+							<?php } ?>
+							</optgroup>
+						</select>
+					</div>
+					<div class="form-group text-left">
+						<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source"></select>
+					</div>
+					<div class="form-group text-left">
+						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="<?php echo $campaign->getKeywords() ?>" />
+					</div>
 				</div>
-				<div class="form-group text-left">
-					<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
-					    <optgroup label="Administrators">
-						<?php
-							/* @var $client \Flux\Client */ 
-							foreach ($clients as $client) { 
-						?>
-                            <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
-                                <option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
-                            <?php } ?>
-						<?php } ?>
-						</optgroup>
-						<optgroup label="Affiliates">
-						<?php
-							/* @var $client \Flux\Client */ 
-							foreach ($clients as $client) { 
-						?>
-                            <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
-                                <option value="<?php echo $client->getId() ?>" <?php echo in_array($client->getId(), $campaign->getClientIdArray()) ? "selected" : "" ?>><?php echo $client->getName() ?></option>
-                            <?php } ?>
-						<?php } ?>
-						</optgroup>
-					</select>
-				</div>
-				<div class="form-group text-left">
-					<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source"></select>
-				</div>
-				<div class="form-group text-left">
-					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="<?php echo $campaign->getKeywords() ?>" />
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
+		<div id="campaign-grid"></div>
+		<div id="campaign-pager" class="panel-footer"></div>
 	</div>
-	<div id="campaign-grid"></div>
-	<div id="campaign-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit saved-search modal -->
@@ -84,15 +93,15 @@ $(document).ready(function() {
 		}},
 		{id:'traffic_source', name:'&nbsp;', field:'traffic_source.traffic_source_icon', sort_field:'traffic_source.name', def_value: ' ', maxWidth:64, width:64, minWidth:64, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			
-        	return '<img class="img-thumbnail" src="/images/traffic-sources/' + (value != null ? value : 'unknown') + '_48.png" width="32" border="0" />';
-        }},
-		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', hidden: true, sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			return '<a href="/client/client?_id=' + dataContext.client.client_id + '">' + value + '</a>';
+			return '<img class="img-thumbnail" src="/images/traffic-sources/' + (value != null ? value : 'unknown') + '_48.png" width="32" border="0" />';
 		}},
-		{id:'offer_name', name:'offer', field:'offer.offer_name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'client_name', name:'client', field:'client.client_name', sort_field:'_id', def_value: ' ', hidden: true, sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return '<a href="/client/client?_id=' + dataContext.client._id + '">' + value + '</a>';
+		}},
+		{id:'offer_name', name:'offer', field:'offer.name', sort_field:'_id', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
-				ret_val += '<a href="/offer/offer?_id=' + dataContext.offer.offer_id + '">' + value + '</a>';
-				ret_val += '<div class="small text-muted">' + dataContext.client.client_name + '</div>';
+				ret_val += '<a href="/offer/offer?_id=' + dataContext.offer._id + '">' + value + '</a>';
+				ret_val += '<div class="small text-muted">' + dataContext.client.name + '</div>';
 				ret_val += '</div>';
 				return ret_val;
 		}},
@@ -107,7 +116,7 @@ $(document).ready(function() {
 		}},
 		{id:'payout', name:'payout', field:'payout', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value > 0) {
-			    return '$' + $.number(value, 2);
+				return '$' + $.number(value, 2);
 			} else {
 				var ret_val = '<div style="line-height:16pt;">'
 					ret_val += '<i class="text-muted">$0.00</i>';
@@ -169,28 +178,28 @@ $(document).ready(function() {
 	  	
   	$('#campaign_search_form').trigger('submit');
 
-    $('#client_id_array').selectize({
-    	dropdownWidthOffset: 200,
+	$('#client_id_array').selectize({
+		dropdownWidthOffset: 200,
 		allowEmptyOption: true
-    }).on('change', function(e) {
+	}).on('change', function(e) {
 		$('#campaign_search_form').trigger('submit');
 	});
 	
 	$('#offer_id_array').selectize({
-    	valueField: '_id',
-    	dropdownWidthOffset: 200,
+		valueField: '_id',
+		dropdownWidthOffset: 200,
 		allowEmptyOption: true,
 		labelField: 'name',
 		searchField: ['name'],
 		options: [
-		    <?php foreach ($offers as $offer) { ?>
-		    <?php echo json_encode($offer->toArray()) ?>,
-		    <?php } ?>
+			<?php foreach ($offers as $offer) { ?>
+			<?php echo json_encode($offer->toArray()) ?>,
+			<?php } ?>
 		],
 		optgroups: [
-		    <?php foreach ($verticals as $vertical) { ?>
-		    { label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
-            <?php } ?>
+			<?php foreach ($verticals as $vertical) { ?>
+			{ label: '<?php echo $vertical->getName() ?>', value: '<?php echo $vertical->getName() ?>'},
+			<?php } ?>
 		],
 		lockOptgroupOrder: true,
 		render: {
@@ -201,7 +210,7 @@ $(document).ready(function() {
 				var landing_page = item.landing_pages.shift();
 				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
 				if (landing_page != undefined) {
-				    ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(landing_page.url) + '" width="64" border="0" />';
+					ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(landing_page.url) + '" width="64" border="0" />';
 				} else {
 					ret_val += '<img class="media-object img-thumbnail" src="/images/no_preview.png" width="64" border="0" />';
 				}
@@ -218,19 +227,19 @@ $(document).ready(function() {
 
 	// Preload the offers
 	<?php foreach ($campaign->getOfferIdArray() as $offer_id) { ?>
-    $('#offer_id_array').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
+	$('#offer_id_array').selectize()[0].selectize.addItem(<?php echo $offer_id ?>);
 	<?php } ?>
 
 	$('#traffic_source_id_array').selectize({
-    	allowEmptyOption: true,
-    	dropdownWidthOffset: 200,
-    	valueField: '_id',
+		allowEmptyOption: true,
+		dropdownWidthOffset: 200,
+		valueField: '_id',
 		labelField: 'name',
 		searchField: ['name', 'description'],
 		options: [
-		    <?php foreach ($traffic_sources as $traffic_source) { ?>
-		    <?php echo json_encode($traffic_source->toArray()) ?>,
-		    <?php } ?>
+			<?php foreach ($traffic_sources as $traffic_source) { ?>
+			<?php echo json_encode($traffic_source->toArray()) ?>,
+			<?php } ?>
 		],
 		render: {
 			option: function(item, escape) {
@@ -244,20 +253,20 @@ $(document).ready(function() {
 				return ret_val;
 			}
 		}
-    }).on('change', function(e) {
-    	$('#campaign_search_form').trigger('submit');
-    });
+	}).on('change', function(e) {
+		$('#campaign_search_form').trigger('submit');
+	});
 
 	// Preload the traffic sources
 	<?php foreach ($campaign->getTrafficSourceIdArray() as $traffic_source_id) { ?>
-    $('#traffic_source_id_array').selectize()[0].selectize.addItem(<?php echo $traffic_source_id ?>);
+	$('#traffic_source_id_array').selectize()[0].selectize.addItem(<?php echo $traffic_source_id ?>);
 	<?php } ?>
 
-    $('#save_search_btn').on('click', function() {
-        $(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>&query_string=' + encodeURIComponent($('#campaign_search_form').serialize()));
-    });
+	$('#save_search_btn').on('click', function() {
+		$(this).attr('href', '/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>&query_string=' + encodeURIComponent($('#campaign_search_form').serialize()));
+	});
 
-    
+	
 });
 //-->
 </script>

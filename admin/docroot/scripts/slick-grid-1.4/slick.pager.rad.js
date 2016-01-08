@@ -145,7 +145,7 @@
 					start += 1;
 				}
 				
-				$status.text('viewing rows ' + $.formatNumber(start, {format:"#,##0", locale:"us"}) + ' - ' + $.formatNumber(end, {format:"#,##0", locale:"us"}) + ' of ' + $.formatNumber(pagingInfo.totalRows, {format:"#,##0", locale:"us"}) + ' (page ' + $.formatNumber((pagingInfo.pageNum+1), {format:"#,##0", locale:"us"}) + " of " + $.formatNumber((Math.floor(pagingInfo.totalRows/pagingInfo.pageSize)+1), {format:"#,##0", locale:"us"}) + ')');
+				$status.text('viewing rows ' + $.number(start, {format:"#,##0", locale:"us"}) + ' - ' + $.number(end, {format:"#,##0", locale:"us"}) + ' of ' + $.number(pagingInfo.totalRows, {format:"#,##0", locale:"us"}) + ' (page ' + $.number((pagingInfo.pageNum+1), {format:"#,##0", locale:"us"}) + " of " + $.number((Math.floor(pagingInfo.totalRows/pagingInfo.pageSize)+1), {format:"#,##0", locale:"us"}) + ')');
 			}
         }
 

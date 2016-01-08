@@ -42,20 +42,20 @@
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
 			<input type="hidden" id="sort" name="sort" value="_id" />
 			<input type="hidden" id="sord" name="sord" value="desc" />
-            <input type="hidden" id="campaign_id" name="campaign_id_array[]" value="<?php echo $campaign->getKey() ?>" />
+			<input type="hidden" id="campaign_id" name="campaign_id_array[]" value="<?php echo $campaign->getKey() ?>" />
 			<div class="row">
-    			<div class="form-group text-left col-md-4">
-    				<label>Search by lead name or id: </label>
-    				<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="" />
-    			</div>
-    			<div class="form-group text-left col-md-5">
-    				<label>Only show leads with the following fields set: </label>
-    				<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="Add required fields..."></select>
-    			</div>
-    			<div class="form-group text-left col-md-3">
-    				<label>Show leads created on: </label>
-    				<input type="text" class="form-control" placeholder="search by created date" size="35" id="start_date" name="start_date" value="<?php echo isset($_REQUEST['start_date']) ? $_REQUEST['start_date'] : '' ?>" />
-    			</div>
+				<div class="form-group text-left col-md-4">
+					<label>Search by lead name or id: </label>
+					<input type="text" class="form-control" placeholder="search by name or id" size="35" id="txtSearch" name="keywords" value="" />
+				</div>
+				<div class="form-group text-left col-md-5">
+					<label>Only show leads with the following fields set: </label>
+					<select class="form-control selectize" name="required_fields[]" id="required_fields" multiple placeholder="Add required fields..."></select>
+				</div>
+				<div class="form-group text-left col-md-3">
+					<label>Show leads created on: </label>
+					<input type="text" class="form-control" placeholder="search by created date" size="35" id="start_date" name="start_date" value="<?php echo isset($_REQUEST['start_date']) ? $_REQUEST['start_date'] : '' ?>" />
+				</div>
 			</div>
 			
 			<div class="text-center">
@@ -87,8 +87,8 @@ $(document).ready(function() {
    		{id:'contact_name', name:'Lead Name', field:'_id', sort_field:'_d.fn', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
    			var name = (dataContext._d.name == undefined) ? '' : dataContext._d.name;
    			if (name == '') {
-   			    var name = (dataContext._d.fn == undefined) ? '' : dataContext._d.fn;
-   			    name += (dataContext._d.ln == undefined) ? '' : (' ' + dataContext._d.ln);
+   				var name = (dataContext._d.fn == undefined) ? '' : dataContext._d.fn;
+   				name += (dataContext._d.ln == undefined) ? '' : (' ' + dataContext._d.ln);
    			}			
    			var email = (dataContext._d.em == undefined) ? '' : 'E: ' + dataContext._d.em;
    			var phone = (dataContext._d.ph1 == undefined) ? '' : ', P: ' + dataContext._d.ph1;
@@ -134,17 +134,17 @@ $(document).ready(function() {
    						$.each(dataContext._e, function(i, item) {
    							if (item.data_field.data_field_id == '<?php echo $data_field->getId() ?>') {
    								// This is our event
-   							        ret_val = '<div style="line-height:16pt;">'
-   								    if (item.v == '1') {
-   								        ret_val += 'Yes';
-   								    } else {
-   								    	ret_val += 'No';
-   								    }
+   									ret_val = '<div style="line-height:16pt;">'
+   									if (item.v == '1') {
+   										ret_val += 'Yes';
+   									} else {
+   										ret_val += 'No';
+   									}
    									ret_val += '<div class="small text-muted">';
    									if (moment.unix(item.t.sec).isBefore(moment().startOf('day'), 'day')) {
    										ret_val += ' (' + moment.unix(item.t.sec).format("MMM Do [at] LT") + ')';
    									} else {
-   									    ret_val += ' (' + moment.unix(item.t.sec).format("LT") + ')';
+   										ret_val += ' (' + moment.unix(item.t.sec).format("LT") + ')';
    									}
    									ret_val += '</div>';
    									ret_val += '</div>';
@@ -194,40 +194,40 @@ $(document).ready(function() {
    		searchField: ['name', 'description', 'request_names'],
    		dropdownWidthOffset: 150,
    		options: [
-               <?php foreach ($data_fields as $data_field) { ?>
-                   <?php echo json_encode($data_field->toArray()) ?>,
-               <?php } ?>		
+			   <?php foreach ($data_fields as $data_field) { ?>
+				   <?php echo json_encode($data_field->toArray()) ?>,
+			   <?php } ?>		
    		],
    		render: {
    			item: function(item, escape) {
-   				var label = item.name || item.key;            
-   	            return '<div class="item">' + escape(label) + '</div>';
+   				var label = item.name || item.key;			
+   				return '<div class="item">' + escape(label) + '</div>';
    			},
    			option: function(item, escape) {
    				var label = item.name || item.key;
-   	            var caption = item.description ? item.description : null;
-   	            var keyname = item.key_name ? item.key_name : null;
-   	            var tags = item.tags ? item.tags : null;
-   	            var tag_span = '';
+   				var caption = item.description ? item.description : null;
+   				var keyname = item.key_name ? item.key_name : null;
+   				var tags = item.tags ? item.tags : null;
+   				var tag_span = '';
    				$.each(tags, function(j, tag_item) {
    					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-   				});	            
-   	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-   	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-   	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-   	                '<div>' + tag_span + '</div>' +
-   	            '</div>';
+   				});				
+   				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+   					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+   					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+   					'<div>' + tag_span + '</div>' +
+   				'</div>';
    			}
    		}
    	});
-    // Preload any required fields from a saved search
-    <?php if (isset($_REQUEST['required_fields']) && is_array($_REQUEST['required_fields'])) { ?>
+	// Preload any required fields from a saved search
+	<?php if (isset($_REQUEST['required_fields']) && is_array($_REQUEST['required_fields'])) { ?>
 	<?php foreach ($_REQUEST['required_fields'] as $required_field) { ?>
-    $('#required_fields','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $required_field ?>');
+	$('#required_fields','#lead_search_form').selectize()[0].selectize.addItem('<?php echo $required_field ?>');
 	<?php } ?>
 	<?php } ?>
    
-    $('#lead_search_form').trigger('submit');
+	$('#lead_search_form').trigger('submit');
 });
 //-->
 </script>

@@ -24,14 +24,14 @@ class CampaignPostInstructionDownloadAction extends BasicAction
 	 */
 	public function execute ()
 	{
-	    /* @var $campaign \Flux\Campaign */
-	    $campaign = new \Flux\Campaign();
-	    $campaign->populate($_REQUEST);
-	    $campaign->query();
-	    
-	    require(MO_WEBAPP_DIR . '/vendor/autoload.php');
-	    
-	    /* @var $snappy \Knp\Snappy\Pdf */
+		/* @var $campaign \Flux\Campaign */
+		$campaign = new \Flux\Campaign();
+		$campaign->populate($_REQUEST);
+		$campaign->query();
+		
+		require(MO_WEBAPP_DIR . '/vendor/autoload.php');
+		
+		/* @var $snappy \Knp\Snappy\Pdf */
 		$snappy = new \Knp\Snappy\Pdf(MO_WEBAPP_DIR . '/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/wkhtmltopdf-amd64-centos6');
 		header('Content-Type: application/pdf');
 		header('Content-Disposition: attachment; filename="campaign-post-instructions.pdf"');

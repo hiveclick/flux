@@ -32,51 +32,51 @@
 				<?php } ?>
 			</select>
 			<div style="padding-left:10px;">
-                <label><input type="checkbox" name="test" value="1" /> I only want to test the fulfillment, only show me what would be sent</label>
+				<label><input type="checkbox" name="test" value="1" /> I only want to test the fulfillment, only show me what would be sent</label>
 			</div>
 		</div>
 		<div style="display:none;" id="fulfillment_log_div">
-		    <hr />
+			<hr />
 			<div id="fulfillment_result_debug">
-			    <div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
-			    <div role="tabpanel">
+				<div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
+				<div role="tabpanel">
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
-                        <li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="qs">
-                            <div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
-                            <div style="height:400px;overflow:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <th>Parameter</th>
-                                        <th>Value</th>
-                                    </thead>
-                                    <tbody id="debug_qs"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="request">
-                            <div class="help-block">This is the raw post url that will be sent to the advertiser</div>
-                            <textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="fulfillment_result_error">
-                <div class="help-block">The results of your fulfillment request are below</div>
-                <div class="alert alert-danger alert-dismissible" role="alert"></div>
-            </div>
-            <div id="fulfillment_result_success">
-                <div class="help-block">The results of your fulfillment request are below</div>
-                <div class="alert alert-success alert-dismissible" role="alert">
-                    Fulfillment was sent successfully
-                </div>
-            </div>
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
+						<li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="qs">
+							<div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
+							<div style="height:400px;overflow:auto;">
+								<table class="table">
+									<thead>
+										<th>Parameter</th>
+										<th>Value</th>
+									</thead>
+									<tbody id="debug_qs"></tbody>
+								</table>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="request">
+							<div class="help-block">This is the raw post url that will be sent to the advertiser</div>
+							<textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="fulfillment_result_error">
+				<div class="help-block">The results of your fulfillment request are below</div>
+				<div class="alert alert-danger alert-dismissible" role="alert"></div>
+			</div>
+			<div id="fulfillment_result_success">
+				<div class="help-block">The results of your fulfillment request are below</div>
+				<div class="alert alert-success alert-dismissible" role="alert">
+					Fulfillment was sent successfully
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -116,13 +116,13 @@ $('#lead_fulfill_manual_form').form(
 			if (data.record.test) {
 				$('#debug_request').val(data.record.debug.request);
 				if (data.record.debug.url != '') {
-    				$('#debug_url').html(data.record.debug.url);
-    				$('#debug_qs').html('');
-    				$.each(data.record.debug.params, function(i, item) {
-        				var tr = $('<tr />').appendTo($('#debug_qs'));
-        				$('<td />').html(i).appendTo(tr);
-        				$('<td />').html(item).appendTo(tr);
-    				});
+					$('#debug_url').html(data.record.debug.url);
+					$('#debug_qs').html('');
+					$.each(data.record.debug.params, function(i, item) {
+						var tr = $('<tr />').appendTo($('#debug_qs'));
+						$('<td />').html(i).appendTo(tr);
+						$('<td />').html(item).appendTo(tr);
+					});
 				} else {
 					var tr = $('<tr />').appendTo($('#debug_qs'));
 					$('<td colspan="2" />').html('<pre>' + data.record.debug.request + '</pre>').appendTo(tr);
@@ -130,15 +130,15 @@ $('#lead_fulfill_manual_form').form(
 				$('#fulfillment_result_debug').show();
 				$.rad.notify('Test Complete', 'The test was sent and you can see the results above');
 			} else {
-    			if (data.record.is_error) {
-    				$('#fulfillment_result_error .alert').html(data.record.error_message);
-    				$('#fulfillment_result_error').show();
-    				$.rad.notify.error('Lead Submitted', 'The lead had errors while trying to be fulfilled');
-    			} else {
-    			    $('#fulfillment_result_success').show();
-    			    $.rad.notify('Lead Submitted', 'The lead has been submitted to the export successfully');
-    			}
-    			loadAttempts();
+				if (data.record.is_error) {
+					$('#fulfillment_result_error .alert').html(data.record.error_message);
+					$('#fulfillment_result_error').show();
+					$.rad.notify.error('Lead Submitted', 'The lead had errors while trying to be fulfilled');
+				} else {
+					$('#fulfillment_result_success').show();
+					$.rad.notify('Lead Submitted', 'The lead has been submitted to the export successfully');
+				}
+				loadAttempts();
 			}
 		}
 	}, {

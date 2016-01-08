@@ -25,7 +25,7 @@ class SplitQueuePaneAttemptAction extends BasicAction
 	 */
 	public function execute ()
 	{
-	    
+		
 		/* @var $offer Flux\SplitQueue */
 		$split_queue = new \Flux\SplitQueue();
 		$split_queue->populate($_REQUEST);
@@ -38,7 +38,7 @@ class SplitQueuePaneAttemptAction extends BasicAction
 		$split_queue_attempt = new \Flux\SplitQueueAttempt();
 		
 		if (isset($attempts[$index])) {
-		    $split_queue_attempt->populate($attempts[$index]);
+			$split_queue_attempt->populate($attempts[$index]);
 		}
 		$split_queue_attempt->setAttemptIndex($index);
 

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -17,14 +17,14 @@ namespace Zend\Authentication\Adapter\Http;
  */
 interface ResolverInterface
 {
-    /**
-     * Resolve username/realm to password/hash/etc.
-     *
-     * @param  string $username Username
-     * @param  string $realm    Authentication Realm
-     * @param  string $password Password (optional)
-     * @return string|array|false User's shared secret as string if found in realm, or User's identity as array
-     *         if resolved, false otherwise.
-     */
-    public function resolve($username, $realm, $password = null);
+	/**
+	 * Resolve username/realm to password/hash/etc.
+	 *
+	 * @param  string $username Username
+	 * @param  string $realm	Authentication Realm
+	 * @param  string $password Password (optional)
+	 * @return string|array|false User's shared secret as string if found in realm, or User's identity as array
+	 *		 if resolved, false otherwise.
+	 */
+	public function resolve($username, $realm, $password = null);
 }

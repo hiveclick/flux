@@ -79,18 +79,18 @@
 			</spacer>
 			<!-- Insert Lead Saved Searches -->
 			<!-- <saved_searches_lead /> -->
-			<splitqueuesearch>
-                <label>View Queued Leads</label>
-                <uri>/export/split-queue-search</uri>
+			<pendingtoday>
+                <label>Pending Leads Today</label>
+                <uri>/lead/lead-split-pending-today-search</uri>
                 <class>nav-secondary</class>
                 <permission>1</permission>
-            </splitqueuesearch>
-            <splitqueuecatchallsearch>
-                <label>View Catch-All Leads</label>
-                <uri>/export/split-queue-catch-all-search</uri>
+            </pendingtoday>
+            <fulfilledtoday>
+                <label>Fulfilled Leads Today</label>
+                <uri>/lead/lead-split-fulfilled-today-search</uri>
                 <class>nav-secondary</class>
                 <permission>1</permission>
-            </splitqueuecatchallsearch>
+            </fulfilledtoday>
        </pages>
 	</leads>
 	<export>
@@ -111,12 +111,36 @@
 				<class>nav-secondary</class>
 				<permission>1</permission>
 			</spacer2>
+			<pendingtoday>
+                <label>Pending Leads Today</label>
+                <uri>/lead/lead-split-pending-today-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </pendingtoday>
+            <fulfilledtoday>
+                <label>Fulfilled Leads Today</label>
+                <uri>/lead/lead-split-fulfilled-today-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </fulfilledtoday>
+			<spacer3>
+				<label></label>
+				<uri></uri>>
+				<class>nav-secondary</class>
+				<permission>1</permission>
+			</spacer3>
             <fulfillmentsearch>
                 <label>Fulfillment Handlers</label>
                 <uri>/admin/fulfillment-search</uri>
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </fulfillmentsearch>
+            <ubottest>
+                <label>Test Ubot Scripts</label>
+                <uri>/export/ubot-test</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </ubottest>
        </pages>
 	</export>
 	<reports>

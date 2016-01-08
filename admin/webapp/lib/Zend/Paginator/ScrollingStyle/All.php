@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -18,15 +18,15 @@ use Zend\Paginator\Paginator;
  */
 class All implements ScrollingStyleInterface
 {
-    /**
-     * Returns an array of all pages given a page number and range.
-     *
-     * @param  Paginator $paginator
-     * @param  int $pageRange Unused
-     * @return array
-     */
-    public function getPages(Paginator $paginator, $pageRange = null)
-    {
-        return $paginator->getPagesInRange(1, $paginator->count());
-    }
+	/**
+	 * Returns an array of all pages given a page number and range.
+	 *
+	 * @param  Paginator $paginator
+	 * @param  int $pageRange Unused
+	 * @return array
+	 */
+	public function getPages(Paginator $paginator, $pageRange = null)
+	{
+		return $paginator->getPagesInRange(1, $paginator->count());
+	}
 }

@@ -25,9 +25,9 @@ class LeadSearchAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\Lead */
-		$lead = new Lead();
-		$lead->populate($_REQUEST);
+		/* @var $offer Flux\LeadSearch */
+		$lead_search = new \Flux\LeadSearch();
+		$lead_search->populate($_REQUEST);
 
 		/* @var $datafield \Flux\DataField */
 		$data_field = new \Flux\DataField();
@@ -59,7 +59,7 @@ class LeadSearchAction extends BasicAction
 		$campaigns = $campaign->queryAll();
 		
 
-		$this->getContext()->getRequest()->setAttribute("lead", $lead);
+		$this->getContext()->getRequest()->setAttribute("lead_search", $lead_search);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
 		$this->getContext()->getRequest()->setAttribute("campaigns", $campaigns);
 		$this->getContext()->getRequest()->setAttribute("verticals", $verticals);

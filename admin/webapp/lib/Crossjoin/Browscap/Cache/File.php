@@ -40,112 +40,112 @@ namespace Crossjoin\Browscap\Cache;
 class File
 extends AbstractCache
 {
-    protected static $cache_dir;
+	protected static $cache_dir;
 
-    /**
-     * Get cached data by a given key
-     *
-     * @param string $key
-     * @param boolean $with_version
-     * @return string|null
-     */
-    public function get($key, $with_version = true)
-    {
-        $file = $this->getFileName($key, $with_version, false);
-        if (is_readable($file)) {
-            return file_get_contents($file);
-        }
-        return null;
-    }
+	/**
+	 * Get cached data by a given key
+	 *
+	 * @param string $key
+	 * @param boolean $with_version
+	 * @return string|null
+	 */
+	public function get($key, $with_version = true)
+	{
+		$file = $this->getFileName($key, $with_version, false);
+		if (is_readable($file)) {
+			return file_get_contents($file);
+		}
+		return null;
+	}
 
-    /**
-     * Set cached data for a given key
-     *
-     * @param string $key
-     * @param string $content
-     * @param boolean $with_version
-     * @return int|false
-     */
-    public function set($key, $content, $with_version = true)
-    {
-        $file = $this->getFileName($key, $with_version, true);
-        return file_put_contents($file, $content);
-    }
+	/**
+	 * Set cached data for a given key
+	 *
+	 * @param string $key
+	 * @param string $content
+	 * @param boolean $with_version
+	 * @return int|false
+	 */
+	public function set($key, $content, $with_version = true)
+	{
+		$file = $this->getFileName($key, $with_version, true);
+		return file_put_contents($file, $content);
+	}
 
-    /**
-     * Delete cached data by a given key
-     *
-     * @param type $key
-     * @param type $with_version
-     * @return boolean
-     */
-    public function delete($key, $with_version = true)
-    {
-        $file = $this->getFileName($key, $with_version, false);
-        if (file_exists($file)) {
-            return unlink($file);
-        }
-        return true;
-    }
+	/**
+	 * Delete cached data by a given key
+	 *
+	 * @param type $key
+	 * @param type $with_version
+	 * @return boolean
+	 */
+	public function delete($key, $with_version = true)
+	{
+		$file = $this->getFileName($key, $with_version, false);
+		if (file_exists($file)) {
+			return unlink($file);
+		}
+		return true;
+	}
 
-    /**
-     * Check if a key is already cached
-     *
-     * @param type $key
-     * @param type $with_version
-     * @return boolean
-     */
-    public function exists($key, $with_version = true)
-    {
-        return file_exists($this->getFileName($key, $with_version, false));
-    }
+	/**
+	 * Check if a key is already cached
+	 *
+	 * @param type $key
+	 * @param type $with_version
+	 * @return boolean
+	 */
+	public function exists($key, $with_version = true)
+	{
+		return file_exists($this->getFileName($key, $with_version, false));
+	}
 
-    /**
-     * Gets the cache file name for a given key
-     *
-     * @param string $key
-     * @param boolean $with_version
-     * @return string
-     */
-    public function getFileName($key, $with_version = true, $create_dir = false)
-    {
-        $file  = $this->getCacheDirectory($with_version, $create_dir);
-        $file .= DIRECTORY_SEPARATOR . $key;
+	/**
+	 * Gets the cache file name for a given key
+	 *
+	 * @param string $key
+	 * @param boolean $with_version
+	 * @return string
+	 */
+	public function getFileName($key, $with_version = true, $create_dir = false)
+	{
+		$file  = $this->getCacheDirectory($with_version, $create_dir);
+		$file .= DIRECTORY_SEPARATOR . $key;
 
-        return $file;
-    }
+		return $file;
+	}
 
-    /**
-     * Sets the (main) cache directory
-     *
-     * @param string $cache_dir
-     */
-    public static function setCacheDirectory($cache_dir)
-    {
-        self::$cache_dir = rtrim($cache_dir, DIRECTORY_SEPARATOR);
-    }
+	/**
+	 * Sets the (main) cache directory
+	 *
+	 * @param string $cache_dir
+	 */
+	public static function setCacheDirectory($cache_dir)
+	{
+		self::$cache_dir = rtrim($cache_dir, DIRECTORY_SEPARATOR);
+	}
 
-    /**
-     * Gets the main/version cache directory
-     *
-     * @param boolean $with_version
-     * @return string
-     */
-    public static function getCacheDirectory($with_version = false, $create_dir = false)
-    {
-        if (self::$cache_dir === null) {
-            self::setCacheDirectory(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'browscap');
-        }
-        $path = self::$cache_dir;
+	/**
+	 * Gets the main/version cache directory
+	 *
+	 * @param boolean $with_version
+	 * @return string
+	 */
+	public static function getCacheDirectory($with_version = false, $create_dir = false)
+	{
+		if (self::$cache_dir === null) {
+			self::setCacheDirectory(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'browscap');
+		}
+		$path = self::$cache_dir;
 
-        if ($with_version === true) {
-            $path .= DIRECTORY_SEPARATOR . 'browscap_v' . \Crossjoin\Browscap\Browscap::getParser()->getVersion();
-        }
+		if ($with_version === true) {
+			$path .= DIRECTORY_SEPARATOR . 'browscap_v' . \Crossjoin\Browscap\Browscap::getParser()->getVersion();
+		}
 
-        if ($create_dir === true && !file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+		if ($create_dir === true && !file_exists($path)) {
+			mkdir($path, 0777, true);
+		}
 
-        return $path;
-    }
+		return $path;
+	}
 }

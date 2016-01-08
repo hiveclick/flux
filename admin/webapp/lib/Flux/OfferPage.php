@@ -2,8 +2,8 @@
 namespace Flux;
 
 class OfferPage extends Base\OfferPage {
-	    
-    private $server_id; // Used to load a page source from a remote server
+		
+	private $server_id; // Used to load a page source from a remote server
 	private $offer_page_id_array; // Used to save multiple pages
 	private $offer_id_array; // Used to search
 	
@@ -79,7 +79,7 @@ class OfferPage extends Base\OfferPage {
 			$criteria['page_name'] = $this->getPageName();
 		}
 		if (count($this->getOfferIdArray()) > 0) {
-			$criteria['offer.offer_id'] = array('$in' => $this->getOfferIdArray());
+			$criteria['offer._id'] = array('$in' => $this->getOfferIdArray());
 		}
 		return parent::queryAll($criteria, $hydrate, $fields);
 	}
@@ -89,7 +89,7 @@ class OfferPage extends Base\OfferPage {
 	 * @return \Flux\OfferPage
 	 */
 	function queryByPageName() {
-		return parent::query(array('offer.offer_id' => $this->getOffer()->getOfferId(), 'page_name' => $this->getPageName()), false);
+		return parent::query(array('offer._id' => $this->getOffer()->getId(), 'page_name' => $this->getPageName()), false);
 	}
 	
 	/**
@@ -97,19 +97,19 @@ class OfferPage extends Base\OfferPage {
 	 * @return integer
 	 */
 	function flushFlow() {
-	    return true;
-	    $flows = array();
-	    foreach ($this->getOfferPageFlows() as $page_flow) {
-	        $flow = $page_flow->toArray(true);
-	        if (isset($flow['filter_conditions'])) { unset($flow['filter_conditions']); }
-	        $flows[] = $flow;
-	    }
+		return true;
+		$flows = array();
+		foreach ($this->getOfferPageFlows() as $page_flow) {
+			$flow = $page_flow->toArray(true);
+			if (isset($flow['filter_conditions'])) { unset($flow['filter_conditions']); }
+			$flows[] = $flow;
+		}
 
-	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Updating flows: " . $this->getId());
-	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($flows, true));
-	    //parent::update();
-	    parent::updateMultiple(array('_id' => $this->getId()), array('$set' => array('offer_page_flows' => array())));
-	    return true;
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Updating flows: " . $this->getId());
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . var_export($flows, true));
+		//parent::update();
+		parent::updateMultiple(array('_id' => $this->getId()), array('$set' => array('offer_page_flows' => array())));
+		return true;
 	}
 
 	/**
@@ -118,7 +118,7 @@ class OfferPage extends Base\OfferPage {
 	 */
 	function updateMultiplePriority() {
 		// Reset the priorities first
-		parent::updateMultiple(array('offer.offer_id' => $this->getOffer()->getOfferId()), array('$set' => array('priority' => 0)));
+		parent::updateMultiple(array('offer.offer_id' => $this->getOffer()->getId()), array('$set' => array('priority' => 0)));
 		foreach ($this->getOfferPageIdArray() as $key => $offer_page_id_item) {
 			$offer_page = new \Flux\OfferPage();
 			$offer_page->setId($offer_page_id_item);
@@ -135,7 +135,7 @@ class OfferPage extends Base\OfferPage {
 	 */
 	public static function ensureIndexes() {
 		$offer_page = new self();
-		$offer_page->getCollection()->ensureIndex(array('offer.offer_id' => 1), array('background' => true));
+		$offer_page->getCollection()->ensureIndex(array('offer._id' => 1), array('background' => true));
 		return true;
 	}
 }

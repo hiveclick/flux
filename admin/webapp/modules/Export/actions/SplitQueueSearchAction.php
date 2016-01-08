@@ -27,7 +27,7 @@ class SplitQueueSearchAction extends BasicAction
 		$split_queue = new \Flux\SplitQueue();
 		$split_queue->populate($_REQUEST);
 		if (empty($split_queue->getDispositionArray())) {
-		    $split_queue->setDispositionArray(array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, \Flux\SplitQueue::DISPOSITION_PENDING));
+			$split_queue->setDispositionArray(array(\Flux\SplitQueue::DISPOSITION_UNFULFILLED, \Flux\SplitQueue::DISPOSITION_PENDING));
 		}
 		
 		/* @var $split Flux\Split */

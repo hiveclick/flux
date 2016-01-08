@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Fulfillment extends CommonForm {
-	
-	protected $fulfillment_id;
-	protected $fulfillment_name;
+class Fulfillment extends BasicLink {
 	
 	private $fulfillment;
 	
@@ -15,10 +10,7 @@ class Fulfillment extends CommonForm {
 	 * @return integer
 	 */
 	function getFulfillmentId() {
-		if (is_null($this->fulfillment_id)) {
-			$this->fulfillment_id = null;
-		}
-		return $this->fulfillment_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class Fulfillment extends CommonForm {
 	 * @var integer
 	 */
 	function setFulfillmentId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->fulfillment_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->fulfillment_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class Fulfillment extends CommonForm {
 	 * @return string
 	 */
 	function getFulfillmentName() {
-		if (is_null($this->fulfillment_name)) {
-			$this->fulfillment_name = "";
-		}
-		return $this->fulfillment_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class Fulfillment extends CommonForm {
 	 * @var string
 	 */
 	function setFulfillmentName($arg0) {
-		$this->fulfillment_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -61,7 +44,7 @@ class Fulfillment extends CommonForm {
 	function getFulfillment() {
 		if (is_null($this->fulfillment)) {
 			$this->fulfillment = new \Flux\Fulfillment();
-			$this->fulfillment->setId($this->getFulfillmentId());
+			$this->fulfillment->setId($this->getId());
 			$this->fulfillment->query();
 		}
 		return $this->fulfillment;

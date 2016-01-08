@@ -48,6 +48,8 @@ class Fulfillment extends MongoForm {
 	protected $mapping;
 	protected $scheduling;
 	
+	protected $trigger_fulfillment_flag;
+	
 	protected $client;
 
 	/**
@@ -106,10 +108,10 @@ class Fulfillment extends MongoForm {
 	 * @return float
 	 */
 	function getBounty() {
-	    if (is_null($this->bounty)) {
-	        $this->bounty = 0.00;
-	    }
-	    return $this->bounty;
+		if (is_null($this->bounty)) {
+			$this->bounty = 0.00;
+		}
+		return $this->bounty;
 	}
 	
 	/**
@@ -117,9 +119,9 @@ class Fulfillment extends MongoForm {
 	 * @var float
 	 */
 	function setBounty($arg0) {
-	    $this->bounty = floatval($arg0);
-	    $this->addModifiedColumn("bounty");
-	    return $this;
+		$this->bounty = floatval($arg0);
+		$this->addModifiedColumn("bounty");
+		return $this;
 	}
 	
 	/**
@@ -152,11 +154,11 @@ class Fulfillment extends MongoForm {
 		if (trim($class_name) != '') {
 			$class_name = '\\Flux\\Export\\' . $class_name;
 			if (class_exists($class_name)) {
-    			$ret_val = new $class_name();
-    			$ret_val->setFulfillment($this->getId());
+				$ret_val = new $class_name();
+				$ret_val->setFulfillment($this->getId());
 			} else {
-			    $ret_val = new \Flux\Export\Generic();
-			    $ret_val->setFulfillment($this->getId());
+				$ret_val = new \Flux\Export\Generic();
+				$ret_val->setFulfillment($this->getId());
 			}
 		} else {
 			$ret_val = new \Flux\Export\Generic();
@@ -183,6 +185,27 @@ class Fulfillment extends MongoForm {
 	function setStatus($arg0) {
 		$this->status = (int)$arg0;
 		$this->addModifiedColumn('status');
+		return $this;
+	}
+	
+	/**
+	 * Returns the trigger_fulfillment_flag
+	 * @return boolean
+	 */
+	function getTriggerFulfillmentFlag() {
+		if (is_null($this->trigger_fulfillment_flag)) {
+			$this->trigger_fulfillment_flag = false;
+		}
+		return $this->trigger_fulfillment_flag;
+	}
+	
+	/**
+	 * Sets the trigger_fulfillment_flag
+	 * @var boolean
+	 */
+	function setTriggerFulfillmentFlag($arg0) {
+		$this->trigger_fulfillment_flag = $arg0;
+		$this->addModifiedColumn("trigger_fulfillment_flag");
 		return $this;
 	}
 
@@ -439,10 +462,10 @@ class Fulfillment extends MongoForm {
 	 * @return string
 	 */
 	function getTrackingUrl() {
-	    if (is_null($this->tracking_url)) {
-	        $this->tracking_url = "";
-	    }
-	    return $this->tracking_url;
+		if (is_null($this->tracking_url)) {
+			$this->tracking_url = "";
+		}
+		return $this->tracking_url;
 	}
 	
 	/**
@@ -450,9 +473,9 @@ class Fulfillment extends MongoForm {
 	 * @var string
 	 */
 	function setTrackingUrl($arg0) {
-	    $this->tracking_url = $arg0;
-	    $this->addModifiedColumn("tracking_url");
-	    return $this;
+		$this->tracking_url = $arg0;
+		$this->addModifiedColumn("tracking_url");
+		return $this;
 	}
 
 	/**
@@ -586,10 +609,10 @@ class Fulfillment extends MongoForm {
 	 * @return string
 	 */
 	function getMailchimpApiKey() {
-	    if (is_null($this->mailchimp_api_key)) {
-	        $this->mailchimp_api_key = "";
-	    }
-	    return $this->mailchimp_api_key;
+		if (is_null($this->mailchimp_api_key)) {
+			$this->mailchimp_api_key = "";
+		}
+		return $this->mailchimp_api_key;
 	}
 	
 	/**
@@ -597,9 +620,9 @@ class Fulfillment extends MongoForm {
 	 * @var string
 	 */
 	function setMailchimpApiKey($arg0) {
-	    $this->mailchimp_api_key = $arg0;
-	    $this->addModifiedColumn("mailchimp_api_key");
-	    return $this;
+		$this->mailchimp_api_key = $arg0;
+		$this->addModifiedColumn("mailchimp_api_key");
+		return $this;
 	}
 	
 	/**
@@ -607,10 +630,10 @@ class Fulfillment extends MongoForm {
 	 * @return string
 	 */
 	function getMailchimpList() {
-	    if (is_null($this->mailchimp_list)) {
-	        $this->mailchimp_list = "";
-	    }
-	    return $this->mailchimp_list;
+		if (is_null($this->mailchimp_list)) {
+			$this->mailchimp_list = "";
+		}
+		return $this->mailchimp_list;
 	}
 	
 	/**
@@ -618,9 +641,9 @@ class Fulfillment extends MongoForm {
 	 * @var string
 	 */
 	function setMailchimpList($arg0) {
-	    $this->mailchimp_list = $arg0;
-	    $this->addModifiedColumn("mailchimp_list");
-	    return $this;
+		$this->mailchimp_list = $arg0;
+		$this->addModifiedColumn("mailchimp_list");
+		return $this;
 	}
 	
 	/**
@@ -642,24 +665,24 @@ class Fulfillment extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if ($arg0 instanceof \MongoId) {
-		    $client = $this->getClient();
-		    $client->setClientId($arg0);
-		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
-		        $client->setClientName($client->getClient()->getName());
-		    }
-		    $this->client = $client;
+			$client = $this->getClient();
+			$client->setClientId($arg0);
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
+				$client->setClientName($client->getClient()->getName());
+			}
+			$this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -671,7 +694,7 @@ class Fulfillment extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$fulfillment = new self();
-		$fulfillment->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
+		$fulfillment->getCollection()->ensureIndex(array('client._id' => 1), array('background' => true));
 		$fulfillment->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
 		return true;
 	}

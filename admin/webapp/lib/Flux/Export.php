@@ -196,10 +196,10 @@ class Export extends Base\Export {
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (count($this->getFulfillmentIdArray()) > 0) {
-			$criteria['fulfillment.fulfillment_id'] = array('$in' => $this->getFulfillmentIdArray());
+			$criteria['fulfillment._id'] = array('$in' => $this->getFulfillmentIdArray());
 		}
 		if (count($this->getSplitIdArray()) > 0) {
-			$criteria['split.split_id'] = array('$in' => $this->getSplitIdArray());
+			$criteria['split._id'] = array('$in' => $this->getSplitIdArray());
 		}
 		if (count($this->getExportTypeArray()) > 0) {
 			$criteria['export_type'] = array('$in' => $this->getExportTypeArray());
@@ -215,11 +215,11 @@ class Export extends Base\Export {
 	 * @return \Flux\Export
 	 */
 	function queryBySplitAndFulfillment(array $criteria = array()) {
-		if (\MongoId::isValid($this->getFulfillment()->getFulfillmentId())) {
-			$criteria['fulfillment.fulfillment_id'] = $this->getFulfillment()->getFulfillmentId();
+		if (\MongoId::isValid($this->getFulfillment()->getId())) {
+			$criteria['fulfillment.fulfillment_id'] = $this->getFulfillment()->getId();
 		}
-		if (\MongoId::isValid($this->getSplit()->getSplitId())) {
-			$criteria['split.split_id'] = $this->getSplit()->getSplitId();
+		if (\MongoId::isValid($this->getSplit()->getId())) {
+			$criteria['split.split_id'] = $this->getSplit()->getId();
 		}
 		$criteria['is_complete'] = false;
 		$criteria['is_running'] = false;
@@ -232,8 +232,8 @@ class Export extends Base\Export {
 	 */
 	public static function ensureIndexes() {
 		$export = new self();
-		$export->getCollection()->ensureIndex(array('fulfillment_id' => 1), array('background' => true));
-		$export->getCollection()->ensureIndex(array('split_id' => 1), array('background' => true));
+		$export->getCollection()->ensureIndex(array('fulfillment._id' => 1), array('background' => true));
+		$export->getCollection()->ensureIndex(array('split._id' => 1), array('background' => true));
 		$export->getCollection()->ensureIndex(array('is_complete' => 1), array('background' => true));
 		return true;
 	}

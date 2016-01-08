@@ -88,8 +88,8 @@ class SpyReport extends BaseReport {
 			))),
 		);
 
-		if (count($this->getOfferId()) > 0) {
-			$match[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . \Flux\DataField::DATA_FIELD_REF_OFFER_ID . '._id'] = array('$in' => $this->getOfferId());
+		if (count($this->getId()) > 0) {
+			$match[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . \Flux\DataField::DATA_FIELD_REF_OFFER_ID . '._id'] = array('$in' => $this->getId());
 		}
 
 		$lead = new \Flux\Lead();

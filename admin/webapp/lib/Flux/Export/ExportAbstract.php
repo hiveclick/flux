@@ -104,38 +104,38 @@ abstract class ExportAbstract extends MongoForm {
 	 * @var \Flux\Link\Fulfillment
 	 */
 	function setFulfillment($arg0) {
-	    if (is_array($arg0)) {
-	        $fulfillment = new \Flux\Link\Fulfillment();
-	        $fulfillment->populate($arg0);
-	        if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
-	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
-	        }
-	        $this->fulfillment = $fulfillment;
-	    } else if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $fulfillment = new \Flux\Link\Fulfillment();
-	        $fulfillment->setFulfillmentId($arg0);
-	        if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
-	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
-	        }
-	        $this->fulfillment = $fulfillment;
-	    } else if ($arg0 instanceof \MongoId) {
-	        $fulfillment = new \Flux\Link\Fulfillment();
-	        $fulfillment->setFulfillmentId($arg0);
-	        if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == '') {
-	            $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
-	        }
-	        $this->fulfillment = $fulfillment;
-	    }
+		if (is_array($arg0)) {
+			$fulfillment = new \Flux\Link\Fulfillment();
+			$fulfillment->populate($arg0);
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
+				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+			}
+			$this->fulfillment = $fulfillment;
+		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
+			$fulfillment = new \Flux\Link\Fulfillment();
+			$fulfillment->setFulfillmentId($arg0);
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
+				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+			}
+			$this->fulfillment = $fulfillment;
+		} else if ($arg0 instanceof \MongoId) {
+			$fulfillment = new \Flux\Link\Fulfillment();
+			$fulfillment->setFulfillmentId($arg0);
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == '') {
+				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+			}
+			$this->fulfillment = $fulfillment;
+		}
 		$this->addModifiedColumn("fulfillment");
 		return $this;
 	}
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array|MongoCursor $split_queue_attempts
+	 * @param array|MongoCursor $lead_split_attempts
 	 * @return boolean
 	 */
-	abstract function send($split_queue_attempts, $is_test = false);
+	abstract function send($lead_split_attempts, $is_test = false);
 	
 	/**
 	 * Determines if this person can accept the lead or not

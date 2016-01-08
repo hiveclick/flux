@@ -15,14 +15,14 @@ class ServerExplorerSuccessView extends IndexBlankView {
 	 * @return void
 	 */
 	public function execute ()
-    {
-        parent::execute();
-        
-        // set our template
-        $this->setTemplate("ServerExplorerSuccess.php");
+	{
+		parent::execute();
+		
+		// set our template
+		$this->setTemplate("ServerExplorerSuccess.php");
 
-        // set the title
-        $this->setTitle("Server Explorer");
+		// set the title
+		$this->setTitle("Server Explorer");
 	}
 } 
 ?>

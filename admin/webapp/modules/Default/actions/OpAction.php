@@ -30,14 +30,14 @@ class OpAction extends BasicAction
 			$op_contents = str_replace('%api_domain%', substr($_SERVER['SERVER_NAME'], strpos($_SERVER['SERVER_NAME'], '.') + 1), $op_contents);
 		}
 		if (isset($_REQUEST['l'])) {
-		    $op_contents = str_replace('%lead_id%', $_REQUEST['l'], $op_contents);
+			$op_contents = str_replace('%lead_id%', $_REQUEST['l'], $op_contents);
 		} else {
-		    $op_contents = str_replace('%lead_id%', '', $op_contents);
+			$op_contents = str_replace('%lead_id%', '', $op_contents);
 		}
 		if (isset($_REQUEST['c'])) {
-		    $op_contents = str_replace('%cookie_name%', $_REQUEST['c'], $op_contents);
+			$op_contents = str_replace('%cookie_name%', $_REQUEST['c'], $op_contents);
 		} else {
-		    $op_contents = str_replace('%cookie_name%', 'flux_data', $op_contents);
+			$op_contents = str_replace('%cookie_name%', 'flux_data', $op_contents);
 		}
 		
 		header('Content-Type: text/javascript');

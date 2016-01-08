@@ -398,20 +398,20 @@ class DataField extends MongoForm {
 	 * @var array
 	 */
 	function setDataFieldSet($arg0) {
-	    if (is_array($arg0)) {
-	        array_walk($arg0, function(&$value) { 
-	            $ret_val = new DataFieldSet(); 
-	            $ret_val->populate($value);
-	            $value = $ret_val;
-	        });
-            $this->data_field_set = $arg0;
-            $this->addModifiedColumn("data_field_set");
-	    } else if (is_string($arg0)) {
-	        $tmp_obj = new DataFieldSet();
-	        $tmp_obj->setValue($arg0);
-	        $this->data_field_set = array($tmp_obj);
-	        $this->addModifiedColumn("data_field_set");
-	    }
+		if (is_array($arg0)) {
+			array_walk($arg0, function(&$value) { 
+				$ret_val = new DataFieldSet(); 
+				$ret_val->populate($value);
+				$value = $ret_val;
+			});
+			$this->data_field_set = $arg0;
+			$this->addModifiedColumn("data_field_set");
+		} else if (is_string($arg0)) {
+			$tmp_obj = new DataFieldSet();
+			$tmp_obj->setValue($arg0);
+			$this->data_field_set = array($tmp_obj);
+			$this->addModifiedColumn("data_field_set");
+		}
 		return $this;
 	}
 
@@ -477,10 +477,10 @@ class DataField extends MongoForm {
 	 * @return boolean
 	 */
 	public static function ensureIndexes() {
-	    $data_field = new self();
-	    $data_field->getCollection()->ensureIndex(array('key_name' => 1), array('background' => true, 'unique' => true));
-	    $data_field->getCollection()->ensureIndex(array('status' => 1, 'access_type' => 1), array('background' => true));
-	    return true;
+		$data_field = new self();
+		$data_field->getCollection()->ensureIndex(array('key_name' => 1), array('background' => true, 'unique' => true));
+		$data_field->getCollection()->ensureIndex(array('status' => 1, 'access_type' => 1), array('background' => true));
+		return true;
 	}
 }
 
@@ -489,93 +489,93 @@ class DataField extends MongoForm {
  * @author Mark Hobson
  */
 class DataFieldSet extends CommonForm {
-    
-    protected $name;
-    protected $value;
-    protected $lead_total;
-    protected $daily_total;
-    
-    /**
-     * Returns the name
-     * @return string
-     */
-    function getName() {
-    	if (is_null($this->name)) {
-    		$this->name = "";
-    	}
-    	return $this->name;
-    }
-    
-    /**
-     * Sets the name
-     * @var string
-     */
-    function setName($arg0) {
-    	$this->name = $arg0;
-    	$this->addModifiedColumn("name");
-    	return $this;
-    }
-    
-    /**
-     * Returns the value
-     * @return string
-     */
-    function getValue() {
-    	if (is_null($this->value)) {
-    		$this->value = "";
-    	}
-    	return $this->value;
-    }
-    
-    /**
-     * Sets the value
-     * @var string
-     */
-    function setValue($arg0) {
-    	$this->value = $arg0;
-    	$this->addModifiedColumn("value");
-    	return $this;
-    }
-    
-    /**
-     * Returns the lead_total
-     * @return integer
-     */
-    function getLeadTotal() {
-    	if (is_null($this->lead_total)) {
-    		$this->lead_total = 0;
-    	}
-    	return $this->lead_total;
-    }
-    
-    /**
-     * Sets the lead_total
-     * @var integer
-     */
-    function setLeadTotal($arg0) {
-    	$this->lead_total = (int)$arg0;
-    	$this->addModifiedColumn("lead_total");
-    	return $this;
-    }
-    
-    /**
-     * Returns the daily_total
-     * @return integer
-     */
-    function getDailyTotal() {
-    	if (is_null($this->daily_total)) {
-    		$this->daily_total = 0;
-    	}
-    	return $this->daily_total;
-    }
-    
-    /**
-     * Sets the daily_total
-     * @var integer
-     */
-    function setDailyTotal($arg0) {
-    	$this->daily_total = (int)$arg0;
-    	$this->addModifiedColumn("daily_total");
-    	return $this;
-    }
+	
+	protected $name;
+	protected $value;
+	protected $lead_total;
+	protected $daily_total;
+	
+	/**
+	 * Returns the name
+	 * @return string
+	 */
+	function getName() {
+		if (is_null($this->name)) {
+			$this->name = "";
+		}
+		return $this->name;
+	}
+	
+	/**
+	 * Sets the name
+	 * @var string
+	 */
+	function setName($arg0) {
+		$this->name = $arg0;
+		$this->addModifiedColumn("name");
+		return $this;
+	}
+	
+	/**
+	 * Returns the value
+	 * @return string
+	 */
+	function getValue() {
+		if (is_null($this->value)) {
+			$this->value = "";
+		}
+		return $this->value;
+	}
+	
+	/**
+	 * Sets the value
+	 * @var string
+	 */
+	function setValue($arg0) {
+		$this->value = $arg0;
+		$this->addModifiedColumn("value");
+		return $this;
+	}
+	
+	/**
+	 * Returns the lead_total
+	 * @return integer
+	 */
+	function getLeadTotal() {
+		if (is_null($this->lead_total)) {
+			$this->lead_total = 0;
+		}
+		return $this->lead_total;
+	}
+	
+	/**
+	 * Sets the lead_total
+	 * @var integer
+	 */
+	function setLeadTotal($arg0) {
+		$this->lead_total = (int)$arg0;
+		$this->addModifiedColumn("lead_total");
+		return $this;
+	}
+	
+	/**
+	 * Returns the daily_total
+	 * @return integer
+	 */
+	function getDailyTotal() {
+		if (is_null($this->daily_total)) {
+			$this->daily_total = 0;
+		}
+		return $this->daily_total;
+	}
+	
+	/**
+	 * Sets the daily_total
+	 * @var integer
+	 */
+	function setDailyTotal($arg0) {
+		$this->daily_total = (int)$arg0;
+		$this->addModifiedColumn("daily_total");
+		return $this;
+	}
 }

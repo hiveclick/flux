@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -15,41 +15,41 @@ namespace Zend\Http\Header;
  */
 class Etag implements HeaderInterface
 {
-    /** @var string */
-    protected $value;
+	/** @var string */
+	protected $value;
 
-    public static function fromString($headerLine)
-    {
-        list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
+	public static function fromString($headerLine)
+	{
+		list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
 
-        // check to ensure proper header type for this factory
-        if (strtolower($name) !== 'etag') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Etag string: "' . $name . '"');
-        }
+		// check to ensure proper header type for this factory
+		if (strtolower($name) !== 'etag') {
+			throw new Exception\InvalidArgumentException('Invalid header line for Etag string: "' . $name . '"');
+		}
 
-        // @todo implementation details
-        $header = new static($value);
+		// @todo implementation details
+		$header = new static($value);
 
-        return $header;
-    }
+		return $header;
+	}
 
-    public function __construct($value = null)
-    {
-        $this->value = $value;
-    }
+	public function __construct($value = null)
+	{
+		$this->value = $value;
+	}
 
-    public function getFieldName()
-    {
-        return 'Etag';
-    }
+	public function getFieldName()
+	{
+		return 'Etag';
+	}
 
-    public function getFieldValue()
-    {
-        return $this->value;
-    }
+	public function getFieldValue()
+	{
+		return $this->value;
+	}
 
-    public function toString()
-    {
-        return 'Etag: ' . $this->getFieldValue();
-    }
+	public function toString()
+	{
+		return 'Etag: ' . $this->getFieldValue();
+	}
 }

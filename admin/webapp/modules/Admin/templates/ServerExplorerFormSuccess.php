@@ -11,13 +11,13 @@ $servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 	You can use this wizard to browse a remote server
 	<p />
 	<select name="server_id" id="server_id" placeholder="select a server to connect to...">
-	    <option value=""></option>
-	    <?php
-	        /* @var $server_item \Flux\Server */ 
-	        foreach ($servers as $server_item) { 
-        ?>
-	        <option value="<?php echo $server_item->getId() ?>" <?php echo ($server_item->getId() == $server->getId()) ? 'selected' : '' ?>><?php echo $server_item->getHostname() ?></option>
-	    <?php } ?>
+		<option value=""></option>
+		<?php
+			/* @var $server_item \Flux\Server */ 
+			foreach ($servers as $server_item) { 
+		?>
+			<option value="<?php echo $server_item->getId() ?>" <?php echo ($server_item->getId() == $server->getId()) ? 'selected' : '' ?>><?php echo $server_item->getHostname() ?></option>
+		<?php } ?>
 	</select>
 	
 	<p />
@@ -25,27 +25,27 @@ $servers = $this->getContext()->getRequest()->getAttribute('servers', array());
 	<input type="text" class="form-control" id="current_folder_name" name="current_folder_name" value="<?php echo $server->getFolderName() ?>" />
 </div>
 <div class="modal-footer">
-    <?php if ($server->getHtmlInputElementId() != '') { ?>
-        <button type="button" id="save_folder" class="btn btn-primary" data-dismiss="modal">Save Folder</button>
-    <?php } ?>
+	<?php if ($server->getHtmlInputElementId() != '') { ?>
+		<button type="button" id="save_folder" class="btn btn-primary" data-dismiss="modal">Save Folder</button>
+	<?php } ?>
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 <script>
 //<!--
 $(document).ready(function() {
-     $('#server_id').selectize({
-    	 onChange: function(value) {
+	 $('#server_id').selectize({
+		 onChange: function(value) {
   			if (!value.length) return;
   			$('#server_explorer_iframe').attr('src', '/admin/server-explorer?_id=' + value);
-    	 }
-     });
+		 }
+	 });
 
-     $('#save_folder').click(function() {
-    	 if ('<?php echo $server->getHtmlInputElementId() ?>' != '') {
- 		     $('#<?php echo $server->getHtmlInputElementId() ?>').val($('#current_folder_name').val());
- 		     
-    	 }
-     });
+	 $('#save_folder').click(function() {
+		 if ('<?php echo $server->getHtmlInputElementId() ?>' != '') {
+ 			 $('#<?php echo $server->getHtmlInputElementId() ?>').val($('#current_folder_name').val());
+ 			 
+		 }
+	 });
 });
 //-->
 </script>

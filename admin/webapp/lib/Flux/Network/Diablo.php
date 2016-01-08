@@ -43,33 +43,33 @@ class Diablo extends BaseNetwork {
 					foreach ($revenue_response['data'] as $revenue_entry) {
 						$transaction_id = $revenue_entry["trxid"];
 						if (trim($transaction_id) != '' && \MongoId::isValid(trim($transaction_id))) {
-    						/* @var $report_lead \Flux\ReportLead */
-    						$report_lead = new \Flux\ReportLead();
-    						$report_lead->setClient($this->getClient()->getClientId());
-    						$report_lead->setLead(trim($transaction_id));
-    						$report_lead->setReportDate(new \MongoDate(strtotime($revenue_entry["date"])));
-    						$report_lead->setRevenue(floatval($revenue_entry["revenue"]));
-    						$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-    						$report_lead->setAccepted(true);
-    					    
-    						\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
-    						$report_lead->updateMultiple(
-    						    array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
-    						    array(
-    						        '$setOnInsert' => array(
-    						            'report_date' => $report_lead->getReportDate(),
-    						            'client' => $report_lead->getClient()->toArray(true, true, true)
-    						        ),
-    						        '$set' => array(
-    						            'lead' => $report_lead->getLead()->toArray(true, true, true),
-    						            'accepted' => $report_lead->getAccepted(),
-    						            'disposition' => $report_lead->getDisposition(),
-    						            'revenue' => $report_lead->getRevenue()
-    						        )
-    						    )
-    						);
+							/* @var $report_lead \Flux\ReportLead */
+							$report_lead = new \Flux\ReportLead();
+							$report_lead->setClient($this->getClient()->getId());
+							$report_lead->setLead(trim($transaction_id));
+							$report_lead->setReportDate(new \MongoDate(strtotime($revenue_entry["date"])));
+							$report_lead->setRevenue(floatval($revenue_entry["revenue"]));
+							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
+							$report_lead->setAccepted(true);
+							
+							\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $report_lead->getLead()->getLeadName() . ' Revenue on ' . date('m/d/Y', $report_lead->getReportDate()->sec), '$' . number_format($report_lead->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+							$report_lead->updateMultiple(
+								array('lead.lead_id' => $report_lead->getLead()->getLeadId(), 'report_date' => $report_lead->getReportDate()),
+								array(
+									'$setOnInsert' => array(
+										'report_date' => $report_lead->getReportDate(),
+										'client' => $report_lead->getClient()->toArray(true, true, true)
+									),
+									'$set' => array(
+										'lead' => $report_lead->getLead()->toArray(true, true, true),
+										'accepted' => $report_lead->getAccepted(),
+										'disposition' => $report_lead->getDisposition(),
+										'revenue' => $report_lead->getRevenue()
+									)
+								)
+							);
 						} else {
-						    \Mojavi\Util\StringTools::consoleWrite(' - Missing TRX ID on ' . date('m/d/Y', strtotime($revenue_entry["date"])), '$' . number_format($revenue_entry["revenue"], 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+							\Mojavi\Util\StringTools::consoleWrite(' - Missing TRX ID on ' . date('m/d/Y', strtotime($revenue_entry["date"])), '$' . number_format($revenue_entry["revenue"], 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 						}
 					}
 				}
@@ -117,25 +117,25 @@ class Diablo extends BaseNetwork {
 				}
 				// We found a record, so update it's revenue for this day
 				$report_client = new \Flux\ReportClient();
-				$report_client->setClient($this->getClient()->getClientId());
+				$report_client->setClient($this->getClient()->getId());
 				$report_client->setReportDate(new \MongoDate(strtotime($current_date)));
 				$report_client->setClickCount($network_revenue['clicks']);
 				$report_client->setConversionCount($network_revenue['actions']);
 				$report_client->setRevenue(floatval($network_revenue['revenue']));
-				\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getClientName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+				\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 				$report_client->updateMultiple(
-				    array('client.client_id' => $report_client->getClient()->getClientId(), 'report_date' => $report_client->getReportDate()),
-				    array(
-				        '$setOnInsert' => array(
-				            'report_date' => $report_client->getReportDate()
-				        ),
-				        '$set' => array(
-				            'client' => $report_client->getClient()->toArray(true, true, true),
-				            'click_count' => $report_client->getClickCount(),
-				            'conversion_count' => $report_client->getConversionCount(),
-				            'revenue' => $report_client->getRevenue()
-				        )
-				    )  
+					array('client.client_id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
+					array(
+						'$setOnInsert' => array(
+							'report_date' => $report_client->getReportDate()
+						),
+						'$set' => array(
+							'client' => $report_client->getClient()->toArray(true, true, true),
+							'click_count' => $report_client->getClickCount(),
+							'conversion_count' => $report_client->getConversionCount(),
+							'revenue' => $report_client->getRevenue()
+						)
+					)  
 				);
 
 				$current_date = date('m/d/Y', strtotime($current_date . ' + 1 days'));

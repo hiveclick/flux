@@ -2,29 +2,38 @@
 	/* @var $client \Flux\Client */
 	$client = $this->getContext()->getRequest()->getAttribute("client", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_client_modal" href="/client/client-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Client</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/client/client-search">Clients</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_client_modal" href="/client/client-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Client</a>
+		</div>
+	   <h2>Clients</h2>
 	</div>
-   <h2>Clients</h2>
-</div>
-<div class="help-block">Clients are owners of exports, offers, and campaigns</div>
-<div class="panel panel-primary">
-    <div id='client-header' class='grid-header panel-heading clearfix'>
-		<form id="client_search_form" method="GET" action="/api">
-			<input type="hidden" name="func" value="/client/client">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="pull-right">
-				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
-			</div>
-		</form>
+	<div class="help-block">Clients are owners of exports, offers, and campaigns</div>
+	<div class="panel panel-primary">
+		<div id='client-header' class='grid-header panel-heading clearfix'>
+			<form id="client_search_form" method="GET" action="/api">
+				<input type="hidden" name="func" value="/client/client">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="pull-right">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
+			</form>
+		</div>
+		<div id="client-grid"></div>
+		<div id="client-pager" class="panel-footer"></div>
 	</div>
-	<div id="client-grid"></div>
-	<div id="client-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit client modal -->
@@ -70,11 +79,11 @@ $(document).ready(function() {
 
 	slick_grid = $('#client-grid').slickGrid({
 		pager: $('#client-pager'),
-	    form: $('#client_search_form'),
+		form: $('#client_search_form'),
 		columns: columns,
 		useFilter: false,
 		cookie: '<?php echo $_SERVER['PHP_SELF'] ?>',
-	    pagingOptions: {
+		pagingOptions: {
 			pageSize: <?php echo \Flux\Preferences::getPreference('items_per_page', 25) ?>,
 			pageNum: 1
 		},
@@ -100,7 +109,7 @@ $(document).ready(function() {
 
 	$('#edit_client_modal').on('hide.bs.modal', function(e) {
   		$(this).removeData('bs.modal');
-    });    
+	});	
 });
 //-->
 </script>

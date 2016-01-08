@@ -2,43 +2,52 @@
 	/* @var $split \Flux\Split */
 	$split = $this->getContext()->getRequest()->getAttribute("split", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#add_split_modal" href="/export/split-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Split</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/export/split-search">Splits</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#add_split_modal" href="/export/split-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Split</a>
+		</div>
+	   <h1>Splits</h1>
 	</div>
-   <h2>Splits</h2>
-</div>
-<div class="help-block">Splits are used to automate lead fulfillment</div>
-<div class="panel panel-primary">
-	<div id='split-header' class='grid-header panel-heading clearfix'>
-		<form id="split_search_form" method="GET" class="form-inline" action="/api">
-			<input type="hidden" name="func" value="/export/split">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="created_date" />
-			<input type="hidden" id="sord" name="sord" value="desc" />
-			<div class="text-right">
-				<div class="form-group text-left">
-					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+	<div class="help-block">Splits are used to automate lead fulfillment</div>
+	<div class="panel panel-primary">
+		<div id='split-header' class='grid-header panel-heading clearfix'>
+			<form id="split_search_form" method="GET" class="form-inline" action="/api">
+				<input type="hidden" name="func" value="/export/split">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="created_date" />
+				<input type="hidden" id="sord" name="sord" value="desc" />
+				<div class="text-right">
+					<div class="form-group text-left">
+						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+					</div>
+					<div class="form-group text-left">
+						<select name="split_type" id="split_type" style="width:200px;">
+						   <optgroup label="Show All Split Types">
+							   <option value="0">Show all split types</option>
+						   </optgroup>
+						   <optgroup label="Show Selected Split Type">
+							   <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>">Show normal splits</option>
+							   <option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>">Show post splits</option>
+							   <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>">Show catch-all splits</option>
+						   </optgroup>
+						</select>
+					</div>
 				</div>
-				<div class="form-group text-left">
-					<select name="split_type" id="split_type" style="width:200px;">
-					   <optgroup label="Show All Split Types">
-					       <option value="0">Show all split types</option>
-					   </optgroup>
-					   <optgroup label="Show Selected Split Type">
-    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>">Show normal splits</option>
-    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>">Show post splits</option>
-    					   <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>">Show catch-all splits</option>
-					   </optgroup>
-					</select>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
+		<div id="split-grid"></div>
+		<div id="split-pager" class="panel-footer"></div>
 	</div>
-	<div id="split-grid"></div>
-	<div id="split-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit split modal -->
@@ -65,11 +74,11 @@ $(document).ready(function() {
  		{id:'queue_count', name:'# Queued', field:'queue_count', def_value: ' ', cssClass:'text-center', sortable:true, type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
  			var ret_val = '<div style="line-height:16pt;">'
  	 			ret_val += $.number(value, 0);
- 		        if (dataContext.last_queue_time == null) {
- 		        	ret_val += '<div class="small text-muted">nothing queued yet</div>';
- 		        } else {
-  		            ret_val += '<div class="small text-muted">' + moment.unix(dataContext.last_queue_time.sec).calendar() + '</div>';
- 		        }
+ 				if (dataContext.last_queue_time == null) {
+ 					ret_val += '<div class="small text-muted">nothing queued yet</div>';
+ 				} else {
+  					ret_val += '<div class="small text-muted">' + moment.unix(dataContext.last_queue_time.sec).calendar() + '</div>';
+ 				}
  	 			ret_val += '</div>';
  	 			return ret_val;
  		}},
@@ -98,14 +107,14 @@ $(document).ready(function() {
  			var ret_val = '<div style="line-height:16pt;">'
  			ret_val += moment.unix(value.sec).fromNow();
  			if (dataContext.last_run_time && dataContext.last_run_time.sec) {
- 			    ret_val += '<div class="small text-muted">Last Fulfilled Lead: ' + moment.unix(dataContext.last_run_time.sec).calendar() + '</div>';
+ 				ret_val += '<div class="small text-muted">Last Fulfilled Lead: ' + moment.unix(dataContext.last_run_time.sec).calendar() + '</div>';
  			}
  			ret_val += '</div>';
  			return ret_val;
  		}},
  		{id:'status', name:'Status', field:'status', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', width:250, formatter: function(row, cell, value, columnDef, dataContext) {
  			if (value == '<?php echo \Flux\Split::SPLIT_STATUS_INACTIVE ?>') {
- 			    return '<i class="text-danger">inactive</i>';
+ 				return '<i class="text-danger">inactive</i>';
  			} else {
  				return '<div class="text-muted">active</div>';
  			}
@@ -115,7 +124,7 @@ $(document).ready(function() {
  	 		if (value) {
  	 			ret_val += '<span class="text-success">Yes</span>';
  	 			if (dataContext.fulfill_delay > 0) {
- 	 			    ret_val += '<div class="small text-muted">Delayed for ' + dataContext.fulfill_delay + ' minutes</div>';
+ 	 				ret_val += '<div class="small text-muted">Delayed for ' + dataContext.fulfill_delay + ' minutes</div>';
  	 			}
  	 		} else {
  	 			ret_val += '<span class="text-danger">No</span>';
@@ -155,7 +164,7 @@ $(document).ready(function() {
 	});
 
 	$('#split_type').selectize().on('change', function() {
-		//$('#split_search_form').trigger('submit');
+		$('#split_search_form').trigger('submit');
 	});
  		  	
 	$('#split_search_form').trigger('submit');

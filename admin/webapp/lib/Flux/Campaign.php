@@ -28,10 +28,10 @@ class Campaign extends Base\Campaign {
 	 * @return array
 	 */
 	function getTrafficSourceIdArray() {
-	    if (is_null($this->traffic_source_id_array)) {
-	        $this->traffic_source_id_array = array();
-	    }
-	    return $this->traffic_source_id_array;
+		if (is_null($this->traffic_source_id_array)) {
+			$this->traffic_source_id_array = array();
+		}
+		return $this->traffic_source_id_array;
 	}
 	
 	/**
@@ -39,7 +39,7 @@ class Campaign extends Base\Campaign {
 	 * @var array
 	 */
 	function setTrafficSourceIdArray($arg0) {
-	    if (is_array($arg0)) {
+		if (is_array($arg0)) {
 			$this->traffic_source_id_array = $arg0;
 			array_walk($this->traffic_source_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
@@ -50,7 +50,7 @@ class Campaign extends Base\Campaign {
 				$this->traffic_source_id_array = array($arg0);
 			}
 		}
-	    return $this;
+		return $this;
 	}
 	
 	
@@ -125,27 +125,27 @@ class Campaign extends Base\Campaign {
 	 * @return Flux\Campaign
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
-	    if (trim($this->getKeywords()) != '') {
-	        if (\MongoId::isValid(trim($this->getKeywords()))) {
+		if (trim($this->getKeywords()) != '') {
+			if (\MongoId::isValid(trim($this->getKeywords()))) {
 				$criteria['_id'] = new \MongoId($this->getKeywords());
-	        } else {
-	        	$criteria['description'] = new \MongoRegex("/" . $this->getKeywords() . "/i");
-	        }
-	    }
-		if (\MongoId::isValid($this->getClient()->getClientId())) {
-			$criteria['client.client_id'] = $this->getClientId();
+			} else {
+				$criteria['description'] = new \MongoRegex("/" . $this->getKeywords() . "/i");
+			}
 		}
-		if (\MongoId::isValid($this->getOffer()->getOfferId())) {
-			$criteria['offer.offer_id'] = $this->getOfferId();
+		if (\MongoId::isValid($this->getClient()->getId())) {
+			$criteria['client._id'] = $this->getId();
+		}
+		if (\MongoId::isValid($this->getOffer()->getId())) {
+			$criteria['offer._id'] = $this->getId();
 		}
 		if (count($this->getOfferIdArray()) > 0) {
-			$criteria['offer.offer_id'] = array('$in' => $this->getOfferIdArray());
+			$criteria['offer._id'] = array('$in' => $this->getOfferIdArray());
 		}
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		if (count($this->getTrafficSourceIdArray()) > 0) {
-		    $criteria['traffic_source.traffic_source_id'] = array('$in' => $this->getTrafficSourceIdArray());
+			$criteria['traffic_source._id'] = array('$in' => $this->getTrafficSourceIdArray());
 		}
 		return parent::queryAll($criteria, $hydrate, $fields);
 	}
@@ -155,7 +155,7 @@ class Campaign extends Base\Campaign {
 	 * @return Flux\Campaign
 	 */
 	function queryAllByClient() {
-		return $this->queryAll(array('client.client_id' => $this->getClient()->getClientId()));
+		return $this->queryAll(array('client._id' => $this->getClient()->getId()));
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Campaign extends Base\Campaign {
 	 * @return Flux\Campaign
 	 */
 	function queryAllByOffer() {
-		return $this->queryAll(array('offer.offer_id' => $this->getOffer()->getOfferId()));
+		return $this->queryAll(array('offer._id' => $this->getOffer()->getId()));
 	}
 	
 	/**
@@ -191,8 +191,8 @@ class Campaign extends Base\Campaign {
 	 */
 	public static function ensureIndexes() {
 		$campaign = new self();
-		$campaign->getCollection()->ensureIndex(array('offer_id' => 1, 'client_id' => 1), array('background' => true));
-		$campaign->getCollection()->ensureIndex(array('client_id' => 1, 'offer_id' => 1), array('background' => true));
+		$campaign->getCollection()->ensureIndex(array('offer._id' => 1, 'client._id' => 1), array('background' => true));
+		$campaign->getCollection()->ensureIndex(array('client._id' => 1, 'offer._id' => 1), array('background' => true));
 		return true;
 	}
 }

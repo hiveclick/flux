@@ -15,10 +15,10 @@
 	   /* @var $mapping \Flux\FulfillmentMap */ 
 	   foreach ($fulfillment->getMapping() as $key => $mapping) { 
 	?>
-        <input type="hidden" name="mapping[<?php echo $key ?>][field_name]" value="<?php echo $mapping->getFieldName() ?>" />
-        <input type="hidden" name="mapping[<?php echo $key ?>][default_value]" value="<?php echo $mapping->getDefaultValue() ?>" />
-        <input type="hidden" name="mapping[<?php echo $key ?>][data_field]" value="<?php echo $mapping->getDataField()->getDataFieldId() ?>" />
-        <input type="hidden" name="mapping[<?php echo $key ?>][mapping_func]" value="<?php echo htmlspecialchars($mapping->getMappingFunc()) ?>" />
+		<input type="hidden" name="mapping[<?php echo $key ?>][field_name]" value="<?php echo $mapping->getFieldName() ?>" />
+		<input type="hidden" name="mapping[<?php echo $key ?>][default_value]" value="<?php echo $mapping->getDefaultValue() ?>" />
+		<input type="hidden" name="mapping[<?php echo $key ?>][data_field]" value="<?php echo $mapping->getDataField()->getDataFieldId() ?>" />
+		<input type="hidden" name="mapping[<?php echo $key ?>][mapping_func]" value="<?php echo htmlspecialchars($mapping->getMappingFunc()) ?>" />
 	<?php } ?>
 	<input type="hidden" name="client[client_id]" value="<?php echo $fulfillment->getClient()->getClientId() ?>" />
 	<div class="modal-body">
@@ -122,7 +122,7 @@
 					</div>
 				</div>
 			
-			    <!-- Email specific settings -->
+				<!-- Email specific settings -->
 				<div id="clone_email_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_EMAIL ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter one or more email addresses below</div>
 					<div class="form-group">
@@ -131,7 +131,7 @@
 					</div>
 				</div>
 			
-			    <!-- INFUSIONSOFT specific settings -->
+				<!-- INFUSIONSOFT specific settings -->
 				<div id="clone_infusionsoft_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the Infusionsoft domain name and api key found in the Infusionsoft Dashboard</div>
 					<div class="form-group">
@@ -154,8 +154,8 @@
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
 						<div class="row">
-                            <div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
-                            <div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
+							<div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
+							<div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
 						</div>
 					</div>
 					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
@@ -205,7 +205,7 @@ $(document).ready(function() {
 	$('#clone_fulfillment_form').form(function(data) {
 		$.rad.notify('You have cloned this fulfillment', 'You have cloned this fulfillment.');
 		if (data.meta.insert_id) {
-		    location.href='/admin/fulfillment?_id=' + data.meta.insert_id;
+			location.href='/admin/fulfillment?_id=' + data.meta.insert_id;
 		}
 	}, {keep_form: true});
 
@@ -249,18 +249,18 @@ $(document).ready(function() {
 	});
 
 	$('#refresh_mc_lists').click(function() {
-        // Refresh the mailchimp lists based on the api key
-        $mc_api_key = $('#mailchimp_api_key').val();
-        $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-        $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
-        	$select = $('#mailchimp_list').selectize()[0].selectize;
-        	$select.clearOptions();
-            data.data.forEach(function(item) {
-            	$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
-            });
-            $select.refreshOptions();
-        }, 'json');
-    });
+		// Refresh the mailchimp lists based on the api key
+		$mc_api_key = $('#mailchimp_api_key').val();
+		$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+		$.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+			$select = $('#mailchimp_list').selectize()[0].selectize;
+			$select.clearOptions();
+			data.data.forEach(function(item) {
+				$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
+			});
+			$select.refreshOptions();
+		}, 'json');
+	});
 	
 	$('#clone_parse_url').click(function() {
 		$.rad.get('/api', { func: '/admin/build-post-url', 'post_url': $('#post_url').val() }, function(data) {

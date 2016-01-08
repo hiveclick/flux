@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -21,46 +21,46 @@ use Zend\XmlRpc\Fault;
  */
 class Stdin extends XmlRpcRequest
 {
-    /**
-     * Raw XML as received via request
-     * @var string
-     */
-    protected $xml;
+	/**
+	 * Raw XML as received via request
+	 * @var string
+	 */
+	protected $xml;
 
-    /**
-     * Constructor
-     *
-     * Attempts to read from php://stdin to get raw POST request; if an error
-     * occurs in doing so, or if the XML is invalid, the request is declared a
-     * fault.
-     *
-     */
-    public function __construct()
-    {
-        $fh = fopen('php://stdin', 'r');
-        if (!$fh) {
-            $this->fault = new Fault(630);
-            return;
-        }
+	/**
+	 * Constructor
+	 *
+	 * Attempts to read from php://stdin to get raw POST request; if an error
+	 * occurs in doing so, or if the XML is invalid, the request is declared a
+	 * fault.
+	 *
+	 */
+	public function __construct()
+	{
+		$fh = fopen('php://stdin', 'r');
+		if (!$fh) {
+			$this->fault = new Fault(630);
+			return;
+		}
 
-        $xml = '';
-        while (!feof($fh)) {
-            $xml .= fgets($fh);
-        }
-        fclose($fh);
+		$xml = '';
+		while (!feof($fh)) {
+			$xml .= fgets($fh);
+		}
+		fclose($fh);
 
-        $this->xml = $xml;
+		$this->xml = $xml;
 
-        $this->loadXml($xml);
-    }
+		$this->loadXml($xml);
+	}
 
-    /**
-     * Retrieve the raw XML request
-     *
-     * @return string
-     */
-    public function getRawRequest()
-    {
-        return $this->xml;
-    }
+	/**
+	 * Retrieve the raw XML request
+	 *
+	 * @return string
+	 */
+	public function getRawRequest()
+	{
+		return $this->xml;
+	}
 }

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -17,44 +17,44 @@ namespace Zend\Http\Client\Adapter;
  */
 interface AdapterInterface
 {
-    /**
-     * Set the configuration array for the adapter
-     *
-     * @param array $options
-     */
-    public function setOptions($options = array());
+	/**
+	 * Set the configuration array for the adapter
+	 *
+	 * @param array $options
+	 */
+	public function setOptions($options = array());
 
-    /**
-     * Connect to the remote server
-     *
-     * @param string  $host
-     * @param int     $port
-     * @param  bool $secure
-     */
-    public function connect($host, $port = 80, $secure = false);
+	/**
+	 * Connect to the remote server
+	 *
+	 * @param string  $host
+	 * @param int	 $port
+	 * @param  bool $secure
+	 */
+	public function connect($host, $port = 80, $secure = false);
 
-    /**
-     * Send request to the remote server
-     *
-     * @param string        $method
-     * @param \Zend\Uri\Uri $url
-     * @param string        $httpVer
-     * @param array         $headers
-     * @param string        $body
-     * @return string Request as text
-     */
-    public function write($method, $url, $httpVer = '1.1', $headers = array(), $body = '');
+	/**
+	 * Send request to the remote server
+	 *
+	 * @param string		$method
+	 * @param \Zend\Uri\Uri $url
+	 * @param string		$httpVer
+	 * @param array		 $headers
+	 * @param string		$body
+	 * @return string Request as text
+	 */
+	public function write($method, $url, $httpVer = '1.1', $headers = array(), $body = '');
 
-    /**
-     * Read response from server
-     *
-     * @return string
-     */
-    public function read();
+	/**
+	 * Read response from server
+	 *
+	 * @return string
+	 */
+	public function read();
 
-    /**
-     * Close the connection to the server
-     *
-     */
-    public function close();
+	/**
+	 * Close the connection to the server
+	 *
+	 */
+	public function close();
 }

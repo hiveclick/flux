@@ -42,10 +42,10 @@ header("Content-Type: image/png");
 					$dest_img = imagecreatetruecolor($dest_img_width, $dest_img_height);
 					$dest_background = imagecolorallocate($dest_img, 255, 255, 255);
 					imagealphablending($dest_img, false);
-				    imagesavealpha($dest_img, true);
-				    if (function_exists('imageantialias')) {
+					imagesavealpha($dest_img, true);
+					if (function_exists('imageantialias')) {
 						imageantialias($dest_img, true);
-				    }
+					}
 					imagefilledrectangle($dest_img, 0, 0, $dest_img_width, $dest_img_height, $dest_background);
 
 					imagecopyresampled($dest_img, $src_img, $dest_x, $dest_y, 0, 0, $dest_width, $dest_height, $src_width, $src_height);
@@ -75,11 +75,11 @@ header("Content-Type: image/png");
 
 					$dest_img = imagecreatetruecolor($dest_width, $dest_height);
 					imagecolortransparent($dest_img, imagecolorallocatealpha($dest_img, 0, 0, 0, 127));
-				    imagealphablending($dest_img, false);
-				    imagesavealpha($dest_img, true);
-				    if (function_exists('imageantialias')) {
+					imagealphablending($dest_img, false);
+					imagesavealpha($dest_img, true);
+					if (function_exists('imageantialias')) {
 						imageantialias($dest_img, true);
-				    }
+					}
 					imagecopyresampled($dest_img, $src_img, 0, 0, 0, 0, $dest_width, $dest_height, $src_width, $src_height);
 					echo imagepng($dest_img);
 					imagedestroy($dest_img);

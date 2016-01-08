@@ -75,10 +75,10 @@ class Campaign extends MongoForm {
 	 * @return float
 	 */
 	function getPayout() {
-	    if (is_null($this->payout)) {
-	        $this->payout = 0.00;
-	    }
-	    return $this->payout;
+		if (is_null($this->payout)) {
+			$this->payout = 0.00;
+		}
+		return $this->payout;
 	}
 	
 	/**
@@ -86,9 +86,9 @@ class Campaign extends MongoForm {
 	 * @var float
 	 */
 	function setPayout($arg0) {
-	    $this->payout = floatval($arg0);
-	    $this->addModifiedColumn("payout");
-	    return $this;
+		$this->payout = floatval($arg0);
+		$this->addModifiedColumn("payout");
+		return $this;
 	}
 	
 	/**
@@ -215,24 +215,24 @@ class Campaign extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
 			}
 			$this->client = $client;
 		} else if ($arg0 instanceof \MongoId) {
-		    $client = $this->getClient();
-		    $client->setClientId($arg0);
-		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
-		        $client->setClientName($client->getClient()->getName());
-		    }
-		    $this->client = $client;
+			$client = $this->getClient();
+			$client->setClientId($arg0);
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
+				$client->setClientName($client->getClient()->getName());
+			}
+			$this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -243,10 +243,10 @@ class Campaign extends MongoForm {
 	 * @return \Flux\Link\TrafficSource
 	 */
 	function getTrafficSource() {
-	    if (is_null($this->traffic_source)) {
-	        $this->traffic_source = new \Flux\Link\TrafficSource();
-	    }
-	    return $this->traffic_source;
+		if (is_null($this->traffic_source)) {
+			$this->traffic_source = new \Flux\Link\TrafficSource();
+		}
+		return $this->traffic_source;
 	}
 	
 	/**
@@ -254,39 +254,39 @@ class Campaign extends MongoForm {
 	 * @var \Flux\Link\TrafficSource
 	 */
 	function setTrafficSource($arg0) {
-	    if (is_array($arg0)) {
+		if (is_array($arg0)) {
 			$traffic_source = $this->getTrafficSource();
 			$traffic_source->populate($arg0);
-			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getName() == "") {
 				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
 			}
-			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
-			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getTrafficSourceIcon() == "") {
+				$traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
 			}
 			$this->traffic_source = $traffic_source;
 		} else if (is_string($arg0)) {
 			$traffic_source = $this->getTrafficSource();
 			$traffic_source->setTrafficSourceId($arg0);
-			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getName() == "") {
 				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
 			}
-			if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
-			    $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getTrafficSourceIcon() == "") {
+				$traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
 			}
 			$this->traffic_source = $traffic_source;
 		} else if ($arg0 instanceof \MongoId) {
-		    $traffic_source = $this->getTrafficSource();
-		    $traffic_source->setTrafficSourceId($arg0);
-		    if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceName() == "") {
-		        $traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
-		    }
-		    if (\MongoId::isValid($traffic_source->getTrafficSourceId()) && $traffic_source->getTrafficSourceIcon() == "") {
-		        $traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
-		    }
-		    $this->traffic_source = $traffic_source;
+			$traffic_source = $this->getTrafficSource();
+			$traffic_source->setTrafficSourceId($arg0);
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getName() == "") {
+				$traffic_source->setTrafficSourceName($traffic_source->getTrafficSource()->getName());
+			}
+			if (\MongoId::isValid($traffic_source->getId()) && $traffic_source->getTrafficSourceIcon() == "") {
+				$traffic_source->setTrafficSourceIcon($traffic_source->getTrafficSource()->getIcon());
+			}
+			$this->traffic_source = $traffic_source;
 		}
 		$this->addModifiedColumn('traffic_source');
-	    return $this;
+		return $this;
 	}
 	
 	/**
@@ -308,24 +308,27 @@ class Campaign extends MongoForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->offer = $offer;
 		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->offer = $offer;
 		} else if ($arg0 instanceof \MongoId) {
-		    $offer = $this->getOffer();
-		    $offer->setOfferId($arg0);
-		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
-		        $offer->setOfferName($offer->getOffer()->getName());
-		    }
-		    $this->offer = $offer;
+			$offer = $this->getOffer();
+			$offer->setOfferId($arg0);
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
+				$offer->setOfferName($offer->getOffer()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
+			}
+			$this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;
@@ -336,10 +339,10 @@ class Campaign extends MongoForm {
 	 * @return array
 	 */
 	function getWhitelistIps() {
-	    if (is_null($this->whitelist_ips)) {
-	        $this->whitelist_ips = array();
-	    }
-	    return $this->whitelist_ips;
+		if (is_null($this->whitelist_ips)) {
+			$this->whitelist_ips = array();
+		}
+		return $this->whitelist_ips;
 	}
 	
 	/**
@@ -347,18 +350,18 @@ class Campaign extends MongoForm {
 	 * @var array
 	 */
 	function setWhitelistIps($arg0) {
-	    if (is_array($arg0)) {
-            $this->whitelist_ips = $arg0;
-	    } else if (is_string($arg0)) {
-	        if (strpos(",", $arg0) !== false) {
-	            $this->whitelist_ips = explode(",", $arg0);
-	        } else {
-	            $this->whitelist_ips = array($arg0);
-	        }
-	    }
-	    array_walk($this->whitelist_ips, function(&$value) { $value = trim($value); });
-	    $this->addModifiedColumn("whitelist_ips");
-	    return $this;
+		if (is_array($arg0)) {
+			$this->whitelist_ips = $arg0;
+		} else if (is_string($arg0)) {
+			if (strpos(",", $arg0) !== false) {
+				$this->whitelist_ips = explode(",", $arg0);
+			} else {
+				$this->whitelist_ips = array($arg0);
+			}
+		}
+		array_walk($this->whitelist_ips, function(&$value) { $value = trim($value); });
+		$this->addModifiedColumn("whitelist_ips");
+		return $this;
 	}
 	
 	/**
@@ -366,10 +369,10 @@ class Campaign extends MongoForm {
 	 * @return string
 	 */
 	function getTrackingPixel() {
-	    if (is_null($this->tracking_pixel)) {
-	        $this->tracking_pixel = "";
-	    }
-	    return $this->tracking_pixel;
+		if (is_null($this->tracking_pixel)) {
+			$this->tracking_pixel = "";
+		}
+		return $this->tracking_pixel;
 	}
 	
 	/**
@@ -377,9 +380,9 @@ class Campaign extends MongoForm {
 	 * @var string
 	 */
 	function setTrackingPixel($arg0) {
-	    $this->tracking_pixel = $arg0;
-	    $this->addModifiedColumn("tracking_pixel");
-	    return $this;
+		$this->tracking_pixel = $arg0;
+		$this->addModifiedColumn("tracking_pixel");
+		return $this;
 	}
 
 	// +------------------------------------------------------------------------+
@@ -392,7 +395,7 @@ class Campaign extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$campaign = new self();
-		$campaign->getCollection()->ensureIndex(array('offer.offer_id' => 1, 'client.client_id' => 1, "traffic_source.traffic_source_id" => 1), array('background' => true));
+		$campaign->getCollection()->ensureIndex(array('offer._id' => 1, 'client._id' => 1, "traffic_source._id" => 1), array('background' => true));
 		return true;
 	}
 }

@@ -3,6 +3,8 @@
     "require": {
 		"novaksolutions/infusionsoft-php-sdk": "dev-master",
         "knplabs/knp-snappy": "0.3.*",
-		"ioki/wkhtmltopdf-amd64-centos6": "dev-master"
+		"ioki/wkhtmltopdf-amd64-centos6": "dev-master",
+		"twbs/bootstrap": "^3.3@dev",
+		"oyejorge/less.php": "dev-master"
     }
 }

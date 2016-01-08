@@ -9,162 +9,162 @@ namespace Mojavi\Filter;
  * <b>Optional parameters:</b>
  *
  * # <b>comment</b> - [Yes] - Should we add an HTML comment to the end of each
- *                            output with the execution time?
+ *							output with the execution time?
  * # <b>replace</b> - [No] - If this exists, every occurance of the value in the
- *                           client response will be replaced by the execution
- *                           time.
+ *						   client response will be replaced by the execution
+ *						   time.
  */
 class ExecutionTimeFilter extends Filter
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Calculate the execution time.
-     *
-     * @param string The start microtime.
-     * @param string The end microtime.
-     *
-     * @return double The execution time in seconds.
-     */
-    private function calculateTime ($start, $end)
-    {
+	/**
+	 * Calculate the execution time.
+	 *
+	 * @param string The start microtime.
+	 * @param string The end microtime.
+	 *
+	 * @return double The execution time in seconds.
+	 */
+	private function calculateTime ($start, $end)
+	{
 
-        $end   = explode(' ', $end);
-        $start = explode(' ', $start);
+		$end   = explode(' ', $end);
+		$start = explode(' ', $start);
 
-        $end   = (float) $end[1] + (float) $end[0];
-        $start = (float) $start[1] + (float) $start[0];
+		$end   = (float) $end[1] + (float) $end[0];
+		$start = (float) $start[1] + (float) $start[0];
 
-        return number_format($end - $start, 4);
+		return number_format($end - $start, 4);
 
-    }
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Execute this filter.
-     *
-     * @param FilterChain The filter chain.
-     *
-     * @return void
-     *
-     * @throws <b>FilterException</b> If an erro occurs during execution.
-     */
-    public function execute ($filterChain)
-    {
+	/**
+	 * Execute this filter.
+	 *
+	 * @param FilterChain The filter chain.
+	 *
+	 * @return void
+	 *
+	 * @throws <b>FilterException</b> If an erro occurs during execution.
+	 */
+	public function execute ($filterChain)
+	{
 
-        static $loaded;
+		static $loaded;
 
-        if (!isset($loaded))
-        {
+		if (!isset($loaded))
+		{
 
-            // load the filter
-            $loaded = true;
+			// load the filter
+			$loaded = true;
 
-            // grab parameters
-            $comment = $this->getParameter('comment');
-            $replace = $this->getParameter('replace', false);
+			// grab parameters
+			$comment = $this->getParameter('comment');
+			$replace = $this->getParameter('replace', false);
 
-            if ($replace)
-            {
+			if ($replace)
+			{
 
-                // we have to buffer the output in order to replace
-                // the keywords
+				// we have to buffer the output in order to replace
+				// the keywords
 
-                // track start time
-                $start = microtime();
+				// track start time
+				$start = microtime();
 
-                // turn on buffering
-                ob_start();
+				// turn on buffering
+				ob_start();
 
-                // execute next filter
-                $filterChain->execute();
+				// execute next filter
+				$filterChain->execute();
 
-                // grab buffer
-                $buffer = ob_get_contents();
+				// grab buffer
+				$buffer = ob_get_contents();
 
-                // stop buffering
-                ob_end_clean();
+				// stop buffering
+				ob_end_clean();
 
-                // track end time
-                $end = microtime();
+				// track end time
+				$end = microtime();
 
-                // calculate time
-                $time = $this->calculateTime($start, $end);
+				// calculate time
+				$time = $this->calculateTime($start, $end);
 
-                // replace keyword in buffer
-                $buffer = str_replace($replace, $time, $buffer);
+				// replace keyword in buffer
+				$buffer = str_replace($replace, $time, $buffer);
 
-                // print the modified buffer to the client
-                echo $buffer;
+				// print the modified buffer to the client
+				echo $buffer;
 
-            } else
-            {
+			} else
+			{
 
-                // we're not replacing any keywords so process normally
+				// we're not replacing any keywords so process normally
 
-                // track start time
-                $start = microtime();
+				// track start time
+				$start = microtime();
 
-                // execute next filter
-                $filterChain->execute();
+				// execute next filter
+				$filterChain->execute();
 
-                // track end time
-                $end = microtime();
+				// track end time
+				$end = microtime();
 
-                // calculate time
-                $time = $this->calculateTime($start, $end);
+				// calculate time
+				$time = $this->calculateTime($start, $end);
 
-            }
+			}
 
-            // should we print an HTML comment?
-            if ($comment === true)
-            {
+			// should we print an HTML comment?
+			if ($comment === true)
+			{
 
-                //echo "\n\n";
-                //echo '<!-- This page took ' . $time . ' seconds to process. -->';
+				//echo "\n\n";
+				//echo '<!-- This page took ' . $time . ' seconds to process. -->';
 
-            }
+			}
 
-        } else
-        {
+		} else
+		{
 
-            // we already loaded this filter, skip to the next filter
-            $filterChain->execute();
+			// we already loaded this filter, skip to the next filter
+			$filterChain->execute();
 
-        }
+		}
 
-    }
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    /**
-     * Initialize this filter.
-     *
-     * @param Context The current application context.
-     * @param array   An associative array of initialization parameters.
-     *
-     * @return bool true, if initialization completes successfully, otherwise
-     *              false.
-     *
-     * @throws <b>FilterException</b> If an error occurs during initialization.
-     */
-    public function initialize ($context, $parameters = null)
-    {
+	/**
+	 * Initialize this filter.
+	 *
+	 * @param Context The current application context.
+	 * @param array   An associative array of initialization parameters.
+	 *
+	 * @return bool true, if initialization completes successfully, otherwise
+	 *			  false.
+	 *
+	 * @throws <b>FilterException</b> If an error occurs during initialization.
+	 */
+	public function initialize ($context, $parameters = null)
+	{
 
-        // set defaults
-        $this->setParameter('comment', true);
-        $this->setParameter('replace', null);
+		// set defaults
+		$this->setParameter('comment', true);
+		$this->setParameter('replace', null);
 
-        // initialize parent
-        parent::initialize($context, $parameters);
+		// initialize parent
+		parent::initialize($context, $parameters);
 
-        return true;
+		return true;
 
-    }
+	}
 
 }
 

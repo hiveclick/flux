@@ -6,7 +6,7 @@
 ?>
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	<h4 class="modal-title">Edit Fulfillment</h4>
+	<h4 class="modal-title">Edit Fulfillment for <?php echo $fulfillment->getName() ?></h4>
 </div>
 <form id="fulfillment_form" name="export_form" method="PUT" action="/api" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $fulfillment->getId() ?>" />
@@ -40,21 +40,34 @@
 						<option value="<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_INACTIVE ?>"<?php echo $fulfillment->getStatus() == \Flux\Fulfillment::FULFILLMENT_STATUS_INACTIVE ? ' selected="selected"' : ''; ?>>Inactive</option>
 					</select>
 				</div>
-			
+				<hr />
 				<div class="form-group">
-					<label class="control-label" for="export_type">Owner</label>
+					<label class="control-label" for="export_type">Fulfillment Payer</label>
 					<select class="form-control" name="client[client_id]" id="client_id" placeholder="Select owner...">
 						<?php foreach($clients AS $client) { ?>
 							<option value="<?php echo $client->getId() ?>"<?php echo $fulfillment->getClient()->getClientId() == $client->getId() ? ' selected="selected"' : ''; ?>><?php echo $client->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
-				
 				<div class="form-group">
 					<label class="control-label" for="bounty">Payout</label>
 					<div class="input-group">
 					   <div class="input-group-addon">$</div>
 					   <input type="text" name="bounty" id="bounty" class="form-control" value="<?php echo number_format($fulfillment->getBounty(), 2) ?>" placeholder="Enter payout from advertiser...">
+					</div>
+				</div>
+				<div class="help-block">Specify who will pay us and how much they will pay when this fulfillment is successfully received</div>	
+				<hr />
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-9">
+							<label class="control-label" for="export_type">Trigger Fulfillment Flag</label>
+							<div class="help-block">Determines if the fulfillment flag should be added to a lead when this fulfillment is successful</div>	
+						</div>
+						<div class="col-md-3 text-right">
+							<input type="hidden" name="trigger_fulfillment_flag" value="0" />
+							<input type="checkbox" id="trigger_fulfillment_flag_1" name="trigger_fulfillment_flag" value="1" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -98,9 +111,9 @@
 					</div>
 				</div>
 				
-                <!-- POST specific settings -->
+				<!-- POST specific settings -->
 				<div id="post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
-					<div class="help-block">Enter the POST url and what to check in the result for a successful post</div>
+					<div class="help-block">Enter the POST url and what to check in the result for a successful post.  Column mappings should be done on the <i>Post Mapping</i> tab below.</div>
 					<div class="form-group">
 						<label class="control-label" for="parse_url">Post URL</label>
 						<textarea name="post_url" rows="4" class="form-control" placeholder="enter posting url here..."><?php echo $fulfillment->getPostUrl() ?></textarea>
@@ -130,7 +143,7 @@
 					</div>
 				</div>
 				
-			    <!-- Email specific settings -->
+				<!-- Email specific settings -->
 				<div id="email_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_EMAIL ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter one or more email addresses below</div>
 					<div class="form-group">
@@ -139,7 +152,7 @@
 					</div>
 				</div>
 			
-			    <!-- INFUSIONSOFT specific settings -->
+				<!-- INFUSIONSOFT specific settings -->
 				<div id="infusionsoft_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the Infusionsoft domain name and api key found in the Infusionsoft Dashboard</div>
 					<div class="form-group">
@@ -162,8 +175,8 @@
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
 						<div class="row">
-                            <div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
-                            <div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
+							<div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
+							<div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
 						</div>
 					</div>
 					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
@@ -189,7 +202,7 @@
 				<p />
 				<div class="form-group">
 					<label class="control-label" for="scheduling[days]">Select the days that this user can accept data?</label>
-					<select name="scheduling[days][]" id="scheduling_days" multiple class="form-control">
+					<select name="scheduling[days][]" id="scheduling_days" multiple class="form-control" placeholder="all days">
 						<option value="0" <?php echo isset($fulfillment->getScheduling()['days']) && in_array('0', $fulfillment->getScheduling()['days']) ? "selected" : "" ?>>Sunday</option>
 						<option value="1" <?php echo isset($fulfillment->getScheduling()['days']) && in_array('1', $fulfillment->getScheduling()['days']) ? "selected" : "" ?>>Monday</option>
 						<option value="2" <?php echo isset($fulfillment->getScheduling()['days']) && in_array('2', $fulfillment->getScheduling()['days']) ? "selected" : "" ?>>Tuesday</option>
@@ -261,9 +274,9 @@ $(document).ready(function() {
 	});
 
 	$('#refresh_mc_lists').click(function() {
-        // Refresh the mailchimp lists based on the api key
-        reloadMailchimpLists();
-    });
+		// Refresh the mailchimp lists based on the api key
+		reloadMailchimpLists();
+	});
 
 	$('#export_class_name').change(function() {
 		<?php foreach($export_handlers AS $export_class_name => $export_class_instance) { ?>
@@ -281,7 +294,7 @@ $(document).ready(function() {
 				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MULTI_POST) { ?>
 		 			$('#formfill_settings').removeClass('hidden');
 		 		<?php } else { ?>
-			 	    $('#formfill_settings').addClass('hidden');
+			 		$('#formfill_settings').addClass('hidden');
 		 		<?php } ?>
 				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST) { ?>
 		 			$('#post_settings').removeClass('hidden');
@@ -294,10 +307,10 @@ $(document).ready(function() {
 					$('#infusionsoft_settings').addClass('hidden');
 				<?php } ?>
 				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MAILCHIMP) { ?>
-    	 			$('#mailchimp_settings').removeClass('hidden');
-    			<?php } else { ?>
-    				$('#mailchimp_settings').addClass('hidden');
-    			<?php } ?>
+		 			$('#mailchimp_settings').removeClass('hidden');
+				<?php } else { ?>
+					$('#mailchimp_settings').addClass('hidden');
+				<?php } ?>
 				return true;
 			}
 		<?php } ?>
@@ -315,24 +328,29 @@ $(document).ready(function() {
 
 	<?php if ($fulfillment->getMailchimpApiKey() != '') { ?>
 	reloadMailchimpLists();
-    <?php } ?>
+	<?php } ?>
+
+	$('#trigger_fulfillment_flag_1').bootstrapSwitch({
+		onText: 'Yes',
+		offText: 'No'
+	});
 });
 
 function reloadMailchimpLists() {
 	$mc_api_key = $('#mailchimp_api_key').val();
-    $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-    $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
-    	$select = $('#mailchimp_list').selectize()[0].selectize;
-    	$select.clearOptions();
-        data.data.forEach(function(item) {
-        	$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
-        	if (item.id == '<?php echo $fulfillment->getMailchimpList() ?>') {
-        		$select.addItem(item.id);
-        	}
-        });
-        $select.refreshOptions();
-        $select.refreshItems();
-    }, 'json');
+	$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+	$.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+		$select = $('#mailchimp_list').selectize()[0].selectize;
+		$select.clearOptions();
+		data.data.forEach(function(item) {
+			$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
+			if (item.id == '<?php echo $fulfillment->getMailchimpList() ?>') {
+				$select.addItem(item.id);
+			}
+		});
+		$select.refreshOptions();
+		$select.refreshItems();
+	}, 'json');
 }
 //-->
 </script>

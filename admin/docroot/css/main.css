@@ -1,85 +1,56 @@
 /* custom template */
-body {
-	font-family:verdana,arial,sans-serif;
-	padding-top: 50px;
+html {
+  position: relative;
+  min-height: 100%;
 }
 
+body {
+	
+	padding-top: 50px;
+	margin-bottom: 80px;
+}
+
+.title-header {
+	font-size: 24px;
+	text-align: left;
+	position: relative;
+	padding: 10px 0px 30px 0px;
+	color: #f2f6f7;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+	background-color: #022A4E;
+	margin-Bottom: 15px;
+}
+
+/* Shift the drop down menus to be left aligned and the last one to be right aligned */
 #main-navbar ul li ul.dropdown-menu { right: auto }
 #main-navbar ul li ul.dropdown-menu::before { left:12px;right:auto }
 #main-navbar ul li ul.dropdown-menu::after { left:13px;right:auto }
-
 #main-navbar ul li:last-child ul.dropdown-menu { left: auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu::before { left:12px;left:auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu::after { left:13px;left:auto;right:0; }
 
-/* Placeholder color */
-*::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #D8D8D8;
+div.page-header {
+	padding-bottom: 9px;
+	margin: 40px 0 20px;
+	border-bottom: 1px solid #eee;
 }
-*:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    #D8D8D8;
-   opacity:  1;
+
+div.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 50px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #C8C8C8;
 }
-*::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    #D8D8D8;
-   opacity:  1;
-}
-*:-ms-input-placeholder { /* Internet Explorer 10+ */
-   color:    #D8D8D8;
-}
-.form-control::-webkit-input-placeholder { color: #D8D8D8; }
-.form-control:-moz-placeholder { color: #D8D8D8; }
-.form-control::-moz-placeholder { color: #D8D8D8; }
-.form-control:-ms-input-placeholder { color: #D8D8D8; }
 
 /* fix for bootstrap panel and selectize */
 .panel, .panel-default {
 	overflow: visible; 
 }
 
-.word-break {
-	-ms-word-break: break-all;
-	word-break: break-all;
-
-	/* Non standard for webkit */
-	word-break: break-word;
-}
-
-/* adjust the contents on smaller devices */
-@media (max-width: 768px) {
-  .column .padding {
-    padding: 7px;
-  }
-}
-
-/* Adjust the progress bar margin */
-.table-condensed .progress { 
-	margin-bottom: 0px;
-}
-
-/* Add classes to selectize controls for loading */
-.selectize::before {
-	-moz-transition: opacity 0.2s;
-	-webkit-transition: opacity 0.2s;
-	transition: opacity 0.2s;
-	content: ' ';
-	z-index: 2;
-	position: absolute;
-	display: block;
-	top: 8px;
-	right: 16px;
-	width: 16px;
-	height: 16px;
-	background: url(/images/spinner.gif);
-	background-size: 16px 16px;
-	opacity: 0;
-}
-.selectize.loading::before {
-	opacity: 0.4;
-}
-
 /* Set classes for showing a media object within a selectize drop down */
-
 .media .name,
 .selectize-dropdown .name,
 .selectize-input .name {

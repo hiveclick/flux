@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Server extends CommonForm {
+class Server extends BasicLink {
 	
-	protected $server_id;
-	protected $server_name;
 	protected $record_count;
 	
 	private $server;
@@ -16,10 +12,7 @@ class Server extends CommonForm {
 	 * @return integer
 	 */
 	function getServerId() {
-		if (is_null($this->server_id)) {
-			$this->server_id = null;
-		}
-		return $this->server_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -27,12 +20,7 @@ class Server extends CommonForm {
 	 * @var integer
 	 */
 	function setServerId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->server_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->server_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -40,10 +28,7 @@ class Server extends CommonForm {
 	 * @return string
 	 */
 	function getServerName() {
-		if (is_null($this->server_name)) {
-			$this->server_name = "";
-		}
-		return $this->server_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -51,8 +36,7 @@ class Server extends CommonForm {
 	 * @var string
 	 */
 	function setServerName($arg0) {
-		$this->server_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

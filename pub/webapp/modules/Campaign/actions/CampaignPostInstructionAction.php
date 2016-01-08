@@ -43,7 +43,7 @@ class CampaignPostInstructionAction extends BasicAction
 	public function isSecure ()
 	{
 	
-	    return false;
+		return false;
 	
 	}
 }

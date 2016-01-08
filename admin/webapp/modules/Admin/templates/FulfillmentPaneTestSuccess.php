@@ -16,38 +16,38 @@
 		<div class="form-group">
 			<input type="text" id="lead_id" name="lead[lead_id]" class="form-control" value="" placeholder="enter a lead to use as a test" />
 		</div>
-        <div style="display:none;" id="fulfillment_log_div">
-		    <hr />
+		<div style="display:none;" id="fulfillment_log_div">
+			<hr />
 			<div id="fulfillment_result_debug" style="display:none;">
-			    <div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
-			    <div role="tabpanel">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
-                        <li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="qs">
-                            <div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
-                            <div style="height:400px;overflow:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <th>Parameter</th>
-                                        <th>Value</th>
-                                    </thead>
-                                    <tbody id="debug_qs"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="request">
-                            <div class="help-block">This is the raw post url that will be sent to the advertiser</div>
-                            <textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div class="help-block">This is what would be sent to the fulfillment if it was not a test</div>
+				<div role="tabpanel">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#qs" role="tab" data-toggle="tab">Request</a></li>
+						<li role="presentation"><a href="#request" role="tab" data-toggle="tab">Raw Request</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="qs">
+							<div class="help-block">This is what will be posted to the advertiser at <b id="debug_url"></b></div>
+							<div style="height:400px;overflow:auto;">
+								<table class="table">
+									<thead>
+										<th>Parameter</th>
+										<th>Value</th>
+									</thead>
+									<tbody id="debug_qs"></tbody>
+								</table>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="request">
+							<div class="help-block">This is the raw post url that will be sent to the advertiser</div>
+							<textarea id="debug_request" rows="10" class="form-control" readonly></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -64,9 +64,9 @@ $(document).ready(function() {
 				$('#debug_url').html(data.record.debug.url);
 				$('#debug_qs').html('');
 				$.each(data.record.debug.params, function(i, item) {
-    				var tr = $('<tr />').appendTo($('#debug_qs'));
-    				$('<td />').html(i).appendTo(tr);
-    				$('<td />').html(item).appendTo(tr);
+					var tr = $('<tr />').appendTo($('#debug_qs'));
+					$('<td />').html(i).appendTo(tr);
+					$('<td />').html(item).appendTo(tr);
 				});
 			} else {
 				$('#debug_qs').html('');

@@ -4,20 +4,20 @@ require_once(MO_MODULE_DIR . DIRECTORY_SEPARATOR . '/Default/views/DefaultIndexV
 class UserProfileImageSuccessView extends DefaultIndexView
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any presentation logic and set template attributes.
-     *
-     * @return void
-     */
-    public function execute ()
-    {
-        parent::execute();
+	/**
+	 * Execute any presentation logic and set template attributes.
+	 *
+	 * @return void
+	 */
+	public function execute ()
+	{
+		parent::execute();
 
-        $this->setDecoratorTemplate('image.shell.php');
-    }
+		$this->setDecoratorTemplate('image.shell.php');
+	}
 
 }

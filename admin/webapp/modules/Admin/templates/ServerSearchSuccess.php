@@ -2,29 +2,38 @@
 	/* @var $server \Flux\Server */
 	$server = $this->getContext()->getRequest()->getAttribute("server", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_server_modal" href="/admin/server-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Server</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/admin/server-search">Servers</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_server_modal" href="/admin/server-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Server</a>
+		</div>
+	   <h1>Servers</h1>
 	</div>
-   <h1>Servers</h1>
-</div>
-<div class="help-block">Servers host offers and paths.  A server is used when deploying a new offer</div>
-<div class="panel panel-primary">
-	<div id='server-header' class='grid-header panel-heading clearfix'>
-		<form id="server_search_form" method="GET" action="/api">
-			<input type="hidden" name="func" value="/admin/server">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="pull-right">
-				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="hostname" value="" />
-			</div>
-		</form>
+	<div class="help-block">Servers host offers and paths.  A server is used when deploying a new offer</div>
+	<div class="panel panel-primary">
+		<div id='server-header' class='grid-header panel-heading clearfix'>
+			<form id="server_search_form" method="GET" action="/api">
+				<input type="hidden" name="func" value="/admin/server">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="pull-right">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="hostname" value="" />
+				</div>
+			</form>
+		</div>
+		<div id="server-grid"></div>
+		<div id="server-pager" class="panel-footer"></div>
 	</div>
-	<div id="server-grid"></div>
-	<div id="server-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit server modal -->

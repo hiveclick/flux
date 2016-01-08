@@ -70,12 +70,12 @@
 									<option value="<?php echo $data_field_set['value'] ?>" data-data="<?php echo htmlentities(json_encode($data_field_set)) ?>" <?php echo ((is_array($selected_data_field['posting_url_data_field_value']) && in_array($data_field_set['value'], $selected_data_field['posting_url_data_field_value'])) || (is_string($selected_data_field['posting_url_data_field_value']) && $selected_data_field['posting_url_data_field_value'] == $data_field_set['value'])) ? 'selected' : '' ?>><?php echo $data_field_set['name'] ?></option>
 								<?php } ?>
 							<?php } else { ?>
-							    <?php if (is_array($selected_data_field['posting_url_data_field_value'])) { ?>
-							        <?php foreach ($selected_data_field['posting_url_data_field_value'] as $value) { ?>
-							            <option value="<?php echo $value ?>" selected><?php echo $value ?></option>
-							        <?php } ?>
-							    <?php } else { ?>
-								    <option value="<?php echo $selected_data_field['posting_url_data_field_value'] ?>" selected><?php echo $selected_data_field['posting_url_data_field_value'] ?></option>
+								<?php if (is_array($selected_data_field['posting_url_data_field_value'])) { ?>
+									<?php foreach ($selected_data_field['posting_url_data_field_value'] as $value) { ?>
+										<option value="<?php echo $value ?>" selected><?php echo $value ?></option>
+									<?php } ?>
+								<?php } else { ?>
+									<option value="<?php echo $selected_data_field['posting_url_data_field_value'] ?>" selected><?php echo $selected_data_field['posting_url_data_field_value'] ?></option>
 								<?php } ?>
 							<?php } ?>
 						</select>
@@ -125,43 +125,43 @@ $(document).ready(function() {
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,
 		options: [
-            <?php foreach($data_fields AS $data_fieldId => $data_field) { 
-                    $data_field_set = $data_field->getDataFieldSet();
-                    array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
-            ?>
-            <?php echo json_encode(array('optgroup' => $data_field->getStorageType(), 'name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName())))) ?>,
-            <?php } ?>	
-        ],
+			<?php foreach($data_fields AS $data_fieldId => $data_field) { 
+					$data_field_set = $data_field->getDataFieldSet();
+					array_walk($data_field_set, function(&$value) { if ($value instanceof \Flux\Base\DataFieldSet) { $value = $value->toArray(); }});
+			?>
+			<?php echo json_encode(array('optgroup' => $data_field->getStorageType(), 'name' => $data_field->getName(), 'key_name' => $data_field->getKeyName(), 'description' => $data_field->getDescription(), 'data_field_set' => $data_field_set, 'tags' => $data_field->getTags(), 'request_names' => array_merge(array($data_field->getKeyName(), $data_field->getRequestName())))) ?>,
+			<?php } ?>	
+		],
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="width:100%;padding-right:25px;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +   
-	            '</div>';
+				});				
+				return '<div style="width:100%;padding-right:25px;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +   
+				'</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +
-	            '</div>';
+				});				
+				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +
+				'</div>';
 			}
 		},
 		onChange: function(value) {
@@ -231,63 +231,63 @@ $(document).ready(function() {
 	*/
 
 	$('.btn-geo-lookup').on('click', function() {
-	    $.rad.get('/api', { func: '/lead/lead-geo-lookup', 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
-		    if (data.record) {
-			    // Add the City dropdown	    
-    	    	var index_number = $('#data_field_posting_url_container > .form-group').length;
-    			var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
-    			$dataFieldRow.removeAttr('id');
-    			$dataFieldRow.html(function(i, oldHTML) {
-    				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
-    				return oldHTML;
-    			});
-    			
-    			$('#data_field_posting_url_container').append($dataFieldRow);
-    			$select = $dataFieldRow.find('.selectize').selectize($selectize_options)[0].selectize;
-    			$select_text = $dataFieldRow.find('.selectize-text').selectize({
-    				valueField: 'value',
-    				labelField: 'name',
-    				searchField: ['name'],
-    				sortField: 'name',
-    				sortDirection: 'ASC',
-    				diacritics:true,
-    				create: true,
-    				createOnBlur: true
-    			})[0].selectize;
-    			$dataFieldRow.show('fast', function() {
-    				$select.setValue('cy');
-    				$select_text.addOption({name:data.record.city,value:data.record.city});
-    				$select_text.refreshOptions();
-    				$select_text.setValue(data.record.city);
-    			});
+		$.rad.get('/api', { func: '/lead/lead-geo-lookup', 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
+			if (data.record) {
+				// Add the City dropdown		
+				var index_number = $('#data_field_posting_url_container > .form-group').length;
+				var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
+				$dataFieldRow.removeAttr('id');
+				$dataFieldRow.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+					return oldHTML;
+				});
+				
+				$('#data_field_posting_url_container').append($dataFieldRow);
+				$select = $dataFieldRow.find('.selectize').selectize($selectize_options)[0].selectize;
+				$select_text = $dataFieldRow.find('.selectize-text').selectize({
+					valueField: 'value',
+					labelField: 'name',
+					searchField: ['name'],
+					sortField: 'name',
+					sortDirection: 'ASC',
+					diacritics:true,
+					create: true,
+					createOnBlur: true
+				})[0].selectize;
+				$dataFieldRow.show('fast', function() {
+					$select.setValue('cy');
+					$select_text.addOption({name:data.record.city,value:data.record.city});
+					$select_text.refreshOptions();
+					$select_text.setValue(data.record.city);
+				});
 
-    		    // Add the State dropdown	    
-    	    	var index_number = $('#data_field_posting_url_container > .form-group').length;
-    			var $dataFieldRow2 = $('#dummy_posting_url_data_field').clone(true);
-    			$dataFieldRow2.removeAttr('id');
-    			$dataFieldRow2.html(function(i, oldHTML) {
-    				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
-    				return oldHTML;
-    			});
-    			
-    			$('#data_field_posting_url_container').append($dataFieldRow2);
-    			$select2 = $dataFieldRow2.find('.selectize').selectize($selectize_options)[0].selectize;
-    			$select_text2 = $dataFieldRow2.find('.selectize-text').selectize({
-    				valueField: 'value',
-    				labelField: 'name',
-    				searchField: ['name'],
-    				sortField: 'name',
-    				sortDirection: 'ASC',
-    				diacritics:true,
-    				create: true,
-    				createOnBlur: true
-    			})[0].selectize;
-    			$dataFieldRow2.show('fast', function() {
-    				$select2.setValue('st');
-    				$select_text2.setValue(data.record.state);
-    			});
-		    }
-	    });
+				// Add the State dropdown		
+				var index_number = $('#data_field_posting_url_container > .form-group').length;
+				var $dataFieldRow2 = $('#dummy_posting_url_data_field').clone(true);
+				$dataFieldRow2.removeAttr('id');
+				$dataFieldRow2.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+					return oldHTML;
+				});
+				
+				$('#data_field_posting_url_container').append($dataFieldRow2);
+				$select2 = $dataFieldRow2.find('.selectize').selectize($selectize_options)[0].selectize;
+				$select_text2 = $dataFieldRow2.find('.selectize-text').selectize({
+					valueField: 'value',
+					labelField: 'name',
+					searchField: ['name'],
+					sortField: 'name',
+					sortDirection: 'ASC',
+					diacritics:true,
+					create: true,
+					createOnBlur: true
+				})[0].selectize;
+				$dataFieldRow2.show('fast', function() {
+					$select2.setValue('st');
+					$select_text2.setValue(data.record.state);
+				});
+			}
+		});
 	});
 	
 	

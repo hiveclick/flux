@@ -46,22 +46,22 @@
 
 <div class="help-block">Edit the HTML source for this page and push your changes back to the server</div>
 <div class="panel panel-default">
-    <div class="panel-body">
-    	<form role="form" method="GET" action="/api" id="load_page_from_server_form" name="load_page_from_server_form">
-    		<input type="hidden" name="func" value="/offer/offer-page-source" />
-    		<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
-    		<div class="form-group">
-                <label class="control-label" for="server_id">Choose the server from where you want to load the page contents:</label>
-    			<select name="server_id" id="server_id" class="form-control">
-    				<?php foreach ($servers as $server) { ?>
-    					<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
-    				<?php } ?>
-    			</select>
-            </div>
-    		<div class="form-group">
-    		    <input type="submit" name="__submit" value="load page" class="btn btn-success" />
-    		</div>
-    	</form>
+	<div class="panel-body">
+		<form role="form" method="GET" action="/api" id="load_page_from_server_form" name="load_page_from_server_form">
+			<input type="hidden" name="func" value="/offer/offer-page-source" />
+			<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
+			<div class="form-group">
+				<label class="control-label" for="server_id">Choose the server from where you want to load the page contents:</label>
+				<select name="server_id" id="server_id" class="form-control">
+					<?php foreach ($servers as $server) { ?>
+						<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="submit" name="__submit" value="load page" class="btn btn-success" />
+			</div>
+		</form>
 	</div>
 </div>
 <div id="base_tag_warning" class="alert small alert-warning">

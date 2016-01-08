@@ -16,7 +16,7 @@ class Migrate extends Migration {
 		$client = $client->query(array('status' => \Flux\Client::CLIENT_STATUS_ACTIVE), false);
 		if ($client === false) {
 			/* @var $client \Flux\Client */
-		    $client = new \Flux\Client();
+			$client = new \Flux\Client();
 			$client->setName('Administrator');
 			$client->setStatus(\Flux\Client::CLIENT_STATUS_ACTIVE);
 			$client->setClientType(\Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN);
@@ -28,8 +28,8 @@ class Migrate extends Migration {
 		$active_user = $user->query(array('status' => \Flux\User::USER_STATUS_ACTIVE), false);
 		if ($active_user === false) {
 			// we don't have a user yet, let's create one
-		    /* @var $user \Flux\User */
-		    $user = new \Flux\User();
+			/* @var $user \Flux\User */
+			$user = new \Flux\User();
 			$user->setName('Admin User');
 			$user->setEmail('admin');
 			$user->setPassword('admin');
@@ -279,56 +279,56 @@ class Migrate extends Migration {
 			$datafield->setRequestName('state');
 			$datafield->setTags('contact');
 			$datafield->setDataFieldSet(
-			    array("name" => "Alabama", "value" => "AL"),
-                array("name" => "Alaska", "value" => "AK"),
-                array("name" => "Arizona", "value" => "AZ"),
-                array("name" => "Arkansas", "value" => "AR"),
-                array("name" => "California", "value" => "CA"),
-                array("name" => "Colorado", "value" => "CO"),
-                array("name" => "Connecticut", "value" => "CT"),
-                array("name" => "Delaware", "value" => "DE"),
-                array("name" => "Florida", "value" => "FL"),
-                array("name" => "Georgia", "value" => "GA"),
-                array("name" => "Hawaii", "value" => "HI"),
-                array("name" => "Idaho", "value" => "ID"),
-                array("name" => "Illinois", "value" => "IL"),
-                array("name" => "Indiana", "value" => "IN"),
-                array("name" => "Iowa", "value" => "IA"),
-                array("name" => "Kansas", "value" => "KS"),
-                array("name" => "Kentucky", "value" => "KY"),
-                array("name" => "Louisiana", "value" => "LA"),
-                array("name" => "Maine", "value" => "ME"),
-                array("name" => "Maryland", "value" => "MD"),
-                array("name" => "Massachusetts", "value" => "MA"),
-                array("name" => "Michigan", "value" => "MI"),
-                array("name" => "Minnesota", "value" => "MN"),
-                array("name" => "Mississippi", "value" => "MS"),
-                array("name" => "Missouri", "value" => "MO"),
-                array("name" => "Montana", "value" => "MT"),
-                array("name" => "Nebraska", "value" => "NE"),
-                array("name" => "Nevada", "value" => "NV"),
-                array("name" => "New Hampshire", "value" => "NH"),
-                array("name" => "New Jersey", "value" => "NJ"),
-                array("name" => "New Mexico", "value" => "NM"),
-                array("name" => "New York", "value" => "NY"),
-                array("name" => "North Carolina", "value" => "NC"),
-                array("name" => "North Dakota", "value" => "ND"),
-                array("name" => "Ohio", "value" => "OH"),
-                array("name" => "Oklahoma", "value" => "OK"),
-                array("name" => "Oregon", "value" => "OR"),
-                array("name" => "Pennsylvania", "value" => "PA"),
-                array("name" => "Rhode Island", "value" => "RI"),
-                array("name" => "South Carolina", "value" => "SC"),
-                array("name" => "South Dakota", "value" => "SD"),
-                array("name" => "Tennessee", "value" => "TN"),
-                array("name" => "Texas", "value" => "TX"),
-                array("name" => "Utah", "value" => "UT"),
-                array("name" => "Vermont", "value" => "VT"),
-                array("name" => "Virginia", "value" => "VA"),
-                array("name" => "Washington", "value" => "WA"),
-                array("name" => "West Virginia", "value" => "WV"),
-                array("name" => "Wisconsin", "value" => "WI"),
-                array("name" => "Wyoming", "value" => "WY")
+				array("name" => "Alabama", "value" => "AL"),
+				array("name" => "Alaska", "value" => "AK"),
+				array("name" => "Arizona", "value" => "AZ"),
+				array("name" => "Arkansas", "value" => "AR"),
+				array("name" => "California", "value" => "CA"),
+				array("name" => "Colorado", "value" => "CO"),
+				array("name" => "Connecticut", "value" => "CT"),
+				array("name" => "Delaware", "value" => "DE"),
+				array("name" => "Florida", "value" => "FL"),
+				array("name" => "Georgia", "value" => "GA"),
+				array("name" => "Hawaii", "value" => "HI"),
+				array("name" => "Idaho", "value" => "ID"),
+				array("name" => "Illinois", "value" => "IL"),
+				array("name" => "Indiana", "value" => "IN"),
+				array("name" => "Iowa", "value" => "IA"),
+				array("name" => "Kansas", "value" => "KS"),
+				array("name" => "Kentucky", "value" => "KY"),
+				array("name" => "Louisiana", "value" => "LA"),
+				array("name" => "Maine", "value" => "ME"),
+				array("name" => "Maryland", "value" => "MD"),
+				array("name" => "Massachusetts", "value" => "MA"),
+				array("name" => "Michigan", "value" => "MI"),
+				array("name" => "Minnesota", "value" => "MN"),
+				array("name" => "Mississippi", "value" => "MS"),
+				array("name" => "Missouri", "value" => "MO"),
+				array("name" => "Montana", "value" => "MT"),
+				array("name" => "Nebraska", "value" => "NE"),
+				array("name" => "Nevada", "value" => "NV"),
+				array("name" => "New Hampshire", "value" => "NH"),
+				array("name" => "New Jersey", "value" => "NJ"),
+				array("name" => "New Mexico", "value" => "NM"),
+				array("name" => "New York", "value" => "NY"),
+				array("name" => "North Carolina", "value" => "NC"),
+				array("name" => "North Dakota", "value" => "ND"),
+				array("name" => "Ohio", "value" => "OH"),
+				array("name" => "Oklahoma", "value" => "OK"),
+				array("name" => "Oregon", "value" => "OR"),
+				array("name" => "Pennsylvania", "value" => "PA"),
+				array("name" => "Rhode Island", "value" => "RI"),
+				array("name" => "South Carolina", "value" => "SC"),
+				array("name" => "South Dakota", "value" => "SD"),
+				array("name" => "Tennessee", "value" => "TN"),
+				array("name" => "Texas", "value" => "TX"),
+				array("name" => "Utah", "value" => "UT"),
+				array("name" => "Vermont", "value" => "VT"),
+				array("name" => "Virginia", "value" => "VA"),
+				array("name" => "Washington", "value" => "WA"),
+				array("name" => "West Virginia", "value" => "WV"),
+				array("name" => "Wisconsin", "value" => "WI"),
+				array("name" => "Wyoming", "value" => "WY")
 			);
 			$datafield->insert();
 		}
@@ -365,12 +365,12 @@ class Migrate extends Migration {
 			$datafield->setRequestName('country');
 			$datafield->setTags('contact');
 			$datafield->setDataFieldSet(
-			    array("name" => "United States", "value" => "US"),
-			    array("name" => "Canada", "value" => "CA"),
-			    array("name" => "Mexico", "value" => "MX"),
-			    array("name" => "United Kingdom", "value" => "UK"),
-			    array("name" => "France", "value" => "FR"),
-			    array("name" => "Germany", "value" => "GR")
+				array("name" => "United States", "value" => "US"),
+				array("name" => "Canada", "value" => "CA"),
+				array("name" => "Mexico", "value" => "MX"),
+				array("name" => "United Kingdom", "value" => "UK"),
+				array("name" => "France", "value" => "FR"),
+				array("name" => "Germany", "value" => "GR")
 			);
 			$datafield->insert();
 		}
@@ -424,9 +424,9 @@ class Migrate extends Migration {
 			$datafield->setRequestName('gender');
 			$datafield->setTags('demographic');
 			$datafield->setDataFieldSet(
-			    array("name" => "Male", "value" => "m"),
-			    array("name" => "Female", "value" => "f"),
-			    array("name" => "Unknown", "value" => "")
+				array("name" => "Male", "value" => "m"),
+				array("name" => "Female", "value" => "f"),
+				array("name" => "Unknown", "value" => "")
 			);
 			$datafield->insert();
 		}
@@ -453,17 +453,17 @@ class Migrate extends Migration {
 		$datafield->setName('Referer');
 		$datafield->queryByName();
 		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
-		    $datafield = new \Flux\DataField();
-		    $datafield->setName('Referer');
-		    $datafield->setDescription('Referer url for the where the user came from');
-		    $datafield->setKeyName('_ref');
-		    $datafield->setRequestName('referer');
-		    $datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
-		    $datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING);
-		    $datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
-		    $datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
-		    $datafield->setTags('tracking');
-		    $datafield->insert();
+			$datafield = new \Flux\DataField();
+			$datafield->setName('Referer');
+			$datafield->setDescription('Referer url for the where the user came from');
+			$datafield->setKeyName('_ref');
+			$datafield->setRequestName('referer');
+			$datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
+			$datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING);
+			$datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
+			$datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
+			$datafield->setTags('tracking');
+			$datafield->insert();
 		}
 		
 		/* @var $datafield \Flux\DataField */
@@ -471,17 +471,17 @@ class Migrate extends Migration {
 		$datafield->setName('Query String');
 		$datafield->queryByName();
 		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
-		    $datafield = new \Flux\DataField();
-		    $datafield->setName('Query String');
-		    $datafield->setDescription('Query string pulled from the $_SERVER');
-		    $datafield->setKeyName('_qs');
-		    $datafield->setRequestName('qs');
-		    $datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
-		    $datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING);
-		    $datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
-		    $datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
-		    $datafield->setTags('tracking');
-		    $datafield->insert();
+			$datafield = new \Flux\DataField();
+			$datafield->setName('Query String');
+			$datafield->setDescription('Query string pulled from the $_SERVER');
+			$datafield->setKeyName('_qs');
+			$datafield->setRequestName('qs');
+			$datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
+			$datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING);
+			$datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
+			$datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
+			$datafield->setTags('tracking');
+			$datafield->insert();
 		}
 
 		/* @var $datafield \Flux\DataField */
@@ -516,53 +516,53 @@ class Migrate extends Migration {
 			$datafield->setRequestName('user_agent_browser,browser');
 			$datafield->setTags('tracking');
 			$datafield->setDataFieldSet(
-			    array("name" => "Default Browser", "value" => "Default Browser"),
-                array("name" => "Safari", "value" => "Safari"),
-                array("name" => "Firefox", "value" => "Firefox"),
-                array("name" => "FacebookExternalHit", "value" => "FacebookExternalHit"),
-                array("name" => "AdsBot Google", "value" => "AdsBot Google"),
-                array("name" => "Chrome", "value" => "Chrome"),
-                array("name" => "Google Bot", "value" => "Google Bot"),
-                array("name" => "meanpathbot", "value" => "meanpathbot"),
-                array("name" => "aiHitBot", "value" => "aiHitBot"),
-                array("name" => "Ripper", "value" => "Ripper"),
-                array("name" => "Silk", "value" => "Silk"),
-                array("name" => "Android", "value" => "Android"),
-                array("name" => "RockMelt", "value" => "RockMelt"),
-                array("name" => "MJ12bot", "value" => "MJ12bot"),
-                array("name" => "Qt", "value" => "Qt"),
-                array("name" => "Adobe Dialog Manager", "value" => "Adobe Dialog Manager"),
-                array("name" => "BingBot", "value" => "BingBot"),
-                array("name" => "IEMobile", "value" => "IEMobile"),
-                array("name" => "A6-Indexer", "value" => "A6-Indexer"),
-                array("name" => "Twitter App", "value" => "Twitter App"),
-                array("name" => "Yahoo! Slurp", "value" => "Yahoo! Slurp"),
-                array("name" => "Google Search Appliance", "value" => "Google Search Appliance"),
-                array("name" => "NetSeer Crawler", "value" => "NetSeer Crawler"),
-                array("name" => "Internet Archive", "value" => "Internet Archive"),
-                array("name" => "Baiduspider", "value" => "Baiduspider"),
-                array("name" => "Facebook App", "value" => "Facebook App"),
-                array("name" => "AdsBot Google-Mobile", "value" => "AdsBot Google-Mobile"),
-                array("name" => "Nokia Proxy Browser", "value" => "Nokia Proxy Browser"),
-                array("name" => "NetcraftSurveyAgent", "value" => "NetcraftSurveyAgent"),
-                array("name" => "Download Accelerator", "value" => "Download Accelerator"),
-                array("name" => "BlackBerry", "value" => "BlackBerry"),
-                array("name" => "Kindle", "value" => "Kindle"),
-                array("name" => "IE", "value" => "IE"),
-                array("name" => "Opera Mini", "value" => "Opera Mini"),
-                array("name" => "Mail.Ru", "value" => "Mail.Ru"),
-                array("name" => "Kindle Fire", "value" => "Kindle Fire"),
-                array("name" => "panscient.com", "value" => "panscient.com"),
-                array("name" => "proximic", "value" => "proximic"),
-                array("name" => "Chromium", "value" => "Chromium"),
-                array("name" => "AdSense Bot", "value" => "AdSense Bot"),
-                array("name" => "ContextAd Bot", "value" => "ContextAd Bot"),
-                array("name" => "Google-Site-Verification", "value" => "Google-Site-Verification"),
-                array("name" => "SiteExplorer", "value" => "SiteExplorer"),
-                array("name" => "Opera", "value" => "Opera"),
-                array("name" => "Google Wireless Transcoder", "value" => "Google Wireless Transcoder"),
-                array("name" => "Blackberry Playbook Tablet", "value" => "Blackberry Playbook Tablet"),
-                array("name" => "Iron", "value" => "Iron")
+				array("name" => "Default Browser", "value" => "Default Browser"),
+				array("name" => "Safari", "value" => "Safari"),
+				array("name" => "Firefox", "value" => "Firefox"),
+				array("name" => "FacebookExternalHit", "value" => "FacebookExternalHit"),
+				array("name" => "AdsBot Google", "value" => "AdsBot Google"),
+				array("name" => "Chrome", "value" => "Chrome"),
+				array("name" => "Google Bot", "value" => "Google Bot"),
+				array("name" => "meanpathbot", "value" => "meanpathbot"),
+				array("name" => "aiHitBot", "value" => "aiHitBot"),
+				array("name" => "Ripper", "value" => "Ripper"),
+				array("name" => "Silk", "value" => "Silk"),
+				array("name" => "Android", "value" => "Android"),
+				array("name" => "RockMelt", "value" => "RockMelt"),
+				array("name" => "MJ12bot", "value" => "MJ12bot"),
+				array("name" => "Qt", "value" => "Qt"),
+				array("name" => "Adobe Dialog Manager", "value" => "Adobe Dialog Manager"),
+				array("name" => "BingBot", "value" => "BingBot"),
+				array("name" => "IEMobile", "value" => "IEMobile"),
+				array("name" => "A6-Indexer", "value" => "A6-Indexer"),
+				array("name" => "Twitter App", "value" => "Twitter App"),
+				array("name" => "Yahoo! Slurp", "value" => "Yahoo! Slurp"),
+				array("name" => "Google Search Appliance", "value" => "Google Search Appliance"),
+				array("name" => "NetSeer Crawler", "value" => "NetSeer Crawler"),
+				array("name" => "Internet Archive", "value" => "Internet Archive"),
+				array("name" => "Baiduspider", "value" => "Baiduspider"),
+				array("name" => "Facebook App", "value" => "Facebook App"),
+				array("name" => "AdsBot Google-Mobile", "value" => "AdsBot Google-Mobile"),
+				array("name" => "Nokia Proxy Browser", "value" => "Nokia Proxy Browser"),
+				array("name" => "NetcraftSurveyAgent", "value" => "NetcraftSurveyAgent"),
+				array("name" => "Download Accelerator", "value" => "Download Accelerator"),
+				array("name" => "BlackBerry", "value" => "BlackBerry"),
+				array("name" => "Kindle", "value" => "Kindle"),
+				array("name" => "IE", "value" => "IE"),
+				array("name" => "Opera Mini", "value" => "Opera Mini"),
+				array("name" => "Mail.Ru", "value" => "Mail.Ru"),
+				array("name" => "Kindle Fire", "value" => "Kindle Fire"),
+				array("name" => "panscient.com", "value" => "panscient.com"),
+				array("name" => "proximic", "value" => "proximic"),
+				array("name" => "Chromium", "value" => "Chromium"),
+				array("name" => "AdSense Bot", "value" => "AdSense Bot"),
+				array("name" => "ContextAd Bot", "value" => "ContextAd Bot"),
+				array("name" => "Google-Site-Verification", "value" => "Google-Site-Verification"),
+				array("name" => "SiteExplorer", "value" => "SiteExplorer"),
+				array("name" => "Opera", "value" => "Opera"),
+				array("name" => "Google Wireless Transcoder", "value" => "Google Wireless Transcoder"),
+				array("name" => "Blackberry Playbook Tablet", "value" => "Blackberry Playbook Tablet"),
+				array("name" => "Iron", "value" => "Iron")
 			);
 			$datafield->insert();
 		}
@@ -582,24 +582,24 @@ class Migrate extends Migration {
 			$datafield->setRequestName('user_agent_platform');
 			$datafield->setTags('tracking');
 			$datafield->setDataFieldSet(
-			    array("name" => "unknown", "value" => "unknown"),
-                array("name" => "MacOSX", "value" => "MacOSX"),
-                array("name" => "WinXP", "value" => "WinXP"),
-                array("name" => "iOS", "value" => "iOS"),
-                array("name" => "Win7", "value" => "Win7"),
-                array("name" => "Android", "value" => "Android"),
-                array("name" => "Linux", "value" => "Linux"),
-                array("name" => "WinVista", "value" => "WinVista"),
-                array("name" => "Win8", "value" => "Win8"),
-                array("name" => "Win8.1", "value" => "Win8.1"),
-                array("name" => "FirefoxOS", "value" => "FirefoxOS"),
-                array("name" => "WinPhone8", "value" => "WinPhone8"),
-                array("name" => "SymbianOS", "value" => "SymbianOS"),
-                array("name" => "Win2000", "value" => "Win2000"),
-                array("name" => "ChromeOS", "value" => "ChromeOS"),
-                array("name" => "RIM OS", "value" => "RIM OS"),
-                array("name" => "JAVA", "value" => "JAVA"),
-                array("name" => "RIM Tablet OS", "value" => "RIM Tablet OS")
+				array("name" => "unknown", "value" => "unknown"),
+				array("name" => "MacOSX", "value" => "MacOSX"),
+				array("name" => "WinXP", "value" => "WinXP"),
+				array("name" => "iOS", "value" => "iOS"),
+				array("name" => "Win7", "value" => "Win7"),
+				array("name" => "Android", "value" => "Android"),
+				array("name" => "Linux", "value" => "Linux"),
+				array("name" => "WinVista", "value" => "WinVista"),
+				array("name" => "Win8", "value" => "Win8"),
+				array("name" => "Win8.1", "value" => "Win8.1"),
+				array("name" => "FirefoxOS", "value" => "FirefoxOS"),
+				array("name" => "WinPhone8", "value" => "WinPhone8"),
+				array("name" => "SymbianOS", "value" => "SymbianOS"),
+				array("name" => "Win2000", "value" => "Win2000"),
+				array("name" => "ChromeOS", "value" => "ChromeOS"),
+				array("name" => "RIM OS", "value" => "RIM OS"),
+				array("name" => "JAVA", "value" => "JAVA"),
+				array("name" => "RIM Tablet OS", "value" => "RIM Tablet OS")
 			);
 			$datafield->insert();
 		}
@@ -634,8 +634,8 @@ class Migrate extends Migration {
 			$datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
 			$datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
 			$datafield->setDataFieldSet(
-			    array('name' => 'Yes', 'value' => "1"),
-			    array('name' => 'No', 'value' => "0")
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
 			);
 			$dataField_created_id = $datafield->insert();
 		}
@@ -655,8 +655,8 @@ class Migrate extends Migration {
 			$datafield->setRequestName('impression');
 			$datafield->setTags('events');
 			$datafield->setDataFieldSet(
-			    array('name' => 'Yes', 'value' => "1"),
-			    array('name' => 'No', 'value' => "0")
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
 			);
 			$dataField_partial_id = $datafield->insert();
 		}
@@ -676,8 +676,8 @@ class Migrate extends Migration {
 			$datafield->setRequestName('partial');
 			$datafield->setTags('events');
 			$datafield->setDataFieldSet(
-			    array('name' => 'Yes', 'value' => "1"),
-			    array('name' => 'No', 'value' => "0")
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
 			);
 			$dataField_partial_id = $datafield->insert();
 		}
@@ -697,8 +697,8 @@ class Migrate extends Migration {
 			$datafield->setRequestName('conversion');
 			$datafield->setTags('events');
 			$datafield->setDataFieldSet(
-			    array('name' => 'Yes', 'value' => "1"),
-			    array('name' => 'No', 'value' => "0")
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
 			);
 			$dataField_conversion_id = $datafield->insert();
 		}
@@ -708,20 +708,20 @@ class Migrate extends Migration {
 		$datafield->setName('Fulfilled');
 		$datafield->queryByName();
 		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
-		    $datafield->setName('Fulfilled');
-		    $datafield->setDescription('Time of the fulfilled event');
-		    $datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME);
-		    $datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
-		    $datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT);
-		    $datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
-		    $datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
-		    $datafield->setRequestName('conversion');
-		    $datafield->setTags('events');
-		    $datafield->setDataFieldSet(
-		        array('name' => 'Yes', 'value' => "1"),
-		        array('name' => 'No', 'value' => "0")
-		    );
-		    $dataField_conversion_id = $datafield->insert();
+			$datafield->setName('Fulfilled');
+			$datafield->setDescription('Time of the fulfilled event');
+			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME);
+			$datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
+			$datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT);
+			$datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
+			$datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
+			$datafield->setRequestName('conversion');
+			$datafield->setTags('events');
+			$datafield->setDataFieldSet(
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
+			);
+			$dataField_conversion_id = $datafield->insert();
 		}
 		
 		/* @var $datafield \Flux\DataField */
@@ -729,73 +729,73 @@ class Migrate extends Migration {
 		$datafield->setName('Pixel');
 		$datafield->queryByName();
 		if (is_null($datafield) || (!is_null($datafield) && !\MongoId::isValid($datafield->getId()))) {
-		    $datafield->setName('Pixel');
-		    $datafield->setDescription('Time the pixel was fired from the advertiser site');
-		    $datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_PIXEL_NAME);
-		    $datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
-		    $datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT);
-		    $datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
-		    $datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
-		    $datafield->setRequestName('pxl');
-		    $datafield->setTags('events');
-		    $datafield->setDataFieldSet(
-		        array('name' => 'Yes', 'value' => "1"),
-		        array('name' => 'No', 'value' => "0")
-		    );
-		    $dataField_pixel_id = $datafield->insert();
+			$datafield->setName('Pixel');
+			$datafield->setDescription('Time the pixel was fired from the advertiser site');
+			$datafield->setKeyName(\Flux\DataField::DATA_FIELD_EVENT_PIXEL_NAME);
+			$datafield->setStatus(\Flux\DataField::DATA_FIELD_STATUS_ACTIVE);
+			$datafield->setStorageType(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT);
+			$datafield->setType(\Flux\DataField::DATA_FIELD_TYPE_STRING);
+			$datafield->setAccessType(\Flux\DataField::DATA_FIELD_ACCESS_TYPE_PUBLIC);
+			$datafield->setRequestName('pxl');
+			$datafield->setTags('events');
+			$datafield->setDataFieldSet(
+				array('name' => 'Yes', 'value' => "1"),
+				array('name' => 'No', 'value' => "0")
+			);
+			$dataField_pixel_id = $datafield->insert();
 		}
 
 		StringTools::consoleWrite('   - DataField Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
 
 		StringTools::consoleWrite('   - Zipcode Initialization', 'Building', StringTools::CONSOLE_COLOR_YELLOW);
 		if (!\Flux\Preferences::getPreference('zipcode_initialized', false)) {
-    		if (file_exists(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt')) {
-    			// Preparing to read file
-    			if (($fh = fopen(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt','r')) !== false) {
-    				$counter = 0;
-    				while (($data = fgetcsv($fh, 0, "\t")) !== false) {
-    					if (isset($data[0]) && isset($data[1])) {
-    						//right now we only do US and CA
-    						if (in_array($data[0], array('US', 'CA'))) {
-    						    try {
-        							$zip = new \Flux\Zip();
-        							$zip->setCountry($data[0]);
-        							$zip->setZipcode(isset($data[1]) ? $data[1] : '');
-        							$zip->setCity(isset($data[2]) ? $data[2] : '');
-        							$zip->setState(isset($data[3]) ? $data[3] : '');
-        							$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
-        							$zip->setCounty(isset($data[5]) ? $data[5] : '');
-        							$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
-        							$zip->setCommunity(isset($data[7]) ? $data[7] : '');
-        							$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
-        							$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
-        							$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
-        							$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
-        							$zip->insert();
-    						    } catch (\Exception $e) {
-    						        if (strpos($e->getMessage(), "duplicate key error") === false) {
-                                        StringTools::consoleWrite('   - Zipcode Initialization', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true);
-    						        }
-    						    }
-    						}
-    					} else {
-    					    StringTools::consoleWrite('   - Zipcode Initialization', 'Column 0 or Column 1 not found', StringTools::CONSOLE_COLOR_RED, true);
-    					}
-    					$counter++;
-    					if (($counter % 100) == 0) { StringTools::consoleWrite('   - Zipcode Initialization', number_format($counter, 0, null, ','), StringTools::CONSOLE_COLOR_YELLOW); }
-    				}
-    				fclose($fh);
-    				$preferences = new \Flux\Preferences();
-    				$preferences->updateMultiple(array('key' => 'zipcode_initialized'), array('$set' => array('value' => true)));
-    			} else {
-    			    StringTools::consoleWrite('   - Zipcode Initialization', 'Could not open file US.txt', StringTools::CONSOLE_COLOR_RED, true);
-    			}
-    		} else {
-    		    StringTools::consoleWrite('   - Zipcode Initialization', 'File US.txt not found', StringTools::CONSOLE_COLOR_RED, true);
-    		}
-    		StringTools::consoleWrite('   - Zipcode Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
+			if (file_exists(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt')) {
+				// Preparing to read file
+				if (($fh = fopen(MO_WEBAPP_DIR . '/../../init/zipdb/US.txt','r')) !== false) {
+					$counter = 0;
+					while (($data = fgetcsv($fh, 0, "\t")) !== false) {
+						if (isset($data[0]) && isset($data[1])) {
+							//right now we only do US and CA
+							if (in_array($data[0], array('US', 'CA'))) {
+								try {
+									$zip = new \Flux\Zip();
+									$zip->setCountry($data[0]);
+									$zip->setZipcode(isset($data[1]) ? $data[1] : '');
+									$zip->setCity(isset($data[2]) ? $data[2] : '');
+									$zip->setState(isset($data[3]) ? $data[3] : '');
+									$zip->setStateAbbreviation(isset($data[4]) ? $data[4] : '');
+									$zip->setCounty(isset($data[5]) ? $data[5] : '');
+									$zip->setCountyAbbreviation(isset($data[6]) ? $data[6] : '');
+									$zip->setCommunity(isset($data[7]) ? $data[7] : '');
+									$zip->setCommunityAbbreviation(isset($data[8]) ? $data[8] : '');
+									$zip->setLatitude(isset($data[9]) ? $data[9] : 0);
+									$zip->setLongitude(isset($data[10]) ? $data[10] : 0);
+									$zip->setAccuracy(isset($data[11]) ? $data[11] : 1);
+									$zip->insert();
+								} catch (\Exception $e) {
+									if (strpos($e->getMessage(), "duplicate key error") === false) {
+										StringTools::consoleWrite('   - Zipcode Initialization', $e->getMessage(), StringTools::CONSOLE_COLOR_RED, true);
+									}
+								}
+							}
+						} else {
+							StringTools::consoleWrite('   - Zipcode Initialization', 'Column 0 or Column 1 not found', StringTools::CONSOLE_COLOR_RED, true);
+						}
+						$counter++;
+						if (($counter % 100) == 0) { StringTools::consoleWrite('   - Zipcode Initialization', number_format($counter, 0, null, ','), StringTools::CONSOLE_COLOR_YELLOW); }
+					}
+					fclose($fh);
+					$preferences = new \Flux\Preferences();
+					$preferences->updateMultiple(array('key' => 'zipcode_initialized'), array('$set' => array('value' => true)));
+				} else {
+					StringTools::consoleWrite('   - Zipcode Initialization', 'Could not open file US.txt', StringTools::CONSOLE_COLOR_RED, true);
+				}
+			} else {
+				StringTools::consoleWrite('   - Zipcode Initialization', 'File US.txt not found', StringTools::CONSOLE_COLOR_RED, true);
+			}
+			StringTools::consoleWrite('   - Zipcode Initialization', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);
 		} else {
-		    StringTools::consoleWrite('   - Zipcode Initialization', 'Already Initialized', StringTools::CONSOLE_COLOR_GREEN, true);
+			StringTools::consoleWrite('   - Zipcode Initialization', 'Already Initialized', StringTools::CONSOLE_COLOR_GREEN, true);
 		}
 
 		
@@ -823,15 +823,15 @@ class Migrate extends Migration {
 		$daemon->setType('Fulfill');
 		$daemon->query(array(), false);
 		if (is_null($daemon) || (!is_null($daemon) && !\MongoId::isValid($daemon->getId()))) {
-		    $daemon->setName('Fulfill');
-		    $daemon->setStatus(\Flux\Daemon::DAEMON_STATUS_ACTIVE);
-		    $daemon->setRunStatus(\Flux\Daemon::DAEMON_RUN_STATUS_INACTIVE);
-		    $daemon->setDescription('Fulfills leads in a split that are marked as automatic fulfillment');
-		    $daemon->setThreads(3);
-		    $daemon->setClassName('Flux\Daemon\Fulfill');
-		    $daemon->setType('Fulfill');
-		    $daemon->setChildren(array());
-		    $daemon->insert();
+			$daemon->setName('Fulfill');
+			$daemon->setStatus(\Flux\Daemon::DAEMON_STATUS_ACTIVE);
+			$daemon->setRunStatus(\Flux\Daemon::DAEMON_RUN_STATUS_INACTIVE);
+			$daemon->setDescription('Fulfills leads in a split that are marked as automatic fulfillment');
+			$daemon->setThreads(3);
+			$daemon->setClassName('Flux\Daemon\Fulfill');
+			$daemon->setType('Fulfill');
+			$daemon->setChildren(array());
+			$daemon->insert();
 		}
 
 		StringTools::consoleWrite('   - Building Daemons Collection', 'Done', StringTools::CONSOLE_COLOR_GREEN, true);

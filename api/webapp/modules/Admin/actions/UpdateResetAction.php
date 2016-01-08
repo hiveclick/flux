@@ -33,16 +33,16 @@ class UpdateResetAction extends BasicRestAction {
 	 * @return \Mojavi\Form\BasicAjaxForm
 	 */
 	function executeGet($input_form) {
-	    // Handle GET Requests
-	    
-	    $ajax_form = new BasicAjaxForm();
-	    try {
-            $input_form->clearProgress();
-	    } catch (\Exception $e) {
-	        $this->getErrors()->addError('error', $e->getMessage());
-	    }
-	    $ajax_form->setRecord($input_form);
-	    return $ajax_form;
+		// Handle GET Requests
+		
+		$ajax_form = new BasicAjaxForm();
+		try {
+			$input_form->clearProgress();
+		} catch (\Exception $e) {
+			$this->getErrors()->addError('error', $e->getMessage());
+		}
+		$ajax_form->setRecord($input_form);
+		return $ajax_form;
 	}
 } 
 ?>

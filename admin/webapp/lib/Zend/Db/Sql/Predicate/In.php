@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -14,120 +14,120 @@ use Zend\Db\Sql\Select;
 
 class In implements PredicateInterface
 {
-    protected $identifier;
-    protected $valueSet;
+	protected $identifier;
+	protected $valueSet;
 
-    protected $specification = '%s IN %s';
+	protected $specification = '%s IN %s';
 
-    /**
-     * Constructor
-     *
-     * @param null|string|array $identifier
-     * @param null|array|Select $valueSet
-     */
-    public function __construct($identifier = null, $valueSet = null)
-    {
-        if ($identifier) {
-            $this->setIdentifier($identifier);
-        }
-        if ($valueSet) {
-            $this->setValueSet($valueSet);
-        }
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param null|string|array $identifier
+	 * @param null|array|Select $valueSet
+	 */
+	public function __construct($identifier = null, $valueSet = null)
+	{
+		if ($identifier) {
+			$this->setIdentifier($identifier);
+		}
+		if ($valueSet) {
+			$this->setValueSet($valueSet);
+		}
+	}
 
-    /**
-     * Set identifier for comparison
-     *
-     * @param  string|array $identifier
-     * @return In
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
+	/**
+	 * Set identifier for comparison
+	 *
+	 * @param  string|array $identifier
+	 * @return In
+	 */
+	public function setIdentifier($identifier)
+	{
+		$this->identifier = $identifier;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get identifier of comparison
-     *
-     * @return null|string|array
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
+	/**
+	 * Get identifier of comparison
+	 *
+	 * @return null|string|array
+	 */
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
 
-    /**
-     * Set set of values for IN comparison
-     *
-     * @param  array|Select                       $valueSet
-     * @throws Exception\InvalidArgumentException
-     * @return In
-     */
-    public function setValueSet($valueSet)
-    {
-        if (!is_array($valueSet) && !$valueSet instanceof Select) {
-            throw new Exception\InvalidArgumentException(
-                '$valueSet must be either an array or a Zend\Db\Sql\Select object, ' . gettype($valueSet) . ' given'
-            );
-        }
-        $this->valueSet = $valueSet;
+	/**
+	 * Set set of values for IN comparison
+	 *
+	 * @param  array|Select					   $valueSet
+	 * @throws Exception\InvalidArgumentException
+	 * @return In
+	 */
+	public function setValueSet($valueSet)
+	{
+		if (!is_array($valueSet) && !$valueSet instanceof Select) {
+			throw new Exception\InvalidArgumentException(
+				'$valueSet must be either an array or a Zend\Db\Sql\Select object, ' . gettype($valueSet) . ' given'
+			);
+		}
+		$this->valueSet = $valueSet;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Gets set of values in IN comparision
-     *
-     * @return array|Select
-     */
-    public function getValueSet()
-    {
-        return $this->valueSet;
-    }
+	/**
+	 * Gets set of values in IN comparision
+	 *
+	 * @return array|Select
+	 */
+	public function getValueSet()
+	{
+		return $this->valueSet;
+	}
 
-    /**
-     * Return array of parts for where statement
-     *
-     * @return array
-     */
-    public function getExpressionData()
-    {
-        $identifier = $this->getIdentifier();
-        $values = $this->getValueSet();
-        $replacements = array();
+	/**
+	 * Return array of parts for where statement
+	 *
+	 * @return array
+	 */
+	public function getExpressionData()
+	{
+		$identifier = $this->getIdentifier();
+		$values = $this->getValueSet();
+		$replacements = array();
 
-        if (is_array($identifier)) {
-            $identifierSpecFragment = '(' . implode(', ', array_fill(0, count($identifier), '%s')) . ')';
-            $types = array_fill(0, count($identifier), self::TYPE_IDENTIFIER);
-            $replacements = $identifier;
-        } else {
-            $identifierSpecFragment = '%s';
-            $replacements[] = $identifier;
-            $types = array(self::TYPE_IDENTIFIER);
-        }
+		if (is_array($identifier)) {
+			$identifierSpecFragment = '(' . implode(', ', array_fill(0, count($identifier), '%s')) . ')';
+			$types = array_fill(0, count($identifier), self::TYPE_IDENTIFIER);
+			$replacements = $identifier;
+		} else {
+			$identifierSpecFragment = '%s';
+			$replacements[] = $identifier;
+			$types = array(self::TYPE_IDENTIFIER);
+		}
 
-        if ($values instanceof Select) {
-            $specification = vsprintf(
-                $this->specification,
-                array($identifierSpecFragment, '%s')
-            );
-            $replacements[] = $values;
-            $types[] = self::TYPE_VALUE;
-        } else {
-            $specification = vsprintf(
-                $this->specification,
-                array($identifierSpecFragment, '(' . implode(', ', array_fill(0, count($values), '%s')) . ')')
-            );
-            $replacements = array_merge($replacements, $values);
-            $types = array_merge($types, array_fill(0, count($values), self::TYPE_VALUE));
-        }
+		if ($values instanceof Select) {
+			$specification = vsprintf(
+				$this->specification,
+				array($identifierSpecFragment, '%s')
+			);
+			$replacements[] = $values;
+			$types[] = self::TYPE_VALUE;
+		} else {
+			$specification = vsprintf(
+				$this->specification,
+				array($identifierSpecFragment, '(' . implode(', ', array_fill(0, count($values), '%s')) . ')')
+			);
+			$replacements = array_merge($replacements, $values);
+			$types = array_merge($types, array_fill(0, count($values), self::TYPE_VALUE));
+		}
 
-        return array(array(
-            $specification,
-            $replacements,
-            $types,
-        ));
-    }
+		return array(array(
+			$specification,
+			$replacements,
+			$types,
+		));
+	}
 }

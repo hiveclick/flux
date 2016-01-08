@@ -9,7 +9,7 @@ class ExportQueue extends Base\ExportQueue {
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
 		if (trim($this->getLead()->getLeadId()) != '') {
-			$criteria['lead.lead_id'] = trim($this->getLead()->getLeadId());
+			$criteria['lead._id'] = trim($this->getLead()->getLeadId());
 		}
 		return parent::queryAll($criteria, $hydrate, $fields);
 	}
@@ -46,9 +46,9 @@ class ExportQueue extends Base\ExportQueue {
 	 */
 	public static function ensureIndexes() {
 		$export_queue = new self();
-		$export_queue->getCollection()->ensureIndex(array('lead_id' => 1), array('background' => true));
-		$export_queue->getCollection()->ensureIndex(array('export_id' => 1), array('background' => true));
-		$export_queue->getCollection()->ensureIndex(array('split_id' => 1), array('background' => true));
+		$export_queue->getCollection()->ensureIndex(array('lead._id' => 1), array('background' => true));
+		$export_queue->getCollection()->ensureIndex(array('export._id' => 1), array('background' => true));
+		$export_queue->getCollection()->ensureIndex(array('split._id' => 1), array('background' => true));
 		return true;
 	}
 	

@@ -89,27 +89,27 @@
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="advanced">
-			    <div class="help-block">Define a custom function that you can use to convert this field to a value that the API accepts</div>
+				<div class="help-block">Define a custom function that you can use to convert this field to a value that the API accepts</div>
 				<div class="form-group">
 					<div id="advanced_options_div_<?php echo $data_field->getId() ?>">
 						<div class="help-text">
-				            <span class="text-success">
-				            /**<br />
-				            &nbsp;* Custom mapping function<br />
-				            &nbsp;* $value - Value from mapping<br />
-				            &nbsp;* $lead - \Flux\Lead object<br />
-				            &nbsp;*/<br />
-				            </span>
-				            <strong>
-				            $mapping_func = function ($value, $lead) {
-				            </strong>
-				        </div>
-				        <div class="col-sm-offset-1">
+							<span class="text-success">
+							/**<br />
+							&nbsp;* Custom mapping function<br />
+							&nbsp;* $value - Value from mapping<br />
+							&nbsp;* $lead - \Flux\Lead object<br />
+							&nbsp;*/<br />
+							</span>
+							<strong>
+							$mapping_func = function ($value, $lead) {
+							</strong>
+						</div>
+						<div class="col-sm-offset-1">
 							<div class="form-group">
 								<textarea id="custom_code_<?php echo $data_field->getId() ?>" class="form-control" name="custom_code" rows="15" placeholder="return $value;"><?php echo $data_field->getCustomCode() ?></textarea>
 							</div>
 							<div class="form-group">
-					        	<select name="custom_code_examples" class="form-control" id="custom_code_examples" placeholder="Type custom code above or select a template from the list">
+								<select name="custom_code_examples" class="form-control" id="custom_code_examples" placeholder="Type custom code above or select a template from the list">
 									<option value=""></option>
 									<option value="1">Convert YES/NO to 1/0 (*data field must be of type String)</option>
 									<option value="2">Check if a value is chosen (*data field must be of type Array)</option>
@@ -179,115 +179,115 @@
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="html_select_example_header">
 							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#html_select_example">Select (Single Select)</a></h4>
-    					</div>
-    					<div id="html_select_example" class="panel-collapse collapse" role="tabpanel">
-      						<div class="panel-body">
-      							<?php if (count($data_field->getDataFieldSet()) > 0) { ?>
-	      							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
-	      								$buffer = array();
-	      								$buffer[] = sprintf('<select class="form-control" name="%s">', $data_field->getKeyName());
-	      								/* @var $data_field_set \Flux\DataFieldSet */
+						</div>
+						<div id="html_select_example" class="panel-collapse collapse" role="tabpanel">
+	  						<div class="panel-body">
+	  							<?php if (count($data_field->getDataFieldSet()) > 0) { ?>
+		  							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
+		  								$buffer = array();
+		  								$buffer[] = sprintf('<select class="form-control" name="%s">', $data_field->getKeyName());
+		  								/* @var $data_field_set \Flux\DataFieldSet */
 										foreach($data_field->getDataFieldSet() AS $data_field_set) {
 											$buffer[] = sprintf('	<option value="%s">%s</option>', $data_field_set->getValue(), $data_field_set->getName());
 										}
 										$buffer[] = '</select>';
-	      								echo implode("\n", $buffer);
-	      							?></textarea>
-	      						<?php } else { ?>
-	      							<div class="alert alert-warning">
-	      								You do not have any field values defined.  Please assign field values to this data field.
-	      							</div>
-	      						<?php } ?>
-      						</div>
-      					</div>
-      				</div>
-      				<div class="panel panel-default">
-      					<div class="panel-heading" role="tab" id="html_multiselect_example_header">
+		  								echo implode("\n", $buffer);
+		  							?></textarea>
+		  						<?php } else { ?>
+		  							<div class="alert alert-warning">
+		  								You do not have any field values defined.  Please assign field values to this data field.
+		  							</div>
+		  						<?php } ?>
+	  						</div>
+	  					</div>
+	  				</div>
+	  				<div class="panel panel-default">
+	  					<div class="panel-heading" role="tab" id="html_multiselect_example_header">
 							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#html_multiselect_example">Select (Multi Select)</a></h4>
-    					</div>
-    					<div id="html_multiselect_example" class="panel-collapse collapse" role="tabpanel">
-      						<div class="panel-body">
-      							<?php if (count($data_field->getDataFieldSet()) > 0) { ?>
-	      							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
-	      								$buffer = array();
-	      								$buffer[] = sprintf('<select class="form-control" name="%s[]" multiple>', $data_field->getKeyName());
-	      								/* @var $data_field_set \Flux\DataFieldSet */
+						</div>
+						<div id="html_multiselect_example" class="panel-collapse collapse" role="tabpanel">
+	  						<div class="panel-body">
+	  							<?php if (count($data_field->getDataFieldSet()) > 0) { ?>
+		  							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
+		  								$buffer = array();
+		  								$buffer[] = sprintf('<select class="form-control" name="%s[]" multiple>', $data_field->getKeyName());
+		  								/* @var $data_field_set \Flux\DataFieldSet */
 										foreach($data_field->getDataFieldSet() AS $data_field_set) {
 											$buffer[] = sprintf('	<option value="%s">%s</option>', $data_field_set->getValue(), $data_field_set->getName());
 										}
 										$buffer[] = '</select>';
-	      								echo implode("\n", $buffer);
-	      							?></textarea>
-	      							<div class="help-block">* Make sure you set this field to an <i>Array</i> Data Type under the Storage tab above</div>
-	      						<?php } else { ?>
-	      							<div class="alert alert-warning">
-	      								You do not have any field values defined.  Please assign field values to this data field.
-	      							</div>
-	      						<?php } ?>
-      						</div>
-      					</div>
-      				</div>
-      				<div class="panel panel-default">
-      					<div class="panel-heading" role="tab" id="html_checkbox_example_header">
+		  								echo implode("\n", $buffer);
+		  							?></textarea>
+		  							<div class="help-block">* Make sure you set this field to an <i>Array</i> Data Type under the Storage tab above</div>
+		  						<?php } else { ?>
+		  							<div class="alert alert-warning">
+		  								You do not have any field values defined.  Please assign field values to this data field.
+		  							</div>
+		  						<?php } ?>
+	  						</div>
+	  					</div>
+	  				</div>
+	  				<div class="panel panel-default">
+	  					<div class="panel-heading" role="tab" id="html_checkbox_example_header">
 							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#html_checkbox_example">Checkbox</a></h4>
-    					</div>
-    					<div id="html_checkbox_example" class="panel-collapse collapse" role="tabpanel">
-      						<div class="panel-body">
-      							<textarea readonly class="form-control" rows="15" placeholder="checkbox html code will show here"><?php 
-      								$buffer = array();
-      								if (count($data_field->getDataFieldSet()) > 0) {
-	      								/* @var $data_field_set \Flux\DataFieldSet */
-	      								foreach($data_field->getDataFieldSet() AS $data_field_set) {
-	      									$buffer[] = sprintf('<label><input type="checkbox" class="form-control" name="%s" value="%s"> %s</label>', $data_field->getKeyName(), $data_field_set->getValue(), $data_field_set->getName());
-	      								}
-	      							} else { 
+						</div>
+						<div id="html_checkbox_example" class="panel-collapse collapse" role="tabpanel">
+	  						<div class="panel-body">
+	  							<textarea readonly class="form-control" rows="15" placeholder="checkbox html code will show here"><?php 
+	  								$buffer = array();
+	  								if (count($data_field->getDataFieldSet()) > 0) {
+		  								/* @var $data_field_set \Flux\DataFieldSet */
+		  								foreach($data_field->getDataFieldSet() AS $data_field_set) {
+		  									$buffer[] = sprintf('<label><input type="checkbox" class="form-control" name="%s" value="%s"> %s</label>', $data_field->getKeyName(), $data_field_set->getValue(), $data_field_set->getName());
+		  								}
+		  							} else { 
 										$buffer[] = sprintf('<label><input type="checkbox" class="form-control" name="%s" value="1"> %s</label>', $data_field->getKeyName(), $data_field->getName());
 									}
-      								echo implode("\n", $buffer);
-      							?></textarea>
-      						</div>
-      					</div>
-      				</div>
-      				<div class="panel panel-default">
-      					<div class="panel-heading" role="tab" id="html_radio_example_header">
+	  								echo implode("\n", $buffer);
+	  							?></textarea>
+	  						</div>
+	  					</div>
+	  				</div>
+	  				<div class="panel panel-default">
+	  					<div class="panel-heading" role="tab" id="html_radio_example_header">
 							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#html_radio_example">Radio buttons</a></h4>
-    					</div>
-    					<div id="html_radio_example" class="panel-collapse collapse" role="tabpanel">
-      						<div class="panel-body">
-      							<textarea readonly class="form-control" rows="15" placeholder="radio button html code will show here"><?php 
-      								$buffer = array();
-      								if (count($data_field->getDataFieldSet()) > 0) {
-	      								/* @var $data_field_set \Flux\DataFieldSet */
-	      								foreach($data_field->getDataFieldSet() AS $data_field_set) {
-	      									$buffer[] = sprintf('<label><input type="radio" class="form-control" name="%s" value="%s"> %s</label>', $data_field->getKeyName(), $data_field_set->getValue(), $data_field_set->getName());
-	      								}
-      								} else {
+						</div>
+						<div id="html_radio_example" class="panel-collapse collapse" role="tabpanel">
+	  						<div class="panel-body">
+	  							<textarea readonly class="form-control" rows="15" placeholder="radio button html code will show here"><?php 
+	  								$buffer = array();
+	  								if (count($data_field->getDataFieldSet()) > 0) {
+		  								/* @var $data_field_set \Flux\DataFieldSet */
+		  								foreach($data_field->getDataFieldSet() AS $data_field_set) {
+		  									$buffer[] = sprintf('<label><input type="radio" class="form-control" name="%s" value="%s"> %s</label>', $data_field->getKeyName(), $data_field_set->getValue(), $data_field_set->getName());
+		  								}
+	  								} else {
 										$buffer[] = '<div class="form-group">' + "\n";
 										$buffer[] = sprintf('<label>%s<input type="checkbox" class="form-control" name="%s" value="1"></label>', $data_field->getName(), $data_field->getKeyName());
-      									$buffer[] = '</div>';
-      								}
-      								echo implode("\n", $buffer);
-      							?></textarea>
-      						</div>
-      					</div>
-      				</div>
-      				<div class="panel panel-default">
-      					<div class="panel-heading" role="tab" id="html_textbox_example_header">
+	  									$buffer[] = '</div>';
+	  								}
+	  								echo implode("\n", $buffer);
+	  							?></textarea>
+	  						</div>
+	  					</div>
+	  				</div>
+	  				<div class="panel panel-default">
+	  					<div class="panel-heading" role="tab" id="html_textbox_example_header">
 							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#html_textbox_example">Text</a></h4>
-    					</div>
-    					<div id="html_textbox_example" class="panel-collapse collapse" role="tabpanel">
-      						<div class="panel-body">
-      							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
-      								$buffer = array();
-      								$buffer[] = '<div class="form-group">' + "\n";
-      								$buffer[] = sprintf('    <input type="text" class="form-control" name="%s" value="" placeholder="%s" />', $data_field->getKeyName(), $data_field->getName());
-      								$buffer[] = '</div>';
-      								echo implode("\n", $buffer);
-      							?></textarea>
-      						</div>
-      					</div>
-      				</div>
-      			</div>
+						</div>
+						<div id="html_textbox_example" class="panel-collapse collapse" role="tabpanel">
+	  						<div class="panel-body">
+	  							<textarea readonly class="form-control" rows="15" placeholder="select html code will show here"><?php 
+	  								$buffer = array();
+	  								$buffer[] = '<div class="form-group">' + "\n";
+	  								$buffer[] = sprintf('	<input type="text" class="form-control" name="%s" value="" placeholder="%s" />', $data_field->getKeyName(), $data_field->getName());
+	  								$buffer[] = '</div>';
+	  								echo implode("\n", $buffer);
+	  							?></textarea>
+	  						</div>
+	  					</div>
+	  				</div>
+	  			</div>
 			</div>
 		</div>
 	</div>
@@ -328,8 +328,8 @@ $(document).ready(function() {
 		params += "&func=/admin/data-field-validate";
 		$.rad.post('/api', params, function(data) {
 			if (data.record.validation_result == '') {
-			    $.rad.notify('Function validated', 'Validation was successful for this function');
-			    $('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-success').html('Validation successful').show();
+				$.rad.notify('Function validated', 'Validation was successful for this function');
+				$('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-success').html('Validation successful').show();
 			} else {
 				$.rad.notify.error('Function incorrect', 'Validation failed for this function');
 				$('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-danger').html(data.record.validation_result).show();
@@ -430,17 +430,17 @@ $(document).ready(function() {
 	});
 
 	$('#tags_<?php echo $data_field->getId() ?>').selectize({
-	    delimiter: ',',
-	    persist: true,
-	    searchField: ['name'],
-	    valueField: 'name',
-	    labelField: 'name',
-	    options: [
+		delimiter: ',',
+		persist: true,
+		searchField: ['name'],
+		valueField: 'name',
+		labelField: 'name',
+		options: [
 			{ name: "<?php echo implode('"}, {name: "', $tags) ?>" }
 		],
-	    create: function(input) {
-	        return {name: input}
-	    }
+		create: function(input) {
+			return {name: input}
+		}
 	});
 
 	$('#data_field_form_<?php echo $data_field->getId() ?>').form(function(data) {
@@ -470,14 +470,14 @@ $(document).ready(function() {
 		if ($(this).val() == '1') {
 			// Convert Yes/No to 1/0
 			var custom_code = 'if (strtoupper(trim($value)) == "YES") {' + "\n";
-			custom_code += '    return "1";' + "\n";
+			custom_code += '	return "1";' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'return "0";' + "\n";
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
 		} else if ($(this).val() == '2') {
 			// Check if a value is in an array
 			var custom_code = 'if (in_array("value_to_find", $value)) {' + "\n";
-			custom_code += '    return "1";' + "\n";
+			custom_code += '	return "1";' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'return "0";' + "\n";
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
@@ -488,23 +488,23 @@ $(document).ready(function() {
 		} else if ($(this).val() == '4') {
 			// Find the city based on the zipcode
 			var custom_code = 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>");' + "\n";
+			custom_code += '	return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("city")->getKeyname() ?>");' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    // do a lookup based on the zipcode' + "\n";
-			custom_code += '    $city = \\Flux\\Zip::lookupCity($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
-			custom_code += '    return $city;' + "\n";
+			custom_code += '	// do a lookup based on the zipcode' + "\n";
+			custom_code += '	$city = \\Flux\\Zip::lookupCity($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
+			custom_code += '	return $city;' + "\n";
 			custom_code += '}' + "\n";			
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
 		} else if ($(this).val() == '5') {
 			// Find the state based on the zipcode
 			var custom_code = 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("state")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("state")->getKeyname() ?>");' + "\n";
+			custom_code += '	return $lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("state")->getKeyname() ?>");' + "\n";
 			custom_code += '}' + "\n";
 			custom_code += 'if ($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>") != "") {' + "\n";
-			custom_code += '    // do a lookup based on the zipcode' + "\n";
-			custom_code += '    $state = \\Flux\\Zip::lookupState($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
-			custom_code += '    return $state;' + "\n";
+			custom_code += '	// do a lookup based on the zipcode' + "\n";
+			custom_code += '	$state = \\Flux\\Zip::lookupState($lead->getValue("<?php echo \Flux\DataField::retrieveDataFieldFromName("zip")->getKeyname() ?>"));' + "\n";
+			custom_code += '	return $state;' + "\n";
 			custom_code += '}' + "\n";			
 			$('#custom_code_<?php echo $data_field->getId() ?>').val(custom_code);
 		}

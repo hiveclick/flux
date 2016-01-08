@@ -22,39 +22,39 @@ class GenericSingleEmail extends ExportAbstract {
 	
 	/**
 	 * Sends the leads and returns the results
-	 * @param array $split_queue_attempts
+	 * @param array $lead_split_attempts
 	 * @return boolean
 	 */
-	function send($split_queue_attempts, $is_test = false) {
+	function send($lead_split_attempts, $is_test = false) {
 		/*
 		 * Here we will handle realtime emails, where each lead is sent out in an individual email
 		*/
 
-		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-		foreach ($split_queue_attempts as $key => $split_queue_attempt) {
-		    $split_queue_attempt->setStartTime(microtime(true));
-		    		    
+		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
+		foreach ($lead_split_attempts as $key => $lead_split_attempt) {
+			$lead_split_attempt->setStartTime(microtime(true));
+						
 			$buffer = array();
 			$buffer[] = 'Please review the following lead:';
 			$buffer[] = '';
 		
-			$params = $split_queue_attempt->mergeLead();
+			$params = $lead_split_attempt->mergeLead();
 			/* @var $mapping \Flux\FulfillmentMap */
 			foreach ($params as $key => $value) {
-		        $line = '<b>' . $key . '</b>: ';
-		        if (is_array($value)) {
-		            $line .= ' ' . implode(", ", $value);
-		        } else {
-                    $line .= ' ' . $value;
-		        }
-			    $buffer[] = $line;
+				$line = '<b>' . $key . '</b>: ';
+				if (is_array($value)) {
+					$line .= ' ' . implode(", ", $value);
+				} else {
+					$line .= ' ' . $value;
+				}
+				$buffer[] = $line;
 			}
 			
 			$buffer[] = '';
 			$buffer[] = '';
 			$buffer[] = '';
 		
-			$split_queue_attempt->setRequest(implode("\n", $buffer));
+			$lead_split_attempt->setRequest(implode("\n", $buffer));
 			
 			// Format the email and send it out
 			$options = array(
@@ -84,30 +84,30 @@ class GenericSingleEmail extends ExportAbstract {
 			$message->setFrom(MO_MAIL_USERNAME, 'Leads');
 			$message->getHeaders()->addHeaderLine('Content-Type', 'multipart/alternative');
 		
-			foreach ($split_queue_attempt->getFulfillment()->getFulfillment()->getEmailAddress() as $email_address) {
+			foreach ($lead_split_attempt->getFulfillment()->getFulfillment()->getEmailAddress() as $email_address) {
 				$message->addTo($email_address);
 			}
 			$message->setSubject('Leads for ' . date('m/d/Y'));
 		
 			if (!$is_test) {
-    			try {
-    				$transport->send($message);
-                    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-    				$split_queue_attempt->setResponse('Sent');
-    				$split_queue_attempt->setIsError(false);
-    			} catch (\Exception $e) {
-    			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-    				$split_queue_attempt->setResponse($e->getMessage());
-    				$split_queue_attempt->setErrorMessage($e->getMessage());
-    				$split_queue_attempt->setIsError(false);
-    			}
+				try {
+					$transport->send($message);
+					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+					$lead_split_attempt->setResponse('Sent');
+					$lead_split_attempt->setIsError(false);
+				} catch (\Exception $e) {
+					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+					$lead_split_attempt->setResponse($e->getMessage());
+					$lead_split_attempt->setErrorMessage($e->getMessage());
+					$lead_split_attempt->setIsError(false);
+				}
 			} else {
-			    $split_queue_attempt->setResponseTime(microtime(true) - $split_queue_attempt->getStartTime());
-			    $split_queue_attempt->setResponse('Sent');
-			    $split_queue_attempt->setIsError(false);
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponse('Sent');
+				$lead_split_attempt->setIsError(false);
 			}
 		}
-		return $split_queue_attempts;
+		return $lead_split_attempts;
 	}
 	
 }

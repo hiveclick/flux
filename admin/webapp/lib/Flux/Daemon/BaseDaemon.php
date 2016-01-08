@@ -82,7 +82,7 @@ abstract class BaseDaemon {
 		if ($this->getPrimaryThread()) {
 			$initial_identifier_array = array($this->name . ' (P)', date('Y-m-d H:i:s'));
 		} else {
-			$initial_identifier_array = array($this->name . '    ', date('Y-m-d H:i:s'));
+			$initial_identifier_array = array($this->name . '	', date('Y-m-d H:i:s'));
 		}
 		$identifier_array = array_merge($initial_identifier_array, $identifier_array);
 
@@ -102,14 +102,14 @@ abstract class BaseDaemon {
 	 * @return \Rdm\Record
 	 */
 	protected function updateLastRunTime() {
-	    $daemon = new \Flux\Daemon();
-	    $daemon->setClassName('\\' . get_class($this));
-	    $daemon->queryByClass();
-	    if (\MongoId::isValid($daemon->getId())) {
-	        $daemon->setStartTime(new \MongoDate());
-	        $daemon->update();
-	    }
-	    return true;
+		$daemon = new \Flux\Daemon();
+		$daemon->setClassName('\\' . get_class($this));
+		$daemon->queryByClass();
+		if (\MongoId::isValid($daemon->getId())) {
+			$daemon->setStartTime(new \MongoDate());
+			$daemon->update();
+		}
+		return true;
 	}
 	
 	/**

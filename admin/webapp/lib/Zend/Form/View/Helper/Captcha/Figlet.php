@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -15,40 +15,40 @@ use Zend\Form\Exception;
 
 class Figlet extends AbstractWord
 {
-    /**
-     * Render the captcha
-     *
-     * @param  ElementInterface $element
-     * @throws Exception\DomainException
-     * @return string
-     */
-    public function render(ElementInterface $element)
-    {
-        $captcha = $element->getCaptcha();
+	/**
+	 * Render the captcha
+	 *
+	 * @param  ElementInterface $element
+	 * @throws Exception\DomainException
+	 * @return string
+	 */
+	public function render(ElementInterface $element)
+	{
+		$captcha = $element->getCaptcha();
 
-        if ($captcha === null || !$captcha instanceof CaptchaAdapter) {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has a "captcha" attribute of type Zend\Captcha\Figlet; none found',
-                __METHOD__
-            ));
-        }
+		if ($captcha === null || !$captcha instanceof CaptchaAdapter) {
+			throw new Exception\DomainException(sprintf(
+				'%s requires that the element has a "captcha" attribute of type Zend\Captcha\Figlet; none found',
+				__METHOD__
+			));
+		}
 
-        $captcha->generate();
+		$captcha->generate();
 
-        $figlet = sprintf(
-            '<pre>%s</pre>',
-            $captcha->getFiglet()->render($captcha->getWord())
-        );
+		$figlet = sprintf(
+			'<pre>%s</pre>',
+			$captcha->getFiglet()->render($captcha->getWord())
+		);
 
-        $position     = $this->getCaptchaPosition();
-        $separator    = $this->getSeparator();
-        $captchaInput = $this->renderCaptchaInputs($element);
+		$position	 = $this->getCaptchaPosition();
+		$separator	= $this->getSeparator();
+		$captchaInput = $this->renderCaptchaInputs($element);
 
-        $pattern = '%s%s%s';
-        if ($position == self::CAPTCHA_PREPEND) {
-            return sprintf($pattern, $captchaInput, $separator, $figlet);
-        }
+		$pattern = '%s%s%s';
+		if ($position == self::CAPTCHA_PREPEND) {
+			return sprintf($pattern, $captchaInput, $separator, $figlet);
+		}
 
-        return sprintf($pattern, $figlet, $separator, $captchaInput);
-    }
+		return sprintf($pattern, $figlet, $separator, $captchaInput);
+	}
 }

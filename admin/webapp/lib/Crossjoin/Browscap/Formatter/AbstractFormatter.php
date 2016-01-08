@@ -40,24 +40,24 @@ namespace Crossjoin\Browscap\Formatter;
  */
 abstract class AbstractFormatter
 {
-    /**
-     * Variable to save the settings in, type depends on implementation
-     *
-     * @var mixed
-     */
-    protected $settings;
+	/**
+	 * Variable to save the settings in, type depends on implementation
+	 *
+	 * @var mixed
+	 */
+	protected $settings;
 
-    /**
-     * Sets the data (done by the parser)
-     *
-     * @param array $settings
-     */
-    abstract public function setData(array $settings);
+	/**
+	 * Sets the data (done by the parser)
+	 *
+	 * @param array $settings
+	 */
+	abstract public function setData(array $settings);
 
-    /**
-     * Gets the data (in the preferred format)
-     *
-     * @return mixed
-     */
-    abstract public function getData();
+	/**
+	 * Gets the data (in the preferred format)
+	 *
+	 * @return mixed
+	 */
+	abstract public function getData();
 }

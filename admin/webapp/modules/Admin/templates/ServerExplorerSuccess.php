@@ -22,15 +22,15 @@
 	<style>
 	body {
 		margin: 5px;
-	    padding: 0px;
+		padding: 0px;
 	}
 	
 	table {
-	    font-Size: 8pt;
+		font-Size: 8pt;
 		line-height: 8pt;
-	    color: #666666;
-	    margin: 5px;
-	    padding: 0px;
+		color: #666666;
+		margin: 5px;
+		padding: 0px;
 	}
 	</style>
 </head>

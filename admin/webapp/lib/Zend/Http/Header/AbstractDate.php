@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -28,203 +28,203 @@ use DateTimeZone;
  */
 abstract class AbstractDate implements HeaderInterface
 {
-    /**
-     * Date formats according to RFC 2616
-     * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3
-     */
-    const DATE_RFC1123 = 0;
-    const DATE_RFC1036 = 1;
-    const DATE_ANSIC   = 2;
+	/**
+	 * Date formats according to RFC 2616
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3
+	 */
+	const DATE_RFC1123 = 0;
+	const DATE_RFC1036 = 1;
+	const DATE_ANSIC   = 2;
 
-    /**
-     * Date instance for this header
-     *
-     * @var DateTime
-     */
-    protected $date = null;
+	/**
+	 * Date instance for this header
+	 *
+	 * @var DateTime
+	 */
+	protected $date = null;
 
-    /**
-     * Date output format
-     *
-     * @var string
-     */
-    protected static $dateFormat = 'D, d M Y H:i:s \G\M\T';
+	/**
+	 * Date output format
+	 *
+	 * @var string
+	 */
+	protected static $dateFormat = 'D, d M Y H:i:s \G\M\T';
 
-    /**
-     * Date formats defined by RFC 2616. RFC 1123 date is required
-     * RFC 1036 and ANSI C formats are provided for compatibility with old servers/clients
-     * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3
-     *
-     * @var array
-     */
-    protected static $dateFormats = array(
-        self::DATE_RFC1123 => 'D, d M Y H:i:s \G\M\T',
-        self::DATE_RFC1036 => 'D, d M y H:i:s \G\M\T',
-        self::DATE_ANSIC   => 'D M j H:i:s Y',
-    );
+	/**
+	 * Date formats defined by RFC 2616. RFC 1123 date is required
+	 * RFC 1036 and ANSI C formats are provided for compatibility with old servers/clients
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3
+	 *
+	 * @var array
+	 */
+	protected static $dateFormats = array(
+		self::DATE_RFC1123 => 'D, d M Y H:i:s \G\M\T',
+		self::DATE_RFC1036 => 'D, d M y H:i:s \G\M\T',
+		self::DATE_ANSIC   => 'D M j H:i:s Y',
+	);
 
-    /**
-     * Create date-based header from string
-     *
-     * @param string $headerLine
-     * @return AbstractDate
-     * @throws Exception\InvalidArgumentException
-     */
-    public static function fromString($headerLine)
-    {
-        $dateHeader = new static();
+	/**
+	 * Create date-based header from string
+	 *
+	 * @param string $headerLine
+	 * @return AbstractDate
+	 * @throws Exception\InvalidArgumentException
+	 */
+	public static function fromString($headerLine)
+	{
+		$dateHeader = new static();
 
-        list($name, $date) = GenericHeader::splitHeaderLine($headerLine);
+		list($name, $date) = GenericHeader::splitHeaderLine($headerLine);
 
-        // check to ensure proper header type for this factory
-        if (strtolower($name) !== strtolower($dateHeader->getFieldName())) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid header line for "' . $dateHeader->getFieldName() . '" header string'
-            );
-        }
+		// check to ensure proper header type for this factory
+		if (strtolower($name) !== strtolower($dateHeader->getFieldName())) {
+			throw new Exception\InvalidArgumentException(
+				'Invalid header line for "' . $dateHeader->getFieldName() . '" header string'
+			);
+		}
 
-        $dateHeader->setDate($date);
+		$dateHeader->setDate($date);
 
-        return $dateHeader;
-    }
+		return $dateHeader;
+	}
 
-    /**
-     * Set date output format
-     *
-     * @param int $format
-     * @throws Exception\InvalidArgumentException
-     */
-    public static function setDateFormat($format)
-    {
-        if (!isset(static::$dateFormats[$format])) {
-            throw new Exception\InvalidArgumentException(
-                "No constant defined for provided date format: {$format}"
-            );
-        }
+	/**
+	 * Set date output format
+	 *
+	 * @param int $format
+	 * @throws Exception\InvalidArgumentException
+	 */
+	public static function setDateFormat($format)
+	{
+		if (!isset(static::$dateFormats[$format])) {
+			throw new Exception\InvalidArgumentException(
+				"No constant defined for provided date format: {$format}"
+			);
+		}
 
-        static::$dateFormat = static::$dateFormats[$format];
-    }
+		static::$dateFormat = static::$dateFormats[$format];
+	}
 
-    /**
-     * Return current date output format
-     *
-     * @return string
-     */
-    public static function getDateFormat()
-    {
-        return static::$dateFormat;
-    }
+	/**
+	 * Return current date output format
+	 *
+	 * @return string
+	 */
+	public static function getDateFormat()
+	{
+		return static::$dateFormat;
+	}
 
-    /**
-     * Set the date for this header, this can be a string or an instance of \DateTime
-     *
-     * @param string|DateTime $date
-     * @return AbstractDate
-     * @throws Exception\InvalidArgumentException
-     */
-    public function setDate($date)
-    {
-        if (is_string($date)) {
-            try {
-                $date = new DateTime($date, new DateTimeZone('GMT'));
-            } catch (\Exception $e) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid date passed as string (%s)', (string) $date),
-                    $e->getCode(),
-                    $e
-                );
-            }
-        } elseif (!($date instanceof DateTime)) {
-            throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
-        }
+	/**
+	 * Set the date for this header, this can be a string or an instance of \DateTime
+	 *
+	 * @param string|DateTime $date
+	 * @return AbstractDate
+	 * @throws Exception\InvalidArgumentException
+	 */
+	public function setDate($date)
+	{
+		if (is_string($date)) {
+			try {
+				$date = new DateTime($date, new DateTimeZone('GMT'));
+			} catch (\Exception $e) {
+				throw new Exception\InvalidArgumentException(
+					sprintf('Invalid date passed as string (%s)', (string) $date),
+					$e->getCode(),
+					$e
+				);
+			}
+		} elseif (!($date instanceof DateTime)) {
+			throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
+		}
 
-        $date->setTimezone(new DateTimeZone('GMT'));
-        $this->date = $date;
+		$date->setTimezone(new DateTimeZone('GMT'));
+		$this->date = $date;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Return date for this header
-     *
-     * @return string
-     */
-    public function getDate()
-    {
-        return $this->date()->format(static::$dateFormat);
-    }
+	/**
+	 * Return date for this header
+	 *
+	 * @return string
+	 */
+	public function getDate()
+	{
+		return $this->date()->format(static::$dateFormat);
+	}
 
-    /**
-     * Return date for this header as an instance of \DateTime
-     *
-     * @return DateTime
-     */
-    public function date()
-    {
-        if ($this->date === null) {
-            $this->date = new DateTime(null, new DateTimeZone('GMT'));
-        }
-        return $this->date;
-    }
+	/**
+	 * Return date for this header as an instance of \DateTime
+	 *
+	 * @return DateTime
+	 */
+	public function date()
+	{
+		if ($this->date === null) {
+			$this->date = new DateTime(null, new DateTimeZone('GMT'));
+		}
+		return $this->date;
+	}
 
-    /**
-     * Compare provided date to date for this header
-     * Returns < 0 if date in header is less than $date; > 0 if it's greater, and 0 if they are equal.
-     * @see \strcmp()
-     *
-     * @param string|DateTime $date
-     * @return int
-     * @throws Exception\InvalidArgumentException
-     */
-    public function compareTo($date)
-    {
-        if (is_string($date)) {
-            try {
-                $date = new DateTime($date, new DateTimeZone('GMT'));
-            } catch (\Exception $e) {
-                throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid Date passed as string (%s)', (string) $date),
-                    $e->getCode(),
-                    $e
-                );
-            }
-        } elseif (!($date instanceof DateTime)) {
-            throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
-        }
+	/**
+	 * Compare provided date to date for this header
+	 * Returns < 0 if date in header is less than $date; > 0 if it's greater, and 0 if they are equal.
+	 * @see \strcmp()
+	 *
+	 * @param string|DateTime $date
+	 * @return int
+	 * @throws Exception\InvalidArgumentException
+	 */
+	public function compareTo($date)
+	{
+		if (is_string($date)) {
+			try {
+				$date = new DateTime($date, new DateTimeZone('GMT'));
+			} catch (\Exception $e) {
+				throw new Exception\InvalidArgumentException(
+					sprintf('Invalid Date passed as string (%s)', (string) $date),
+					$e->getCode(),
+					$e
+				);
+			}
+		} elseif (!($date instanceof DateTime)) {
+			throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
+		}
 
-        $dateTimestamp = $date->getTimestamp();
-        $thisTimestamp = $this->date()->getTimestamp();
+		$dateTimestamp = $date->getTimestamp();
+		$thisTimestamp = $this->date()->getTimestamp();
 
-        return ($thisTimestamp === $dateTimestamp) ? 0 : (($thisTimestamp > $dateTimestamp) ? 1 : -1);
-    }
+		return ($thisTimestamp === $dateTimestamp) ? 0 : (($thisTimestamp > $dateTimestamp) ? 1 : -1);
+	}
 
-    /**
-     * Get header value as formatted date
-     *
-     * @return string
-     */
-    public function getFieldValue()
-    {
-        return $this->getDate();
-    }
+	/**
+	 * Get header value as formatted date
+	 *
+	 * @return string
+	 */
+	public function getFieldValue()
+	{
+		return $this->getDate();
+	}
 
-    /**
-     * Return header line
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return $this->getFieldName() . ': ' . $this->getDate();
-    }
+	/**
+	 * Return header line
+	 *
+	 * @return string
+	 */
+	public function toString()
+	{
+		return $this->getFieldName() . ': ' . $this->getDate();
+	}
 
-    /**
-     * Allow casting to string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
-    }
+	/**
+	 * Allow casting to string
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->toString();
+	}
 }

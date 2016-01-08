@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Lead extends CommonForm {
+class Lead extends BasicLink {
 	
-	protected $lead_id;
-	protected $lead_name;
 	protected $offer;
 	protected $client;
 	protected $campaign;
@@ -22,10 +18,7 @@ class Lead extends CommonForm {
 	 * @return integer
 	 */
 	function getLeadId() {
-		if (is_null($this->lead_id)) {
-			$this->lead_id = null;
-		}
-		return $this->lead_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -33,25 +26,30 @@ class Lead extends CommonForm {
 	 * @var integer
 	 */
 	function setLeadId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->lead_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->lead_id = $arg0;
-	    }
+		return $this->setId($arg0);
+	}
+	
+	/**
+	 * Sets the lead_id
+	 * @var integer
+	 */
+	function setId($arg0) {
+		parent::setId($arg0);
+		
 		// Try to set the other fields
 		if (trim($this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln')) != '') {
-            $this->setLeadName((string)$this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
+			$this->setName((string)$this->getLead()->getValue('fn') . ' ' . $this->getLead()->getValue('ln'));
 		} else {
-		    $this->setLeadName((string)$this->getLead()->getValue('name'));
+			$this->setName((string)$this->getLead()->getValue('name'));
 		}
 		$this->setEmail($this->getLead()->getValue('em'));
 		$this->setPhone($this->getLead()->getValue('ph'));
 		if ($this->getLead()->getId() instanceof \MongoId) {
 			$this->setLeadCreated($this->getLead()->getId()->getTimestamp());
 		}
-		$this->setOffer($this->getLead()->getTracking()->getOffer()->getOfferId());
-		$this->setClient($this->getLead()->getTracking()->getClient()->getClientId());
-		$this->setCampaign($this->getLead()->getTracking()->getCampaign()->getCampaignId());
+		$this->setOffer($this->getLead()->getTracking()->getOffer()->getId());
+		$this->setClient($this->getLead()->getTracking()->getClient()->getId());
+		$this->setCampaign($this->getLead()->getTracking()->getCampaign()->getId());
 		return $this;
 	}
 	
@@ -60,10 +58,7 @@ class Lead extends CommonForm {
 	 * @return string
 	 */
 	function getLeadName() {
-		if (is_null($this->lead_name)) {
-			$this->lead_name = "";
-		}
-		return $this->lead_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -71,8 +66,7 @@ class Lead extends CommonForm {
 	 * @var string
 	 */
 	function setLeadName($arg0) {
-		$this->lead_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -134,21 +128,21 @@ class Lead extends CommonForm {
 		if (is_array($arg0)) {
 			$this->offer = $this->getOffer();
 			$this->offer->populate($arg0);
-			if (\Mongoid::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
-				$this->offer->setOfferName($this->offer->getOffer()->getName());
+			if (\Mongoid::isValid($this->offer->getId()) && $this->offer->getName() == '') {
+				$this->offer->setName($this->offer->getOffer()->getName());
 			}
 		} else if (is_string($arg0)) {
 			$this->offer = $this->getOffer();
-			$this->offer->setOfferId($arg0);
-			if (\Mongoid::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
-				$this->offer->setOfferName($this->offer->getOffer()->getName());
+			$this->offer->setId($arg0);
+			if (\Mongoid::isValid($this->offer->getId()) && $this->offer->getName() == '') {
+				$this->offer->setName($this->offer->getOffer()->getName());
 			}
 		} else if ($arg0 instanceof \MongoId) {
-		    $this->offer = $this->getOffer();
-		    $this->offer->setOfferId($arg0);
-		    if (\Mongoid::isValid($this->offer->getOfferId()) && $this->offer->getOfferName() == '') {
-		        $this->offer->setOfferName($this->offer->getOffer()->getName());
-		    }
+			$this->offer = $this->getOffer();
+			$this->offer->setId($arg0);
+			if (\Mongoid::isValid($this->offer->getId()) && $this->offer->getName() == '') {
+				$this->offer->setName($this->offer->getOffer()->getName());
+			}
 		}
 		return $this;
 	}
@@ -172,21 +166,21 @@ class Lead extends CommonForm {
 		if (is_array($arg0)) {
 			$this->client = $this->getClient();
 			$this->client->populate($arg0);
-			if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
-				$this->client->setClientName($this->client->getClient()->getName());
+			if (\MongoId::isValid($this->client->getId()) && $this->client->getName() == '') {
+				$this->client->setName($this->client->getClient()->getName());
 			}
 		} else if (is_string($arg0)) {
 			$this->client = $this->getClient();
-			$this->client->setClientId($arg0);
-			if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
-				$this->client->setClientName($this->client->getClient()->getName());
+			$this->client->setId($arg0);
+			if (\MongoId::isValid($this->client->getId()) && $this->client->getName() == '') {
+				$this->client->setName($this->client->getClient()->getName());
 			}
 		} else if ($arg0 instanceof \MongoId) {
-		    $this->client = $this->getClient();
-		    $this->client->setClientId($arg0);
-		    if (\MongoId::isValid($this->client->getClientId()) && $this->client->getClientName() == '') {
-		        $this->client->setClientName($this->client->getClient()->getName());
-		    }
+			$this->client = $this->getClient();
+			$this->client->setId($arg0);
+			if (\MongoId::isValid($this->client->getId()) && $this->client->getName() == '') {
+				$this->client->setName($this->client->getClient()->getName());
+			}
 		}
 		return $this;
 	}
@@ -210,20 +204,20 @@ class Lead extends CommonForm {
 		if (is_array($arg0)) {
 			$this->campaign = $this->getCampaign();
 			$this->campaign->populate($arg0);
-			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignName() == '') {
-				$this->campaign->setCampaignName((string)$this->campaign->getCampaignId());
+			if (\MongoId::isValid($this->campaign->getId()) && $this->campaign->getName() == '') {
+				$this->campaign->setName((string)$this->campaign->getId());
 			}
-			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignDescription() == '') {
-			    $this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
+			if (\MongoId::isValid($this->campaign->getId()) && $this->campaign->getCampaignDescription() == '') {
+				$this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
 			}
 		} else if (is_string($arg0)) {
 			$this->campaign = $this->getCampaign();
-			$this->campaign->setCampaignId($arg0);
-			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignName() == '') {
-				$this->campaign->setCampaignName((string)$this->campaign->getCampaignId());
+			$this->campaign->setId($arg0);
+			if (\MongoId::isValid($this->campaign->getId()) && $this->campaign->getName() == '') {
+				$this->campaign->setName((string)$this->campaign->getId());
 			}
-			if (\MongoId::isValid($this->campaign->getCampaignId()) && $this->campaign->getCampaignDescription() == '') {
-			    $this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
+			if (\MongoId::isValid($this->campaign->getId()) && $this->campaign->getCampaignDescription() == '') {
+				$this->campaign->setCampaignDescription((string)$this->campaign->getCampaign()->getDescription());
 			}
 		}
 		return $this;
@@ -256,7 +250,7 @@ class Lead extends CommonForm {
 	function getLead() {
 		if (is_null($this->lead)) {
 			$this->lead = new \Flux\Lead();
-			$this->lead->setId($this->getLeadId());
+			$this->lead->setId($this->getId());
 			$this->lead->query();
 		}
 		return $this->lead;

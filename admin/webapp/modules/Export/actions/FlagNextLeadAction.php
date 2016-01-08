@@ -25,80 +25,80 @@ class FlagNextLeadAction extends BasicAction
 	 */
 	public function execute ()
 	{
-	    if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::GET) {
-    		/* @var $split_queue Flux\SplitQueue */
-    		$split_queue = new \Flux\SplitQueue();
-    		$split_queue->populate($_GET);
-    		$split_queue->query();
-    		
-    		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
-    		return View::INPUT;
-	    } else if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::POST) {
-	        /* @var $split_queue Flux\SplitQueue */
-	        $split_queue = new \Flux\SplitQueue();
-	        $split_queue->populate($_POST);
-	        $split_queue->query();
-	        
-	        /* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-	        $split_queue_attempt = new \Flux\SplitQueueAttempt();
-	        $split_queue_attempt->setAttemptTime(new \MongoDate());
-	        $split_queue_attempt->setFulfillment(array('fulfillment_id' => 0, 'fulfillment_name' => 'uBot Script'));
-	        $split_queue_attempt->setResponse($_POST['response']);
-	        if (isset($_POST['error_message']) && trim($_POST['error_message']) != '') {
-	            $split_queue_attempt->setErrorMessage($_POST['error_message']);
-	            $split_queue_attempt->setIsError(true);
-	            $split_queue->setErrorMessage($_POST['error_message']);
-	        }
-	        if (isset($_POST['disposition']) && trim($_POST['disposition']) != '') {
-	            $split_queue->setDisposition($_POST['disposition']);
-	        }
-	        if (isset($_FILES['screenshot'])) {
-	            if (file_exists($_FILES['screenshot']['tmp_name'])) {
-                    $split_queue_attempt->setScreenshot(base64_encode(file_get_contents($_FILES['screenshot']['tmp_name'])));
-	            }
-	        }
-	        $split_queue->addAttempt($split_queue_attempt);
-	        $split_queue->setLastAttemptTime(new \MongoDate());
-	        $split_queue->update();	   
+		if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::GET) {
+			/* @var $lead_split Flux\LeadSplit */
+			$lead_split = new \Flux\LeadSplit();
+			$lead_split->populate($_GET);
+			$lead_split->query();
+			
+			$this->getContext()->getRequest()->setAttribute("lead_split", $lead_split);
+			return View::INPUT;
+		} else if ($this->getContext()->getRequest()->getMethod() == \Mojavi\Request\Request::POST) {
+			/* @var $lead_split Flux\LeadSplit */
+			$lead_split = new \Flux\LeadSplit();
+			$lead_split->populate($_POST);
+			$lead_split->query();
+			
+			/* @var $split_queue_attempt \Flux\LeadSplitAttempt */
+			$lead_split_attempt = new \Flux\LeadSplitAttempt();
+			$lead_split_attempt->setAttemptTime(new \MongoDate());
+			$lead_split_attempt->setFulfillment(array('fulfillment_id' => 0, 'fulfillment_name' => 'uBot Script'));
+			$lead_split_attempt->setResponse($_POST['response']);
+			if (isset($_POST['error_message']) && trim($_POST['error_message']) != '') {
+				$lead_split_attempt->setErrorMessage($_POST['error_message']);
+				$lead_split_attempt->setIsError(true);
+				$lead_split->setErrorMessage($_POST['error_message']);
+			}
+			if (isset($_POST['disposition']) && trim($_POST['disposition']) != '') {
+				$lead_split->setDisposition($_POST['disposition']);
+			}
+			if (isset($_FILES['screenshot'])) {
+				if (file_exists($_FILES['screenshot']['tmp_name'])) {
+					$lead_split_attempt->setScreenshot(base64_encode(file_get_contents($_FILES['screenshot']['tmp_name'])));
+				}
+			}
+			$lead_split->addAttempt($lead_split_attempt);
+			$lead_split->setLastAttemptTime(new \MongoDate());
+			$lead_split->update();	   
 
-	        if ($split_queue->getDisposition() == \Flux\SplitQueue::DISPOSITION_FULFILLED) {
-	            // Add a fulfilled event to the lead
-    	        /* @var $lead \Flux\Lead */
-    	        $lead = $split_queue->getLead()->getLead();
-    	        $lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
-    	        $lead->update();
-    	        
-    	        // Add/Update the lead reporting
-    	        /* @var $report_lead \Flux\ReportLead */
-    	        $report_lead = new \Flux\ReportLead();
-    	        $report_lead->setLead($lead->getId());
-    	        $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
-    	        $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-    	        $report_lead->setRevenue($split_queue->getSplit()->getSplit()->getFulfillment()->getFulfillment()->getBounty());
-    	        if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
-                    $report_lead->setPayout($lead->getTracking()->getCampaign()->getCampaign()->getPayout());
-    	        } else {
-    	            $report_lead->setPayout($lead->getTracking()->getOffer()->getOffer()->getPayout());
-    	        }
-    	        $report_lead->setReportDate(new \MongoDate());
-    	        $report_lead->setAccepted(true);
-    	        $report_lead->insert();
-	        } else {
-	            /* @var $report_lead \Flux\ReportLead */
-	            $report_lead = new \Flux\ReportLead();
-	            $lead = $split_queue->getLead()->getLead();
-	            $report_lead->setLead($lead->getId());
-	            $report_lead->setClient($lead->getTracking()->getClient()->getClientId());
-	            $report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
-	            $report_lead->setRevenue(0.00);
-	            $report_lead->setPayout(0.00);
-	            $report_lead->setReportDate(new \MongoDate());
-	            $report_lead->insert();
-	        }
-	        
-	        $this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
-	        return View::SUCCESS;
-	    }
+			if ($lead_split->getDisposition() == \Flux\SplitQueue::DISPOSITION_FULFILLED) {
+				// Add a fulfilled event to the lead
+				/* @var $lead \Flux\Lead */
+				$lead = $lead_split->getLead()->getLead();
+				$lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
+				$lead->update();
+				
+				// Add/Update the lead reporting
+				/* @var $report_lead \Flux\ReportLead */
+				$report_lead = new \Flux\ReportLead();
+				$report_lead->setLead($lead->getId());
+				$report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+				$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
+				$report_lead->setRevenue($lead_split->getSplit()->getSplit()->getFulfillment()->getFulfillment()->getBounty());
+				if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
+					$report_lead->setPayout($lead->getTracking()->getCampaign()->getCampaign()->getPayout());
+				} else {
+					$report_lead->setPayout($lead->getTracking()->getOffer()->getOffer()->getPayout());
+				}
+				$report_lead->setReportDate(new \MongoDate());
+				$report_lead->setAccepted(true);
+				$report_lead->insert();
+			} else {
+				/* @var $report_lead \Flux\ReportLead */
+				$report_lead = new \Flux\ReportLead();
+				$lead = $lead_split->getLead()->getLead();
+				$report_lead->setLead($lead->getId());
+				$report_lead->setClient($lead->getTracking()->getClient()->getClientId());
+				$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
+				$report_lead->setRevenue(0.00);
+				$report_lead->setPayout(0.00);
+				$report_lead->setReportDate(new \MongoDate());
+				$report_lead->insert();
+			}
+			
+			$this->getContext()->getRequest()->setAttribute("lead_split", $lead_split);
+			return View::SUCCESS;
+		}
 	}
 }
 

@@ -8,10 +8,10 @@ class GraphConversionByHour extends GoogleChart {
 	const GROUP_TYPE_OFFER = 1;
 	const GROUP_TYPE_SUBID = 2;
 	
-    private $offer_id_array;
-    private $campaign_id_array;
-    private $group_type;
-    
+	private $offer_id_array;
+	private $campaign_id_array;
+	private $group_type;
+	
 	/**
 	 * Runs the report and stores the data
 	 * @return boolean
@@ -29,9 +29,9 @@ class GraphConversionByHour extends GoogleChart {
 				}
 			}
 			foreach ($header_col_names as $header_col_name) {
-			    if (trim($header_col_name) != '') {
-				     $this->addColumn('', $header_col_name, 'number');
-			    }
+				if (trim($header_col_name) != '') {
+					 $this->addColumn('', $header_col_name, 'number');
+				}
 			}
 		} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
 			// Add columns for each subid
@@ -49,8 +49,8 @@ class GraphConversionByHour extends GoogleChart {
 		}
 		
 		if (count($this->getCols()) == 1) {
-		    // We have not data, so use dummy data
-		    $this->addColumn(null, 'No Data', 'number');
+			// We have not data, so use dummy data
+			$this->addColumn(null, 'No Data', 'number');
 		}
 		
 		// Add default rows for each hour and each offer
@@ -111,7 +111,7 @@ class GraphConversionByHour extends GoogleChart {
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
 						),
-					    'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME
+						'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME
 					)
 				)
 			)
@@ -144,12 +144,12 @@ class GraphConversionByHour extends GoogleChart {
 		);
 		
 		$ops[] = array('$match' => array(
-		    '_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME,
-		    '_e.t' =>
-		    array(
-		        '$gte' => new \MongoDate($this->getStartDate()),
-		        '$lt' => new \MongoDate($this->getEndDate())
-		    )
+			'_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME,
+			'_e.t' =>
+			array(
+				'$gte' => new \MongoDate($this->getStartDate()),
+				'$lt' => new \MongoDate($this->getEndDate())
+			)
 		));
 		
 		

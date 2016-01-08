@@ -1,5 +1,5 @@
 <?php
-    /* @var $revenue_report \Flux\ReportLead */
+	/* @var $revenue_report \Flux\ReportLead */
 	$report_lead = $this->getContext()->getRequest()->getAttribute('report_lead', array());
 ?>
 <div class="page-header">
@@ -22,25 +22,25 @@
 			<input type="hidden" id="sort" name="sort" value="name" />
 			<input type="hidden" id="sord" name="sord" value="asc" />
 			<div class="pull-right">
-    			<div class="form-group text-left">
-    				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
-    			</div>
-    			<div class="form-group text-left">
-    			    <select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
-    			        <option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_PENDING, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
-    			        <option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Accepted</options>
-    			        <option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Disqualified</options>
-    			        <option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Duplicate</options>
-    				</select>
-    			</div>
-    			<div class="form-group text-left">
-                    <select id="report_date" name="report_date" class="form-control" style="width:200px;">
-                        <option value="<?php echo date('m/01/Y') ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y')) ? 'selected' : '' ?>><?php echo date('F Y') ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
-                        <?php for ($i=1;$i<14;$i++) { ?>
-                            <option value="<?php echo date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months'))) ? 'selected' : '' ?>><?php echo date('F Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
-                        <?php } ?>
-            		</select>
-    			</div>
+				<div class="form-group text-left">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
+				</div>
+				<div class="form-group text-left">
+					<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+						<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_PENDING, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
+						<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Accepted</options>
+						<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Disqualified</options>
+						<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Duplicate</options>
+					</select>
+				</div>
+				<div class="form-group text-left">
+					<select id="report_date" name="report_date" class="form-control" style="width:200px;">
+						<option value="<?php echo date('m/01/Y') ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y')) ? 'selected' : '' ?>><?php echo date('F Y') ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+						<?php for ($i=1;$i<14;$i++) { ?>
+							<option value="<?php echo date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months'))) ? 'selected' : '' ?>><?php echo date('F Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+						<?php } ?>
+					</select>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -56,7 +56,7 @@ $(document).ready(function() {
 			return value;
 		}},
 		{id:'report_date', name:'report date', field:'report_date', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-		    var ret_val = moment.unix(value.sec).format("MMM D YYYY");
+			var ret_val = moment.unix(value.sec).format("MMM D YYYY");
 			return ret_val;
 		}},
 		{id:'lead', name:'lead', field:'lead', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
@@ -78,11 +78,11 @@ $(document).ready(function() {
 			var ret_val = '<div style="line-height:16pt;">'
 				if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>) {
 					ret_val += '<span class="text-success">Accepted</span>';
-			    } else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>) {
-			    	ret_val += '<span class="text-danger">Disqualified</span>';
-			    } else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>) {
-			    	ret_val += '<span class="text-muted">Pending</span>';
-			    }
+				} else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>) {
+					ret_val += '<span class="text-danger">Disqualified</span>';
+				} else if (value == <?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>) {
+					ret_val += '<span class="text-muted">Pending</span>';
+				}
 				ret_val += '<div class="small text-muted">';
 				ret_val += dataContext.disposition_message;
 				ret_val += '</div>';
@@ -90,11 +90,11 @@ $(document).ready(function() {
 				return ret_val;
 		}},
 		{id:'accepted', name:'paid', field:'accepted', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-		    if (value) {
-		        return '<div class="text-success">Yes</div>';
-		    } else {
-		    	return '<div class="text-danger">No</div>';
-		    }
+			if (value) {
+				return '<div class="text-success">Yes</div>';
+			} else {
+				return '<div class="text-danger">No</div>';
+			}
 			return value;
 		}}
 	];

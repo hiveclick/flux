@@ -28,9 +28,15 @@ class SplitPaneEditAction extends BasicAction
 	public function execute ()
 	{
 		/* @var $split Flux\Split */
-		$split = new Split();
+		$split = new \Flux\Split();
 		$split->populate($_GET);
 		$split->query();
+		
+		$failover_split = new \Flux\Split();
+		$failover_split->setSort('name');
+		$failover_split->setSord('asc');
+		$failover_split->setIgnorePagination(true);
+		$failover_splits = $failover_split->queryAll();
 		
 		/* @var $offer Flux\Offer */
 		$offer = new \Flux\Offer();
@@ -52,8 +58,11 @@ class SplitPaneEditAction extends BasicAction
 		$data_field->setSord('ASC');
 		$data_field->setIgnorePagination(true);
 		$data_fields = $data_field->queryAll();
+		
+		
 
 		$this->getContext()->getRequest()->setAttribute("split", $split);
+		$this->getContext()->getRequest()->setAttribute("failover_splits", $failover_splits);
 		$this->getContext()->getRequest()->setAttribute("offers", $offers);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);
 		$this->getContext()->getRequest()->setAttribute("data_fields", $data_fields);	

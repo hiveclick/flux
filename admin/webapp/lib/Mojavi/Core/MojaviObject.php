@@ -2,7 +2,7 @@
 /**
  * MojaviObject provides useful methods that all Mojavi classes inherit.
  *
- * @package    Mojavi
+ * @package	Mojavi
  * @subpackage Core
  */
 namespace Mojavi\Core;
@@ -10,40 +10,40 @@ namespace Mojavi\Core;
 abstract class MojaviObject
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Retrieve a string representation of this object.
-     *
-     * @return string A string containing all public variables available in
-     *                this object.
-     */
-    public function toString ()
-    {
+	/**
+	 * Retrieve a string representation of this object.
+	 *
+	 * @return string A string containing all public variables available in
+	 *				this object.
+	 */
+	public function toString ()
+	{
 
-        $output = '';
-        $vars   = get_object_vars($this);
+		$output = '';
+		$vars   = get_object_vars($this);
 
-        foreach ($vars as $key => &$value)
-        {
+		foreach ($vars as $key => &$value)
+		{
 
-            if (strlen($output) > 0)
-            {
+			if (strlen($output) > 0)
+			{
 
-                $output .= ', ';
+				$output .= ', ';
 
-            }
+			}
 
-            $output .= $key . ': ' . $value;
+			$output .= $key . ': ' . $value;
 
-        }
+		}
 
-        return $output;
+		return $output;
 
-    }
-    
-    
+	}
+	
+	
 }
 

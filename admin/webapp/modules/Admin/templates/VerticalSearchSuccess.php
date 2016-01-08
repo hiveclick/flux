@@ -2,29 +2,38 @@
 	/* @var $vertical \Flux\Vertical */
 	$vertical = $this->getContext()->getRequest()->getAttribute("vertical", array());
 ?>
-<div class="page-header">
-	<div class="pull-right">
-		<a data-toggle="modal" data-target="#edit_vertical_modal" href="/admin/vertical-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Vertical</a>
+<!-- Add breadcrumbs -->
+<ol class="breadcrumb small">
+	<li><span class="fa fa-home"></span> <a href="/index">Home</a></li>
+	<li><a href="/admin/vertical-search">Verticals</a></li>
+</ol>
+
+<!-- Page Content -->
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="pull-right">
+			<a data-toggle="modal" data-target="#edit_vertical_modal" href="/admin/vertical-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Vertical</a>
+		</div>
+		<h1>Verticals</h1>
 	</div>
-	<h1>Verticals</h1>
-</div>
-<div class="help-block">Verticals allow you to categorize and sort offers</div>
-<div class="panel panel-primary">
-	<div id='vertical-header' class='grid-header panel-heading clearfix'>
-		<form id="vertical_search_form" method="GET" action="/api">
-			<input type="hidden" name="func" value="/admin/vertical">
-			<input type="hidden" name="format" value="json" />
-			<input type="hidden" id="page" name="page" value="1" />
-			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
-			<input type="hidden" id="sort" name="sort" value="name" />
-			<input type="hidden" id="sord" name="sord" value="asc" />
-			<div class="pull-right">
-				<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
-			</div>
-		</form>
+	<div class="help-block">Verticals allow you to categorize and sort offers</div>
+	<div class="panel panel-primary">
+		<div id='vertical-header' class='grid-header panel-heading clearfix'>
+			<form id="vertical_search_form" method="GET" action="/api">
+				<input type="hidden" name="func" value="/admin/vertical">
+				<input type="hidden" name="format" value="json" />
+				<input type="hidden" id="page" name="page" value="1" />
+				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
+				<input type="hidden" id="sort" name="sort" value="name" />
+				<input type="hidden" id="sord" name="sord" value="asc" />
+				<div class="pull-right">
+					<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="name" value="" />
+				</div>
+			</form>
+		</div>
+		<div id="vertical-grid"></div>
+		<div id="vertical-pager" class="panel-footer"></div>
 	</div>
-	<div id="vertical-grid"></div>
-	<div id="vertical-pager" class="panel-footer"></div>
 </div>
 
 <!-- edit vertical modal -->

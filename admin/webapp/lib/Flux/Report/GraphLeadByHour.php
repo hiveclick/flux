@@ -8,10 +8,10 @@ class GraphLeadByHour extends GoogleChart {
 	const GROUP_TYPE_OFFER = 1;
 	const GROUP_TYPE_SUBID = 2;
 	
-    private $offer_id_array;
-    private $campaign_id_array;
-    private $group_type;
-    
+	private $offer_id_array;
+	private $campaign_id_array;
+	private $group_type;
+	
 	/**
 	 * Runs the report and stores the data
 	 * @return boolean
@@ -29,9 +29,9 @@ class GraphLeadByHour extends GoogleChart {
 				}
 			}
 			foreach ($header_col_names as $header_col_name) {
-			    if (trim($header_col_name) != '') {
-				     $this->addColumn(null, $header_col_name, 'number');
-			    }
+				if (trim($header_col_name) != '') {
+					 $this->addColumn(null, $header_col_name, 'number');
+				}
 			}
 		} else if ($this->getGroupType() == self::GROUP_TYPE_SUBID) {
 			// Add columns for each subid
@@ -49,8 +49,8 @@ class GraphLeadByHour extends GoogleChart {
 		}
 		
 		if (count($this->getCols()) == 1) {
-		    // We have not data, so use dummy data
-		    $this->addColumn(null, 'No Data', 'number');
+			// We have not data, so use dummy data
+			$this->addColumn(null, 'No Data', 'number');
 		}
 		
 		// Add default rows for each hour and each offer
@@ -115,7 +115,7 @@ class GraphLeadByHour extends GoogleChart {
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
 						),
-					    'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME
+						'data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME
 					)
 				)
 			)
@@ -136,11 +136,11 @@ class GraphLeadByHour extends GoogleChart {
 		}
 		
 		if (count($this->getOfferIdArray()) > 0) {
-		    $ops[] = array(
-		    		'$match' => array(
-		    				\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => array('$in' => $this->getOfferIdArray())
-		    		)
-		    );
+			$ops[] = array(
+					'$match' => array(
+							\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => array('$in' => $this->getOfferIdArray())
+					)
+			);
 		}
 		
 		$ops[] = array(
@@ -148,8 +148,8 @@ class GraphLeadByHour extends GoogleChart {
 		);
 		
 		$ops[] = array('$match' => array(
-		    '_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
-		    '_e.t' => array(
+			'_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
+			'_e.t' => array(
 							'$gte' => new \MongoDate($this->getStartDate()),
 							'$lt' => new \MongoDate($this->getEndDate())
 			)
@@ -214,7 +214,7 @@ class GraphLeadByHour extends GoogleChart {
 		$op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		$op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $op_query);
-        */
+		*/
 
 		return $lead->getCollection()->aggregate($ops);
 	}	

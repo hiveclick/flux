@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c5dfa64488134ad5ee27dffdd21087b0",
+    "hash": "b6a25bda99d5d7b4dcdd629f3954025d",
     "packages": [
         {
             "name": "ioki/wkhtmltopdf-amd64-centos6",
@@ -117,7 +117,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/80afd1df6a953fb69ef5d45a0ac83ad78b9941b9",
+                "url": "https://api.github.com/repos/novaksolutions/infusionsoft-php-sdk/zipball/1fd4796d871d5ba08b178b2b74e1c778d5ef8797",
                 "reference": "80afd1df6a953fb69ef5d45a0ac83ad78b9941b9",
                 "shasum": ""
             },
@@ -152,6 +152,119 @@
                 "php-infusionsoft-api"
             ],
             "time": "2015-04-07 19:01:53"
+        },
+        {
+            "name": "oyejorge/less.php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oyejorge/less.php.git",
+                "reference": "a7e6d222fea7dd1ddd93f0cb38304c0af1f9f72e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oyejorge/less.php/zipball/a7e6d222fea7dd1ddd93f0cb38304c0af1f9f72e",
+                "reference": "a7e6d222fea7dd1ddd93f0cb38304c0af1f9f72e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8.16"
+            },
+            "bin": [
+                "bin/lessc"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Less": "lib/"
+                },
+                "classmap": [
+                    "lessc.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Agar",
+                    "homepage": "https://github.com/agar"
+                },
+                {
+                    "name": "Martin Jantošovič",
+                    "homepage": "https://github.com/Mordred"
+                },
+                {
+                    "name": "Josh Schmidt",
+                    "homepage": "https://github.com/oyejorge"
+                }
+            ],
+            "description": "PHP port of the Javascript version of LESS http://lesscss.org",
+            "homepage": "http://lessphp.gpeasy.com",
+            "keywords": [
+                "css",
+                "less",
+                "less.js",
+                "lesscss",
+                "php",
+                "stylesheet"
+            ],
+            "time": "2015-11-09 15:49:12"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "b2a4cf0517657fcd17a04630b7cacbaa5f4ffc96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/b2a4cf0517657fcd17a04630b7cacbaa5f4ffc96",
+                "reference": "b2a4cf0517657fcd17a04630b7cacbaa5f4ffc96",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2015-11-09 02:15:29"
         }
     ],
     "packages-dev": [],
@@ -159,7 +272,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "novaksolutions/infusionsoft-php-sdk": 20,
-        "ioki/wkhtmltopdf-amd64-centos6": 20
+        "ioki/wkhtmltopdf-amd64-centos6": 20,
+        "twbs/bootstrap": 20,
+        "oyejorge/less.php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

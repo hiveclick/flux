@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -19,59 +19,59 @@ use Zend\View\Exception;
  */
 class PartialLoop extends Partial
 {
-    /**
-     * Marker to where the pointer is at in the loop
-     *
-     * @var int
-     */
-    protected $partialCounter = 0;
+	/**
+	 * Marker to where the pointer is at in the loop
+	 *
+	 * @var int
+	 */
+	protected $partialCounter = 0;
 
-    /**
-     * Renders a template fragment within a variable scope distinct from the
-     * calling View object.
-     *
-     * If no arguments are provided, returns object instance.
-     *
-     * @param  string $name   Name of view script
-     * @param  array  $values Variables to populate in the view
-     * @throws Exception\InvalidArgumentException
-     * @return string
-     */
-    public function __invoke($name = null, $values = null)
-    {
-        if (0 == func_num_args()) {
-            return $this;
-        }
+	/**
+	 * Renders a template fragment within a variable scope distinct from the
+	 * calling View object.
+	 *
+	 * If no arguments are provided, returns object instance.
+	 *
+	 * @param  string $name   Name of view script
+	 * @param  array  $values Variables to populate in the view
+	 * @throws Exception\InvalidArgumentException
+	 * @return string
+	 */
+	public function __invoke($name = null, $values = null)
+	{
+		if (0 == func_num_args()) {
+			return $this;
+		}
 
-        if (!is_array($values)) {
-            if ($values instanceof Traversable) {
-                $values = ArrayUtils::iteratorToArray($values, false);
-            } elseif (is_object($values) && method_exists($values, 'toArray')) {
-                $values = $values->toArray();
-            } else {
-                throw new Exception\InvalidArgumentException('PartialLoop helper requires iterable data');
-            }
-        }
+		if (!is_array($values)) {
+			if ($values instanceof Traversable) {
+				$values = ArrayUtils::iteratorToArray($values, false);
+			} elseif (is_object($values) && method_exists($values, 'toArray')) {
+				$values = $values->toArray();
+			} else {
+				throw new Exception\InvalidArgumentException('PartialLoop helper requires iterable data');
+			}
+		}
 
-        // reset the counter if it's called again
-        $this->partialCounter = 0;
-        $content = '';
+		// reset the counter if it's called again
+		$this->partialCounter = 0;
+		$content = '';
 
-        foreach ($values as $item) {
-            $this->partialCounter++;
-            $content .= parent::__invoke($name, $item);
-        }
+		foreach ($values as $item) {
+			$this->partialCounter++;
+			$content .= parent::__invoke($name, $item);
+		}
 
-        return $content;
-    }
+		return $content;
+	}
 
-    /**
-     * Get the partial counter
-     *
-     * @return int
-     */
-    public function getPartialCounter()
-    {
-        return $this->partialCounter;
-    }
+	/**
+	 * Get the partial counter
+	 *
+	 * @return int
+	 */
+	public function getPartialCounter()
+	{
+		return $this->partialCounter;
+	}
 }

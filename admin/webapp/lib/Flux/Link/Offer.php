@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class Offer extends CommonForm {
-	
-	protected $offer_id;
-	protected $offer_name;
+class Offer extends BasicLink {
 	
 	private $offer;
 	
@@ -15,10 +10,7 @@ class Offer extends CommonForm {
 	 * @return integer
 	 */
 	function getOfferId() {
-		if (is_null($this->offer_id)) {
-			$this->offer_id = null;
-		}
-		return $this->offer_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class Offer extends CommonForm {
 	 * @var integer
 	 */
 	function setOfferId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->offer_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->offer_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class Offer extends CommonForm {
 	 * @return string
 	 */
 	function getOfferName() {
-		if (is_null($this->offer_name)) {
-			$this->offer_name = "";
-		}
-		return $this->offer_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class Offer extends CommonForm {
 	 * @var string
 	 */
 	function setOfferName($arg0) {
-		$this->offer_name = $arg0;
-		return $this;
+		return $this->setName($arg0);
 	}
 	
 	/**
@@ -61,7 +44,7 @@ class Offer extends CommonForm {
 	function getOffer() {
 		if (is_null($this->offer)) {
 			$this->offer = new \Flux\Offer();
-			$this->offer->setId($this->getOfferId());
+			$this->offer->setId($this->getId());
 			$this->offer->query();
 		}
 		return $this->offer;

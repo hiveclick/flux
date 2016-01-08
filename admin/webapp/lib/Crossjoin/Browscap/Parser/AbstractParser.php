@@ -39,87 +39,87 @@ namespace Crossjoin\Browscap\Parser;
  */
 abstract class AbstractParser
 {
-    /**
-     * Detected browscap version (read from INI file)
-     *
-     * @var int
-     */
-    protected static $version;
+	/**
+	 * Detected browscap version (read from INI file)
+	 *
+	 * @var int
+	 */
+	protected static $version;
 
-    /**
-     * The cache instance
-     *
-     * @var \Crossjoin\Browscap\Cache\AbstractCache
-     */
-    protected static $cache;
+	/**
+	 * The cache instance
+	 *
+	 * @var \Crossjoin\Browscap\Cache\AbstractCache
+	 */
+	protected static $cache;
 
-    /**
-     * The type to use when downloading the browscap source data,
-     * has to be overwritten by the extending class,
-     * e.g. 'PHP_BrowscapINI'.
-     *
-     * @see http://browscap.org/
-     * @var string
-     */
-    protected $sourceType = '';
+	/**
+	 * The type to use when downloading the browscap source data,
+	 * has to be overwritten by the extending class,
+	 * e.g. 'PHP_BrowscapINI'.
+	 *
+	 * @see http://browscap.org/
+	 * @var string
+	 */
+	protected $sourceType = '';
 
-    /**
-     * Gets the type of source to use
-     *
-     * @return string
-     */
-    public function getSourceType()
-    {
-        return $this->sourceType;
-    }
+	/**
+	 * Gets the type of source to use
+	 *
+	 * @return string
+	 */
+	public function getSourceType()
+	{
+		return $this->sourceType;
+	}
 
-    /**
-     * Gets the version of the Browscap data
-     *
-     * @return int
-     */
-    abstract public function getVersion();
+	/**
+	 * Gets the version of the Browscap data
+	 *
+	 * @return int
+	 */
+	abstract public function getVersion();
 
-    /**
-     * Gets the browser data formatr for the given user agent
-     * (or null if no data avaailble, no even the default browser)
-     *
-     * @param string $user_agent
-     * @return \Crossjoin\Browscap\Formatter\AbstractFormatter|null
-     */
-    abstract public function getBrowser($user_agent);
+	/**
+	 * Gets the browser data formatr for the given user agent
+	 * (or null if no data avaailble, no even the default browser)
+	 *
+	 * @param string $user_agent
+	 * @return \Crossjoin\Browscap\Formatter\AbstractFormatter|null
+	 */
+	abstract public function getBrowser($user_agent);
 
-    /**
-     * Gets a cache instance
-     *
-     * @return \Crossjoin\Browscap\Cache\AbstractCache
-     */
-    public static function getCache()
-    {
-        if (self::$cache === null) {
-            self::$cache = new \Crossjoin\Browscap\Cache\File();
-        }
-        return self::$cache;
-    }
+	/**
+	 * Gets a cache instance
+	 *
+	 * @return \Crossjoin\Browscap\Cache\AbstractCache
+	 */
+	public static function getCache()
+	{
+		if (self::$cache === null) {
+			self::$cache = new \Crossjoin\Browscap\Cache\File();
+		}
+		return self::$cache;
+	}
 
-    /**
-     * Sets a cache instance
-     */
-    public static function setCache(\Crossjoin\Browscap\Cache\AbstractCache $cache)
-    {
-        self::$cache = $cache;
-    }
+	/**
+	 * Sets a cache instance
+	 */
+	public static function setCache(\Crossjoin\Browscap\Cache\AbstractCache $cache)
+	{
+		self::$cache = $cache;
+	}
 
-    /**
-     * Checks if the surce needs to be updated and processes the update
-     */
-    abstract public function update();
+	/**
+	 * Checks if the surce needs to be updated and processes the update
+	 */
+	abstract public function update();
 
-    /**
-     * Resets cached data (e.g. the version) after an update of the source
-     */
-    public static function resetCachedData()
-    {
-        self::$version = null;
-    }
+	/**
+	 * Resets cached data (e.g. the version) after an update of the source
+	 */
+	public static function resetCachedData()
+	{
+		self::$version = null;
+	}
 }

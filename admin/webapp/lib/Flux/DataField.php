@@ -18,10 +18,10 @@ class DataField extends Base\DataField {
 	 * @return string
 	 */
 	function getValidationResult() {
-	    if (is_null($this->validation_result)) {
-	        $this->validation_result = "";
-	    }
-	    return $this->validation_result;
+		if (is_null($this->validation_result)) {
+			$this->validation_result = "";
+		}
+		return $this->validation_result;
 	}
 	
 	/**
@@ -29,8 +29,8 @@ class DataField extends Base\DataField {
 	 * @var string
 	 */
 	function setValidationResult($arg0) {
-	    $this->validation_result = $arg0;
-	    return $this;
+		$this->validation_result = $arg0;
+		return $this;
 	}
 	
 	/**
@@ -150,7 +150,7 @@ class DataField extends Base\DataField {
 	 */
 	function callMappingFunc($value, $lead) {
 		try {
-		    
+			
 			// Define a default mapping function
 			$mapping_func = function($value, $lead) { return $value; };
 	
@@ -163,7 +163,7 @@ class DataField extends Base\DataField {
 				
 				// Finally call the mapping function and return the result
 				set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
-				    throw new \Exception($errstr);
+					throw new \Exception($errstr);
 				}, E_ALL | E_STRICT);
 				
 				eval('$mapping_func = function ($value, $lead) {' . $this->getCustomCode() . '};');
@@ -181,14 +181,14 @@ class DataField extends Base\DataField {
 			}
 			// Finally call the mapping function and return the result
 			set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
-			    throw new \Exception($errstr);
+				throw new \Exception($errstr);
 			}, E_ALL | E_STRICT);
 			$value = $mapping_func($value, $lead);
 			
 			// restore the old error handler
 			restore_error_handler();
 		} catch (\Exception $e) {
-            \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
 		}
 		return $value;
 	}
@@ -198,47 +198,47 @@ class DataField extends Base\DataField {
 	 * @return string
 	 */
 	function validateMappingFunc($value, $lead) {
-	    try {
-	        // Define a default mapping function
-	        $mapping_func = function($value, $lead) { return $value; };
+		try {
+			// Define a default mapping function
+			$mapping_func = function($value, $lead) { return $value; };
 	
-	        if (($this->getCustomCode() != '') && ($this->getCustomCode() != self::getDefaultMappingFunc())) {
-	            $errors = '';
-	            // Now overwrite the default mapping function with the one from the export mapping
-	            @ob_start();
+			if (($this->getCustomCode() != '') && ($this->getCustomCode() != self::getDefaultMappingFunc())) {
+				$errors = '';
+				// Now overwrite the default mapping function with the one from the export mapping
+				@ob_start();
 	
-	            // Finally call the mapping function and return the result
-	            set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
-	                throw new \Exception($errstr);
-	            }, E_ALL | E_STRICT);
+				// Finally call the mapping function and return the result
+				set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
+					throw new \Exception($errstr);
+				}, E_ALL | E_STRICT);
 	
-                eval('$mapping_func = function ($value, $lead) {' . $this->getCustomCode() . '};');
+				eval('$mapping_func = function ($value, $lead) {' . $this->getCustomCode() . '};');
 
-                // restore the old error handler
-                restore_error_handler();
-                
-                if (ob_get_length() > 0) {
-                    $errors = ob_get_contents();
-                }
-                @ob_end_clean();
-                if (trim($errors) != '') {
-                    throw new \Exception("Error evaluating mapping " . $this->getName() . ": ". $errors);
-                }
-	        }
-	        // Finally call the mapping function and return the result
-	        set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
-	            throw new \Exception($errstr);
-	        }, E_ALL | E_STRICT);
-	        $value = $mapping_func($value, $lead);
-	        
-	        // restore the old error handler
-	        restore_error_handler();
-	        
-	        return $value;
-	    } catch (\Exception $e) {
-	        throw $e;
-	    }
-	    return $value;
+				// restore the old error handler
+				restore_error_handler();
+				
+				if (ob_get_length() > 0) {
+					$errors = ob_get_contents();
+				}
+				@ob_end_clean();
+				if (trim($errors) != '') {
+					throw new \Exception("Error evaluating mapping " . $this->getName() . ": ". $errors);
+				}
+			}
+			// Finally call the mapping function and return the result
+			set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
+				throw new \Exception($errstr);
+			}, E_ALL | E_STRICT);
+			$value = $mapping_func($value, $lead);
+			
+			// restore the old error handler
+			restore_error_handler();
+			
+			return $value;
+		} catch (\Exception $e) {
+			throw $e;
+		}
+		return $value;
 	}
 	
 	/**
@@ -280,7 +280,7 @@ class DataField extends Base\DataField {
 					array('name' => new \MongoRegex("/" . $this->getKeywords() . "/i")),
 					array('tags' =>  new \MongoRegex("/" . $this->getKeywords() . "/i")),
 					array('request_name' => new \MongoRegex("/" . $this->getKeywords() . "/i")),
-			        array('key_name' => new \MongoRegex("/" . $this->getKeywords() . "/i"))
+					array('key_name' => new \MongoRegex("/" . $this->getKeywords() . "/i"))
 			);
 		}
 		if (!empty($this->getTags())) {

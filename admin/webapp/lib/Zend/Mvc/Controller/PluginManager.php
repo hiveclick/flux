@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -21,136 +21,136 @@ use Zend\Stdlib\DispatchableInterface;
  */
 class PluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of plugins factories
-     *
-     * @var array
-     */
-    protected $factories = array(
-        'forward'  => 'Zend\Mvc\Controller\Plugin\Service\ForwardFactory',
-        'identity' => 'Zend\Mvc\Controller\Plugin\Service\IdentityFactory',
-    );
+	/**
+	 * Default set of plugins factories
+	 *
+	 * @var array
+	 */
+	protected $factories = array(
+		'forward'  => 'Zend\Mvc\Controller\Plugin\Service\ForwardFactory',
+		'identity' => 'Zend\Mvc\Controller\Plugin\Service\IdentityFactory',
+	);
 
-    /**
-     * Default set of plugins
-     *
-     * @var array
-     */
-    protected $invokableClasses = array(
-        'acceptableviewmodelselector' => 'Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector',
-        'filepostredirectget'         => 'Zend\Mvc\Controller\Plugin\FilePostRedirectGet',
-        'flashmessenger'              => 'Zend\Mvc\Controller\Plugin\FlashMessenger',
-        'layout'                      => 'Zend\Mvc\Controller\Plugin\Layout',
-        'params'                      => 'Zend\Mvc\Controller\Plugin\Params',
-        'postredirectget'             => 'Zend\Mvc\Controller\Plugin\PostRedirectGet',
-        'redirect'                    => 'Zend\Mvc\Controller\Plugin\Redirect',
-        'url'                         => 'Zend\Mvc\Controller\Plugin\Url',
-    );
+	/**
+	 * Default set of plugins
+	 *
+	 * @var array
+	 */
+	protected $invokableClasses = array(
+		'acceptableviewmodelselector' => 'Zend\Mvc\Controller\Plugin\AcceptableViewModelSelector',
+		'filepostredirectget'		 => 'Zend\Mvc\Controller\Plugin\FilePostRedirectGet',
+		'flashmessenger'			  => 'Zend\Mvc\Controller\Plugin\FlashMessenger',
+		'layout'					  => 'Zend\Mvc\Controller\Plugin\Layout',
+		'params'					  => 'Zend\Mvc\Controller\Plugin\Params',
+		'postredirectget'			 => 'Zend\Mvc\Controller\Plugin\PostRedirectGet',
+		'redirect'					=> 'Zend\Mvc\Controller\Plugin\Redirect',
+		'url'						 => 'Zend\Mvc\Controller\Plugin\Url',
+	);
 
-    /**
-     * Default set of plugin aliases
-     *
-     * @var array
-     */
-    protected $aliases = array(
-        'prg'     => 'postredirectget',
-        'fileprg' => 'filepostredirectget',
-    );
+	/**
+	 * Default set of plugin aliases
+	 *
+	 * @var array
+	 */
+	protected $aliases = array(
+		'prg'	 => 'postredirectget',
+		'fileprg' => 'filepostredirectget',
+	);
 
-    /**
-     * @var DispatchableInterface
-     */
-    protected $controller;
+	/**
+	 * @var DispatchableInterface
+	 */
+	protected $controller;
 
-    /**
-     * Retrieve a registered instance
-     *
-     * After the plugin is retrieved from the service locator, inject the
-     * controller in the plugin every time it is requested. This is required
-     * because a controller can use a plugin and another controller can be
-     * dispatched afterwards. If this second controller uses the same plugin
-     * as the first controller, the reference to the controller inside the
-     * plugin is lost.
-     *
-     * @param  string $name
-     * @param  mixed  $options
-     * @param  bool   $usePeeringServiceManagers
-     * @return mixed
-     */
-    public function get($name, $options = array(), $usePeeringServiceManagers = true)
-    {
-        $plugin = parent::get($name, $options, $usePeeringServiceManagers);
-        $this->injectController($plugin);
+	/**
+	 * Retrieve a registered instance
+	 *
+	 * After the plugin is retrieved from the service locator, inject the
+	 * controller in the plugin every time it is requested. This is required
+	 * because a controller can use a plugin and another controller can be
+	 * dispatched afterwards. If this second controller uses the same plugin
+	 * as the first controller, the reference to the controller inside the
+	 * plugin is lost.
+	 *
+	 * @param  string $name
+	 * @param  mixed  $options
+	 * @param  bool   $usePeeringServiceManagers
+	 * @return mixed
+	 */
+	public function get($name, $options = array(), $usePeeringServiceManagers = true)
+	{
+		$plugin = parent::get($name, $options, $usePeeringServiceManagers);
+		$this->injectController($plugin);
 
-        return $plugin;
-    }
+		return $plugin;
+	}
 
-    /**
-     * Set controller
-     *
-     * @param  DispatchableInterface $controller
-     * @return PluginManager
-     */
-    public function setController(DispatchableInterface $controller)
-    {
-        $this->controller = $controller;
+	/**
+	 * Set controller
+	 *
+	 * @param  DispatchableInterface $controller
+	 * @return PluginManager
+	 */
+	public function setController(DispatchableInterface $controller)
+	{
+		$this->controller = $controller;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Retrieve controller instance
-     *
-     * @return null|DispatchableInterface
-     */
-    public function getController()
-    {
-        return $this->controller;
-    }
+	/**
+	 * Retrieve controller instance
+	 *
+	 * @return null|DispatchableInterface
+	 */
+	public function getController()
+	{
+		return $this->controller;
+	}
 
-    /**
-     * Inject a helper instance with the registered controller
-     *
-     * @param  object $plugin
-     * @return void
-     */
-    public function injectController($plugin)
-    {
-        if (!is_object($plugin)) {
-            return;
-        }
-        if (!method_exists($plugin, 'setController')) {
-            return;
-        }
+	/**
+	 * Inject a helper instance with the registered controller
+	 *
+	 * @param  object $plugin
+	 * @return void
+	 */
+	public function injectController($plugin)
+	{
+		if (!is_object($plugin)) {
+			return;
+		}
+		if (!method_exists($plugin, 'setController')) {
+			return;
+		}
 
-        $controller = $this->getController();
-        if (!$controller instanceof DispatchableInterface) {
-            return;
-        }
+		$controller = $this->getController();
+		if (!$controller instanceof DispatchableInterface) {
+			return;
+		}
 
-        $plugin->setController($controller);
-    }
+		$plugin->setController($controller);
+	}
 
-    /**
-     * Validate the plugin
-     *
-     * Any plugin is considered valid in this context.
-     *
-     * @param  mixed                            $plugin
-     * @return void
-     * @throws Exception\InvalidPluginException
-     */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof Plugin\PluginInterface) {
-            // we're okay
-            return;
-        }
+	/**
+	 * Validate the plugin
+	 *
+	 * Any plugin is considered valid in this context.
+	 *
+	 * @param  mixed							$plugin
+	 * @return void
+	 * @throws Exception\InvalidPluginException
+	 */
+	public function validatePlugin($plugin)
+	{
+		if ($plugin instanceof Plugin\PluginInterface) {
+			// we're okay
+			return;
+		}
 
-        throw new Exception\InvalidPluginException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Plugin\PluginInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+		throw new Exception\InvalidPluginException(sprintf(
+			'Plugin of type %s is invalid; must implement %s\Plugin\PluginInterface',
+			(is_object($plugin) ? get_class($plugin) : gettype($plugin)),
+			__NAMESPACE__
+		));
+	}
 }

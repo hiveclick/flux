@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -11,64 +11,64 @@ namespace Zend\Code\Reflection\DocBlock\Tag;
 
 class ThrowsTag implements TagInterface, PhpDocTypedTagInterface
 {
-    /**
-     * @var array
-     */
-    protected $types = array();
+	/**
+	 * @var array
+	 */
+	protected $types = array();
 
-    /**
-     * @var string
-     */
-    protected $description = null;
+	/**
+	 * @var string
+	 */
+	protected $description = null;
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'throws';
-    }
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'throws';
+	}
 
-    /**
-     * @param  string $tagDocBlockLine
-     * @return void
-     */
-    public function initialize($tagDocBlockLine)
-    {
-        $matches = array();
-        preg_match('#([\w|\\\]+)(?:\s+(.*))?#', $tagDocBlockLine, $matches);
+	/**
+	 * @param  string $tagDocBlockLine
+	 * @return void
+	 */
+	public function initialize($tagDocBlockLine)
+	{
+		$matches = array();
+		preg_match('#([\w|\\\]+)(?:\s+(.*))?#', $tagDocBlockLine, $matches);
 
-        $this->types = explode('|', $matches[1]);
+		$this->types = explode('|', $matches[1]);
 
-        if (isset($matches[2])) {
-            $this->description = $matches[2];
-        }
-    }
+		if (isset($matches[2])) {
+			$this->description = $matches[2];
+		}
+	}
 
-    /**
-     * Get return variable type
-     *
-     * @return string
-     * @deprecated 2.0.4 use getTypes instead
-     */
-    public function getType()
-    {
-        return implode('|', $this->getTypes());
-    }
+	/**
+	 * Get return variable type
+	 *
+	 * @return string
+	 * @deprecated 2.0.4 use getTypes instead
+	 */
+	public function getType()
+	{
+		return implode('|', $this->getTypes());
+	}
 
-    /**
-     * @return array
-     */
-    public function getTypes()
-    {
-        return $this->types;
-    }
+	/**
+	 * @return array
+	 */
+	public function getTypes()
+	{
+		return $this->types;
+	}
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
 }

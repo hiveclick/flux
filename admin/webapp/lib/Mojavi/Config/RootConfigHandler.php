@@ -3,7 +3,7 @@
  * RootConfigHandler allows you to specify configuration handlers for the
  * application or on a module level.
  *
- * @package    Mojavi
+ * @package	Mojavi
  * @subpackage Config
  */
 namespace Mojavi\Config;
@@ -13,128 +13,128 @@ use Mojavi\Exception\ParseException as ParseException;
 class RootConfigHandler extends IniConfigHandler
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute this configuration handler.
-     *
-     * @param string An absolute filesystem path to a configuration file.
-     *
-     * @return string Data to be written to a cache file.
-     *
-     * @throws <b>ConfigurationException</b> If a requested configuration file
-     *                                       does not exist or is not readable.
-     * @throws <b>ParseException</b> If a requested configuration file is
-     *                               improperly formatted.
-     */
-    public function & execute ($config)
-    {
+	/**
+	 * Execute this configuration handler.
+	 *
+	 * @param string An absolute filesystem path to a configuration file.
+	 *
+	 * @return string Data to be written to a cache file.
+	 *
+	 * @throws <b>ConfigurationException</b> If a requested configuration file
+	 *									   does not exist or is not readable.
+	 * @throws <b>ParseException</b> If a requested configuration file is
+	 *							   improperly formatted.
+	 */
+	public function & execute ($config)
+	{
 
-        // parse the ini
-        $ini = $this->parseIni($config);
+		// parse the ini
+		$ini = $this->parseIni($config);
 
-        // determine if we're loading the system config_handlers.ini or a module
-        // config_handlers.ini
-        $moduleLevel = ($this->getParameter('module_level') === true)
-                       ? true : false;
+		// determine if we're loading the system config_handlers.ini or a module
+		// config_handlers.ini
+		$moduleLevel = ($this->getParameter('module_level') === true)
+					   ? true : false;
 
-        if ($moduleLevel)
-        {
+		if ($moduleLevel)
+		{
 
-            // get the current module name
-            $moduleName = $this->getParameter('module_name');
+			// get the current module name
+			$moduleName = $this->getParameter('module_name');
 
-        }
+		}
 
-        // init our data and includes arrays
-        $data     = array();
-        $includes = array();
+		// init our data and includes arrays
+		$data	 = array();
+		$includes = array();
 
-        // let's do our fancy work
-        foreach ($ini as $category => &$keys)
-        {
+		// let's do our fancy work
+		foreach ($ini as $category => &$keys)
+		{
 
-            if ($moduleLevel)
-            {
+			if ($moduleLevel)
+			{
 
-                // module-level registration, so we must prepend the module
-                // root to the category
-                $category = 'modules/' . $moduleName . '/' .
-                            $category;
+				// module-level registration, so we must prepend the module
+				// root to the category
+				$category = 'modules/' . $moduleName . '/' .
+							$category;
 
-            }
+			}
 
-            if (!isset($keys['class']))
-            {
+			if (!isset($keys['class']))
+			{
 
-                // missing class key
-                $error = 'Configuration file "%s" specifies category ' .
-                         '"%s" with missing class key';
-                $error = sprintf($error, $config, $category);
+				// missing class key
+				$error = 'Configuration file "%s" specifies category ' .
+						 '"%s" with missing class key';
+				$error = sprintf($error, $config, $category);
 
-                throw new ParseException($error);
+				throw new ParseException($error);
 
-            }
+			}
 
-            $class =& $keys['class'];
+			$class =& $keys['class'];
 
-            if (isset($keys['file']))
-            {
+			if (isset($keys['file']))
+			{
 
-                // we have a file to include
-                $file =& $keys['file'];
-                $file =  $this->replaceConstants($file);
-                $file =  $this->replacePath($file);
+				// we have a file to include
+				$file =& $keys['file'];
+				$file =  $this->replaceConstants($file);
+				$file =  $this->replacePath($file);
 
-                if (!is_readable($file))
-                {
+				if (!is_readable($file))
+				{
 
-                    // handler file doesn't exist
-                    $error = 'Configuration file "%s" specifies class "%s" ' .
-                             'with nonexistent or unreadable file "%s"';
-                    $error = sprintf($error, $config, $class, $file);
+					// handler file doesn't exist
+					$error = 'Configuration file "%s" specifies class "%s" ' .
+							 'with nonexistent or unreadable file "%s"';
+					$error = sprintf($error, $config, $class, $file);
 
-                    throw new ParseException($error);
+					throw new ParseException($error);
 
-                }
+				}
 
-                // append our data
-                $tmp        = "require_once('%s');";
-                $includes[] = sprintf($tmp, $file);
+				// append our data
+				$tmp		= "require_once('%s');";
+				$includes[] = sprintf($tmp, $file);
 
-            }
+			}
 
-            // parse parameters
-            $parameters =& ParameterParser::parse($keys);
+			// parse parameters
+			$parameters =& ParameterParser::parse($keys);
 
-            // append new data
-            $tmp    = "self::\$handlers['%s'] = new %s();";
-            $data[] = sprintf($tmp, $category, $class);
+			// append new data
+			$tmp	= "self::\$handlers['%s'] = new %s();";
+			$data[] = sprintf($tmp, $category, $class);
 
-            if ($parameters != 'null')
-            {
+			if ($parameters != 'null')
+			{
 
-                // since we have parameters we will need to init the handler
-                $tmp    = "self::\$handlers['%s']->initialize(%s);";
-                $data[] = sprintf($tmp, $category, $parameters);
+				// since we have parameters we will need to init the handler
+				$tmp	= "self::\$handlers['%s']->initialize(%s);";
+				$data[] = sprintf($tmp, $category, $parameters);
 
-            }
+			}
 
-        }
+		}
 
-        // compile data
-        $retval = "<?php\n" .
-                  "// auth-generated by RootConfigHandler\n" .
-                  "// date: %s\n%s\n%s\n?>";
+		// compile data
+		$retval = "<?php\n" .
+				  "// auth-generated by RootConfigHandler\n" .
+				  "// date: %s\n%s\n%s\n?>";
 
-        $retval = sprintf($retval, date('m/d/Y H:i:s'),
-                          implode("\n", $includes), implode("\n", $data));
+		$retval = sprintf($retval, date('m/d/Y H:i:s'),
+						  implode("\n", $includes), implode("\n", $data));
 
-        return $retval;
+		return $retval;
 
-    }
+	}
 
 }
 

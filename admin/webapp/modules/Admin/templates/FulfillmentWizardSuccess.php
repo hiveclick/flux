@@ -5,7 +5,7 @@
 	$export_handlers = $this->getContext()->getRequest()->getAttribute("export_handlers", array());
 	$data_fields = $this->getContext()->getRequest()->getAttribute("data_fields", array());
 ?>
-<div class="modal-header">
+<div class="modal-header bg-success">
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($fulfillment->getId()) ? 'Edit' : 'Add' ?> Fulfillment Handler</h4>
 </div>
@@ -46,39 +46,40 @@
 					<div class="form-group">
 						<textarea id="description" name="description" class="form-control" placeholder="Enter description..."><?php echo $fulfillment->getDescription() ?></textarea>
 					</div>
-					
+					<hr />
+					<div class="help-block">Select who will pay when this fulfillment is successful and how much they will pay</div>
 					<div class="form-group">
 						<select class="form-control" name="client[client_id]" id="client_id" placeholder="Assign an owner to this handler...">
 							<option value=""></option>
 							<optgroup label="Administrators">
-							    <?php
-    								/* @var $client \Flux\Client */ 
-    								foreach ($clients AS $client) { 
-    							?>
-    							    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
-    								    <option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
-    								<?php } ?>
-    							<?php } ?>
+								<?php
+									/* @var $client \Flux\Client */ 
+									foreach ($clients AS $client) { 
+								?>
+									<?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN) { ?>
+										<option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
+									<?php } ?>
+								<?php } ?>
 							</optgroup>
 							<optgroup label="Affiliates">
-							    <?php
-    								/* @var $client \Flux\Client */ 
-    								foreach ($clients AS $client) { 
-    							?>
-    							    <?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
-    								    <option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
-    								<?php } ?>
-    							<?php } ?>
+								<?php
+									/* @var $client \Flux\Client */ 
+									foreach ($clients AS $client) { 
+								?>
+									<?php if ($client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE) { ?>
+										<option value="<?php echo $client->getId() ?>"><?php echo $client->getName() ?></option>
+									<?php } ?>
+								<?php } ?>
 							</optgroup>
 						</select>
 					</div>
 					
 					<div class="form-group">
-    					<div class="input-group">
-    					   <div class="input-group-addon">$</div>
-    					   <input type="text" name="bounty" id="bounty" class="form-control" value="<?php echo $fulfillment->getBounty() > 0 ? number_format($fulfillment->getBounty(), 2) : '' ?>" placeholder="Enter payout from advertiser...">
-    					</div>
-    				</div>
+						<div class="input-group">
+						   <div class="input-group-addon">$</div>
+						   <input type="text" name="bounty" id="bounty" class="form-control" value="<?php echo $fulfillment->getBounty() > 0 ? number_format($fulfillment->getBounty(), 2) : '' ?>" placeholder="Enter payout from advertiser...">
+						</div>
+					</div>
 					<hr />
 				</div>
 				
@@ -171,8 +172,8 @@
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
 						<div class="row">
-                            <div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
-                            <div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
+							<div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
+							<div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
 						</div>
 					</div>
 					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
@@ -316,19 +317,19 @@ $(document).ready(function() {
 
 	$('#status,#export_type,#client_id,#scheduling_interval,#scheduling_days,#mailchimp_list').selectize();
 
-    $('#refresh_mc_lists').click(function() {
-        // Refresh the mailchimp lists based on the api key
-    	$mc_api_key = $('#mailchimp_api_key').val();
-        $region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-        $.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
-        	$select = $('#mailchimp_list').selectize()[0].selectize;
-        	$select.clearOptions();
-            data.data.forEach(function(item) {
-            	$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
-            });
-            $select.refreshOptions();
-        }, 'json');
-    });
+	$('#refresh_mc_lists').click(function() {
+		// Refresh the mailchimp lists based on the api key
+		$mc_api_key = $('#mailchimp_api_key').val();
+		$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
+		$.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+			$select = $('#mailchimp_list').selectize()[0].selectize;
+			$select.clearOptions();
+			data.data.forEach(function(item) {
+				$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
+			});
+			$select.refreshOptions();
+		}, 'json');
+	});
 	
 	$('#email_address').selectize({
 		delimiter: ',',
@@ -348,33 +349,33 @@ $(document).ready(function() {
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : new Array();
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : new Array();
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
 				});
-	            return '<div style="width:99%;padding-right:25px;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +   
-	            '</div>';
+				return '<div style="width:99%;padding-right:25px;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +   
+				'</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : new Array();
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : new Array();
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});           
-	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +
-	            '</div>';
+				});		   
+				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +
+				'</div>';
 			}
 		}
 	};

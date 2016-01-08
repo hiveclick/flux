@@ -21,32 +21,32 @@ namespace Mojavi\Error;
 
 class Error {
 
-    private $message;
+	private $message;
 
-    /**
-     * Constructor to create a new Error object.  You can pass in a String for the argument to
-     * create a new Error Object.
-     */
-    function __construct($arg0, $arg1 = null) {
-        $this->setMessage($arg0);
-    }
+	/**
+	 * Constructor to create a new Error object.  You can pass in a String for the argument to
+	 * create a new Error Object.
+	 */
+	function __construct($arg0, $arg1 = null) {
+		$this->setMessage($arg0);
+	}
 
-    /**
-     * Returns the error message
-     * @return string Error Message that was stored in this Error object
-     */
-    function getMessage() {
-        if (is_null($this->message)) {
-            $this->message= "";
-        }
-        return($this->message);
-    }
+	/**
+	 * Returns the error message
+	 * @return string Error Message that was stored in this Error object
+	 */
+	function getMessage() {
+		if (is_null($this->message)) {
+			$this->message= "";
+		}
+		return($this->message);
+	}
 
-    /**
-     * Sets the error Mesage
-     * @param string $arg0 String that contains the error message
-     */
-    function setMessage($arg0) {
-        $this->message = $arg0;
-    }
+	/**
+	 * Sets the error Mesage
+	 * @param string $arg0 String that contains the error message
+	 */
+	function setMessage($arg0) {
+		$this->message = $arg0;
+	}
 }

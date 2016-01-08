@@ -259,10 +259,10 @@ class Daemon extends MongoForm {
 	 * @return integer
 	 */
 	function getPendingRecords() {
-	    if (is_null($this->pending_records)) {
-	        $this->pending_records = 0;
-	    }
-	    return $this->pending_records;
+		if (is_null($this->pending_records)) {
+			$this->pending_records = 0;
+		}
+		return $this->pending_records;
 	}
 	
 	/**
@@ -270,9 +270,9 @@ class Daemon extends MongoForm {
 	 * @var integer
 	 */
 	function setPendingRecords($arg0) {
-	    $this->pending_records = (int)$arg0;
-	    $this->addModifiedColumn('pending_records');
-	    return $this;
+		$this->pending_records = (int)$arg0;
+		$this->addModifiedColumn('pending_records');
+		return $this;
 	}
 	
 	// +------------------------------------------------------------------------+

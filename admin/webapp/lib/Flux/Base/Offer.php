@@ -18,8 +18,8 @@ class Offer extends MongoForm {
 	protected $redirect_type;
 	protected $redirect_url;
 	protected $folder_name;
-    protected $domain_name;
-    protected $docroot_dir;
+	protected $domain_name;
+	protected $docroot_dir;
 	protected $preview_url;
 	protected $realtime_status;
 	protected $batch_status;
@@ -316,20 +316,23 @@ class Offer extends MongoForm {
 			$this->vertical = new \Flux\Link\Vertical();
 			$this->vertical->populate($arg0);
 			if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
-			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+				$this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 		} else if (is_string($arg0)) {
-            $this->vertical = new \Flux\Link\Vertical();
+			$this->vertical = new \Flux\Link\Vertical();
 			$this->vertical->setVerticalId($arg0);
 			if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
-			    $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+				$this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 		} else if ($arg0 instanceof \MongoId) {
-		    $this->vertical = new \Flux\Link\Vertical();
-		    $this->vertical->setVerticalId($arg0);
-		    if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
-		        $this->vertical->setVerticalName($this->vertical->getVertical()->getName());
-		    }
+			$this->vertical = new \Flux\Link\Vertical();
+			$this->vertical->setVerticalId($arg0);
+			if (\MongoId::isValid($this->vertical->getVerticalId()) && $this->vertical->getVerticalName() == '') {
+				$this->vertical->setVerticalName($this->vertical->getVertical()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
+			}
 		}
 		$this->addModifiedColumn('vertical');
 		return $this;
@@ -458,7 +461,7 @@ class Offer extends MongoForm {
 	function setEvents($arg0) {
 		$this->events = $arg0;
 		if (is_array($this->events)) {
-            array_walk($this->events, function(&$val) { if (\MongoId::isValid($val['event_id']) && !($val['event_id'] instanceof \MongoId)) { $val['event_id'] = new \MongoId($val['event_id']); }});
+			array_walk($this->events, function(&$val) { if (\MongoId::isValid($val['event_id']) && !($val['event_id'] instanceof \MongoId)) { $val['event_id'] = new \MongoId($val['event_id']); }});
 		}
 		$this->addModifiedColumn('events');
 		return $this;
@@ -483,24 +486,27 @@ class Offer extends MongoForm {
 		if (is_array($arg0)) {
 			$client = $this->getClient();
 			$client->populate($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->client = $client;
 		} else if (is_string($arg0)) {
 			$client = $this->getClient();
 			$client->setClientId($arg0);
-			if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
 				$client->setClientName($client->getClient()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->client = $client;
 		} else if ($arg0 instanceof \MongoId) {
-		    $client = $this->getClient();
-		    $client->setClientId($arg0);
-		    if (\MongoId::isValid($client->getClientId()) && $client->getClientName() == "") {
-		        $client->setClientName($client->getClient()->getName());
-		    }
-		    $this->client = $client;
+			$client = $this->getClient();
+			$client->setClientId($arg0);
+			if (\MongoId::isValid($client->getId()) && $client->getName() == "") {
+				$client->setClientName($client->getClient()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
+			}
+			$this->client = $client;
 		}
 		$this->addModifiedColumn('client');
 		return $this;
@@ -511,10 +517,10 @@ class Offer extends MongoForm {
 	 * @return \Flux\Link\Split
 	 */
 	function getSplit() {
-	    if (is_null($this->split)) {
-	        $this->split = new \Flux\Link\Split();
-	    }
-	    return $this->split;
+		if (is_null($this->split)) {
+			$this->split = new \Flux\Link\Split();
+		}
+		return $this->split;
 	}
 	
 	/**
@@ -522,30 +528,33 @@ class Offer extends MongoForm {
 	 * @var \Flux\Link\Split
 	 */
 	function setSplit($arg0) {
-	    if (is_array($arg0)) {
+		if (is_array($arg0)) {
 			$split = $this->getSplit();
 			$split->populate($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->split = $split;
 		} else if (is_string($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->split = $split;
 		} else if ($arg0 instanceof \MongoId) {
-		    $split = $this->getSplit();
-		    $split->setSplitId($arg0);
-		    if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
-		        $split->setSplitName($split->getSplit()->getName());
-		    }
-		    $this->split = $split;
+			$split = $this->getSplit();
+			$split->setSplitId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
+				$split->setSplitName($split->getSplit()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
+			}
+			$this->split = $split;
 		}
 		$this->addModifiedColumn('split');
-	    return $this;
+		return $this;
 	}
 	
 	/**
@@ -553,10 +562,10 @@ class Offer extends MongoForm {
 	 * @return array
 	 */
 	function getLandingPages() {
-	    if (is_null($this->landing_pages)) {
-	        $this->landing_pages = array();
-	    }
-	    return $this->landing_pages;
+		if (is_null($this->landing_pages)) {
+			$this->landing_pages = array();
+		}
+		return $this->landing_pages;
 	}
 	
 	/**
@@ -564,18 +573,18 @@ class Offer extends MongoForm {
 	 * @var array
 	 */
 	function setLandingPages($arg0) {
-	    $this->landing_pages = array();
-	    if (is_array($arg0)) {
-	        foreach ($arg0 as $lander) {
-	            $landing_page = new \Flux\Link\LandingPage();
-	            $landing_page->populate($lander);
-	            if ($landing_page->getUrl() != '') {
-                    $this->landing_pages[] = $landing_page;
-	            }
-	        }   
-	    }
-	    $this->addModifiedColumn("landing_pages");
-	    return $this;
+		$this->landing_pages = array();
+		if (is_array($arg0)) {
+			foreach ($arg0 as $lander) {
+				$landing_page = new \Flux\Link\LandingPage();
+				$landing_page->populate($lander);
+				if ($landing_page->getUrl() != '') {
+					$this->landing_pages[] = $landing_page;
+				}
+			}   
+		}
+		$this->addModifiedColumn("landing_pages");
+		return $this;
 	}
 
 	/**
@@ -630,7 +639,7 @@ class Offer extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$offer = new self();
-		$offer->getCollection()->ensureIndex(array('client.client_id' => 1), array('background' => true));
+		$offer->getCollection()->ensureIndex(array('client._id' => 1), array('background' => true));
 		$offer->getCollection()->ensureIndex(array('name' => 1), array('background' => true));
 		return true;
 	}

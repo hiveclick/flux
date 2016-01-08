@@ -40,18 +40,18 @@ namespace Crossjoin\Browscap\Updater;
  */
 class FactoryUpdater
 {
-    /**
-     * Get a available updater instance, or returns NULL is none available.
-     *
-     * @return \Crossjoin\Browscap\Updater\AbstractUpdater|null
-     */
-    public static function getInstance()
-    {
-        if (function_exists('curl_init')) {
-            return new Curl();
-        } elseif ((bool)(int)ini_get('allow_url_fopen') === false) {
-            return new FileGetContents();
-        }
-        return null;
-    }
+	/**
+	 * Get a available updater instance, or returns NULL is none available.
+	 *
+	 * @return \Crossjoin\Browscap\Updater\AbstractUpdater|null
+	 */
+	public static function getInstance()
+	{
+		if (function_exists('curl_init')) {
+			return new Curl();
+		} elseif ((bool)(int)ini_get('allow_url_fopen') === false) {
+			return new FileGetContents();
+		}
+		return null;
+	}
 }

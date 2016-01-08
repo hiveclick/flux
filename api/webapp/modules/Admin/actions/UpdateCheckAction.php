@@ -33,18 +33,18 @@ class UpdateCheckAction extends BasicRestAction {
 	 * @return \Mojavi\Form\BasicAjaxForm
 	 */
 	function executeGet($input_form) {
-	    // Handle GET Requests
-	    
-	    $ajax_form = new BasicAjaxForm();
-	    try {
-	        /* @var $input_form \Rdm\Updater */
-            $input_form->checkForUpdates();
-            $input_form->checkProgress();
-	    } catch (\Exception $e) {
-	        $this->getErrors()->addError('error', $e->getMessage());
-	    }
-	    $ajax_form->setRecord($input_form);
-	    return $ajax_form;
+		// Handle GET Requests
+		
+		$ajax_form = new BasicAjaxForm();
+		try {
+			/* @var $input_form \Rdm\Updater */
+			$input_form->checkForUpdates();
+			$input_form->checkProgress();
+		} catch (\Exception $e) {
+			$this->getErrors()->addError('error', $e->getMessage());
+		}
+		$ajax_form->setRecord($input_form);
+		return $ajax_form;
 	}
 } 
 ?>

@@ -121,7 +121,7 @@ class SplitPosition extends MongoForm {
 		return $this;
 	}
 	
-    /**
+	/**
 	 * Returns the offers
 	 * @return integer
 	 */
@@ -142,7 +142,7 @@ class SplitPosition extends MongoForm {
 			array_walk($this->offers, function(&$val, $key) { 
 				$offer = new \Flux\Link\Offer();
 				$offer->setOfferId($val);
-				if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
+				if (\MongoId::isValid($offer->getId()) && $offer->getName() == '') {
 					$offer->setOfferName($offer->getOffer()->getName());
 				}
 				$val = $offer; 
@@ -155,7 +155,7 @@ class SplitPosition extends MongoForm {
 				array_walk($this->offers, function(&$val, $key) { 
 					$offer = new \Flux\Link\Offer();
 					$offer->setOfferId($val);
-					if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == '') {
+					if (\MongoId::isValid($offer->getId()) && $offer->getName() == '') {
 						$offer->setOfferName($offer->getOffer()->getName());
 					}
 					$val = $offer; 
@@ -277,7 +277,7 @@ class SplitPosition extends MongoForm {
 			array_walk($this->data_fields, function(&$val, $key) { 
 				$data_field = new \Flux\Link\DataField();
 				$data_field->setDataFieldId($val);
-				if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == '') {
+				if (\MongoId::isValid($data_field->getId()) && $data_field->getName() == '') {
 					$data_field->setDataFieldName($data_field->getDataField()->getName());
 				}
 				$val = $data_field; 
@@ -290,7 +290,7 @@ class SplitPosition extends MongoForm {
 				array_walk($this->data_fields, function(&$val, $key) { 
 					$data_field = new \Flux\Link\DataField();
 					$data_field->setDataFieldId($val);
-					if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == '') {
+					if (\MongoId::isValid($data_field->getId()) && $data_field->getName() == '') {
 						$data_field->setDataFieldName($data_field->getDataField()->getName());
 					}
 					$val = $data_field; 
@@ -300,7 +300,7 @@ class SplitPosition extends MongoForm {
 				array_walk($this->data_fields, function(&$val, $key) { 
 					$data_field = new \Flux\Link\DataField();
 					$data_field->setDataFieldId($val);
-					if (\MongoId::isValid($data_field->getDataFieldId()) && $data_field->getDataFieldName() == '') {
+					if (\MongoId::isValid($data_field->getId()) && $data_field->getName() == '') {
 						$data_field->setDataFieldName($data_field->getDataField()->getName());
 					}
 					$val = $data_field; 
@@ -311,7 +311,7 @@ class SplitPosition extends MongoForm {
 		return $this;
 	}
 	
-    /**
+	/**
 	 * Returns the fulfillment
 	 * @return \Flux\Link\Fulfillment
 	 */
@@ -330,24 +330,24 @@ class SplitPosition extends MongoForm {
 		if (is_array($arg0)) {
 			$fulfillment = $this->getFulfillment();
 			$fulfillment->populate($arg0);
-			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == "") {
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == "") {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if (is_string($arg0)) {
 			$fulfillment = $this->getFulfillment();
 			$fulfillment->setFulfillmentId($arg0);
-			if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == "") {
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == "") {
 				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
 			}
 			$this->fulfillment = $fulfillment;
 		} else if ($arg0 instanceof \MongoId) {
-		    $fulfillment = $this->getFulfillment();
-		    $fulfillment->setFulfillmentId($arg0);
-		    if (\MongoId::isValid($fulfillment->getFulfillmentId()) && $fulfillment->getFulfillmentName() == "") {
-		        $fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
-		    }
-		    $this->fulfillment = $fulfillment;
+			$fulfillment = $this->getFulfillment();
+			$fulfillment->setFulfillmentId($arg0);
+			if (\MongoId::isValid($fulfillment->getId()) && $fulfillment->getName() == "") {
+				$fulfillment->setFulfillmentName($fulfillment->getFulfillment()->getName());
+			}
+			$this->fulfillment = $fulfillment;
 		}
 		$this->addModifiedColumn('fulfillment');
 		return $this;
@@ -372,24 +372,24 @@ class SplitPosition extends MongoForm {
 		if (is_array($arg0)) {
 			$split = $this->getSplit();
 			$split->populate($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
 		} else if (is_string($arg0)) {
 			$split = $this->getSplit();
 			$split->setSplitId($arg0);
-			if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
 				$split->setSplitName($split->getSplit()->getName());
 			}
 			$this->split = $split;
 		} else if ($arg0 instanceof \MongoId) {
-		    $split = $this->getSplit();
-		    $split->setSplitId($arg0);
-		    if (\MongoId::isValid($split->getSplitId()) && $split->getSplitName() == "") {
-		        $split->setSplitName($split->getSplit()->getName());
-		    }
-		    $this->split = $split;
+			$split = $this->getSplit();
+			$split->setSplitId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == "") {
+				$split->setSplitName($split->getSplit()->getName());
+			}
+			$this->split = $split;
 		}
 		$this->addModifiedColumn('split');
 		return $this;

@@ -2,7 +2,7 @@
 /**
  * Zend Framework (http://framework.zend.com/)
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @link	  http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -25,12 +25,12 @@ use Zend\Soap\Exception;
  *
  *   class MyCalculatorService
  *   {
- *      /**
- *       * @param int $x
- *       * @param int $y
- *       * @return int
- *       *
- *      public function add($x, $y) {}
+ *	  /**
+ *	   * @param int $x
+ *	   * @param int $y
+ *	   * @return int
+ *	   *
+ *	  public function add($x, $y) {}
  *   }
  *
  * The document/literal wrapper pattern would lead php ext/soap to generate a
@@ -68,115 +68,115 @@ use Zend\Soap\Exception;
  */
 class DocumentLiteralWrapper
 {
-    /**
-     * @var object
-     */
-    protected $object;
+	/**
+	 * @var object
+	 */
+	protected $object;
 
-    /**
-     * @var ReflectionObject
-     */
-    protected $reflection;
+	/**
+	 * @var ReflectionObject
+	 */
+	protected $reflection;
 
-    /**
-     * Pass Service object to the constructor
-     *
-     * @param object $object
-     */
-    public function __construct($object)
-    {
-        $this->object = $object;
-        $this->reflection = new ReflectionObject($this->object);
-    }
+	/**
+	 * Pass Service object to the constructor
+	 *
+	 * @param object $object
+	 */
+	public function __construct($object)
+	{
+		$this->object = $object;
+		$this->reflection = new ReflectionObject($this->object);
+	}
 
-    /**
-     * Proxy method that does the heavy document/literal decomposing.
-     *
-     * @param  string $method
-     * @param  array $args
-     * @return mixed
-     */
-    public function __call($method, $args)
-    {
-        $this->_assertOnlyOneArgument($args);
-        $this->_assertServiceDelegateHasMethod($method);
+	/**
+	 * Proxy method that does the heavy document/literal decomposing.
+	 *
+	 * @param  string $method
+	 * @param  array $args
+	 * @return mixed
+	 */
+	public function __call($method, $args)
+	{
+		$this->_assertOnlyOneArgument($args);
+		$this->_assertServiceDelegateHasMethod($method);
 
-        $delegateArgs = $this->_parseArguments($method, $args[0]);
-        $ret          = call_user_func_array(array($this->object, $method), $delegateArgs);
-        return $this->_getResultMessage($method, $ret);
-    }
+		$delegateArgs = $this->_parseArguments($method, $args[0]);
+		$ret		  = call_user_func_array(array($this->object, $method), $delegateArgs);
+		return $this->_getResultMessage($method, $ret);
+	}
 
-    /**
-     * Parse the document/literal wrapper into arguments to call the real
-     * service.
-     *
-     * @param  string $method
-     * @param  object $document
-     * @return array
-     * @throws Exception\UnexpectedValueException
-     */
-    protected function _parseArguments($method, $document)
-    {
-        $reflMethod = $this->reflection->getMethod($method);
-        $params = array();
-        foreach ($reflMethod->getParameters() as $param) {
-            $params[$param->getName()] = $param;
-        }
+	/**
+	 * Parse the document/literal wrapper into arguments to call the real
+	 * service.
+	 *
+	 * @param  string $method
+	 * @param  object $document
+	 * @return array
+	 * @throws Exception\UnexpectedValueException
+	 */
+	protected function _parseArguments($method, $document)
+	{
+		$reflMethod = $this->reflection->getMethod($method);
+		$params = array();
+		foreach ($reflMethod->getParameters() as $param) {
+			$params[$param->getName()] = $param;
+		}
 
-        $delegateArgs = array();
-        foreach (get_object_vars($document) as $argName => $argValue) {
-            if (!isset($params[$argName])) {
-                throw new Exception\UnexpectedValueException(sprintf(
-                    "Received unknown argument %s which is not an argument to %s::%s",
-                    $argName,
-                    get_class($this->object),
-                    $method
-                ));
-            }
-            $delegateArgs[$params[$argName]->getPosition()] = $argValue;
-        }
+		$delegateArgs = array();
+		foreach (get_object_vars($document) as $argName => $argValue) {
+			if (!isset($params[$argName])) {
+				throw new Exception\UnexpectedValueException(sprintf(
+					"Received unknown argument %s which is not an argument to %s::%s",
+					$argName,
+					get_class($this->object),
+					$method
+				));
+			}
+			$delegateArgs[$params[$argName]->getPosition()] = $argValue;
+		}
 
-        return $delegateArgs;
-    }
+		return $delegateArgs;
+	}
 
-    /**
-     * Returns result message content
-     *
-     * @param  string $method
-     * @param  mixed $ret
-     * @return array
-     */
-    protected function _getResultMessage($method, $ret)
-    {
-        return array($method . 'Result' => $ret);
-    }
+	/**
+	 * Returns result message content
+	 *
+	 * @param  string $method
+	 * @param  mixed $ret
+	 * @return array
+	 */
+	protected function _getResultMessage($method, $ret)
+	{
+		return array($method . 'Result' => $ret);
+	}
 
-    /**
-     * @param  string $method
-     * @throws Exception\BadMethodCallException
-     */
-    protected function _assertServiceDelegateHasMethod($method)
-    {
-        if (!$this->reflection->hasMethod($method)) {
-            throw new Exception\BadMethodCallException(sprintf(
-                "Method %s does not exist on delegate object %s",
-                $method,
-                get_class($this->object)
-            ));
-        }
-    }
+	/**
+	 * @param  string $method
+	 * @throws Exception\BadMethodCallException
+	 */
+	protected function _assertServiceDelegateHasMethod($method)
+	{
+		if (!$this->reflection->hasMethod($method)) {
+			throw new Exception\BadMethodCallException(sprintf(
+				"Method %s does not exist on delegate object %s",
+				$method,
+				get_class($this->object)
+			));
+		}
+	}
 
-    /**
-     * @param  array $args
-     * @throws Exception\UnexpectedValueException
-     */
-    protected function _assertOnlyOneArgument(array $args)
-    {
-        if (count($args) != 1) {
-            throw new Exception\UnexpectedValueException(sprintf(
-                "Expecting exactly one argument that is the document/literal wrapper, got %d",
-                count($args)
-            ));
-        }
-    }
+	/**
+	 * @param  array $args
+	 * @throws Exception\UnexpectedValueException
+	 */
+	protected function _assertOnlyOneArgument(array $args)
+	{
+		if (count($args) != 1) {
+			throw new Exception\UnexpectedValueException(sprintf(
+				"Expecting exactly one argument that is the document/literal wrapper, got %d",
+				count($args)
+			));
+		}
+	}
 }

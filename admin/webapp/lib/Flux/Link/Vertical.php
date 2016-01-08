@@ -1,12 +1,8 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
+class Vertical extends BasicLink {
 
-class Vertical extends CommonForm {
-	
-	protected $vertical_id;
-	protected $vertical_name;
 	protected $record_count;
 	
 	private $vertical;
@@ -16,10 +12,7 @@ class Vertical extends CommonForm {
 	 * @return integer
 	 */
 	function getVerticalId() {
-		if (is_null($this->vertical_id)) {
-			$this->vertical_id = null;
-		}
-		return $this->vertical_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -27,12 +20,7 @@ class Vertical extends CommonForm {
 	 * @var integer
 	 */
 	function setVerticalId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->vertical_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->vertical_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -40,10 +28,7 @@ class Vertical extends CommonForm {
 	 * @return string
 	 */
 	function getVerticalName() {
-		if (is_null($this->vertical_name)) {
-			$this->vertical_name = "";
-		}
-		return $this->vertical_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -51,8 +36,7 @@ class Vertical extends CommonForm {
 	 * @var string
 	 */
 	function setVerticalName($arg0) {
-		$this->vertical_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

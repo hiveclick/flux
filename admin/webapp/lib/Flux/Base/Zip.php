@@ -33,10 +33,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCountry() {
-	    if (is_null($this->country)) {
-	        $this->country = "";
-	    }
-	    return $this->country;
+		if (is_null($this->country)) {
+			$this->country = "";
+		}
+		return $this->country;
 	}
 	
 	/**
@@ -44,9 +44,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCountry($arg0) {
-	    $this->country = $arg0;
-	    $this->addModifiedColumn("country");
-	    return $this;
+		$this->country = $arg0;
+		$this->addModifiedColumn("country");
+		return $this;
 	}
 	
 	/**
@@ -54,10 +54,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getZipcode() {
-	    if (is_null($this->zipcode)) {
-	        $this->zipcode = "";
-	    }
-	    return $this->zipcode;
+		if (is_null($this->zipcode)) {
+			$this->zipcode = "";
+		}
+		return $this->zipcode;
 	}
 	
 	/**
@@ -65,9 +65,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setZipcode($arg0) {
-	    $this->zipcode = $arg0;
-	    $this->addModifiedColumn("zipcode");
-	    return $this;
+		$this->zipcode = $arg0;
+		$this->addModifiedColumn("zipcode");
+		return $this;
 	}
 	
 	/**
@@ -75,10 +75,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getZipcodeType() {
-	    if (is_null($this->zipcode_type)) {
-	        $this->zipcode_type = "";
-	    }
-	    return $this->zipcode_type;
+		if (is_null($this->zipcode_type)) {
+			$this->zipcode_type = "";
+		}
+		return $this->zipcode_type;
 	}
 	
 	/**
@@ -86,9 +86,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setZipcodeType($arg0) {
-	    $this->zipcode_type = $arg0;
-	    $this->addModifiedColumn("zipcode_type");
-	    return $this;
+		$this->zipcode_type = $arg0;
+		$this->addModifiedColumn("zipcode_type");
+		return $this;
 	}
 	
 	/**
@@ -96,10 +96,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCity() {
-	    if (is_null($this->city)) {
-	        $this->city = "";
-	    }
-	    return $this->city;
+		if (is_null($this->city)) {
+			$this->city = "";
+		}
+		return $this->city;
 	}
 	
 	/**
@@ -107,9 +107,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCity($arg0) {
-	    $this->city = $arg0;
-	    $this->addModifiedColumn("city");
-	    return $this;
+		$this->city = $arg0;
+		$this->addModifiedColumn("city");
+		return $this;
 	}
 	
 	/**
@@ -117,10 +117,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getState() {
-	    if (is_null($this->state)) {
-	        $this->state = "";
-	    }
-	    return $this->state;
+		if (is_null($this->state)) {
+			$this->state = "";
+		}
+		return $this->state;
 	}
 	
 	/**
@@ -128,9 +128,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setState($arg0) {
-	    $this->state = $arg0;
-	    $this->addModifiedColumn("state");
-	    return $this;
+		$this->state = $arg0;
+		$this->addModifiedColumn("state");
+		return $this;
 	}
 	
 	/**
@@ -138,10 +138,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getStateAbbreviation() {
-	    if (is_null($this->state_abbreviation)) {
-	        $this->state_abbreviation = "";
-	    }
-	    return $this->state_abbreviation;
+		if (is_null($this->state_abbreviation)) {
+			$this->state_abbreviation = "";
+		}
+		return $this->state_abbreviation;
 	}
 	
 	/**
@@ -149,9 +149,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setStateAbbreviation($arg0) {
-	    $this->state_abbreviation = $arg0;
-	    $this->addModifiedColumn("state_abbreviation");
-	    return $this;
+		$this->state_abbreviation = $arg0;
+		$this->addModifiedColumn("state_abbreviation");
+		return $this;
 	}
 	
 	/**
@@ -159,10 +159,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCounty() {
-	    if (is_null($this->county)) {
-	        $this->county = "";
-	    }
-	    return $this->county;
+		if (is_null($this->county)) {
+			$this->county = "";
+		}
+		return $this->county;
 	}
 	
 	/**
@@ -170,9 +170,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCounty($arg0) {
-	    $this->county = $arg0;
-	    $this->addModifiedColumn("county");
-	    return $this;
+		$this->county = $arg0;
+		$this->addModifiedColumn("county");
+		return $this;
 	}
 	
 	/**
@@ -180,10 +180,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCountyAbbreviation() {
-	    if (is_null($this->county_abbreviation)) {
-	        $this->county_abbreviation = "";
-	    }
-	    return $this->county_abbreviation;
+		if (is_null($this->county_abbreviation)) {
+			$this->county_abbreviation = "";
+		}
+		return $this->county_abbreviation;
 	}
 	
 	/**
@@ -191,9 +191,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCountyAbbreviation($arg0) {
-	    $this->county_abbreviation = $arg0;
-	    $this->addModifiedColumn("county_abbreviation");
-	    return $this;
+		$this->county_abbreviation = $arg0;
+		$this->addModifiedColumn("county_abbreviation");
+		return $this;
 	}
 	
 	/**
@@ -201,10 +201,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCommunity() {
-	    if (is_null($this->community)) {
-	        $this->community = "";
-	    }
-	    return $this->community;
+		if (is_null($this->community)) {
+			$this->community = "";
+		}
+		return $this->community;
 	}
 	
 	/**
@@ -212,9 +212,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCommunity($arg0) {
-	    $this->community = $arg0;
-	    $this->addModifiedColumn("community");
-	    return $this;
+		$this->community = $arg0;
+		$this->addModifiedColumn("community");
+		return $this;
 	}
 	
 	/**
@@ -222,10 +222,10 @@ class Zip extends MongoForm {
 	 * @return string
 	 */
 	function getCommunityAbbreviation() {
-	    if (is_null($this->community_abbreviation)) {
-	        $this->community_abbreviation = "";
-	    }
-	    return $this->community_abbreviation;
+		if (is_null($this->community_abbreviation)) {
+			$this->community_abbreviation = "";
+		}
+		return $this->community_abbreviation;
 	}
 	
 	/**
@@ -233,9 +233,9 @@ class Zip extends MongoForm {
 	 * @var string
 	 */
 	function setCommunityAbbreviation($arg0) {
-	    $this->community_abbreviation = $arg0;
-	    $this->addModifiedColumn("community_abbreviation");
-	    return $this;
+		$this->community_abbreviation = $arg0;
+		$this->addModifiedColumn("community_abbreviation");
+		return $this;
 	}
 	
 	/**
@@ -243,10 +243,10 @@ class Zip extends MongoForm {
 	 * @return float
 	 */
 	function getLatitude() {
-	    if (is_null($this->latitude)) {
-	        $this->latitude = 0.0;
-	    }
-	    return $this->latitude;
+		if (is_null($this->latitude)) {
+			$this->latitude = 0.0;
+		}
+		return $this->latitude;
 	}
 	
 	/**
@@ -254,9 +254,9 @@ class Zip extends MongoForm {
 	 * @var float
 	 */
 	function setLatitude($arg0) {
-	    $this->latitude = (float)$arg0;
-	    $this->addModifiedColumn("latitude");
-	    return $this;
+		$this->latitude = (float)$arg0;
+		$this->addModifiedColumn("latitude");
+		return $this;
 	}
 	
 	/**
@@ -264,10 +264,10 @@ class Zip extends MongoForm {
 	 * @return float
 	 */
 	function getLongitude() {
-	    if (is_null($this->longitude)) {
-	        $this->longitude = 0.0;
-	    }
-	    return $this->longitude;
+		if (is_null($this->longitude)) {
+			$this->longitude = 0.0;
+		}
+		return $this->longitude;
 	}
 	
 	/**
@@ -275,9 +275,9 @@ class Zip extends MongoForm {
 	 * @var float
 	 */
 	function setLongitude($arg0) {
-	    $this->longitude = (float)$arg0;
-	    $this->addModifiedColumn("longitude");
-	    return $this;
+		$this->longitude = (float)$arg0;
+		$this->addModifiedColumn("longitude");
+		return $this;
 	}
 	
 	/**
@@ -285,10 +285,10 @@ class Zip extends MongoForm {
 	 * @return integer
 	 */
 	function getAccuracy() {
-	    if (is_null($this->accuracy)) {
-	        $this->accuracy = 1;
-	    }
-	    return $this->accuracy;
+		if (is_null($this->accuracy)) {
+			$this->accuracy = 1;
+		}
+		return $this->accuracy;
 	}
 	
 	/**
@@ -296,9 +296,9 @@ class Zip extends MongoForm {
 	 * @var integer
 	 */
 	function setAccuracy($arg0) {
-	    $this->accuracy = (int)$arg0;
-	    $this->addModifiedColumn("accuracy");
-	    return $this;
+		$this->accuracy = (int)$arg0;
+		$this->addModifiedColumn("accuracy");
+		return $this;
 	}
 	
 	/**

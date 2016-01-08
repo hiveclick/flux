@@ -42,13 +42,13 @@ class Fulfillment extends Base\Fulfillment {
 	 * @var array
 	 */
 	function setClientIdArray($arg0) {
-	    if (is_array($arg0)) {
-            $this->client_id_array = $arg0;
-	    } else if (is_string($arg0)) {
-	        $this->client_id_array = array($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->client_id_array = array($arg0);
-	    }
+		if (is_array($arg0)) {
+			$this->client_id_array = $arg0;
+		} else if (is_string($arg0)) {
+			$this->client_id_array = array($arg0);
+		} else if ($arg0 instanceof \MongoId) {
+			$this->client_id_array = array($arg0);
+		}
 		array_walk($this->client_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		return $this;
 	}
@@ -64,10 +64,10 @@ class Fulfillment extends Base\Fulfillment {
 			);
 		}
 		if (trim($this->getName()) != '') {
-		    $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
+			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		return parent::queryAll($criteria, $hydrate, $fields);
 	}
@@ -77,7 +77,7 @@ class Fulfillment extends Base\Fulfillment {
 	 * @return \Flux\Export
 	 */
 	function queryAllByClient() {
-		return parent::queryAll(array('client.client_id' => $this->getClient()->getClientId()));
+		return parent::queryAll(array('client._id' => $this->getClient()->getId()));
 	}
 
 	/**
@@ -149,11 +149,11 @@ class Fulfillment extends Base\Fulfillment {
 	
 	/**
 	 * Helper function to queue a single lead
-	 * @param $split_queue_attempt \Flux\SplitQueueAttempt
+	 * @param $lead_split_attempt \Flux\LeadSplitAttempt
 	 * @return boolean
 	 */
-	function queueLead(\Flux\SplitQueueAttempt $split_queue_attempt, $is_test = false) {
-		return $this->queueLeads(array($split_queue_attempt), $is_test);
+	function queueLead(\Flux\LeadSplitAttempt $lead_split_attempt, $is_test = false) {
+		return $this->queueLeads(array($lead_split_attempt), $is_test);
 	}
 	
 	/**
@@ -161,8 +161,8 @@ class Fulfillment extends Base\Fulfillment {
 	 * @param $lead array
 	 * @return boolean
 	 */
-	function queueLeads(array $split_queue_attempts, $is_test = false) {
-		return $this->getExportClass()->send($split_queue_attempts, $is_test);
+	function queueLeads(array $lead_split_attempts, $is_test = false) {
+		return $this->getExportClass()->send($lead_split_attempts, $is_test);
 	}
 	
 	/**
@@ -171,7 +171,7 @@ class Fulfillment extends Base\Fulfillment {
 	 */
 	public static function ensureIndexes() {
 		$client_export = new self();
-		$client_export->getCollection()->ensureIndex(array('client_id' => 1), array('background' => true));
+		$client_export->getCollection()->ensureIndex(array('client._id' => 1), array('background' => true));
 		return true;
 	}
 

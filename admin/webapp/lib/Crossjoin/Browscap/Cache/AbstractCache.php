@@ -40,38 +40,38 @@ namespace Crossjoin\Browscap\Cache;
  */
 abstract class AbstractCache
 {
-    /**
-     * @param mixed $key
-     * @param boolean $with_version
-     * @return string|null
-     */
-    abstract public function get ($key, $with_version = true);
+	/**
+	 * @param mixed $key
+	 * @param boolean $with_version
+	 * @return string|null
+	 */
+	abstract public function get ($key, $with_version = true);
 
-    /**
-     * Set cached data for a given key
-     *
-     * @param string $key
-     * @param string $content
-     * @param boolean $with_version
-     * @return int|false
-     */
-    abstract public function set ($key, $content, $with_version = true);
+	/**
+	 * Set cached data for a given key
+	 *
+	 * @param string $key
+	 * @param string $content
+	 * @param boolean $with_version
+	 * @return int|false
+	 */
+	abstract public function set ($key, $content, $with_version = true);
 
-    /**
-     * Delete cached data by a given key
-     *
-     * @param type $key
-     * @param type $with_version
-     * @return boolean
-     */
-    abstract public function delete ($key, $with_version = true);
+	/**
+	 * Delete cached data by a given key
+	 *
+	 * @param type $key
+	 * @param type $with_version
+	 * @return boolean
+	 */
+	abstract public function delete ($key, $with_version = true);
 
-    /**
-     * Check if a key is already cached
-     *
-     * @param type $key
-     * @param type $with_version
-     * @return boolean
-     */
-    abstract public function exists ($key, $with_version = true);
+	/**
+	 * Check if a key is already cached
+	 *
+	 * @param type $key
+	 * @param type $with_version
+	 * @return boolean
+	 */
+	abstract public function exists ($key, $with_version = true);
 }

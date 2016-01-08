@@ -29,6 +29,11 @@
 			<textarea id="fulfillment_map_modal_mapping_func" name="mapping_func" rows="12" class="form-control" placeholder="return $value;"><?php echo $fulfillment_map->getMappingFunc() ?></textarea>
 		</div>
 		<div class="help-text"><strong>}</strong></div>
+		<hr />
+		<div class="help-block">Set a default value that will be used for this field</div>
+		<div class="form-group">
+			<input type="text" id="fulfillment_map_modal_mapping_default" name="default_value" class="form-control" value="<?php echo $fulfillment_map->getDefaultValue() ?>" placeholder="enter default value (optional)" />
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" id="btn_validate" class="btn btn-info">Validate</button>
@@ -51,15 +56,20 @@ $(document).ready(function() {
 	
 	/* Handle a form submit by converting it to a text representative and hidden input fields on the main page */	
 	$('#fulfillment_map_modal_form').on('submit', function(event) {
+		event.preventDefault();
 		var position = $('#fulfillment_map_modal_column_id').val();
 		$('#mapping_func-' + position).val($('#fulfillment_map_modal_mapping_func').val());
-		$('.map_options-' + position).attr('href', '/admin/fulfillment-pane-map-options-modal?' + $(this).serialize());
-		if (window.btoa($('#fulfillment_map_modal_mapping_func').val()) == '<?php echo base64_encode(\Flux\FulfillmentMap::getDefaultMappingFunc()) ?>' || $('#fulfillment_map_modal_mapping_func').val() == '') {
-			$('.map_options-' + position).removeClass('btn-warning').addClass('btn-info').text('Options');
-			$('.map_alert-' + position).hide();
+		$('#mapping_default-' + position).val($('#fulfillment_map_modal_mapping_default').val());
+		if ($('#fulfillment_map_modal_mapping_default').val() != '') {
+			$('#map_defaults-' + position).html('Default Value: ' + $('#fulfillment_map_modal_mapping_default').val());
 		} else {
- 			$('.map_options-' + position).removeClass('btn-info').addClass('btn-warning').text('Options*');
-  			$('.map_alert-' + position).fadeIn();
+			$('#map_defaults-' + position).html('');
+		}
+		$('#map_options-' + position).attr('href', '/admin/fulfillment-pane-map-options-modal?' + $(this).serialize());
+		if (window.btoa($('#fulfillment_map_modal_mapping_func').val()) == '<?php echo base64_encode(\Flux\FulfillmentMap::getDefaultMappingFunc()) ?>' || $('#fulfillment_map_modal_mapping_func').val() == '') {
+			$('#map_options-' + position).removeClass('btn-success').addClass('btn-default');
+		} else {
+ 			$('#map_options-' + position).removeClass('btn-default').addClass('btn-success');
 		}
 		// Hide the modal
 		$('#map_options_modal').modal('hide');

@@ -1,23 +1,23 @@
 <?php
-    header('X-DataSource-Auth:1');
-    //header('Access-Control-Allow-Origin:http://www.flux.dev');
-    header('Content-Type: text/javascript');
-    /* @var $ajax_form BasicAjaxForm */ 
-    $ajax_form = $this->getContext()->getRequest()->getAttribute('ajax_form');
-    if (is_null($ajax_form)) {
-        $ajax_form = new BasicAjaxForm();
-    }
+	header('X-DataSource-Auth:1');
+	//header('Access-Control-Allow-Origin:http://www.flux.dev');
+	header('Content-Type: text/javascript');
+	/* @var $ajax_form BasicAjaxForm */ 
+	$ajax_form = $this->getContext()->getRequest()->getAttribute('ajax_form');
+	if (is_null($ajax_form)) {
+		$ajax_form = new BasicAjaxForm();
+	}
 ?>
 <?php 
 /*
 $response = array(
-            "version" => "0.6",
-            "status" => "ok",
-            "sig" => "1029305520",
-            "table" => array(
-                    "cols" => $ajax_form->getRecord()->getCols(),
-                    "rows" => $ajax_form->getRecord()->getRows()
-            ) 
+			"version" => "0.6",
+			"status" => "ok",
+			"sig" => "1029305520",
+			"table" => array(
+					"cols" => $ajax_form->getRecord()->getCols(),
+					"rows" => $ajax_form->getRecord()->getRows()
+			) 
 );
 google.visualization.Query.setResponse(<?php echo @json_encode($response) ?>);
 */

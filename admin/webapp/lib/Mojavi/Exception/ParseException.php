@@ -8,24 +8,24 @@ namespace Mojavi\Exception;
 class ParseException extends ConfigurationException
 {
 
-    // +-----------------------------------------------------------------------+
-    // | CONSTRUCTOR                                                           |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | CONSTRUCTOR														   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Class constructor.
-     *
-     * @param string The error message.
-     * @param int    The error code.
-     */
-    public function __construct ($message = null, $code = 0)
-    {
+	/**
+	 * Class constructor.
+	 *
+	 * @param string The error message.
+	 * @param int	The error code.
+	 */
+	public function __construct ($message = null, $code = 0)
+	{
 
-        parent::__construct($message, $code);
+		parent::__construct($message, $code);
 
-        $this->setName('ParseException');
+		$this->setName('ParseException');
 
-    }
+	}
 
 }
 

@@ -1,12 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class OfferPage extends CommonForm {
-	
-	protected $offer_page_id;
-	protected $offer_page_name;
+class OfferPage extends BasicLink {
 	
 	private $offer_page;
 	
@@ -15,10 +10,7 @@ class OfferPage extends CommonForm {
 	 * @return integer
 	 */
 	function getOfferPageId() {
-		if (is_null($this->offer_page_id)) {
-			$this->offer_page_id = null;
-		}
-		return $this->offer_page_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -26,12 +18,7 @@ class OfferPage extends CommonForm {
 	 * @var integer
 	 */
 	function setOfferPageId($arg0) {
-        if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->offer_page_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->offer_page_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -39,10 +26,7 @@ class OfferPage extends CommonForm {
 	 * @return string
 	 */
 	function getOfferPageName() {
-		if (is_null($this->offer_page_name)) {
-			$this->offer_page_name = "";
-		}
-		return $this->offer_page_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -50,8 +34,7 @@ class OfferPage extends CommonForm {
 	 * @var string
 	 */
 	function setOfferPageName($arg0) {
-		$this->offer_page_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**

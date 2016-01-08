@@ -17,24 +17,24 @@
 	<input type="hidden" name="is_global" value="0" />
 	<?php if (\MongoId::isValid($saved_search->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $saved_search->getId() ?>" />
-        <input type="hidden" name="user[user_id]" value="<?php echo \MongoId::isValid($saved_search->getUser()->getUserId()) ? $saved_search->getUser()->getUserId() : $this->getContext()->getUser()->getUserDetails()->getId()  ?>" />
+		<input type="hidden" name="user[user_id]" value="<?php echo \MongoId::isValid($saved_search->getUser()->getUserId()) ? $saved_search->getUser()->getUserId() : $this->getContext()->getUser()->getUserDetails()->getId()  ?>" />
 	<?php } else { ?>
-	    <input type="hidden" name="user[user_id]" value="<?php echo $this->getContext()->getUser()->getUserDetails()->getId() ?>" />
+		<input type="hidden" name="user[user_id]" value="<?php echo $this->getContext()->getUser()->getUserDetails()->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
 		<div class="help-block">Select what type of saved search you want to create</div>
 		<select name="search_type" id="search_type" placeholder="select the type of search you want to save">
-		    <option value=""></option>
-            <option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD, 'name' => 'Leads', 'description' => 'Search for leads on the search all leads pages'))) ?>">Leads</option>
-            <option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER, 'name' => 'Offers', 'description' => 'Search for offers based on keywords or by vertical'))) ?>">Offers</option>
-            <option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN, 'name' => 'Campaigns', 'description' => 'Search for campaigns by offer, client, or traffic source'))) ?>">Campaigns</option>
+			<option value=""></option>
+			<option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD, 'name' => 'Leads', 'description' => 'Search for leads on the search all leads pages'))) ?>">Leads</option>
+			<option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER, 'name' => 'Offers', 'description' => 'Search for offers based on keywords or by vertical'))) ?>">Offers</option>
+			<option value="<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('id' => \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN, 'name' => 'Campaigns', 'description' => 'Search for campaigns by offer, client, or traffic source'))) ?>">Campaigns</option>
 		</select>
 		<!-- Lead Search settings -->
 		<div id="saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>" class="<?php echo $saved_search->getSearchType() != \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ? 'hidden' : ''; ?>">
-		    <hr />
+			<hr />
 			<div class="help-block">Select search criteria to use when searching for leads</div>
 			<div class="form-group">
-			    <label>Only show leads with the following fields set: </label>
+				<label>Only show leads with the following fields set: </label>
 				<select class="form-control selectize" name="query_string[required_fields][]" id="required_fields" multiple placeholder="No Fields" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ? '' : 'disabled'; ?>>
 					<?php
 						/* @var $data_field \Flux\DataField */ 
@@ -75,7 +75,7 @@
 		</div>
 		<!-- Offer Search settings -->
 		<div id="saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>" class="<?php echo $saved_search->getSearchType() != \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ? 'hidden' : ''; ?>">
-		    <hr />
+			<hr />
 			<div class="help-block">Select search criteria to use when searching for offers</div>
 			<div class="form-group">
 				<label>Filter offers by name: </label>
@@ -84,7 +84,7 @@
 		</div>
 		<!-- Campaign Search settings -->
 		<div id="saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>" class="<?php echo $saved_search->getSearchType() != \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ? 'hidden' : ''; ?>">
-		    <hr />
+			<hr />
 			<div class="help-block">Select search criteria to use when searching for campaigns</div>
 			<div class="form-group">
 				<label>Filter campaigns by name: </label>
@@ -113,7 +113,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-                <label>Filter campaigns by traffic source: </label>
+				<label>Filter campaigns by traffic source: </label>
 				<select class="form-control selectize" name="query_string[traffic_source_id_array][]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ? '' : 'disabled'; ?>>
 					<?php
 						/* @var $traffic_source \Flux\TrafficSource */ 
@@ -129,7 +129,7 @@
 			<div class="help-block">Enter a nickname for this saved search that will be displayed in the menu</div>
 			<input type="text" name="name" class="form-control" placeholder="Enter a name for this search..." value="<?php echo $saved_search->getName() ?>" />
 			<div style="padding-left:10px;">
-                <label><input type="checkbox" name="is_global" value="1" <?php echo $saved_search->getIsGlobal() ? 'checked'  : '' ?> /> Show this saved search to all users in the system</label>
+				<label><input type="checkbox" name="is_global" value="1" <?php echo $saved_search->getIsGlobal() ? 'checked'  : '' ?> /> Show this saved search to all users in the system</label>
 			</div>
 		</div>
 	</div>
@@ -180,21 +180,21 @@ $(document).ready(function() {
 			// disable offer elements
 			$('#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>').addClass('hidden');
 			$('input,select,textarea','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>').attr('disabled', 'disabled');
-		    // disable campaign elements
+			// disable campaign elements
 			$('#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').addClass('hidden');
 			$('input,select,textarea','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').attr('disabled', 'disabled');
 
 			$('#saved_qs_' + val).removeClass('hidden');
 			$('input,select,textarea','#saved_qs_' + val).removeAttr('disabled');
 
-		    if (val != '') {
-		    	$('#saved_search_name').removeClass('hidden');
-		    }
+			if (val != '') {
+				$('#saved_search_name').removeClass('hidden');
+			}
 			
 			if (val == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>') {
-			    $('#required_fields','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
-			    $('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
-			    $('#campaign_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
+				$('#required_fields','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
+				$('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
+				$('#campaign_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
 			} else if (val == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>') {
 				$('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize()[0].selectize.enable();
 				$('#client_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize()[0].selectize.enable();
@@ -210,23 +210,23 @@ $(document).ready(function() {
 		dropdownWidthOffset: 150,
 		render: {
 			item: function(item, escape) {
-				var label = item.name || item.key;            
-	            return '<div">' + escape(label) + '</div>';
+				var label = item.name || item.key;			
+				return '<div">' + escape(label) + '</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +
-	            '</div>';
+				});				
+				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +
+				'</div>';
 			}
 		}
 	});
@@ -249,15 +249,15 @@ $(document).ready(function() {
 		create: true,
 		render: {
 			item: function(item, escape) {
-	            return '<div>' + escape(item.campaign_key) + '</div>';
+				return '<div>' + escape(item.campaign_key) + '</div>';
 			},
 			option: function(item, escape) {
 				return '<div style="padding-right:25px;">' +
-	                '<b>' + escape(item.campaign_key) + '</b>' +
-	                '<span class="pull-right label label-success">' + (item.client_name ? escape(item.client_name) : 'Unknown') + '</span>' + 
-	    	        '<br />' +
-	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
-	            '</div>';
+					'<b>' + escape(item.campaign_key) + '</b>' +
+					'<span class="pull-right label label-success">' + (item.client_name ? escape(item.client_name) : 'Unknown') + '</span>' + 
+					'<br />' +
+					(item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+				'</div>';
 			}
 		}
 	});
@@ -268,9 +268,9 @@ $(document).ready(function() {
 	});
 
 	$('#traffic_source_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize({
-    	allowEmptyOption: true,
-    	dropdownWidthOffset: 150,
-    	valueField: 'value',
+		allowEmptyOption: true,
+		dropdownWidthOffset: 150,
+		valueField: 'value',
 		labelField: 'name',
 		searchField: ['name', 'description'],
 		render: {
@@ -286,7 +286,7 @@ $(document).ready(function() {
 				return ret_val;
 			}
 		}
-    });
+	});
 });
 
 <?php if (\MongoId::isValid($saved_search->getId())) { ?>

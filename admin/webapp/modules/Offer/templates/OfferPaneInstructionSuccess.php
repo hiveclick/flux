@@ -127,33 +127,33 @@ var $selectize_options = {
 	render: {
 		item: function(item, escape) {
 			var label = item.name || item.key;
-            var caption = item.description ? item.description : null;
-            var keyname = item.key_name ? item.key_name : null;
-            var tags = item.tags ? item.tags : null;
-            var tag_span = '';
+			var caption = item.description ? item.description : null;
+			var keyname = item.key_name ? item.key_name : null;
+			var tags = item.tags ? item.tags : null;
+			var tag_span = '';
 			$.each(tags, function(j, tag_item) {
 				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-			});	            
-            return '<div style="width:100%;padding-right:25px;">' +
-                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-                '<div>' + tag_span + '</div>' +   
-            '</div>';
+			});				
+			return '<div style="width:100%;padding-right:25px;">' +
+				'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+				(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+				'<div>' + tag_span + '</div>' +   
+			'</div>';
 		},
 		option: function(item, escape) {
 			var label = item.name || item.key;
-            var caption = item.description ? item.description : null;
-            var keyname = item.key_name ? item.key_name : null;
-            var tags = item.tags ? item.tags : null;
-            var tag_span = '';
+			var caption = item.description ? item.description : null;
+			var keyname = item.key_name ? item.key_name : null;
+			var tags = item.tags ? item.tags : null;
+			var tag_span = '';
 			$.each(tags, function(j, tag_item) {
 				tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-			});	            
-            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-                '<div>' + tag_span + '</div>' +
-            '</div>';
+			});				
+			return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+				'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+				(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+				'<div>' + tag_span + '</div>' +
+			'</div>';
 		}
 	},
 	onChange: function(value) {
@@ -176,16 +176,16 @@ $(document).ready(function() {
 		searchField: ['client_name', 'description', 'campaign_key'],
 		render: {
 			item: function(item, escape) {
-	            return '<div style="padding-right:25px;">' +
-	                '<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
-	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
-	            '</div>';
+				return '<div style="padding-right:25px;">' +
+					'<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
+					(item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+				'</div>';
 			},
 			option: function(item, escape) {
 				return '<div style="padding-right:25px;">' +
-	                '<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
-	                (item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
-	            '</div>';
+					'<b>' + escape(item.campaign_key) + '</b> <span class="pull-right label label-success">' + escape(item.client_name) + '</span><br />' +
+					(item.description ? '<span class="text-muted small">' + escape(item.description) + ' </span>' : '') +
+				'</div>';
 			}
 		}
 	}).on('change', function(e) {
@@ -212,6 +212,7 @@ $(document).ready(function() {
 
 function buildPostingUrl() {
 	var posting_params = {};
+	var pixel_params = {};
 
 	var campaign_key = $('[name=posting_url_campaign]').val();
 	posting_params[<?php echo json_encode(\Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY); ?>] = campaign_key;

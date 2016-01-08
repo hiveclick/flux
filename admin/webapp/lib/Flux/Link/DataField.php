@@ -1,9 +1,7 @@
 <?php
 namespace Flux\Link;
 
-use Mojavi\Form\CommonForm;
-
-class DataField extends CommonForm {
+class DataField extends BasicLink {
 	
 	const DATA_FIELD_CONDITION_IS = 1;
 	const DATA_FIELD_CONDITION_IS_NOT = 2;
@@ -13,8 +11,6 @@ class DataField extends CommonForm {
 	const DATA_FIELD_CONDITION_IS_LT = 6;
 	
 	protected $data_field_key_name;
-	protected $data_field_id;
-	protected $data_field_name;
 	protected $data_field_value;
 	protected $data_field_condition;
 	
@@ -45,10 +41,7 @@ class DataField extends CommonForm {
 	 * @return integer
 	 */
 	function getDataFieldId() {
-		if (is_null($this->data_field_id)) {
-			$this->data_field_id = null;
-		}
-		return $this->data_field_id;
+		return parent::getId();
 	}
 	
 	/**
@@ -56,12 +49,7 @@ class DataField extends CommonForm {
 	 * @var integer
 	 */
 	function setDataFieldId($arg0) {
-	    if (is_string($arg0) && \MongoId::isValid($arg0)) {
-	        $this->data_field_id = new \MongoId($arg0);
-	    } else if ($arg0 instanceof \MongoId) {
-	        $this->data_field_id = $arg0;
-	    }
-		return $this;
+		return parent::setId($arg0);
 	}
 	
 	/**
@@ -69,10 +57,7 @@ class DataField extends CommonForm {
 	 * @return string
 	 */
 	function getDataFieldName() {
-		if (is_null($this->data_field_name)) {
-			$this->data_field_name = "";
-		}
-		return $this->data_field_name;
+		return parent::getName();
 	}
 	
 	/**
@@ -80,8 +65,7 @@ class DataField extends CommonForm {
 	 * @var string
 	 */
 	function setDataFieldName($arg0) {
-		$this->data_field_name = $arg0;
-		return $this;
+		return parent::setName($arg0);
 	}
 	
 	/**
@@ -100,17 +84,17 @@ class DataField extends CommonForm {
 	 * @var string
 	 */
 	function setDataFieldValue($arg0) {
-	    if (is_array($arg0)) {
-	        $this->data_field_value = $arg0;
-	        array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
-	    } else if (is_string($arg0)) {
-	        if (strpos($arg0, ',') !== false) {
-	            $this->data_field_value = explode(",", $arg0);
-	        } else {
-	            $this->data_field_value = array($arg0);
-	        }
-	        array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
-	    }
+		if (is_array($arg0)) {
+			$this->data_field_value = $arg0;
+			array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
+		} else if (is_string($arg0)) {
+			if (strpos($arg0, ',') !== false) {
+				$this->data_field_value = explode(",", $arg0);
+			} else {
+				$this->data_field_value = array($arg0);
+			}
+			array_walk($this->data_field_value, function(&$value) { $value = trim($value); });
+		}
 		return $this;
 	}
 	
@@ -146,7 +130,7 @@ class DataField extends CommonForm {
 				$this->data_field->queryByKeyName();
 			} else {
 				$this->data_field = new \Flux\DataField();
-				$this->data_field->setId($this->getDataFieldId());
+				$this->data_field->setId($this->getId());
 				$this->data_field->query();
 			}
 		}

@@ -4,18 +4,18 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ChartIndexView.php');
 class GraphConversionByHourSuccessView extends ChartIndexView
 {
 
-    // +-----------------------------------------------------------------------+
-    // | METHODS                                                               |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Execute any presentation logic and set template attributes.
-     *
-     * @return void
-     */
-    public function execute ()
-    {
-        parent::execute();
-    }
+	/**
+	 * Execute any presentation logic and set template attributes.
+	 *
+	 * @return void
+	 */
+	public function execute ()
+	{
+		parent::execute();
+	}
 
 }

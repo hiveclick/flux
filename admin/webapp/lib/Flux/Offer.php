@@ -7,6 +7,8 @@ class Offer extends Base\Offer {
 	protected $daily_conversions;
 	protected $optgroup;
 
+	private $campaigns;
+	private $splits;
 	private $offer_pages;
 	private $flow;
 	private $offer_map;
@@ -25,10 +27,10 @@ class Offer extends Base\Offer {
 	 * @return string
 	 */
 	function getOptgroup() {
-	    if (is_null($this->optgroup)) {
-	        $this->optgroup = $this->getVertical()->getVerticalName();
-	    }
-	    return $this->optgroup;
+		if (is_null($this->optgroup)) {
+			$this->optgroup = $this->getVertical()->getVerticalName();
+		}
+		return $this->optgroup;
 	}	
 	
 	/**
@@ -36,14 +38,14 @@ class Offer extends Base\Offer {
 	 * @return \Flux\Campaign
 	 */
 	function getDefaultCampaign() {
-	    if (is_null($this->default_campaign)) {
-	        $this->default_campaign = new \Flux\Campaign();
-    	    if (\MongoId::isValid($this->getDefaultCampaignId())) {
-    	        $this->default_campaign->setId(new \MongoId($this->getDefaultCampaignId()));
-    	        $this->default_campaign->query();
-    	    }
-	    }
-	    return $this->default_campaign;
+		if (is_null($this->default_campaign)) {
+			$this->default_campaign = new \Flux\Campaign();
+			if (\MongoId::isValid($this->getDefaultCampaignId())) {
+				$this->default_campaign->setId(new \MongoId($this->getDefaultCampaignId()));
+				$this->default_campaign->query();
+			}
+		}
+		return $this->default_campaign;
 	}
 	
 	/**
@@ -84,20 +86,20 @@ class Offer extends Base\Offer {
 	 */
 	function getFormattedRedirectUrl() {
 		if ($this->getRedirectType() == self::REDIRECT_TYPE_HOSTED) {
-		    if (strpos($this->getDomainName(), 'http') === 0) {
-		        if (strpos($this->getDomainName(), '#_id#') === false) {
-		            return $this->getDomainName() . '?_id=#_id#';   
-		        } else {
-                    return $this->getDomainName();
-		        }
-		    } else {
-    			$ret_val = 'http://' . $this->getDomainName() . '/';
-    			if ($this->getFolderName() != '') {
-    				$ret_val .= $this->getFolderName() . '/';
-    			}
-    			$ret_val .= '?_id=#_id#';
-    			return $ret_val;
-		    }
+			if (strpos($this->getDomainName(), 'http') === 0) {
+				if (strpos($this->getDomainName(), '#_id#') === false) {
+					return $this->getDomainName() . '?_id=#_id#';   
+				} else {
+					return $this->getDomainName();
+				}
+			} else {
+				$ret_val = 'http://' . $this->getDomainName() . '/';
+				if ($this->getFolderName() != '') {
+					$ret_val .= $this->getFolderName() . '/';
+				}
+				$ret_val .= '?_id=#_id#';
+				return $ret_val;
+			}
 		} else {
 			return $this->getRedirectUrl();
 		}
@@ -139,10 +141,10 @@ class Offer extends Base\Offer {
 	 * @return array
 	 */
 	function getVerticalIdArray() {
-	    if (is_null($this->vertical_id_array)) {
-	        $this->vertical_id_array = array();
-	    }
-	    return $this->vertical_id_array;
+		if (is_null($this->vertical_id_array)) {
+			$this->vertical_id_array = array();
+		}
+		return $this->vertical_id_array;
 	}
 	
 	/**
@@ -150,7 +152,7 @@ class Offer extends Base\Offer {
 	 * @var array
 	 */
 	function setVerticalIdArray($arg0) {
-	    if (is_array($arg0)) {
+		if (is_array($arg0)) {
 			$this->vertical_id_array = $arg0;
 			array_walk($this->vertical_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 		} else if (is_string($arg0)) {
@@ -162,7 +164,7 @@ class Offer extends Base\Offer {
 				array_walk($this->vertical_id_array, function(&$val) { if (\MongoId::isValid($val) && !($val instanceof \MongoId)) { $val = new \MongoId($val); }});
 			}
 		}
-	    return $this;
+		return $this;
 	}
 	
 	/**
@@ -202,10 +204,39 @@ class Offer extends Base\Offer {
 	function getOfferPages() {
 		if (is_null($this->offer_pages)) {
 			$offer_page = new \Flux\OfferPage();
-			$offer_page->setOffer($this->getId());
+			$offer_page->setOfferIdArray(array($this->getId()));
+			$offer_page->setIgnorePagination(true);
 			$this->offer_pages = $offer_page->queryAll();
 		}
 		return $this->offer_pages;
+	}
+	
+	/**
+	 * Returns the splits
+	 * @return array
+	 */
+	function getSplits() {
+		if (is_null($this->splits)) {
+			$split = new \Flux\Split();
+			$split->setOfferIdArray(array($this->getId()));
+			$split->setIgnorePagination(true);
+			$this->splits = $split->queryAll();
+		}
+		return $this->splits;
+	}
+	
+	/**
+	 * Returns the splits
+	 * @return array
+	 */
+	function getCampaigns() {
+		if (is_null($this->campaigns)) {
+			$campaign = new \Flux\Campaign();
+			$campaign->setOfferIdArray(array($this->getId()));
+			$campaign->setIgnorePagination(true);
+			$this->campaigns = $campaign->queryAllByOffer();
+		}
+		return $this->campaigns;
 	}
 
 	/**
@@ -213,12 +244,7 @@ class Offer extends Base\Offer {
 	 * @return array
 	 */
 	function getPublisherCampaigns() {
-		if (is_null($this->publisher_campaigns)) {
-			$campaign = new \Flux\Campaign();
-			$campaign->setOffer($this->getId());
-			$this->publisher_campaigns = $campaign->queryAllByOffer();
-		}
-		return $this->publisher_campaigns;
+		return $this->getCampaigns();
 	}
 
 	// +------------------------------------------------------------------------+
@@ -229,30 +255,30 @@ class Offer extends Base\Offer {
 	 * @return Flux\Offer
 	 */
 	function insert() {
-	    $insert_id = parent::insert();
-	    $this->setId($insert_id);
-	    // Create the first campaign for this offer
-	    if (\MongoId::isValid($insert_id)) {
-	        /* @var $campaign \Flux\Campaign */
-	        $campaign = new \Flux\Campaign();
-	        $campaign->setOffer($insert_id);
-	        $campaign->setClient($this->getClient()->getClientId());
-	        $campaign->setDescription('Default campaign for ' . $this->getName());
-	        // Find the main landing page
-	        $landing_pages = $this->getLandingPages();
-	        if (count($landing_pages) > 0) {
-    	        $landing_page = array_shift($landing_pages);
-    	        if (!is_null($landing_page)) {
-    	           $campaign->setRedirectLink($landing_page->getUrl() . '?_id=#_id#');
-    	        }
-	        }
-	        $campaign_id = $campaign->insert();
-	        
-	        // Assign this new campaign to this offer
-	        $this->setDefaultCampaignId($campaign_id);
-	        $this->update();
-	    }
-	    return $insert_id;
+		$insert_id = parent::insert();
+		$this->setId($insert_id);
+		// Create the first campaign for this offer
+		if (\MongoId::isValid($insert_id)) {
+			/* @var $campaign \Flux\Campaign */
+			$campaign = new \Flux\Campaign();
+			$campaign->setOffer($insert_id);
+			$campaign->setClient($this->getClient()->getId());
+			$campaign->setDescription('Default campaign for ' . $this->getName());
+			// Find the main landing page
+			$landing_pages = $this->getLandingPages();
+			if (count($landing_pages) > 0) {
+				$landing_page = array_shift($landing_pages);
+				if (!is_null($landing_page)) {
+				   $campaign->setRedirectLink($landing_page->getUrl() . '?_id=#_id#');
+				}
+			}
+			$campaign_id = $campaign->insert();
+			
+			// Assign this new campaign to this offer
+			$this->setDefaultCampaignId($campaign_id);
+			$this->update();
+		}
+		return $insert_id;
 	}
 	
 	/**
@@ -266,23 +292,23 @@ class Offer extends Base\Offer {
 		if ($this->getDomainName() != '') {
 			$criteria['domain_name'] = $this->getDomainName();
 		}
-		if (\MongoId::isValid($this->getClient()->getClientId())) {
-			$criteria['client.client_id'] = $this->getClientId();
+		if (\MongoId::isValid($this->getClient()->getId())) {
+			$criteria['client._id'] = $this->getId();
 		}
 		if (count($this->getVerticalIdArray()) > 0) {
-			$criteria['vertical.vertical_id'] = array('$in' => $this->getVerticalIdArray());
+			$criteria['vertical._id'] = array('$in' => $this->getVerticalIdArray());
 		}
 		if (trim($this->getKeywords()) != '') {
 			$criteria['$or'] = array(
 				array('name' => new \MongoRegex("/" . $this->getKeywords() . "/i")),
-				array('verticals' =>  new \MongoRegex("/" . $this->getKeywords() . "/i"))
+				array('vertical.name' =>  new \MongoRegex("/" . $this->getKeywords() . "/i"))
 			);
 		}
 		if (trim($this->getName()) != '') {
 		   $criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		if (count($this->getStatusArray()) > 0) {
 			$criteria['status'] = array('$in' => $this->getStatusArray());
@@ -303,7 +329,7 @@ class Offer extends Base\Offer {
 	 * @return Flux\Offer
 	 */
 	function queryAllByClient() {
-		return $this->queryAll(array('client_id' => $this->getClientId()));
+		return $this->queryAll(array('client._id' => $this->getId()));
 	}
 
 	/**
@@ -311,7 +337,7 @@ class Offer extends Base\Offer {
 	 * @return Flux\Offer
 	 */
 	function queryAllByVerticals() {
-		return $this->queryAll(array('vertical.vertical_id' => array('$in' => $this->getVerticalIdArray())));
+		return $this->queryAll(array('vertical._id' => array('$in' => $this->getVerticalIdArray())));
 	}
 
 	/**
@@ -330,7 +356,7 @@ class Offer extends Base\Offer {
 	 */
 	public static function ensureIndexes() {
 		$offer = new self();
-		$offer->getCollection()->ensureIndex(array('client_id' => 1), array('background' => true));
+		$offer->getCollection()->ensureIndex(array('client._id' => 1), array('background' => true));
 		return true;
 	}
 }

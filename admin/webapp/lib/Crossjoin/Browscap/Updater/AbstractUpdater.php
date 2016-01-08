@@ -41,129 +41,129 @@ namespace Crossjoin\Browscap\Updater;
  */
 abstract class AbstractUpdater
 {
-    /**
-     * Update interval in seconds, default 432000 (5 days)
-     *
-     * @var int
-     */
-    protected $interval = 432000;
+	/**
+	 * Update interval in seconds, default 432000 (5 days)
+	 *
+	 * @var int
+	 */
+	protected $interval = 432000;
 
-    /**
-     * Name of the update method, used in the user agent for the request,
-     * for browscap download statistics. Has to be overwritten by the
-     * extending class.
-     *
-     * @var string
-     */
-    protected $updateMethod = '';
+	/**
+	 * Name of the update method, used in the user agent for the request,
+	 * for browscap download statistics. Has to be overwritten by the
+	 * extending class.
+	 *
+	 * @var string
+	 */
+	protected $updateMethod = '';
 
-    /**
-     * Options for the updater. The array should be overwritten,
-     * containing all options as keys, set to the default value.
-     *
-     * @var array
-     */
-    protected $options = array();
+	/**
+	 * Options for the updater. The array should be overwritten,
+	 * containing all options as keys, set to the default value.
+	 *
+	 * @var array
+	 */
+	protected $options = array();
 
-    /**
-     * @param array|null $options
-     * @throws \InvalidArgumentException
-     */
-    public function __construct($options = null)
-    {
-        if ($options !== null) {
-            if (is_array($options)) {
-                foreach ($options as $key => $value) {
-                    $this->setOption($key, $value);
-                }
-            } else {
-                throw new \InvalidArgumentException("Invalid value for 'options', array expected.");
-            }
-        }
-    }
+	/**
+	 * @param array|null $options
+	 * @throws \InvalidArgumentException
+	 */
+	public function __construct($options = null)
+	{
+		if ($options !== null) {
+			if (is_array($options)) {
+				foreach ($options as $key => $value) {
+					$this->setOption($key, $value);
+				}
+			} else {
+				throw new \InvalidArgumentException("Invalid value for 'options', array expected.");
+			}
+		}
+	}
 
-    /**
-     * Gets the configured update method, used in the user agent for the request
-     *
-     * @return string
-     */
-    protected function getUpdateMethod()
-    {
-        return $this->updateMethod;
-    }
+	/**
+	 * Gets the configured update method, used in the user agent for the request
+	 *
+	 * @return string
+	 */
+	protected function getUpdateMethod()
+	{
+		return $this->updateMethod;
+	}
 
-    /**
-     * Sets the update interval in seconds
-     *
-     * @param int $interval
-     * @return \Crossjoin\Browscap\Updater\AbstractUpdater
-     */
-    public function setInterval($interval)
-    {
-        $this->interval = (int)$interval;
-        return $this;
-    }
+	/**
+	 * Sets the update interval in seconds
+	 *
+	 * @param int $interval
+	 * @return \Crossjoin\Browscap\Updater\AbstractUpdater
+	 */
+	public function setInterval($interval)
+	{
+		$this->interval = (int)$interval;
+		return $this;
+	}
 
-    /**
-     * Gets the update interval in seconds
-     *
-     * @return int
-     */
-    public function getInterval()
-    {
-        return $this->interval;
-    }
+	/**
+	 * Gets the update interval in seconds
+	 *
+	 * @return int
+	 */
+	public function getInterval()
+	{
+		return $this->interval;
+	}
 
-    /**
-     * Sets an updater option value
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return \Crossjoin\Browscap\Updater\AbstractUpdater
-     * @throws \InvalidArgumentException
-     */
-    public function setOption($key, $value)
-    {
-        if (isset($this->options[$key])) {
-            $this->options[$key] = $value;
-        } else {
-            throw new \InvalidArgumentException("Invalid option key '" . (string)$key . "'.");
-        }
-        return $this;
-    }
+	/**
+	 * Sets an updater option value
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 * @return \Crossjoin\Browscap\Updater\AbstractUpdater
+	 * @throws \InvalidArgumentException
+	 */
+	public function setOption($key, $value)
+	{
+		if (isset($this->options[$key])) {
+			$this->options[$key] = $value;
+		} else {
+			throw new \InvalidArgumentException("Invalid option key '" . (string)$key . "'.");
+		}
+		return $this;
+	}
 
-    /**
-     * Gets an updater option value
-     *
-     * @param string $key
-     * @return mixed|null
-     */
-    public function getOption($key)
-    {
-        if (isset($this->options[$key])) {
-            return $this->options[$key];
-        }
-        return null;
-    }
+	/**
+	 * Gets an updater option value
+	 *
+	 * @param string $key
+	 * @return mixed|null
+	 */
+	public function getOption($key)
+	{
+		if (isset($this->options[$key])) {
+			return $this->options[$key];
+		}
+		return null;
+	}
 
-    /**
-     * Gets the current browscap version (time stamp)
-     *
-     * @return int
-     */
-    abstract public function getBrowscapVersion();
+	/**
+	 * Gets the current browscap version (time stamp)
+	 *
+	 * @return int
+	 */
+	abstract public function getBrowscapVersion();
 
-    /**
-     * Gets the current browscap version number (if possible for the source)
-     *
-     * @return int|null
-     */
-    abstract public function getBrowscapVersionNumber();
+	/**
+	 * Gets the current browscap version number (if possible for the source)
+	 *
+	 * @return int|null
+	 */
+	abstract public function getBrowscapVersionNumber();
 
-    /**
-     * Gets the browscap data of the used source type
-     *
-     * @return string
-     */
-    abstract public function getBrowscapSource();
+	/**
+	 * Gets the browscap data of the used source type
+	 *
+	 * @return string
+	 */
+	abstract public function getBrowscapSource();
 }

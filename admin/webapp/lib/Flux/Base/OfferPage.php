@@ -15,8 +15,8 @@ class OfferPage extends MongoForm {
 	protected $page_source;
 	protected $offer_page_flows;
 	
-    protected $click_today;
-    protected $click_yesterday;
+	protected $click_today;
+	protected $click_yesterday;
    
 	/**
 	 * Constructs new user
@@ -279,24 +279,24 @@ class OfferPage extends MongoForm {
 		if (is_array($arg0)) {
 			$offer = $this->getOffer();
 			$offer->populate($arg0);
-			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
 		} else if (is_string($arg0)) {
 			$offer = $this->getOffer();
 			$offer->setOfferId($arg0);
-			if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
 				$offer->setOfferName($offer->getOffer()->getName());
 			}
 			$this->offer = $offer;
 		} else if ($arg0 instanceof \MongoId) {
-		    $offer = $this->getOffer();
-		    $offer->setOfferId($arg0);
-		    if (\MongoId::isValid($offer->getOfferId()) && $offer->getOfferName() == "") {
-		        $offer->setOfferName($offer->getOffer()->getName());
-		    }
-		    $this->offer = $offer;
+			$offer = $this->getOffer();
+			$offer->setOfferId($arg0);
+			if (\MongoId::isValid($offer->getId()) && $offer->getName() == "") {
+				$offer->setOfferName($offer->getOffer()->getName());
+			}
+			$this->offer = $offer;
 		}
 		$this->addModifiedColumn('offer');
 		return $this;
@@ -308,7 +308,7 @@ class OfferPage extends MongoForm {
 	 */
 	public static function ensureIndexes() {
 		$offer_page = new self();
-		$offer_page->getCollection()->ensureIndex(array('offer.offer_id' => 1), array('background' => true));
+		$offer_page->getCollection()->ensureIndex(array('offer._id' => 1), array('background' => true));
 		return true;
 	}
 }

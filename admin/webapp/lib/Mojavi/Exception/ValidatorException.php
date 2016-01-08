@@ -7,23 +7,23 @@ namespace Mojavi\Exception;
 class ValidatorException extends MojaviException
 {
 
-    // +-----------------------------------------------------------------------+
-    // | CONSTRUCTOR                                                           |
-    // +-----------------------------------------------------------------------+
+	// +-----------------------------------------------------------------------+
+	// | CONSTRUCTOR														   |
+	// +-----------------------------------------------------------------------+
 
-    /**
-     * Class constructor.
-     *
-     * @param string The error message.
-     * @param int    The error code.
-     */
-    public function __construct ($message = null, $code = 0)
-    {
+	/**
+	 * Class constructor.
+	 *
+	 * @param string The error message.
+	 * @param int	The error code.
+	 */
+	public function __construct ($message = null, $code = 0)
+	{
 
-        parent::__construct($message, $code);
+		parent::__construct($message, $code);
 
-        $this->setName('ValidatorException');
+		$this->setName('ValidatorException');
 
-    }
+	}
 
 }

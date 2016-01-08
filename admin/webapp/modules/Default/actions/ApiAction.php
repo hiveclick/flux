@@ -35,8 +35,8 @@ class ApiAction extends BasicAction
 			$response = $ajax_form->send($this->getContext()->getRequest(), $this->getContext()->getRequest()->getMethod(), $url);
 			$this->getContext()->getRequest()->setAttribute('response', $response);
 		} catch (Exception $e) {
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
-		    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getTraceAsString());
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getMessage());
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $e->getTraceAsString());
 			$this->getErrors()->addError('error', $e->getMessage());
 		}
 		return View::SUCCESS;

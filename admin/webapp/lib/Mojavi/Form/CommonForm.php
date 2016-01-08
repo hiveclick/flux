@@ -7,5 +7,5 @@ namespace Mojavi\Form;
  * can change where this form points to
  */
 class CommonForm extends OrmForm {
-    
+	
 }

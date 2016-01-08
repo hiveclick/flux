@@ -38,9 +38,9 @@
 				
 				<div class="form-group">
 					<select name="split_type" id="split_type">
-                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL ? 'selected' : '' ?>>This is a normal split that will find leads that match the filters</option>
-                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL ? 'selected' : '' ?>>This is a catch-all split and will only receive leads if no other splits match</option>
-                        <option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST ? 'selected' : '' ?>>This is a host &amp; post split that can fulfill leads through a POST</option>
+						<option value="<?php echo \Flux\Split::SPLIT_TYPE_NORMAL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL ? 'selected' : '' ?>>This is a normal split that will find leads that match the filters</option>
+						<option value="<?php echo \Flux\Split::SPLIT_TYPE_CATCH_ALL ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL ? 'selected' : '' ?>>This is a catch-all split and will only receive leads if no other splits match</option>
+						<option value="<?php echo \Flux\Split::SPLIT_TYPE_HOST_POST ?>" <?php echo $split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST ? 'selected' : '' ?>>This is a host &amp; post split that can fulfill leads through a POST</option>
 					</select>
 				</div>
 			</div>
@@ -70,39 +70,39 @@
 					<select class="form-control" name="fulfillment[fulfillment_id]" id="fulfillment_id" placeholder="choose a fulfillment to run when the lead matches the criteria">
 						<option value=""></option>
 						<?php
-        					/* @var $client \Flux\Client */ 
-        					foreach ($clients as $client) { 
-        				?>
-        					<?php if (count($client->getFulfillments()) > 0) { ?>
-        						<optgroup label="<?php echo $client->getName() ?>">
-        							<?php 
-        								/* @var $client \Flux\Fulfillment */
-        								foreach ($client->getFulfillments() AS $fulfillment) { 
-        							?>
-        								<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
-        							<?php } ?>
-        						</optgroup>
-        					<?php } ?>
-        				<?php } ?>
+							/* @var $client \Flux\Client */ 
+							foreach ($clients as $client) { 
+						?>
+							<?php if (count($client->getFulfillments()) > 0) { ?>
+								<optgroup label="<?php echo $client->getName() ?>">
+									<?php 
+										/* @var $client \Flux\Fulfillment */
+										foreach ($client->getFulfillments() AS $fulfillment) { 
+									?>
+										<option value="<?php echo $fulfillment->getId() ?>" <?php echo $split->getFulfillment()->getFulfillmentId() == $fulfillment->getId() ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$fulfillment->getId(), 'name' => $fulfillment->getName()))) ?>"><?php echo $fulfillment->getName() ?></option>
+									<?php } ?>
+								</optgroup>
+							<?php } ?>
+						<?php } ?>
 					</select>
 				</div>
 				<p />
 				<div class="row">
-				    <input type="hidden" id="fulfill_immediately_0" name="fulfill_immediately" value="0" />
-				    <div class="col-md-8"><div class="help-block">Choose when the fulfillment script will be run on this split</div></div>
-				    <div class="col-md-4 text-right"><input type="checkbox" class="form-control" id="fulfill_immediately_1" name="fulfill_immediately" value="1" <?php echo $split->getFulfillImmediately() ? 'checked' : '' ?> /></div>
+					<input type="hidden" id="fulfill_immediately_0" name="fulfill_immediately" value="0" />
+					<div class="col-md-8"><div class="help-block">Choose when the fulfillment script will be run on this split</div></div>
+					<div class="col-md-4 text-right"><input type="checkbox" class="form-control" id="fulfill_immediately_1" name="fulfill_immediately" value="1" <?php echo $split->getFulfillImmediately() ? 'checked' : '' ?> /></div>
 				</div>
 				<div class="row">
-				    <div class="col-md-8"><div class="help-block">You can delay fulfillment to allow people to finish filling out a form</div></div>
-				    <div class="col-md-4">
-				        <select name="fulfill_delay" id="fulfill_delay" <?php echo $split->getFulfillImmediately() ? '' : 'DISABLED' ?>>
-				            <option value="0" <?php echo $split->getFulfillDelay() == 0 ? 'SELECTED' : '' ?>>Do not delay</option>
-				            <option value="5" <?php echo $split->getFulfillDelay() == 5 ? 'SELECTED' : '' ?>>Delay for 5 minutes</option>
-				            <option value="10" <?php echo $split->getFulfillDelay() == 10 ? 'SELECTED' : '' ?>>Delay for 10 minutes</option>
-				            <option value="15" <?php echo $split->getFulfillDelay() == 15 ? 'SELECTED' : '' ?>>Delay for 15 minutes</option>
-				            <option value="60" <?php echo $split->getFulfillDelay() == 60 ? 'SELECTED' : '' ?>>Delay for 1 hour</option>
-				        </select>
-				    </div>
+					<div class="col-md-8"><div class="help-block">You can delay fulfillment to allow people to finish filling out a form</div></div>
+					<div class="col-md-4">
+						<select name="fulfill_delay" id="fulfill_delay" <?php echo $split->getFulfillImmediately() ? '' : 'DISABLED' ?>>
+							<option value="0" <?php echo $split->getFulfillDelay() == 0 ? 'SELECTED' : '' ?>>Do not delay</option>
+							<option value="5" <?php echo $split->getFulfillDelay() == 5 ? 'SELECTED' : '' ?>>Delay for 5 minutes</option>
+							<option value="10" <?php echo $split->getFulfillDelay() == 10 ? 'SELECTED' : '' ?>>Delay for 10 minutes</option>
+							<option value="15" <?php echo $split->getFulfillDelay() == 15 ? 'SELECTED' : '' ?>>Delay for 15 minutes</option>
+							<option value="60" <?php echo $split->getFulfillDelay() == 60 ? 'SELECTED' : '' ?>>Delay for 1 hour</option>
+						</select>
+					</div>
 				</div>
 				<hr />
 				<div class="help-block">If a lead cannot be fulfilled, you can send an email notification</div>
@@ -113,34 +113,34 @@
 				<hr />
 				<div class="help-block">Set a schedule for when leads can be fulfilled</div>
 				<div class="row">
-    				<div class="form-group col-md-8">
-    					<label class="control-label" for="days">Days</label>
-    					<select id="days" name="scheduling[days][]" class="form-control" multiple placeholder="select one or more days when leads can be accepted">
-    						<option value="0" <?php echo in_array(0, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Sunday</option>
-    						<option value="1" <?php echo in_array(1, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Monday</option>
-    						<option value="2" <?php echo in_array(2, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Tuesday</option>
-    						<option value="3" <?php echo in_array(3, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Wednesday</option>
-    						<option value="4" <?php echo in_array(4, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Thursday</option>
-    						<option value="5" <?php echo in_array(5, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Friday</option>
-    						<option value="6" <?php echo in_array(6, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Saturday</option>
-    					</select>
-    				</div>
-    				<div class="form-group col-md-2">
-    					<label class="control-label" for="start_hour">Hours</label>
-    					<select id="start_hour" name="scheduling[start_hour]" class="form-control" placeholder="enter starting hour">
-    						<?php for ($i=0;$i<24;$i++) { ?>
-    							<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getStartHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
-    						<?php } ?>
-    					</select>
-    				</div>
-    				<div class="form-group col-md-2">
-    					<label class="control-label" for="end_hour">&nbsp;</label>
-    					<select id="end_hour" name="scheduling[end_hour]" class="form-control" placeholder="enter ending hour">
-    						<?php for ($i=0;$i<24;$i++) { ?>
-    							<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getEndHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
-    						<?php } ?>
-    					</select>
-    				</div>
+					<div class="form-group col-md-8">
+						<label class="control-label" for="days">Days</label>
+						<select id="days" name="scheduling[days][]" class="form-control" multiple placeholder="select one or more days when leads can be accepted">
+							<option value="0" <?php echo in_array(0, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Sunday</option>
+							<option value="1" <?php echo in_array(1, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Monday</option>
+							<option value="2" <?php echo in_array(2, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Tuesday</option>
+							<option value="3" <?php echo in_array(3, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Wednesday</option>
+							<option value="4" <?php echo in_array(4, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Thursday</option>
+							<option value="5" <?php echo in_array(5, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Friday</option>
+							<option value="6" <?php echo in_array(6, $split->getScheduling()->getDays()) ? 'SELECTED' : '' ?>>Saturday</option>
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<label class="control-label" for="start_hour">Hours</label>
+						<select id="start_hour" name="scheduling[start_hour]" class="form-control" placeholder="enter starting hour">
+							<?php for ($i=0;$i<24;$i++) { ?>
+								<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getStartHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+							<?php } ?>
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<label class="control-label" for="end_hour">&nbsp;</label>
+						<select id="end_hour" name="scheduling[end_hour]" class="form-control" placeholder="enter ending hour">
+							<?php for ($i=0;$i<24;$i++) { ?>
+								<option value="<?php echo $i ?>" <?php echo ($split->getScheduling()->getEndHour() == $i) ? 'SELECTED' : '' ?>><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="validators">
@@ -238,33 +238,33 @@ $(document).ready(function() {
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="width:100%;padding-right:25px;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +   
-	            '</div>';
+				});				
+				return '<div style="width:100%;padding-right:25px;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +   
+				'</div>';
 			},
 			option: function(item, escape) {
 				var label = item.name || item.key;
-	            var caption = item.description ? item.description : null;
-	            var keyname = item.key_name ? item.key_name : null;
-	            var tags = item.tags ? item.tags : null;
-	            var tag_span = '';
+				var caption = item.description ? item.description : null;
+				var keyname = item.key_name ? item.key_name : null;
+				var tags = item.tags ? item.tags : null;
+				var tag_span = '';
 				$.each(tags, function(j, tag_item) {
 					tag_span += '<span class="label label-default">' + escape(tag_item) + '</span> ';
-				});	            
-	            return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
-	                '<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
-	                (caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
-	                '<div>' + tag_span + '</div>' +
-	            '</div>';
+				});				
+				return '<div style="border-bottom: 1px dotted #C8C8C8;">' +
+					'<b>' + escape(label) + '</b> <span class="pull-right label label-success">' + escape(keyname) + '</span><br />' +
+					(caption ? '<span class="text-muted small">' + escape(caption) + ' </span>' : '') +
+					'<div>' + tag_span + '</div>' +
+				'</div>';
 			}
 		},
 		onChange: function(value) {
@@ -298,59 +298,59 @@ $(document).ready(function() {
 	// Add new data fields and set them up along with value textboxes
 	$('.btn-add-dataField').on('click', function() {
 		if ($('#filters').is(':hidden')) {
-    		var index_number = $('#validator_container > .form-group').length;
-    		var $dataFieldRow = $('#dummy_validator_data_field').clone(true);
-    		$dataFieldRow.removeAttr('id');
-    		$dataFieldRow.html(function(i, oldHTML) {
-    			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
-    			return oldHTML;
-    		});
-    		
-    		$('#validator_container').append($dataFieldRow);
-    		$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
-    			$(this).closest('.form-group').remove();
-    		});
-    		$dataFieldRow.find('.selectize').selectize($selectize_options);
-    		$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
-    		$dataFieldRow.find('.selectize-text').selectize({
-    			valueField: 'value',
-    			labelField: 'name',
-    			searchField: ['name'],
-    			sortField: 'name',
-    			sortDirection: 'ASC',
-    			diacritics:true,
-    			create: true,
-    			createOnBlur: true
-    		});
+			var index_number = $('#validator_container > .form-group').length;
+			var $dataFieldRow = $('#dummy_validator_data_field').clone(true);
+			$dataFieldRow.removeAttr('id');
+			$dataFieldRow.html(function(i, oldHTML) {
+				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+				return oldHTML;
+			});
+			
+			$('#validator_container').append($dataFieldRow);
+			$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
+				$(this).closest('.form-group').remove();
+			});
+			$dataFieldRow.find('.selectize').selectize($selectize_options);
+			$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
+			$dataFieldRow.find('.selectize-text').selectize({
+				valueField: 'value',
+				labelField: 'name',
+				searchField: ['name'],
+				sortField: 'name',
+				sortDirection: 'ASC',
+				diacritics:true,
+				create: true,
+				createOnBlur: true
+			});
 		
-    	    $dataFieldRow.show();
+			$dataFieldRow.show();
 		} else {
 			var index_number = $('#filter_container > .form-group').length;
-    		var $dataFieldRow = $('#dummy_filter_data_field').clone(true);
-    		$dataFieldRow.removeAttr('id');
-    		$dataFieldRow.html(function(i, oldHTML) {
-    			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
-    			return oldHTML;
-    		});
-    		
-    		$('#filter_container').append($dataFieldRow);
-    		$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
-    			$(this).closest('.form-group').remove();
-    		});
-    		$dataFieldRow.find('.selectize').selectize($selectize_options);
-    		$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
-    		$dataFieldRow.find('.selectize-text').selectize({
-    			valueField: 'value',
-    			labelField: 'name',
-    			searchField: ['name'],
-    			sortField: 'name',
-    			sortDirection: 'ASC',
-    			diacritics:true,
-    			create: true,
-    			createOnBlur: true
-    		});
+			var $dataFieldRow = $('#dummy_filter_data_field').clone(true);
+			$dataFieldRow.removeAttr('id');
+			$dataFieldRow.html(function(i, oldHTML) {
+				oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+				return oldHTML;
+			});
+			
+			$('#filter_container').append($dataFieldRow);
+			$dataFieldRow.find('.btn-remove-dataField').on('click', function() {
+				$(this).closest('.form-group').remove();
+			});
+			$dataFieldRow.find('.selectize').selectize($selectize_options);
+			$dataFieldRow.find('.selectize-cond').selectize($selectize_cond_options);
+			$dataFieldRow.find('.selectize-text').selectize({
+				valueField: 'value',
+				labelField: 'name',
+				searchField: ['name'],
+				sortField: 'name',
+				sortDirection: 'ASC',
+				diacritics:true,
+				create: true,
+				createOnBlur: true
+			});
 		
-    	    $dataFieldRow.show();
+			$dataFieldRow.show();
 		}
 	});
 

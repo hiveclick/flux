@@ -34,14 +34,14 @@ class OfferSearchAction extends BasicAction
 		$client->setSort('name');
 		$client->setSord('ASC');
 		$client->setIgnorePagination(true);
-		$clients = $client->queryAll();
+		$clients = array(); //$client->queryAll();
 		
 		/* @var $vertical \Flux\Vertical */
 		$vertical = new \Flux\Vertical();
 		$vertical->setSort('name');
 		$vertical->setSord('ASC');
 		$vertical->setIgnorePagination(true);
-		$verticals = $vertical->queryAll();
+		$verticals = array(); //$vertical->queryAll();
 
 		$this->getContext()->getRequest()->setAttribute("offer", $offer);
 		$this->getContext()->getRequest()->setAttribute("clients", $clients);

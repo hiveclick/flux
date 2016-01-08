@@ -40,54 +40,54 @@ namespace Crossjoin\Browscap\Parser;
 class Ini
 extends IniLt55
 {
-    /**
-     * Gets some possible patterns that have to be matched against the user agent. With the given
-     * user agent string, we can optimize the search for potential patterns:
-     * - We check the first characters of the user agent (or better: a hash, generated from it)
-     * - We compare the length of the pattern with the length of the user agent
-     *   (the pattern cannot be longer than the user agent!)
-     *
-     * @param string $user_agent
-     */
-    protected function getPatterns($user_agent)
-    {
-        $start  = $this->getPatternStart($user_agent);
-        $length = strlen($user_agent);
-        $subkey = $this->getPatternCacheSubkey($start);
+	/**
+	 * Gets some possible patterns that have to be matched against the user agent. With the given
+	 * user agent string, we can optimize the search for potential patterns:
+	 * - We check the first characters of the user agent (or better: a hash, generated from it)
+	 * - We compare the length of the pattern with the length of the user agent
+	 *   (the pattern cannot be longer than the user agent!)
+	 *
+	 * @param string $user_agent
+	 */
+	protected function getPatterns($user_agent)
+	{
+		$start  = $this->getPatternStart($user_agent);
+		$length = strlen($user_agent);
+		$subkey = $this->getPatternCacheSubkey($start);
 
-        if (!self::getCache()->exists('browscap.patterns.' . $subkey)) {
-            $this->createPatterns();
-        }
+		if (!self::getCache()->exists('browscap.patterns.' . $subkey)) {
+			$this->createPatterns();
+		}
 
-        // get patterns, first for the given browser and if that is not found,
-        // for the default browser (with a special key)
-        foreach (array($start, str_repeat('z', 32)) as $tmp_start) {
-            $tmp_subkey = $this->getPatternCacheSubkey($tmp_start);
-            $file       = self::getCache()->getFileName('browscap.patterns.' . $tmp_subkey);
-            if (file_exists($file)) {
-                $handle = fopen($file, "r");
-                if ($handle) {
-                    $found = false;
-                    while (($buffer = fgets($handle)) !== false) {
-                        $tmp_buffer = substr($buffer, 0, 32);
-                        if ($tmp_buffer === $tmp_start) {
-                            // get length of the pattern
-                            $len = (int)strstr(substr($buffer, 33, 4), ' ', true);
+		// get patterns, first for the given browser and if that is not found,
+		// for the default browser (with a special key)
+		foreach (array($start, str_repeat('z', 32)) as $tmp_start) {
+			$tmp_subkey = $this->getPatternCacheSubkey($tmp_start);
+			$file	   = self::getCache()->getFileName('browscap.patterns.' . $tmp_subkey);
+			if (file_exists($file)) {
+				$handle = fopen($file, "r");
+				if ($handle) {
+					$found = false;
+					while (($buffer = fgets($handle)) !== false) {
+						$tmp_buffer = substr($buffer, 0, 32);
+						if ($tmp_buffer === $tmp_start) {
+							// get length of the pattern
+							$len = (int)strstr(substr($buffer, 33, 4), ' ', true);
 
-                            // the user agent must be longer than the pattern without place holders
-                            if ($len <= $length) {
-                                list(,,$patterns) = explode(" ", $buffer, 3);
-                                yield trim($patterns);
-                            }
-                            $found = true;
-                        } elseif ($found === true) {
-                            break;
-                        }
-                    }
-                    fclose($handle);
-                }
-            }
-        }
-        yield false;
-    }
+							// the user agent must be longer than the pattern without place holders
+							if ($len <= $length) {
+								list(,,$patterns) = explode(" ", $buffer, 3);
+								yield trim($patterns);
+							}
+							$found = true;
+						} elseif ($found === true) {
+							break;
+						}
+					}
+					fclose($handle);
+				}
+			}
+		}
+		yield false;
+	}
 }
