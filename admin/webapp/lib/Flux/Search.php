@@ -53,7 +53,7 @@ class Search extends Base\Search {
 		}
 	
 		/* @var $lead \Flux\Lead */
-		$lead = new \Flux\Lead();
+		$lead = new \Flux\LeadSearch();
 		$lead->setKeywords($this->getKeywords());
 		$leads = $lead->queryAll();
 		foreach ($leads as $lead) {

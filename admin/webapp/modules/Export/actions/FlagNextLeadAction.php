@@ -39,7 +39,7 @@ class FlagNextLeadAction extends BasicAction
 			$lead_split->populate($_POST);
 			$lead_split->query();
 			
-			/* @var $split_queue_attempt \Flux\LeadSplitAttempt */
+			/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 			$lead_split_attempt = new \Flux\LeadSplitAttempt();
 			$lead_split_attempt->setAttemptTime(new \MongoDate());
 			$lead_split_attempt->setFulfillment(array('fulfillment_id' => 0, 'fulfillment_name' => 'uBot Script'));
@@ -61,12 +61,14 @@ class FlagNextLeadAction extends BasicAction
 			$lead_split->setLastAttemptTime(new \MongoDate());
 			$lead_split->update();	   
 
-			if ($lead_split->getDisposition() == \Flux\SplitQueue::DISPOSITION_FULFILLED) {
+			if ($lead_split->getDisposition() == \Flux\LeadSplit::DISPOSITION_FULFILLED) {
 				// Add a fulfilled event to the lead
-				/* @var $lead \Flux\Lead */
-				$lead = $lead_split->getLead()->getLead();
-				$lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
-				$lead->update();
+				if ($lead_split->getSplit()->getSplit()->getFulfillment()->getFulfillment()->getTriggerFulfillmentFlag()) {
+					/* @var $lead \Flux\Lead */
+					$lead = $lead_split->getLead()->getLead();
+					$lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
+					$lead->update();
+				}
 				
 				// Add/Update the lead reporting
 				/* @var $report_lead \Flux\ReportLead */

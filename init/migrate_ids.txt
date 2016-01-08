@@ -227,7 +227,7 @@ db.lead_split.find().forEach(function(obj) {
 });
 
 var counter = 0;
-db.lead.find().forEach(function(obj) {
+db.lead.find().sort({_id:-1}).forEach(function(obj) {
 	counter++;
 	if (obj._t) {
 		if (obj._t.offer) {

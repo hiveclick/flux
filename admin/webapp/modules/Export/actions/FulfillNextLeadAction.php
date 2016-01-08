@@ -25,21 +25,21 @@ class FulfillNextLeadAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\SplitQueue */
-		$split_queue = new \Flux\SplitQueue();
-		$split_queue->populate($_REQUEST);
-		$split_queue->query();
+		/* @var $lead_split Flux\LeadSplit */
+		$lead_split = new \Flux\LeadSplit();
+		$lead_split->populate($_REQUEST);
+		$lead_split->query();
 		
-		$split_queue->setDisposition(\Flux\SplitQueue::DISPOSITION_FULFILLED);
-		$split_queue->setErrorMessage('');
-		$split_queue->setIsError(false);
+		$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_FULFILLED);
+		$lead_split->setErrorMessage('');
+		$lead_split->setIsError(false);
 		
-		$split_queue_attempt = new \Flux\SplitQueueAttempt();
-		$split_queue_attempt->setAttemptTime(new \MongoDate());
-		$split_queue_attempt->setResponse($arg0);
-		$split_queue_attempt->setIsError(true);
+		$lead_split_attempt = new \Flux\LeadSplitAttempt();
+		$lead_split_attempt->setAttemptTime(new \MongoDate());
+		$lead_split_attempt->setResponse($arg0);
+		$lead_split_attempt->setIsError(true);
 		
-		$split_queue->update();
+		$lead_split->update();
 		
 		$this->getContext()->getRequest()->setAttribute("split_queue", $split_queue);
 		return View::SUCCESS;

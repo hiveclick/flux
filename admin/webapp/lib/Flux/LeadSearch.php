@@ -354,9 +354,19 @@ class LeadSearch extends Lead {
 				$lastname_data_field = \Flux\DataField::retrieveDataFieldFromKeyName('ln');
 				$name_data_field = \Flux\DataField::retrieveDataFieldFromKeyName('name');
 				$email_data_field = \Flux\DataField::retrieveDataFieldFromKeyName('em');
-				if (strpos($this->getKeywords(), ' ') === false) {
+				if (strpos($this->getKeywords(), '@') !== false) {
+					if ($email_data_field !== false) {
+						$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $email_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
+					}
+					if ($name_data_field !== false) {
+						$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $name_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
+					}
+				} else if (strpos($this->getKeywords(), ' ') === false) {
 					$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $firstname_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
 					$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $lastname_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
+					if ($name_data_field !== false) {
+						$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $name_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
+					}
 				} else {
 					$firstname = substr($this->getKeywords(), 0, strpos($this->getKeywords(), ' '));
 					$lastname = substr($this->getKeywords(), strpos($this->getKeywords(), ' ') + 1);
@@ -364,13 +374,11 @@ class LeadSearch extends Lead {
 							array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $firstname_data_field->getKeyName() =>  new \MongoRegex("/" . $firstname . "/i")),
 							array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $lastname_data_field->getKeyName() =>  new \MongoRegex("/" . $lastname . "/i"))
 					));
+					if ($name_data_field !== false) {
+						$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $name_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
+					}
 				}
-				if ($name_data_field !== false) {
-					$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $name_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
-				}
-				if ($email_data_field !== false) {
-					$search_params[] = array(\Flux\DataField::DATA_FIELD_DEFAULT_CONTAINER . '.' . $email_data_field->getKeyName() =>  new \MongoRegex("/" . $this->getKeywords() . "/i"));
-				}
+				
 				$criteria['$or'] = $search_params;
 			}		
 		}

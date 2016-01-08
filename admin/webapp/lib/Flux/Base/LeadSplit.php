@@ -609,14 +609,47 @@ class LeadSplit extends MongoForm {
 	}
 	
 	/**
-	 * Ensures that the mongo indexes are set (should be called once)
+	 * Creates indexes for this collection
 	 * @return boolean
 	 */
-	public static function ensureIndexes() {
-		$lead_split = new self();
-		$lead_split->getCollection()->ensureIndex(array('split._id' => 1), array('background' => true));
-		$lead_split->getCollection()->ensureIndex(array('lead._id' => 1), array('background' => true));
-		$lead_split->getCollection()->ensureIndex(array('disposition' => 1), array('background' => true));
-		return true;
+	static function ensureIndexes() {
+		$exception = null;
+		$indexes = array();
+		$indexes[] = array('idx' => array('lead._id' => 1), 'options' => array('background' => true));
+		$indexes[] = array('idx' => array('split._id' => 1), 'options' => array('background' => true));
+		$indexes[] = array('idx' => array('status' => 1), 'options' => array('background' => true));
+	
+		foreach ($indexes as $index) {
+			try {
+				$collection = new self();
+				$collection->getCollection()->createIndex($index['idx'], $index['options']);
+			} catch (\Exception $e) {
+				$exception = $e;
+			}
+		}
+	
+		// Enable sharding as well
+		/*
+		$shards[] = array('idx' => array('_id' => 1));
+		foreach ($shards as $shard) {
+		try {
+		$collection = new self();
+	
+		$shardDB = \Mojavi\Controller\Controller::getInstance()->getContext()->getDatabaseManager()->getDatabase($collection->getDbName())->getParameter('database');
+		$shardCollection =  $shardDB . '.' . $collection->getCollectionName();
+	
+		$r = $collection->getConnection('mongo_admin')->command(array('shardCollection' => $shardCollection, 'key' => $shard['idx']));
+	
+		if (isset($r['ok']) && $r['ok'] == 0 && isset($r['errmsg'])) {
+		throw new \Exception($r['errmsg']);
+		}
+		} catch (\Exception $e) {
+		if (strpos($e->getMessage(), 'already sharded') === false && strpos($e->getMessage(), 'no such command') === false) {
+		$exception = $e;
+		}
+		}
+		}
+		*/
+		if (!is_null($exception)) { throw $exception; }
 	}
 }

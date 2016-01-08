@@ -31,10 +31,10 @@ class GetNextLeadAction extends BasicAction
 		
 		$criteria = array();
 		if (\MongoId::isValid($lead_split->getLead()->getLeadId())) {
-			$criteria['lead.lead_id'] = $lead_split->getLead()->getLeadId();
-			$criteria['split.split_id'] = array('$in' => $lead_split->getSplitIdArray());
+			$criteria['lead._id'] = $lead_split->getLead()->getLeadId();
+			$criteria['split._id'] = array('$in' => $lead_split->getSplitIdArray());
 		} else {
-			$criteria['split.split_id'] = array('$in' => $lead_split->getSplitIdArray());
+			$criteria['split._id'] = array('$in' => $lead_split->getSplitIdArray());
 			$criteria['disposition'] = array('$in' => array(\Flux\LeadSplit::DISPOSITION_UNFULFILLED));
 		}
 		
