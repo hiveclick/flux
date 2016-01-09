@@ -33,7 +33,7 @@
 				<?php } ?>
 			</select>
 			<div style="padding-left:10px;">
-				<label><input type="checkbox" name="test" value="1" /> I only want to test the fulfillment, only show me what would be sent</label>
+				<label><input type="checkbox" name="test" id="test_1" value="1" /> I only want to test the fulfillment, only show me what would be sent</label>
 			</div>
 		</div>
 		<div style="display:none;" id="fulfillment_log_div">
@@ -117,7 +117,7 @@ $('#fulfillment_id', '#lead_fulfill_manual_form').selectize({
 $('#lead_fulfill_manual_form').form(
 	function(data) {
 		if (data.record) {
-			if (data.record.test) {
+			if ($('#test_1').is(':checked')) {
 				$('#debug_request', '#lead_fulfill_manual_form').val(data.record.debug.request);
 				if (data.record.debug.url != '') {
 					$('#debug_url', '#lead_fulfill_manual_form').html(data.record.debug.url);
