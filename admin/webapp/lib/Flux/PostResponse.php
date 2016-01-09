@@ -5,7 +5,7 @@ use Mojavi\Form\CommonForm;
 
 class PostResponse extends CommonForm {
 	
-	protected $lead;
+	private $lead;
 	protected $response;
 	protected $received_time;
 	

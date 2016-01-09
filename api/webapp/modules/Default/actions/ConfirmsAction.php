@@ -44,7 +44,7 @@ class ConfirmsAction extends BasicRestAction
 	 */
 	function executePost($input_form) {
 		$ajax_form = new \Mojavi\Form\BasicAjaxForm();	
-		$ajax_form->setRecord($input_form);
+		$post_response = new \Flux\PostResponse();
 		try {
 			$fulfillment_id = $this->getContext()->getRequest()->getParameter('token', null);
 			
@@ -75,6 +75,9 @@ class ConfirmsAction extends BasicRestAction
 							$lead_split->setConfirmedNote($returned_note);
 							$lead_split->setIsConfirmed(true);
 							$lead_split->update();
+							
+							$post_response->setResponse('Lead updated successfully');
+							$post_response->setId($lead->getId());
 							break;
 						}
 					}
@@ -86,8 +89,12 @@ class ConfirmsAction extends BasicRestAction
 				throw new \Exception('An invalid lead was passed in');
 			}
 		} catch (\Exception $e) {
+			$post_response->setResponse('Lead update failed');
 			$this->getErrors()->addError('error', $e->getMessage());
 		}
+		$ajax_form->setHidePagination(true);
+		$ajax_form->setHideMeta(true);
+		$ajax_form->setRecord($post_response);
 		return $ajax_form;
 	}
 }

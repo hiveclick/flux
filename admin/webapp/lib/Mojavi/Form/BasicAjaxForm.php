@@ -5,6 +5,9 @@ namespace Mojavi\Form;
  */
 class BasicAjaxForm extends CommonForm {
 
+	private $hide_pagination;
+	private $hide_meta;
+	
 	protected $result;
 	protected $record;
 	protected $entries;
@@ -102,6 +105,46 @@ class BasicAjaxForm extends CommonForm {
 		$this->rows_affected = $arg0;
 		return $this;
 	}
+	
+	/**
+	 * Returns the hide_pagination
+	 * @return boolean
+	 */
+	function getHidePagination() {
+		if (is_null($this->hide_pagination)) {
+			$this->hide_pagination = false;
+		}
+		return $this->hide_pagination;
+	}
+	
+	/**
+	 * Sets the hide_pagination
+	 * @var boolean
+	 */
+	function setHidePagination($arg0) {
+		$this->hide_pagination = $arg0;
+		return $this;
+	}
+	
+	/**
+	 * Returns the hide_meta
+	 * @return boolean
+	 */
+	function getHideMeta() {
+		if (is_null($this->hide_meta)) {
+			$this->hide_meta = false;
+		}
+		return $this->hide_meta;
+	}
+	
+	/**
+	 * Sets the hide_meta
+	 * @var boolean
+	 */
+	function setHideMeta($arg0) {
+		$this->hide_meta = $arg0;
+		return $this;
+	}
 
 	/**
 	 * Override default toArray functionality so we don't add too much to the request
@@ -111,13 +154,17 @@ class BasicAjaxForm extends CommonForm {
 		$ret_val = array();
 		$ret_val['result'] = $this->getResult();
 		$ret_val['errors'] = $this->getErrors()->toArray();
-		$ret_val['meta']['insert_id'] = $this->getInsertId();
-		$ret_val['meta']['rows_affected'] = $this->getRowsAffected();
-		$ret_val['pagination']['draw'] = $this->getDraw();
-		$ret_val['pagination']['page'] = $this->getPage();
-		$ret_val['pagination']['items_per_page'] = $this->getItemsPerPage();
-		$ret_val['pagination']['page_count'] = $this->getPageCount();
-		$ret_val['pagination']['total_rows'] = $this->getTotal();
+		if (!$this->getHideMeta()) {
+			$ret_val['meta']['insert_id'] = $this->getInsertId();
+			$ret_val['meta']['rows_affected'] = $this->getRowsAffected();
+		}
+		if (!$this->getHidePagination()) {
+			$ret_val['pagination']['draw'] = $this->getDraw();
+			$ret_val['pagination']['page'] = $this->getPage();
+			$ret_val['pagination']['items_per_page'] = $this->getItemsPerPage();
+			$ret_val['pagination']['page_count'] = $this->getPageCount();
+			$ret_val['pagination']['total_rows'] = $this->getTotal();
+		}
 		if (is_object($this->getRecord())) {
 			$ret_val['record'] = $this->getRecord()->toArray($deep, $use_null_for_blank, $preserve_object_ids);
 		} else {
