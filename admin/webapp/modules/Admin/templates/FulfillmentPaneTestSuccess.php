@@ -9,12 +9,12 @@
 	<h4 class="modal-title">Test Fulfillment</h4>
 </div>
 <form id="fulfillment_test_form" name="fulfillment_test_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="fulfillment[fulfillment_id]" value="<?php echo $fulfillment->getId() ?>" />
+	<input type="hidden" name="fulfillment" value="<?php echo $fulfillment->getId() ?>" />
 	<input type="hidden" name="func" value="/admin/fulfillment-test" />
 	<div class="modal-body">
 		<div class="help-block">Enter a lead id to test this fulfillment and see what would be submitted</div>
 		<div class="form-group">
-			<input type="text" id="lead_id" name="lead[lead_id]" class="form-control" value="" placeholder="enter a lead to use as a test" />
+			<input type="text" id="lead_id" name="lead" class="form-control" value="" placeholder="enter a lead to use as a test" />
 		</div>
 		<div style="display:none;" id="fulfillment_log_div">
 			<hr />

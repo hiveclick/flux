@@ -29,7 +29,7 @@ class FulfillmentTestAction extends BasicRestAction
 	 * @return \Flux\Offer
 	 */
 	function getInputForm() {
-		return new \Flux\SplitQueue();
+		return new \Flux\LeadSplit();
 	}
 	
 	/**
@@ -39,13 +39,18 @@ class FulfillmentTestAction extends BasicRestAction
 		/* @var $ajax_form \Mojavi\Form\BasicAjaxForm */
 		$ajax_form = new \Mojavi\Form\BasicAjaxForm();
 		
-		/* @var $split_queue_attempt \Flux\SplitQueueAttempt */
-		$split_queue_attempt = new \Flux\SplitQueueAttempt();
-		$split_queue_attempt->setLead($input_form->getLead()->getLeadId());
-		$split_queue_attempt->setFulfillment($input_form->getFulfillment()->getFulfillmentId());
-		$split_queue_attempt->setAttemptTime(new \MongoDate());
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Testing fulfillment with lead: " . $input_form->getLead()->getId());
 		
-		$results = $split_queue_attempt->getFulfillment()->getFulfillment()->queueLead($split_queue_attempt, true);
+		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
+		$lead_split_attempt = new \Flux\LeadSplitAttempt();
+		$lead_split_attempt->setLead($input_form->getLead()->getId());
+		$lead_split_attempt->setFulfillment($input_form->getFulfillment()->getId());
+		$lead_split_attempt->setAttemptTime(new \MongoDate());
+		
+		$fulfillment = $lead_split_attempt->getFulfillment()->getFulfillment();
+		
+		// Set the testing flag to true
+		$results = $fulfillment->queueLead($lead_split_attempt, true);
 		/* @var $result \Flux\SplitQueueAttempt */
 		foreach ($results as $key => $result) {
 			// Save the split queue attempts back to the split queue item

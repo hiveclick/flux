@@ -142,6 +142,19 @@ class LeadSplitAttempt extends Base\LeadSplitAttempt {
 					$params[$mapping->getFieldName()] = $value;
 				}
 			}
+		} else if (\MongoId::isValid($this->getLead()->getId())) {
+			// If we don't have a lead split, then we are testing a fulfillment with a real lead, so 
+			// pull from the $this->getLead() function instead
+			/* @var $mapping \Flux\FulfillmentMap */
+			$lead = $this->getLead();
+			foreach ($this->getFulfillment()->getFulfillment()->getMapping() as $mapping) {
+				$value = $mapping->getMappedValue($lead);
+				if (trim($mapping->getFieldName()) == '') {
+					$params[$mapping->getDataField()->getKeyName()] = $value;
+				} else {
+					$params[$mapping->getFieldName()] = $value;
+				}
+			}
 		} else {
 			throw new \Exception('Invalid lead when trying to merge fulfillment (' . $this->getLeadSplit()->getId() . '/' .  $this->getLeadSplit()->getLeadSplit()->getLead()->getId(). ')');
 		}
