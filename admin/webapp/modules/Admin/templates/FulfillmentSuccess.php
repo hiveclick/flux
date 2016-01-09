@@ -54,7 +54,7 @@
 			<li role="presentation" class="active"><a href="#mapping" aria-controls="mapping" role="tab" data-toggle="tab">Post Mapping</a></li>
 			<li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Preview Mapping</a></li>
 			<li role="presentation"><a href="#attempts" aria-controls="attempts" role="tab" data-toggle="tab">Attempts</a></li>
-			<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+			<li role="presentation"><a href="#pixels" aria-controls="settings" role="tab" data-toggle="tab">Returns &amp; Pixels</a></li>
 		</ul>
 	
 		<!-- Tab panes -->
@@ -215,8 +215,14 @@
 			<div role="tabpanel" class="tab-pane" id="attempts">
 				<div class="help-block">Recent leads that have been attempted on this fulfillment will appear here</div>
 			</div>
-			<div role="tabpanel" class="tab-pane" id="settings">
-				<div class="help-block">Not sure what will be here yet</div>
+			<div role="tabpanel" class="tab-pane" id="pixels">
+				<div class="help-block">You can give these urls to the buyer so they can send confirmations and returns via pixel fires</div>
+				<h3>Returns</h3>
+				<div class="help-block">Use this url for returns.  Simply replace #LEADID# with the lead id that needs to be returned and the returned note <i>(optional)</i> with any additional information.</div>
+				<pre><?php echo MO_API_URL ?>/returns?token=<?php echo $fulfillment->getId() ?>&amp;lead=#LEAD#&amp;returned_note=</pre>
+				<h3>Confirmed Sales</h3>
+				<div class="help-block">Use this url for confirmed sales.  Simply replace #LEADID# with the lead id that is confirmed paid, the bounty with the amount paid, and the confirmed note <i>(optional)</i> with any additional information.</div>
+				<pre><?php echo MO_API_URL ?>/confirmed?token=<?php echo $fulfillment->getId() ?>&amp;lead=#LEAD#&amp;confirmed_note=&amp;bounty=0.00</pre>
 			</div>
 		</div>
 	</div>

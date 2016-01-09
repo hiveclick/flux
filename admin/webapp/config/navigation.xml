@@ -123,6 +123,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </fulfilledtoday>
+            <returnedtoday>
+                <label>Returned Leads This Week</label>
+                <uri>/lead/lead-split-returned-today-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </returnedtoday>
 			<spacer3>
 				<label></label>
 				<uri></uri>>

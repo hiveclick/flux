@@ -13,6 +13,7 @@ class LeadSplit extends MongoForm {
 	const DISPOSITION_PROCESSING = 5;
 	const DISPOSITION_FAILOVER = 6;
 	const DISPOSITION_CONFIRMED = 7;
+	const DISPOSITION_RETURNED = 8;
 	
 	protected $disposition;
 	protected $lead;
@@ -34,7 +35,10 @@ class LeadSplit extends MongoForm {
 	protected $next_cleanup_time;
 	
 	protected $is_confirmed;
+	protected $is_returned;
 	protected $bounty;
+	protected $confirmed_note;
+	protected $returned_note;
 	
 	protected $attempts;
 	
@@ -571,6 +575,48 @@ class LeadSplit extends MongoForm {
 	function setIsConfirmed($arg0) {
 		$this->is_confirmed = $arg0;
 		$this->addModifiedColumn("is_confirmed");
+		return $this;
+	}
+	
+	/**
+	 * Returns the is_returned
+	 * @return boolean
+	 */
+	function getIsReturned() {
+		if (is_null($this->is_returned)) {
+			$this->is_returned = false;
+		}
+		return $this->is_returned;
+	}
+	
+	/**
+	 * Sets the is_returned
+	 * @var boolean
+	 */
+	function setIsReturned($arg0) {
+		$this->is_returned = (boolean)$arg0;
+		$this->addModifiedColumn("is_returned");
+		return $this;
+	}
+	
+	/**
+	 * Returns the returned_note
+	 * @return string
+	 */
+	function getReturnedNote() {
+		if (is_null($this->returned_note)) {
+			$this->returned_note = "";
+		}
+		return $this->returned_note;
+	}
+	
+	/**
+	 * Sets the returned_note
+	 * @var string
+	 */
+	function setReturnedNote($arg0) {
+		$this->returned_note = $arg0;
+		$this->addModifiedColumn("returned_note");
 		return $this;
 	}
 	

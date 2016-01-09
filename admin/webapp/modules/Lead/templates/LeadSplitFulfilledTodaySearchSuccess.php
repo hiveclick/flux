@@ -168,6 +168,8 @@ $(document).ready(function() {
 					ret_val += '<div class="text-danger">Failover</div>';
 				} else if (value == 7) {
 					ret_val += '<div class="text-success">Confirmed</div>';
+				} else if (value == 8) {
+					ret_val += '<div class="text-danger">Returned</div>';
 				} else {
 					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
 				}

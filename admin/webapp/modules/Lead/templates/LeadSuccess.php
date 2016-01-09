@@ -431,7 +431,7 @@
 
 <div id="lead_split_dummy" class="hidden">
 	<div class="col-md-6 lead_split_item" id="lead_split_item_#ID#">
-		<div class="panel #CONFIRMEDCLASS#">
+		<div class="panel #CONFIRMEDCLASS# #RETURNEDCLASS#">
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-md-9">
@@ -457,6 +457,7 @@
 			</div>
 			<div class="panel-body">
 				#CONFIRMEDALERT#
+				#RETURNEDALERT#
 				<div class="lead_split_attempts">#ATTEMPTS#</div>
 			</div>
 			<div class="panel-footer small">
@@ -552,6 +553,9 @@ $(document).ready(function() {
 			} else if (obj.disposition == '<?php echo \Flux\LeadSplit::DISPOSITION_FAILOVER ?>') {
 				oldHTML = oldHTML.replace(/#DISPOSITION_CLASS#/g, 'warning');
 				oldHTML = oldHTML.replace(/#DISPOSITION#/g, 'Failover');
+			} else if (obj.disposition == '<?php echo \Flux\LeadSplit::DISPOSITION_RETURNED ?>') {
+				oldHTML = oldHTML.replace(/#DISPOSITION_CLASS#/g, 'danger');
+				oldHTML = oldHTML.replace(/#DISPOSITION#/g, 'Returned');
 			}
 			 
 			if (obj.is_confirmed) {
@@ -560,6 +564,13 @@ $(document).ready(function() {
 			} else {
 				oldHTML = oldHTML.replace(/#CONFIRMEDCLASS#/g, 'panel-default');
 				oldHTML = oldHTML.replace(/#CONFIRMEDALERT#/g, '');
+			}
+			if (obj.is_returned) {
+				oldHTML = oldHTML.replace(/#RETURNEDCLASS#/g, 'panel-danger');
+				oldHTML = oldHTML.replace(/#RETURNEDALERT#/g, ((obj.returned_note) ? '<div class="alert alert-danger"><i class="fa fa-times"></i> ' + obj.returned_note + '</div>' : '<div class="alert alert-danger"><i class="fa fa-times"></i> This fulfillment has been returned by the network.</div>'));
+			} else {
+				oldHTML = oldHTML.replace(/#RETURNEDCLASS#/g, 'panel-default');
+				oldHTML = oldHTML.replace(/#RETURNEDALERT#/g, '');
 			}
 			oldHTML = oldHTML.replace(/#LASTATTEMPTTIME#/g, ((obj.last_attempt_time && obj.last_attempt_time.sec) ? moment.unix(obj.last_attempt_time.sec).calendar() : '<i>-- not attempted yet --</i>'));
 			oldHTML = oldHTML.replace(/#NEXTATTEMPTTIME#/g, ((obj.next_attempt_time && obj.next_attempt_time.sec) ? moment.unix(obj.next_attempt_time.sec).calendar() : '<i>-- not set yet --</i>'));
@@ -615,6 +626,10 @@ $(document).ready(function() {
 				$('button.disposition-flag', this).addClass('btn-warning');
 				$('span.disposition', this).addClass('label-warning');
 				$('span.disposition', this).html('Failover');
+			} else if (obj.disposition == '<?php echo \Flux\LeadSplit::DISPOSITION_RETURNED ?>') {
+				$('button.disposition-flag', this).addClass('btn-danger');
+				$('span.disposition', this).addClass('label-danger');
+				$('span.disposition', this).html('Returned');
 			}
 		}
 	}).delegate('.lead_split_item', 'remove', function(event, obj) {

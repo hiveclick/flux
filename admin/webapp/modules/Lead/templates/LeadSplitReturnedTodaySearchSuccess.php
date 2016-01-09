@@ -5,14 +5,14 @@
 ?>
 <ol class="breadcrumb">
 	<li><a href="/lead/lead-search">Leads</a></li>
-	<li class="active">Pending Leads for Today &amp; Yesterday</li>
+	<li class="active">Returned Leads in the Past Week</li>
 </ol>
 
 <div class="container-fluid">
 	<div class="page-header">
-	   <h1>Pending Leads for Today &amp; Yesterday</h1>
+	   <h1>Returned Leads in the Past Week</h1>
 	</div>
-	<div class="help-block">These leads have been found by a split and are queued to be sent for fulfillment.</div>
+	<div class="help-block">These leads have been returned or refunded by the buyer.</div>
 	<p />
 	<div class="panel panel-primary">
 		<div id='split-header' class='grid-header panel-heading clearfix'>
@@ -72,6 +72,8 @@
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_FULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Fulfilled</options>
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLABLE ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_UNFULFILLABLE, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfillable</options>
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Already Fulfilled</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_CONFIRMED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_CONFIRMED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Confirmed</options>
+							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_RETURNED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_RETURNED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Returned</options>
 						</select>
 					</div>
 				</div>
@@ -98,19 +100,35 @@ $(document).ready(function() {
 			var ret_val = '<div style="line-height:16pt;">'
 			ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (Lead #<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + lead_id + '</a> - <a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
+			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'lead_id', name:'Lead #', field:'lead._id', sort_field:'lead._id', def_value: ' ', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'lead_id', name:'Lead #', field:'lead._id', sort_field:'lead._id', def_value: ' ', width:175, sortable:true, hidden:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var lead_id = (dataContext.lead._id == undefined) ? '' : dataContext.lead._id;
+			var offer_id = (dataContext.lead.offer._id == undefined) ? '' : dataContext.lead.offer._id;
+			var offer_name = (dataContext.lead.offer.name == undefined) ? '' : dataContext.lead.offer.name;
+			var client_name = (dataContext.lead.client.name == undefined) ? '' : dataContext.lead.client.name;
 			var ret_val = '<div style="line-height:16pt;">'
-			ret_val += '<a href="/lead/lead?_id=' + dataContext.lead._id + '&tab=attempts">' + value + '</a>';
+			ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + value + '</a>';
 			ret_val += '<div class="small text-muted">';
-			ret_val += ' (Item #:<a href="/lead/lead?_id=' + dataContext.lead._id + '&tab=attempts">' + dataContext.lead._id + '</a>)';
+			ret_val += ' (<a href="/offer/offer?_id=' + offer_id + '">' + offer_name + '</a> on ' + client_name + ')';
 			ret_val += '</div>';
 			ret_val += '</div>';
 			return ret_val;
+		}},
+		{id:'name', name:'Name', field:'lead_name', sort_field:'lead_name', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			var lead_id = (dataContext.lead._id == undefined) ? '' : dataContext.lead._id;
+			var email = (dataContext.lead.email == '') ? '' : 'E: ' + dataContext.lead.email;
+			var phone = (dataContext.lead.phone == '') ? '' : ', P: ' + dataContext.lead.phone;
+			var ret_val = '<div style="line-height:16pt;">'
+				ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + dataContext.lead.name + '</a>';
+				ret_val += '<div class="small text-muted">';
+				ret_val += ' (' + email + phone + ')';
+				ret_val += '</div>';
+				ret_val += '</div>';
+				return ret_val;
 		}},
 		{id:'split_id', name:'Split', field:'split._id', sort_field:'split._id', def_value: ' ', cssClass: 'text-center', width:175, sortable:true, type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var split_id = (dataContext.split._id == undefined) ? '' : dataContext.split._id;
@@ -126,18 +144,6 @@ $(document).ready(function() {
 				ret_val += '</div>';
 			return ret_val;
 		}},
-		{id:'name', name:'Name', field:'lead_name', sort_field:'lead_name', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			var lead_id = (dataContext.lead._id == undefined) ? 0 : dataContext.lead._id;
-			var email = (dataContext.lead.email == '') ? '' : 'E: ' + dataContext.lead.email;
-			var phone = (dataContext.lead.phone == '') ? '' : ', P: ' + dataContext.lead.phone;
-			var ret_val = '<div style="line-height:16pt;">'
-				ret_val += '<a href="/lead/lead?_id=' + lead_id + '&tab=attempts">' + dataContext.lead.name + '</a>';
-				ret_val += '<div class="small text-muted">';
-				ret_val += ' (' + email + phone + ')';
-				ret_val += '</div>';
-				ret_val += '</div>';
-				return ret_val;
-		}},
 		{id:'is_fulfilled', name:'Fulfilled', field:'is_fulfilled', def_value: ' ', width:60, sortable:true, hidden: true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value) {
 				return '<span class="text-success">Yes</span>';
@@ -145,7 +151,7 @@ $(document).ready(function() {
 				return '<span class="text-danger">No</span>';
 			}
 		}},
-		{id:'disposition', name:'Disposition', field:'disposition', def_value: ' ', width:60, sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'disposition', name:'Disposition', field:'disposition', def_value: ' ', width:90, sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			var ret_val = '<div style="line-height:16pt;">'
 				if (value == 0) {
 					ret_val += '<div class="text-muted">Unfulfilled</div>';
@@ -181,6 +187,17 @@ $(document).ready(function() {
 				return '<span class="text-danger">' + value + '</span>';
 			} else {
 				return '<i class="text-muted">no errors</i>';
+			}
+		}},
+		{id:'is_confirmed', name:'Confirmed', field:'is_confirmed', def_value: ' ', width:60, sortable:true, hidden: false, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (!value) {
+				return '<div class="text-danger"><i class="fa fa-times-circle"></i></div>';
+			} else {
+				var ret_val = '<div style="line-height:16pt;">'
+					ret_val += '<div class="text-success"><i class="fa fa-check-circle"></i></div>';
+					ret_val += '<div class="text-muted">$'+ $.number(dataContext.bounty, 2) + '</div>';
+					ret_val += '</div>';
+					return ret_val;
 			}
 		}},
 		{id:'last_attempt_time', name:'Last Attempt', field:'last_attempt_time', def_value: ' ', sortable:true, cssClass:'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {

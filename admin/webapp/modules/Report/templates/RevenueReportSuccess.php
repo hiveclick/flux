@@ -200,7 +200,7 @@ function loadRevenue() {
 				// Create an array of revenue by network				
 				rev_obj_found = false;
 				$.each(revenue_array, function(i, rev_obj) {
-					if (rev_obj.id == item.client._id) {
+					if (rev_obj.id.$id == item.client._id.$id) {
 						rev_obj.revenue += parseFloat(item.revenue);
 						rev_obj_found = true;
 					}
