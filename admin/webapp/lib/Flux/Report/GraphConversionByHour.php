@@ -126,7 +126,7 @@ class GraphConversionByHour extends GoogleChart {
 		if (count($this->getCampaignIdArray()) > 0) {
 			$ops[] = array(
 					'$match' => array(
-							\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign.campaign_id' => array('$in' => $this->getCampaignIdArray())
+							\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.campaign._id' => array('$in' => $this->getCampaignIdArray())
 					)
 			);
 		}
@@ -134,7 +134,7 @@ class GraphConversionByHour extends GoogleChart {
 		if (count($this->getOfferIdArray()) > 0) {
 			$ops[] = array(
 					'$match' => array(
-							\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer.offer_id' => array('$in' => $this->getOfferIdArray())
+							\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.offer._id' => array('$in' => $this->getOfferIdArray())
 					)
 			);
 		}
@@ -158,9 +158,9 @@ class GraphConversionByHour extends GoogleChart {
 			'event_date' => array('$substr' => 
 								array('$_e.t', 0, 13)
 							),
-			'event_offer' => '$_e.offer.offer_id',
+			'event_offer' => '$_e.offer._id',
 			'event_name' => '$_e.data_field.data_field_key_name',
-			'offer_name' => '$_t.offer.offer_name',
+			'offer_name' => '$_t.offer.name',
 			'subid' => '$_t.s1',
 			'clicks' => 1
 		));

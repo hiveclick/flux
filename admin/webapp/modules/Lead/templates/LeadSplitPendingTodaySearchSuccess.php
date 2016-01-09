@@ -159,6 +159,10 @@ $(document).ready(function() {
 					ret_val += '<div class="text-info">Already Fulfilled</div>';
 				} else if (value == 5) {
 					ret_val += '<div class="text-info">Processing</div>';
+				} else if (value == 6) {
+					ret_val += '<div class="text-danger">Failover</div>';
+				} else if (value == 7) {
+					ret_val += '<div class="text-success">Confirmed</div>';
 				} else {
 					ret_val += '<div class="text-muted">Unknown Disposition (' + value + ')</div>';
 				}

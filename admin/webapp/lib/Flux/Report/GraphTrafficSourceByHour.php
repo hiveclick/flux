@@ -116,10 +116,10 @@ class GraphTrafficSourceByHour extends GoogleChart {
 		);
 		
 		$ops[] = array('$match' => array(
-			'_e.data_field.name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
+			'_e.data_field.data_field_key_name' => \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME,
 			'_e.t' => array(
-							'$gte' => new \MongoDate($this->getStartDate()),
-							'$lt' => new \MongoDate($this->getEndDate())
+				'$gte' => new \MongoDate($this->getStartDate()),
+				'$lt' => new \MongoDate($this->getEndDate())
 			)
 		));
 		
@@ -183,7 +183,7 @@ class GraphTrafficSourceByHour extends GoogleChart {
 						$traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getName()]['clicks'] += (int)$result['clicks'];
 					} else {
 						$traffic_source_aggregate[$result['event_date']][$campaign->getTrafficSource()->getName()] = array(
-							'name' => $campaign->getTrafficSource()->getName(),
+							'traffic_source_name' => $campaign->getTrafficSource()->getName(),
 							'_id' => $campaign->getTrafficSource()->getId(),
 							'clicks' => (int)$result['clicks'],
 							'event_date' => $result['event_date']
@@ -191,7 +191,7 @@ class GraphTrafficSourceByHour extends GoogleChart {
 					}
 				} else {
 					$traffic_source_aggregate[$result['event_date']] = array($campaign->getTrafficSource()->getName() => array(
-						'name' => $campaign->getTrafficSource()->getName(),
+						'traffic_source_name' => $campaign->getTrafficSource()->getName(),
 						'_id' => $campaign->getTrafficSource()->getId(),
 						'clicks' => (int)$result['clicks'],
 						'event_date' => $result['event_date']

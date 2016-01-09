@@ -440,18 +440,26 @@ class LeadSplit extends MongoForm {
 			$split->populate($arg0);
 			$this->split = $split;
 			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
-				$split->setSplitName($split->getSplit()->getName());
+				$split->setName($split->getSplit()->getName());
 				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 		} else if (is_string($arg0) && \MongoId::isValid($arg0)) {
 			$split = $this->getSplit();
 			$split->setId($arg0);
 			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
-				$split->setSplitName($split->getSplit()->getName());
+				$split->setName($split->getSplit()->getName());
 				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
 			}
 			$this->split = $split;
 			
+		} else if ($arg0 instanceof \MongoId) {
+			$split = $this->getSplit();
+			$split->setId($arg0);
+			if (\MongoId::isValid($split->getId()) && $split->getName() == '') {
+				$split->setName($split->getSplit()->getName());
+				\Mojavi\Logging\LoggerManager::debug(__METHOD__ . " :: Populating name from object");
+			}
+			$this->split = $split;
 		}
 		$this->addModifiedColumn("split");
 		return $this;

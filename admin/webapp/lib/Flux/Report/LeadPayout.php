@@ -280,16 +280,16 @@ class LeadPayout extends BaseReport {
 		
 		$criteria = array();
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['client.client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		if (count($this->getDispositionArray()) > 0) {
 			$criteria['disposition'] = array('$in' => $this->getDispositionArray());
 		}
 		if (trim($this->getKeywords()) != '') {
 			$criteria['$or'] = array(
-				array('lead.lead_name' => new \MongoRegex('/' . $this->getKeywords() . '/i')),
+				array('lead.name' => new \MongoRegex('/' . $this->getKeywords() . '/i')),
 				array('lead.email' => new \MongoRegex('/' . $this->getKeywords() . '/i')),
-				array('lead.lead_id' => new \MongoRegex('/' . $this->getKeywords() . '/i')),
+				array('lead._id' => new \MongoRegex('/' . $this->getKeywords() . '/i')),
 			);
 		}
 		$this->massageDates();
@@ -302,10 +302,10 @@ class LeadPayout extends BaseReport {
 		);
 		$ops[] = array(
 			'$project' => array(
-				'client_name' => '$client.client_name',
-				'client_id' => '$client.client_id',
-				'offer_id' => '$lead.offer.offer_id',
-				'offer_name' => '$lead.offer.offer_name',
+				'client_name' => '$client.name',
+				'client_id' => '$client._id',
+				'offer_id' => '$lead.offer._id',
+				'offer_name' => '$lead.offer.name',
 				'report_date' => '$report_date',
 				'payout' => array('$cond' => array(array('$eq' => array('$accepted', true)), '$payout', 0)),
 				'revenue' => array('$cond' => array(array('$eq' => array('$accepted', true)), '$revenue', 0)),
@@ -370,7 +370,7 @@ class LeadPayout extends BaseReport {
 		$ops = array();
 		$criteria = array();
 		if (count($this->getClientIdArray()) > 0) {
-			$criteria['_t.client.client_id'] = array('$in' => $this->getClientIdArray());
+			$criteria['_t.client._id'] = array('$in' => $this->getClientIdArray());
 		}
 		$this->massageDates();
 		$criteria['_id'] = array('$gte' => $this->createMongoIdFromTimestamp(strtotime($this->getStartTime())), '$lte' => $this->createMongoIdFromTimestamp(strtotime($this->getEndTime())));
@@ -392,10 +392,10 @@ class LeadPayout extends BaseReport {
 		);
 		$ops[] = array(
 			'$project' => array(
-				'client_name' => '$_t.client.client_name',
-				'client_id' => '$_t.client.client_id',
-				'offer_name' => '$_t.offer.offer_name',
-				'offer_id' => '$_t.offer.offer_id',
+				'client_name' => '$_t.client.name',
+				'client_id' => '$_t.client._id',
+				'offer_name' => '$_t.offer.name',
+				'offer_id' => '$_t.offer._id',
 				'report_date' => '$created_time',
 				'clicks' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CREATED_NAME)), 1, 0)),
 				'conversions' => array('$cond' => array(array('$eq' => array('$_e.data_field.data_field_key_name', \Flux\DataField::DATA_FIELD_EVENT_CONVERSION_NAME)), 1, 0)),

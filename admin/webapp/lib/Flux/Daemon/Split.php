@@ -3,7 +3,7 @@ namespace Flux\Daemon;
 
 class Split extends BaseDaemon
 {
-	const DEBUG = false;
+	const DEBUG = true;
 	
 	public function action() {
 		if ($this->getPrimaryThread()) {
@@ -19,13 +19,11 @@ class Split extends BaseDaemon
 			
 			
 			if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
-				$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
 				// Normal splits should find leads created since the last time they were run
-				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $split->getLastRunTime());
+				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => $max_event_time);
 			} else {
 				// Catch-all splits should be delayed for 1 hour to give the other splits time to accept the leads
-				$this->log('Finding leads for ' . $split->getName() . ' between ' . date('m/d/Y g:i:s', ($split->getLastRunTime()->sec - (2 * 60 * 60))) . ' and ' . date('m/d/Y g:i:s', strtotime('now - 1 hour')), array($this->pid, $split->getId()));
-				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($split->getLastRunTime()->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
+				$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.t'] = array('$gt' => new \MongoDate(($max_event_time->sec - (2 * 60 * 60))), '$lt' => new \MongoDate(strtotime('now - 1 hour')));
 			}
 			
 			//$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER . '.data_field.data_field_key_name'] = array('$nin' => array(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME));
@@ -64,14 +62,38 @@ class Split extends BaseDaemon
 					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING) {
 						$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.' . $filter->getDataFieldKeyName()] = $filter_criteria;
 					} else if ($filter->getDataField()->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT) {
-						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['data_field.data_field_id'] = $filter->getId();
+						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['data_field._id'] = $filter->getId();
 						$criteria[\Flux\DataField::DATA_FIELD_EVENT_CONTAINER]['$elemMatch']['v'] = $filter_criteria;
 					}
 				}
 			}
 			
-			if (self::DEBUG) { 
-				$this->log(json_encode($criteria), array($this->pid, $split->getId()));
+			if (self::DEBUG) {
+				$op_query = json_encode($criteria);
+				$op_query = str_replace('"$group"', '$group', $op_query);
+				$op_query = str_replace('"$max"', '$max', $op_query);
+				$op_query = str_replace('"$sum"', '$sum', $op_query);
+				$op_query = str_replace('"$unwind"', '$unwind', $op_query);
+				$op_query = str_replace('"$match"', '$match', $op_query);
+				$op_query = str_replace('"$gte"', '$gte', $op_query);
+				$op_query = str_replace('"$lt"', '$lt', $op_query);
+				$op_query = str_replace('"$substr"', '$substr', $op_query);
+				$op_query = str_replace('"$exists"', '$exists', $op_query);
+				$op_query = str_replace('"$elemMatch"', '$elemMatch', $op_query);
+				$op_query = str_replace('"$project"', '$project', $op_query);
+				
+				$op_query = preg_replace('/{"\$id":"([a-z0-9]*)"}/', 'ObjectId("$1")', $op_query);
+				$op_query = str_replace(json_encode($max_event_time), 'ISODate(\'' . $max_event_time->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
+				
+				$start_date = new \MongoDate(($max_event_time->sec - (2 * 60 * 60)));
+				$end_date = new \MongoDate(strtotime('now - 1 hour'));
+				
+				$op_query = str_replace(json_encode($start_date), 'ISODate(\'' . $start_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
+				$op_query = str_replace(json_encode($end_date), 'ISODate(\'' . $end_date->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
+				$op_query = str_replace(json_encode($max_event_time), 'ISODate(\'' . $max_event_time->toDateTime()->format(\DateTime::ISO8601) . '\')', $op_query);
+				$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $max_event_time->sec) . ': ' . $op_query, array($this->pid, $split->getId()));
+			} else {
+				$this->log('Finding leads for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $max_event_time->sec), array($this->pid, $split->getId()));
 			}		
 			
 			/* @var $lead \Flux\Lead */
@@ -154,7 +176,7 @@ class Split extends BaseDaemon
 						}
 						
 					} catch (\Exception $e) {
-						$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
+						$this->log('Lead found [' . $lead->getId() . ']: FAILED VALIDATION (' . $e->getMessage() . ')', array($this->pid, $split->getId()));
 						continue;
 					}				
 					
@@ -171,6 +193,7 @@ class Split extends BaseDaemon
 					/* @var $lead_split \Flux\LeadSplit */
 					$lead_split = new \Flux\LeadSplit();
 					$lead_split->setLead($lead->getId());
+					$lead_split->setSplit($split->getId());
 					$lead_split->setIsFulfilled(false);
 					$lead_split->setIsProcessing(false);
 					$lead_split->setIsError(false);
@@ -182,36 +205,38 @@ class Split extends BaseDaemon
 					if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_NORMAL) {
 						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId(), 'split._id' => $lead_split->getSplit()->getId()));
 						if (is_null($existing_lead)) {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ADDED TO SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 							$lead_split->insert();
 							$added_leads++;
 						} else {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ALREADY EXISTS ON SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 						}
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_HOST_POST) {
 						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
 						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId(), 'split._id' => $lead_split->getSplit()->getId()));
 						if (is_null($existing_lead)) {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ADDED TO HOST/POST SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 							$lead_split->insert();
 							$added_leads++;
 						} else {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ALREADY EXISTS ON HOST/POST SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 						}  
 					} else if ($split->getSplitType() == \Flux\Split::SPLIT_TYPE_CATCH_ALL) {
 						// If this is a catch-all split, then we can only add this lead if it doesn't exist anywhere else
 						$existing_lead = $lead_split->getCollection()->findOne(array('lead._id' => $lead_split->getLead()->getId()));
 						if (is_null($existing_lead)) {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ADDED TO SPLIT', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ADDED TO CATCH-ALL SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 							$lead_split->setIsCatchAll(true);
 							$lead_split->insert();
 							$added_leads++;
 						} else {
-							$this->log('Lead found [' . $split->getId() . ']: ' . $lead->getId() . ', ALREADY EXISTS', array($this->pid, $split->getId()));
+							$this->log('Lead found [' . $lead->getId() . ']: ALREADY EXISTS ON CATCH-ALL SPLIT ' . $split->getName(), array($this->pid, $split->getId()));
 						}  
 					}
 				}
 				$split->update(array('_id' => $split->getId()), array('$set' => array('last_queue_time' => new \MongoDate()), '$inc' => array('queue_count' => $added_leads)), array());
+			} else {
+				$this->log('0 Leads Found for ' . $split->getName() . ' after ' . date('m/d/Y g:i:s', $split->getLastRunTime()->sec), array($this->pid, $split->getId()));
 			}
 			sleep(10);
 			
