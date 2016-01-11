@@ -23,7 +23,7 @@
 			<div class="text-muted"><?php echo $campaign->getDescription() ?></div>
 			<div class="">Owned by <a href="/offer/offer?_id=<?php echo $campaign->getOffer()->getOfferId() ?>"><?php echo $campaign->getOffer()->getOfferName() ?></a></div>
 			<div class="">Pays $<?php echo number_format($campaign->getPayout(), 2, null, ',') ?></div><br />
-			<div class=""><i><?php echo $campaign->getRedirectUrl() ?></i></div> 
+			<div class=""><i><?php echo $campaign->getRedirectLink() ?></i></div> 
 			<br /><br />
 			<div class="">
 				<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#edit_modal" href="/campaign/campaign-pane-edit?_id=<?php echo $campaign->getId() ?>"><span class="fa fa-pencil"></span> edit campaign</a>
@@ -89,81 +89,54 @@
 	<div>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" id="myTab">
+			<li role="presentation" class="active"><a href="#flow" aria-controls="flow" role="tab" data-toggle="tab">Flow</a></li>
 			<li role="presentation"><a href="#leads" data-href="/campaign/campaign-pane-leads.php?_id=<?php echo $campaign->getId() ?>" aria-controls="leads" role="tab" data-toggle="tab">Leads</a></li>
-			<li role="presentation"><a href="#graphs" aria-controls="graphs" role="tab" data-toggle="tab">Traffic Graphs</a></li>
 		</ul>
 	
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="leads"></div>
-			<div role="tabpanel" class="tab-pane" id="graphs">
-				<br />
-				<!-- Page Content -->
-				<div class="help-block">Get a bird's eye view of this offer and how it is performing below.</div>
-				<br/>
-				<!-- content -->
-				<div class="row">
-					<!-- main col right -->
-					<div class="col-md-9 col-sm-9">
-						<div class="panel panel-default">
-							<div class="panel-heading">Click Traffic</div>
-							<div class="panel-body">
-								<div id="click_by_hour_div">
-									<!--Divs that will hold each control and chart-->
-									<div id="click_by_hour_chart_div" style="width:100%;height:250px">
-										<div class="text-muted text-center">
-											<span class="fa fa-spinner fa-spin"></span>
-											Loading report data...
-										</div>
-									</div>
-									<div id="click_by_hour_filter_div" style="width:100%;height:50px"></div>
-								</div>
+			<div role="tabpanel" class="tab-pane active" id="flow">
+				<div class="help-block">When traffic comes through this campaign, it will use the following rules to determine where it is sent.  If no rules can be found, the default landing page will be used.</div>
+				<form method="PUT" action="/api" id="campaign_flow_rules_<?php echo $campaign->getId() ?>">
+					<input type="hidden" name="_id" value="<?php echo $campaign->getId() ?>" />
+					<input type="hidden" name="func" value="/campaign/campaign-flow-rules" />
+					<input type="hidden" name="flow_rules" value="" />
+					
+					<div id="flow-rules"></div>
+					<div id="last_rule_defined">
+						<div class="row">
+							<div class="col-md-1 text-center text-muted hidden-xs hidden-sm">
+								<span class="fa-stack fa-lg">
+									<i class="fa fa-circle fa-stack-2x"></i>
+									<i class="fa fa-stack-1x fa-inverse">F</i>
+								</span>
+							</div>
+							<div class="col-md-5 form-inline">
+								When there are no available rules <i><b>or</b></i> all other rules are capped
+							</div>
+							<div class="col-md-1 text-center text-muted hidden-xs hidden-sm">
+								<img src="/images/vspacer.png" border="0" />
+							</div>
+							<div class="col-md-3">
+								<select name="redirect_link" id="landing_page_default" class="selectize">
+									<?php
+										/* @var $landing_page \Flux\Link\LandingPage */ 
+										foreach ($campaign->getOffer()->getOffer()->getLandingPages() as $landing_page) { 
+									?>
+										<option value="<?php echo $landing_page->getUrl() ?>" <?php echo (strpos($campaign->getRedirectLink(), $landing_page->getUrl()) === 0) ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => $landing_page->getName(), 'url' => $landing_page->getUrl()))) ?>"><?php echo $landing_page->getName() ?></option>
+									<?php } ?>
+								</select>
 							</div>
 						</div>
-				
-						<div class="panel panel-default">
-							<div class="panel-heading">Conversion Traffic</div>
-							<div class="panel-body">
-								<div id="conversion_by_hour_div">
-									<!--Divs that will hold each control and chart-->
-									<div id="conversion_by_hour_chart_div" style="width:100%;height:250px">
-										<div class="text-muted text-center">
-											<span class="fa fa-spinner fa-spin"></span>
-											Loading report data...
-										</div>
-									</div>
-									<div id="conversion_by_hour_filter_div" style="width:100%;height:50px"></div>
-								</div>
-							</div>
-						</div>
+						<hr />
 					</div>
-	
-					<!-- main col right -->
-					<div class="col-md-3 col-sm-3">
-						<ul class="list-group">
-							<li class="list-group-item active">Campaign Stats</li>
-							<li class="list-group-item">
-								<span class="badge"><?php echo number_format($campaign->getDailyClicks(), 0, null, ',') ?></span>
-								Today's Clicks
-							</li>
-							<li class="list-group-item">
-								<span class="badge"><?php echo number_format($campaign->getDailyConversions(), 0, null, ',') ?></span>
-								Today's Conversions
-							</li>
-							<li class="list-group-item">
-								<span class="badge">$<?php echo number_format($campaign->getPayout(), 2, null, ',') ?></span>
-								Payout
-							</li>
-						</ul>
-						<ul class="list-group">
-							<li class="list-group-item disabled">Landing Page Preview</li>
-							<li class="list-group-item text-center">
-								<img class="img-thumbnail page_thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=300x300&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($campaign->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $campaign->getRedirectLink() ?>" />
-							</li>
-						</ul>
+					<div class="text-center">
+						<div class="btn btn-success btn-lg" id="add_flow_rule"><i class="fa fa-plus"></i> Add Rule</div>
+						<input type="submit" class="btn btn-primary btn-lg" id="save_flow_rules" name="btn_submit" value="Save Rules" />
 					</div>
-				</div>
+				</form>
 			</div>
+			<div role="tabpanel" class="tab-pane" id="leads"></div>
 		</div>
 	</div>
 </div>
@@ -175,15 +148,174 @@
 <!-- confirm delete modal -->
 <div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this campaign?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
 
+<div id="dummy-flow-rule" class="flow-rule" style="display:none;">
+	<div class="row">
+		<div class="col-md-1 text-center text-muted hidden-xs hidden-sm">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-circle fa-stack-2x"></i>
+				<i class="fa fa-stack-1x fa-inverse">dummy_id</i>
+			</span>
+		</div>
+		<div class="col-md-5 form-inline">
+			Split traffic up to 
+			<div class="form-group">
+				<div class="input-group col-md-12">
+					<input type="text" class="form-control percent" name="flow_rules[dummy_id][percent]" value="" placeholder="enter percentage" />
+					<span class="input-group-addon">%</span>
+				</div>
+			</div>
+			<span class="daily_click_count_display"></span>
+			<input class="daily_click_count" type="hidden" name="flow_rules[dummy_id][daily_click_count]" value="" />
+			<hr />
+			<div class="form-group">
+				cap traffic at 
+				<div class="input-group">
+					<input type="text" class="form-control cap" name="flow_rules[dummy_id][cap]" value="" placeholder="leave empty for no cap" />
+					<span class="input-group-addon">#</span>
+				</div> 
+			</div>
+			<p />
+			<div class="form-group">
+				tag sub id 
+				<div class="col-md-4 input-group">
+					<span class="input-group-addon">s4</span>
+					<input type="text" class="form-control s4" name="flow_rules[dummy_id][s4]" value="" />
+				</div>
+				<div class="col-md-4 input-group">
+					<span class="input-group-addon">s5</span>
+					<input type="text" class="form-control s5" name="flow_rules[dummy_id][s5]" value="" />
+				</div>
+				<div class="small help-block"><i class="fa fa-info-circle"></i> you should tag a sub id to change a landing page (such as a phone number or address)</div>
+			</div>
+		</div>
+		<div class="col-md-1 text-center text-muted hidden-xs hidden-sm">
+			<img src="/images/vspacer.png" border="0" />
+		</div>
+		<div class="col-md-3">
+			<select name="flow_rules[dummy_id][landing_page]" class="selectize">
+				<?php
+					/* @var $landing_page \Flux\Link\LandingPage */ 
+					foreach ($campaign->getOffer()->getOffer()->getLandingPages() as $landing_page) { 
+				?>
+					<option value="<?php echo $landing_page->getUrl() ?>" data-data="<?php echo htmlentities(json_encode(array('name' => $landing_page->getName(), 'url' => $landing_page->getUrl()))) ?>"><?php echo $landing_page->getName() ?></option>
+				<?php } ?>
+			</select>
+			<p />
+			<div class="form-group">
+				<textarea type="text" class="form-control name" name="flow_rules[dummy_id][name]" value="" placeholder="enter note for this rule"></textarea>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div class="btn btn-danger btn-remove-flow-rule"><i class="fa fa-trash"></i></div>
+		</div>
+	</div>
+	<hr />
+</div>
+
 <script>
 //<!--
-$(document).ready(function() {
+$(document).ready(function() {	
 	// delete the client information
 	$('#confirm_delete').click(function() {
 		$.rad.del('/api', {func: '/campaign/campaign/<?php echo $campaign->getId() ?>' }, function() {
 			window.location = '/campaign/campaign-search';
 		});
 	});
+
+	$('#add_flow_rule').click(function() {
+		$('#flow-rules').trigger('add', {});
+	});
+
+	// button to remove data fields
+	$('#flow-rules').on('click', '.btn-remove-flow-rule', function() {
+		$(this).closest('.flow-rule').remove();		
+	}).on('add', function(event, obj) {
+		// Add the State dropdown		
+		var index_number = $('#flow-rules .flow-rule').length;
+		var $flow_rule = $('#dummy-flow-rule').clone(true);
+		$flow_rule.removeAttr('id');
+		$flow_rule.html(function(i, oldHTML) {
+			oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+			return oldHTML;
+		});
+		
+		if (obj.name) { $flow_rule.find('.name').val(obj.name); }
+		if (obj.s4) { $flow_rule.find('.s4').val(obj.s4); }
+		if (obj.s5) { $flow_rule.find('.s5').val(obj.s5); }
+		if (obj.percent) { $flow_rule.find('.percent').val(obj.percent); }
+		if (obj.cap) { $flow_rule.find('.cap').val(obj.cap); }
+		if (obj.daily_click_count) { 
+			$flow_rule.find('.daily_click_count').val(obj.daily_click_count);
+			$flow_rule.find('.daily_click_count_display').html(obj.daily_click_count + ' clicks today');
+		}
+		
+		$('#flow-rules').append($flow_rule);
+		
+		$flow_rule.find('.selectize').selectize({
+			valueField: 'url',
+			labelField: 'name',
+			searchField: ['name'],
+			items: [ obj.landing_page ],
+			render: {
+				item: function(item, escape) {
+					var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+					ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(item.url) + '" width="64" border="0" />';
+					ret_val += '</div><div class="media-body">';
+					ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+					ret_val += '<div class="text-muted small">' + escape(item.url) + '</div>';
+					ret_val += '</div></div>';
+					return ret_val;
+				},
+				option: function(item, escape) {
+					var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+					ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(item.url) + '" width="64" border="0" />';
+					ret_val += '</div><div class="media-body">';
+					ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+					ret_val += '<div class="text-muted small">' + escape(item.url) + '</div>';
+					ret_val += '</div></div>';
+					return ret_val;
+				}
+			}
+		});
+		
+		$flow_rule.show();
+		$('#save_flow_rules').show();
+	});
+
+	$('#landing_page_default').selectize({
+		valueField: 'url',
+		labelField: 'name',
+		searchField: ['name'],
+		render: {
+			item: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(item.url) + '" width="64" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+				ret_val += '<div class="text-muted small">' + escape(item.url) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			},
+			option: function(item, escape) {
+				var ret_val = '<div class="media"><div class="media-left pull-left media-top">';
+				ret_val += '<img class="media-object img-thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=64x64&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '163e945a6c976b6b' ?>&p2i_url=' + escape(item.url) + '" width="64" border="0" />';
+				ret_val += '</div><div class="media-body">';
+				ret_val += '<h5 class="media-heading">' + escape(item.name) + '</h5>';
+				ret_val += '<div class="text-muted small">' + escape(item.url) + '</div>';
+				ret_val += '</div></div>';
+				return ret_val;
+			}
+		}
+	});
+
+	<?php if (count($campaign->getFlowRules()) > 0) { ?>
+		<?php 
+			/* @var $flow_rule \Flux\Link\FlowRule */
+			foreach ($campaign->getFlowRules() as $key => $flow_rule) {
+		?>
+			$('#flow-rules').trigger('add', <?php echo json_encode($flow_rule->toArray()) ?>);
+		<?php } ?>
+	<?php } ?>
 
 	$('#myTab a[data-href]').on('show.bs.tab', function(e) {
 		var $this = $(this);
@@ -197,68 +329,10 @@ $(document).ready(function() {
 		    }
 		}
     });
+
+	$('#campaign_flow_rules_<?php echo $campaign->getId() ?>').form(function(data) {
+		$.rad.notify('Rules Saves', 'The rules have been saved to the flow of this campaign and will take effect immediately.')
+	},{keep_form:true});
 });
-
-google.setOnLoadCallback(initialize);
-
-$(window).on('debouncedresize', function() {
-	initialize();
-});
-
-function initialize() {
-	var query1 = new google.visualization.Query('/chart/graph-click-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
-	query1.send(drawClickByHourChart);
-
-	var query2 = new google.visualization.Query('/chart/graph-conversion-by-hour?date_range=<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>&tz=<?php echo $this->getContext()->getUser()->getUserDetails()->getTimezone() ?>&group_type=2&campaign_id_array=<?php echo $campaign->getId() ?>');
-	query2.send(drawConversionByHourChart);
-}
-
-function drawClickByHourChart(response) {
-	var data = response.getDataTable();
-	var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_div'));
-	var chart = new google.visualization.ChartWrapper({
-		chartType: "LineChart",
-		options: {
-			animation:{ duration: 250, easing: 'out' },
-			hAxis: {
-				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-				minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-				textStyle: { color: '#737373', fontSize: 11 },
-			},
-			legend: { textStyle: { color: '#737373', fontSize: 11 }},
-			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
-			chartArea:{ left:'8%', top: '8%', width: '80%', height:'80%' }
-		},
-		containerId: 'click_by_hour_chart_div'
-	});
-	var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'click_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
-	dashboard.bind(chart_range_control, chart);
-	dashboard.draw(data); 
-}
-
-function drawConversionByHourChart(response) {
-	var data = response.getDataTable();
-	var dashboard = new google.visualization.Dashboard(document.getElementById('conversion_by_hour_div'));
-	var chart = new google.visualization.ChartWrapper({
-		chartType: "ColumnChart",
-		options: {
-			animation:{ duration: 250, easing: 'out' },
-			hAxis: {
-				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-				minorGridlines: {color: '#f4f4f4', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
-				textStyle: { color: '#737373', fontSize: 11 },
-			},
-			isStacked: true,
-			bar: { groupWidth: 17 },
-			legend: { textStyle: { color: '#737373', fontSize: 11 }},
-			vAxis: { gridlines: {color: '#eaeaea', count: 4}, minorGridlines: {color: '#f4f4f4', count: 1}, textStyle: { color: '#737373', fontSize: 11 }},
-			chartArea:{ left:'8%', top: '8%', width: '80%', height:'80%' }
-		},
-		containerId: 'conversion_by_hour_chart_div'
-	});
-	var chart_range_control = new google.visualization.ControlWrapper({ containerId: 'conversion_by_hour_filter_div', controlType: 'ChartRangeFilter', options: { filterColumnLabel: 'Hour', ui: { chartType: 'LineChart', chartOptions: { chartArea: {left:'8%',width: '90%'}, hAxis: { gridlines: {color: '#eaeaea', count: 30}, minorGridlines: {color: '#f4f4f4', count: 1}, baselineColor: 'none', textStyle: { color: '#737373', fontSize: 11 }}}, minRangeSize: 86400000 /* 1 day */ }}, state: { range: { start: new Date(<?php echo date('Y', strtotime('today')) ?>, <?php echo date('m', strtotime('today'))-1 ?>, <?php echo date('d', strtotime('today')) ?>), end: new Date(<?php echo date('Y', strtotime('tomorrow')) ?>, <?php echo date('m', strtotime('tomorrow'))-1 ?>, <?php echo date('d', strtotime('tomorrow')) ?>) }}});
-	dashboard.bind(chart_range_control, chart);
-	dashboard.draw(data); 
-}
 //-->
 </script>

@@ -123,7 +123,7 @@
 										<div class="media-left">
 											<div class="text-muted small text-center">
 												<?php if ($offer->getOffer()->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
-													<img class="thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=48x48&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer->getOffer()->getDefaultCampaign()->getRedirectUrl()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer->getOffer()->getDefaultCampaign()->getRedirectUrl() ?>" width="48" />
+													<img class="thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=48x48&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer->getOffer()->getDefaultCampaign()->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer->getOffer()->getDefaultCampaign()->getRedirectLink() ?>" width="48" />
 												<?php } else { ?>
 													<i class="fa fa-cloud-upload fa-4x fa-border" style="background-Color:white;"></i>
 												<?php } ?>
@@ -131,7 +131,7 @@
 										</div>
 										<div class="media-body">
 											<h5 class="media-heading"><a href="/offer/offer?_id=<?php echo $offer->getId() ?>"><?php echo $offer->getOfferName() ?></a></h5>
-											<div class="text-muted small"><?php echo $offer->getOffer()->getDefaultCampaign()->getRedirectUrl() ?></div>
+											<div class="text-muted small"><?php echo $offer->getOffer()->getDefaultCampaign()->getRedirectLink() ?></div>
 										</div>
 									</div>
 								</div>

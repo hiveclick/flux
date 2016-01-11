@@ -14,7 +14,7 @@
 	<div class="media">
 		<div class="media-left">
 			<?php if ($offer->getRedirectType() != \Flux\Offer::REDIRECT_TYPE_POST) { ?>
-				<img class="thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=150x150&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer->getDefaultCampaign()->getRedirectUrl()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer->getDefaultCampaign()->getRedirectUrl() ?>" width="150" />
+				<img class="thumbnail" src="http://api.page2images.com/directlink?p2i_device=6&p2i_screen=1280x1024&p2i_size=150x150&p2i_key=<?php echo defined('MO_PAGE2IMAGES_API') ? MO_PAGE2IMAGES_API : '108709d8d7ae991c' ?>&p2i_url=<?php echo urlencode($offer->getDefaultCampaign()->getRedirectLink()) ?>" border="0" alt="Loading thumbnail..." data-url="<?php echo $offer->getDefaultCampaign()->getRedirectLink() ?>" width="150" />
 			<?php } else { ?>
 				<i class="fa fa-cloud-upload fa-4x fa-border" style="background-Color:white;"></i>
 			<?php } ?>
@@ -31,7 +31,7 @@
 				<a class="btn btn-sm btn-info" href="/offer/offer-event-search?_id=<?php echo $offer->getId() ?>"><span class="fa fa-eye"></span> view events</a>
 				-->
 				<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#instruction_modal" href="/offer/offer-pane-instruction?_id=<?php echo $offer->getId() ?>"><span class="fa fa-edit"></span> view instructions</a>
-				<a class="btn btn-sm btn-info" href="<?php echo $offer->getDefaultCampaign()->getRedirectUrl() ?>" target="_blank"><span class="fa fa-eye"></span> open landing page</a>
+				<a class="btn btn-sm btn-info" href="<?php echo $offer->getDefaultCampaign()->getRedirectLink() ?>" target="_blank"><span class="fa fa-eye"></span> open landing page</a>
 				<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-sm btn-danger" href="#"><span class="fa fa-trash-o"></span> delete</a>
 			</div>
 		</div>
@@ -73,7 +73,7 @@
 									<div class="media-body">
 										<h5 class="media-heading"><a href="/campaign/campaign?_id=<?php echo $campaign->getId() ?>"><?php echo $campaign->getId() ?></a></h5>
 										<div class="text-muted small"><?php echo $campaign->getDescription() ?></div>
-										<div class="small"><i><?php echo $campaign->getRedirectUrl() ?></i></div>
+										<div class="small"><i><?php echo $campaign->getRedirectLink() ?></i></div>
 										<div class="help-block">
 											<div class="btn-group" role="group">
 												<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#instruction_modal" href="/offer/offer-pane-instruction?_id=<?php echo $offer->getId() ?>"><span class="fa fa-edit"></span> view instructions</a>

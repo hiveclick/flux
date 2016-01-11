@@ -19,6 +19,11 @@ MAILTO=""
 @daily * * * * root /home/flux/api/webapp/meta/crons/delete_old_clicks.sh
 
 #
+# Delete old clicks from the system to keep it tight
+# 
+@daily * * * * root /home/flux/api/webapp/meta/crons/reset_flow_rules.sh
+
+#
 # Run the watchdog cron to keep vsftpd and the daemons running
 #
 0,30 * * * * root /home/flux/api/webapp/meta/crons/watchdog.sh

@@ -60,7 +60,7 @@
 								/* @var $offer \Flux\Offer */ 
 								foreach ($offers as $offer) { 
 							?>
-								<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $lead_split->getOfferIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectUrl(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
+								<option value="<?php echo $offer->getId() ?>" <?php echo in_array($offer->getId(), $lead_split->getOfferIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectLink(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
 							<?php } ?>
 						</select>
 					</div>

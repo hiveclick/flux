@@ -94,7 +94,7 @@
 							/* @var $offer \Flux\Offer */ 
 							foreach ($offers AS $offer) { 
 						?>
-							<option value="<?php echo $offer->getId() ?>"<?php echo $campaign->getOffer()->getOfferId() == $offer->getId() ? ' selected="selected"' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectUrl(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
+							<option value="<?php echo $offer->getId() ?>"<?php echo $campaign->getOffer()->getOfferId() == $offer->getId() ? ' selected="selected"' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$offer->getId(), 'name' => $offer->getName(), 'url' => $offer->getDefaultCampaign()->getRedirectLink(), 'optgroup' => $offer->getVertical()->getVerticalName()))) ?>"><?php echo $offer->getName() ?></option>
 						<?php } ?>
 					</select>
 				</div>
@@ -270,7 +270,7 @@ $(document).ready(function() {
 		onChange: function(value) {
 			if (!value.length) return;
 			var data = this.options[value];
-			$('#redirect_link').val(value + '?_id=#_id#');
+			$('#redirect_link').val(value);
 		}
 	});
 });

@@ -18,6 +18,8 @@ class Campaign extends MongoForm {
 	protected $whitelist_ips;
 	protected $tracking_pixel;
 	
+	protected $flow_rules;
+	
 	protected $payout;
 	protected $daily_clicks;
 	protected $daily_conversions;
@@ -59,7 +61,45 @@ class Campaign extends MongoForm {
 	 * @return string
 	 */
 	function getRedirectUrl() {
-		return $this->getRedirectLink();
+		if (count($this->getFlowRules()) > 0) {
+			// Figure out what url to use based on the rules
+			$total_clicks = 0;
+			foreach ($this->getFlowRules() as $flow_rule) {
+				$total_clicks += $flow_rule->getDailyClickCount();
+			}
+			// Iterate through the rules and find the one that we want to use
+			foreach ($this->getFlowRules() as $key => $flow_rule) {
+				\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName());
+				if ($flow_rule->getCap() > 0 && $flow_rule->getDailyClickCount() > $flow_rule->getCap()) {
+					// We've hit our cap, so continue
+					\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName() . ' - CAP HIT (' . $flow_rule->getDailyClickCount() . ' > ' . $flow_rule->getCap() . ')');
+					continue;
+				}
+				// Only check percentages if this isn't the last rule (rules could be capped)
+				if ($key < (count($this->getFlowRules()) - 1)) {
+					if ((($flow_rule->getDailyClickCount() / $total_clicks) * 100) > $flow_rule->getPercent()) {
+						\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName() . ' - PERCENT HIT (' . (($flow_rule->getDailyClickCount() / $total_clicks) * 100) . ' > ' . $flow_rule->getPercent() . '%)');
+						continue;
+					}
+				}
+				
+				\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName() . ' - ALL CHECKS PASSED, FORWARDING TO ' . $flow_rule->getLandingPage());
+				// We are below the percentage, so use this rule
+				$this->update(array('_id' => $this->getId()), array(
+					'$inc' => array(
+						'flow_rules.' . $key . '.daily_click_count' => 1
+					)	
+				));
+				
+				return $flow_rule->getLandingPage() . '?_id=#_id#&s4=' . $flow_rule->getS4() . '&s5=' . $flow_rule->getS5();
+			}
+			
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Matched, using default landing page, FORWARDING TO " . $this->getRedirectLink());
+			return $this->getRedirectLink() . '?_id=#_id#';
+		} else {
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Defined, using default landing page, FORWARDING TO " . $this->getRedirectLink());
+			return $this->getRedirectLink() . '?_id=#_id#';
+		}
 	}
 	
 	/**
@@ -382,6 +422,34 @@ class Campaign extends MongoForm {
 	function setTrackingPixel($arg0) {
 		$this->tracking_pixel = $arg0;
 		$this->addModifiedColumn("tracking_pixel");
+		return $this;
+	}
+	
+	/**
+	 * Returns the flow_rules
+	 * @return array
+	 */
+	function getFlowRules() {
+		if (is_null($this->flow_rules)) {
+			$this->flow_rules = array();
+		}
+		return $this->flow_rules;
+	}
+	
+	/**
+	 * Sets the flow_rules
+	 * @var array
+	 */
+	function setFlowRules($arg0) {
+		if (is_array($arg0)) {
+			$this->flow_rules = array();
+			foreach ($arg0 as $key => $value) {
+				$rule = new \Flux\Link\FlowRule();
+				$rule->populate($value);
+				$this->flow_rules[] = $rule;				
+			}
+		}
+		$this->addModifiedColumn("flow_rules");
 		return $this;
 	}
 
