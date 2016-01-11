@@ -19,6 +19,8 @@ class Campaign extends MongoForm {
 	protected $tracking_pixel;
 	
 	protected $flow_rules;
+	protected $s4;
+	protected $s5;
 	
 	protected $payout;
 	protected $daily_clicks;
@@ -76,7 +78,7 @@ class Campaign extends MongoForm {
 					continue;
 				}
 				// Only check percentages if this isn't the last rule (rules could be capped)
-				if ($key < (count($this->getFlowRules()) - 1)) {
+				if ($key < (count($this->getFlowRules()) - 1) && $total_clicks > 0) {
 					if ((($flow_rule->getDailyClickCount() / $total_clicks) * 100) > $flow_rule->getPercent()) {
 						\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName() . ' - PERCENT HIT (' . (($flow_rule->getDailyClickCount() / $total_clicks) * 100) . ' > ' . $flow_rule->getPercent() . '%)');
 						continue;
@@ -95,10 +97,10 @@ class Campaign extends MongoForm {
 			}
 			
 			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Matched, using default landing page, FORWARDING TO " . $this->getRedirectLink());
-			return $this->getRedirectLink() . '?_id=#_id#';
+			return $this->getRedirectLink() . '?_id=#_id#&s4=' . $this->getS4() . '&s5=' . $this->getS5();
 		} else {
 			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Defined, using default landing page, FORWARDING TO " . $this->getRedirectLink());
-			return $this->getRedirectLink() . '?_id=#_id#';
+			return $this->getRedirectLink() . '?_id=#_id#&s4=' . $this->getS4() . '&s5=' . $this->getS5();
 		}
 	}
 	
@@ -450,6 +452,48 @@ class Campaign extends MongoForm {
 			}
 		}
 		$this->addModifiedColumn("flow_rules");
+		return $this;
+	}
+	
+	/**
+	 * Returns the s4
+	 * @return string
+	 */
+	function getS4() {
+		if (is_null($this->s4)) {
+			$this->s4 = "";
+		}
+		return $this->s4;
+	}
+	
+	/**
+	 * Sets the s4
+	 * @var string
+	 */
+	function setS4($arg0) {
+		$this->s4 = $arg0;
+		$this->addModifiedColumn("s4");
+		return $this;
+	}
+	
+	/**
+	 * Returns the s5
+	 * @return string
+	 */
+	function getS5() {
+		if (is_null($this->s5)) {
+			$this->s5 = "";
+		}
+		return $this->s5;
+	}
+	
+	/**
+	 * Sets the s5
+	 * @var string
+	 */
+	function setS5($arg0) {
+		$this->s5 = $arg0;
+		$this->addModifiedColumn("s5");
 		return $this;
 	}
 

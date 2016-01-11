@@ -23,7 +23,7 @@
 			<div class="text-muted"><?php echo $campaign->getDescription() ?></div>
 			<div class="">Owned by <a href="/offer/offer?_id=<?php echo $campaign->getOffer()->getOfferId() ?>"><?php echo $campaign->getOffer()->getOfferName() ?></a></div>
 			<div class="">Pays $<?php echo number_format($campaign->getPayout(), 2, null, ',') ?></div><br />
-			<div class=""><i><?php echo $campaign->getRedirectLink() ?></i></div> 
+			<div class=""><i><?php echo $campaign->getRedirectLink() ?>?_id=#_id#&s4=<?php echo $campaign->getS4() ?>&s5=<?php echo $campaign->getS5() ?></i></div> 
 			<br /><br />
 			<div class="">
 				<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#edit_modal" href="/campaign/campaign-pane-edit?_id=<?php echo $campaign->getId() ?>"><span class="fa fa-pencil"></span> edit campaign</a>
@@ -113,6 +113,19 @@
 							</div>
 							<div class="col-md-5 form-inline">
 								When there are no available rules <i><b>or</b></i> all other rules are capped
+								<hr />
+								<div class="form-group">
+									tag sub id 
+									<div class="col-md-4 input-group">
+										<span class="input-group-addon">s4</span>
+										<input type="text" class="form-control s4" name="s4" value="<?php echo $campaign->getS4() ?>" />
+									</div>
+									<div class="col-md-4 input-group">
+										<span class="input-group-addon">s5</span>
+										<input type="text" class="form-control s5" name="s5" value="<?php echo $campaign->getS5() ?>" />
+									</div>
+									<div class="small help-block"><i class="fa fa-info-circle"></i> you should tag a sub id to change a landing page (such as a phone number or address)</div>
+								</div>
 							</div>
 							<div class="col-md-1 text-center text-muted hidden-xs hidden-sm">
 								<img src="/images/vspacer.png" border="0" />
