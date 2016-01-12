@@ -29,6 +29,13 @@
 		<label for="error_message">Upload screenshot of final page:</label>
 		<input type="file" name="screenshot" id="screenshot" class="form-control" />
 	</div>
+	<hr />
+	<div class="form-group">
+		<label for="error_message">Upload screenshots of other pages:</label>
+		<?php for ($i=0;$i<20;$i++) { ?>
+			<input type="file" name="debug_screenshots[<?php echo $i ?>]" id="debug_screenshot_<?php echo $i ?>" class="form-control" />
+		<?php } ?>
+	</div>
 	<div class="form-group">
 		<input class="btn btn-primary" type="submit" name="btn_submit" id="btn_sumit" value="save lead" />
 	</div>

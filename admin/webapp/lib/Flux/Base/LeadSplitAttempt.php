@@ -13,6 +13,7 @@ class LeadSplitAttempt extends CommonForm {
 	protected $error_message;
 	protected $response_time;
 	protected $screenshot;
+	protected $debug_screenshots;
 	protected $source;
 		
 	private $attempt_index;
@@ -220,6 +221,39 @@ class LeadSplitAttempt extends CommonForm {
 	function setScreenshot($arg0) {
 		$this->screenshot = $arg0;
 		$this->addModifiedColumn("screenshot");
+		return $this;
+	}
+	
+	/**
+	 * Returns the debug_screenshots
+	 * @return array
+	 */
+	function getDebugScreenshots() {
+		if (is_null($this->debug_screenshots)) {
+			$this->debug_screenshots = array();
+		}
+		return $this->debug_screenshots;
+	}
+	
+	/**
+	 * Sets the debug_screenshots
+	 * @var array
+	 */
+	function setDebugScreenshots($arg0) {
+		$this->debug_screenshots = $arg0;
+		$this->addModifiedColumn("debug_screenshots");
+		return $this;
+	}
+	
+	/**
+	 * Sets the debug_screenshots
+	 * @var array
+	 */
+	function addDebugScreenshot($arg0) {
+		$tmp_array = $this->getDebugScreenshots();
+		$tmp_array[] = $arg0;
+		$this->debug_screenshots = $tmp_array;
+		$this->addModifiedColumn("debug_screenshots");
 		return $this;
 	}
 	

@@ -154,7 +154,7 @@ class Lead extends Base\Lead {
 			if ($include_screenshots) {
 				$this->lead_splits = $lead_split->queryAll();
 			} else {
-				$this->lead_splits = $lead_split->queryAll(array(), true, array('attempts.screenshot' => false));
+				$this->lead_splits = $lead_split->queryAll(array(), true, array('attempts.screenshot' => false, 'attempts.debug_screenshots' => false));
 			}
 		}
 		return $this->lead_splits;

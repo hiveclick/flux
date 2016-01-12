@@ -57,15 +57,24 @@ class FlagNextLeadAction extends BasicAction
 					$lead_split_attempt->setScreenshot(base64_encode(file_get_contents($_FILES['screenshot']['tmp_name'])));
 				}
 			}
+			if (isset($_FILES['debug_screenshots']['tmp_name'])) {
+				foreach ($_FILES['debug_screenshots']['tmp_name'] as $debug_screenshot) {
+					if (trim($debug_screenshot) != '') {
+						if (file_exists($debug_screenshot)) {
+							$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot)));
+						}
+					}
+				}
+			}
 			$lead_split->addAttempt($lead_split_attempt);
 			$lead_split->setLastAttemptTime(new \MongoDate());
 			$lead_split->update();	   
 
 			if ($lead_split->getDisposition() == \Flux\LeadSplit::DISPOSITION_FULFILLED) {
 				// Add a fulfilled event to the lead
+				/* @var $lead \Flux\Lead */
+				$lead = $lead_split->getLead()->getLead();
 				if ($lead_split->getSplit()->getSplit()->getFulfillment()->getFulfillment()->getTriggerFulfillmentFlag()) {
-					/* @var $lead \Flux\Lead */
-					$lead = $lead_split->getLead()->getLead();
 					$lead->setValue(\Flux\DataField::DATA_FIELD_EVENT_FULFILLED_NAME, 1);
 					$lead->update();
 				}

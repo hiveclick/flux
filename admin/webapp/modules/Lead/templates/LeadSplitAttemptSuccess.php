@@ -15,6 +15,7 @@
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">Fulfillment</a></li>
 		<li role="presentation" class=""><a href="#screenshot" role="tab" data-toggle="tab">Screenshot</a></li>
+		<li role="presentation" class=""><a href="#debug_screenshots" role="tab" data-toggle="tab">Debug Screenshots</a></li>
 	</ul>
 	<!-- Tab panes -->
 	<div class="tab-content">
@@ -31,6 +32,14 @@
 		</div>
 		<div role="tabpanel" class="tab-pane fade in" id="screenshot">
 			<img src="data:image/png;base64,<?php echo $lead_split_attempt->getScreenshot() ?>" border="0" class="img-thumbnail" />
+		</div>
+		<div role="tabpanel" class="tab-pane fade in" id="debug_screenshots">
+			<?php 
+				foreach ($lead_split_attempt->getDebugScreenshots() as $key => $debug_screenshot) { 
+			?>
+				<h3><?php echo $key + 1 ?></h3>
+				<img src="data:image/png;base64,<?php echo $debug_screenshot ?>" border="0" class="img-thumbnail" />
+			<?php } ?>
 		</div>
 	</div>
 </div>
