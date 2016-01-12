@@ -146,12 +146,16 @@ class Lead extends Base\Lead {
 	 * Returns the lead_splits
 	 * @return array
 	 */
-	function getLeadSplits() {
+	function getLeadSplits($include_screenshots = false) {
 		if (is_null($this->lead_splits)) {
 			$lead_split = new \Flux\LeadSplit();
 			$lead_split->setLead($this->getId());
 			$lead_split->setIgnorePagination(true);
-			$this->lead_splits = $lead_split->queryAll();
+			if ($include_screenshots) {
+				$this->lead_splits = $lead_split->queryAll();
+			} else {
+				$this->lead_splits = $lead_split->queryAll(array(), true, array('attempts.screenshot' => false));
+			}
 		}
 		return $this->lead_splits;
 	}

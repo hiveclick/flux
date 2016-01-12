@@ -339,7 +339,7 @@
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="attempts">
-				<div id="no_splits_alert" class="<?php echo (count($lead->getLeadSplits()) == 0) ? '' : 'hidden' ?>">
+				<div id="no_splits_alert" class="<?php echo (count($lead->getLeadSplits(true)) == 0) ? '' : 'hidden' ?>">
 					<h3>There are no splits associated with this lead</h3>
 					<a class="btn btn-success" data-toggle="modal" data-target="#fulfillment_modal" href="/lead/lead-pane-fulfill?_id=<?php echo $lead->getId() ?>"><i class="fa fa-plus"></i> add to split</a>
 				</div>
@@ -577,7 +577,7 @@ $(document).ready(function() {
 
 			var $attempts = '';
 			obj.attempts.forEach(function(item, i) {
-				var attempt = '<div class="media"><div class="media-left"><a href="#"><img class="media-object img-thumbnail img-responsive" src="data:image/png;base64,' + item.screenshot + '" width="90" alt="fulfillment screenshot"></a></div>';
+				var attempt = '<div class="media"><div class="media-left"><a data-toggle="modal" data-target="#lead_split_attempt_modal" href="/lead/lead-split-attempt?_id=' + obj._id + '&index=' + i + '"><img class="media-object img-thumbnail img-responsive" src="data:image/png;base64,' + item.screenshot + '" width="90" alt="fulfillment screenshot"></a></div>';
 				attempt += '<div class="media-body"><h5 class="media-heading"><a data-toggle="modal" data-target="#lead_split_attempt_modal" href="/lead/lead-split-attempt?_id=' + obj._id + '&index=' + i + '">' + item.fulfillment.name + '</a></h5><div class="small">Attempted ' + moment.unix(item.attempt_time.sec).calendar();
 				attempt += '<div class="text-muted">Response Time: ' + $.number(item.response_time, 2) + 's</div>';
 				if (item.is_error) {
@@ -667,7 +667,7 @@ $(document).ready(function() {
 
 	<?php
 		/* @var $page \Flux\LeadSplit */ 
-		foreach ($lead->getLeadSplits() as $lead_split) { 
+		foreach ($lead->getLeadSplits(true) as $lead_split) { 
 	?>
 		$('#attempts').trigger('add', <?php echo json_encode($lead_split->toArray(true)) ?>)
 	<?php } ?>

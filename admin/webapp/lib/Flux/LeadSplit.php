@@ -173,30 +173,31 @@ class LeadSplit extends Base\LeadSplit {
 	 * @return array
 	 */
 	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
-		if (count($this->getSplitIdArray()) > 0) {
-			$criteria['split._id'] = array('$in' => $this->getSplitIdArray());
-		}
-		if ($this->getDateRange() != \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM) {
-			$date_range_form = new \Mojavi\Form\DateRangeForm();
-			$date_range_form->setDateRange($this->getDateRange());
-			$criteria['queue_time'] = array('$gte' => new \MongoDate($date_range_form->getStartDate()), '$lte' => new \MongoDate($date_range_form->getEndDate()));
-		}
-		if (count($this->getOfferIdArray()) > 0) {
-			$criteria['lead.offer._id'] = array('$in' => $this->getOfferIdArray());
-		}
-		if (count($this->getDispositionArray()) > 0) {
-			$criteria['disposition'] = array('$in' => $this->getDispositionArray());
-		}
-		if (trim($this->getKeywords()) != '') {
-			$criteria['$or'] = array(
-					array('lead._id' => new \MongoRegex('/' . trim($this->getKeywords()) . '/')),
-					array('lead.name' =>  new \MongoRegex('/' . trim($this->getKeywords()) . '/i'))
-			);
-		}
-		if (\MongoId::isValid($this->getLead()->getLeadId())) {
-			$criteria['lead._id'] = $this->getLead()->getLeadId();
-		}
-		return parent::queryAll($criteria, $hydrate, array('attempts.screenshot' => false));
+		if (\MongoId::isValid($this->getLead()->getId())) {
+			$criteria['lead._id'] = $this->getLead()->getId();
+		} else {
+			if (count($this->getSplitIdArray()) > 0) {
+				$criteria['split._id'] = array('$in' => $this->getSplitIdArray());
+			}
+			if ($this->getDateRange() != \Mojavi\Form\DateRangeForm::DATE_RANGE_CUSTOM) {
+				$date_range_form = new \Mojavi\Form\DateRangeForm();
+				$date_range_form->setDateRange($this->getDateRange());
+				$criteria['queue_time'] = array('$gte' => new \MongoDate($date_range_form->getStartDate()), '$lte' => new \MongoDate($date_range_form->getEndDate()));
+			}
+			if (count($this->getOfferIdArray()) > 0) {
+				$criteria['lead.offer._id'] = array('$in' => $this->getOfferIdArray());
+			}
+			if (count($this->getDispositionArray()) > 0) {
+				$criteria['disposition'] = array('$in' => $this->getDispositionArray());
+			}
+			if (trim($this->getKeywords()) != '') {
+				$criteria['$or'] = array(
+						array('lead._id' => new \MongoRegex('/' . trim($this->getKeywords()) . '/')),
+						array('lead.name' =>  new \MongoRegex('/' . trim($this->getKeywords()) . '/i'))
+				);
+			}
+		}		
+		return parent::queryAll($criteria, $hydrate, $fields);
 	}
 	
 }
