@@ -27,8 +27,8 @@ class LeadExportAction extends BasicAction
 	{
 		set_time_limit(0);
 		
-		/* @var $lead \Flux\Lead */
-		$lead = new \Flux\Lead();
+		/* @var $lead \Flux\LeadSearch */
+		$lead = new \Flux\LeadSearch();
 		$lead->populate($_REQUEST);
 		$lead->setSort('_id');
 		$lead->setSord('DESC');
