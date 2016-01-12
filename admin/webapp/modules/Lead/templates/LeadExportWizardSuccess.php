@@ -53,7 +53,7 @@
 					/* @var $campaign \Flux\Campaign */ 
 					foreach ($campaigns as $campaign) { 
 				?>
-					<option value="<?php echo $campaign->getId() ?>" <?php echo in_array($campaign->getId(), $lead->getCampaignIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('campaign_key' => $campaign->getKey(), 'description' => $campaign->getDescription(), 'client_name' => $campaign->getClient()->getClientName()))) ?>"><?php echo $campaign->getId() ?></option>
+					<option value="<?php echo $campaign->getId() ?>" <?php echo in_array($campaign->getId(), $lead->getCampaignIdArray()) ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('campaign_key' => $campaign->getKey(), 'description' => $campaign->getDescription(), 'client_name' => $campaign->getClient()->getName()))) ?>"><?php echo $campaign->getId() ?></option>
 				<?php } ?>
 			</select>
 		</div>

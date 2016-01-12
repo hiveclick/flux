@@ -2,9 +2,6 @@
 use Mojavi\Action\BasicAction;
 use Mojavi\View\View;
 use Mojavi\Request\Request;
-
-use Flux\Offer;
-use Flux\Lead;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -25,8 +22,8 @@ class LeadExportWizardAction extends BasicAction
 	 */
 	public function execute ()
 	{
-		/* @var $offer Flux\Lead */
-		$lead = new Lead();
+		/* @var $offer \Flux\LeadSearch */
+		$lead = new \Flux\LeadSearch();
 		$lead->populate($_REQUEST);
 		
 		/* @var $datafield \Flux\DataField */

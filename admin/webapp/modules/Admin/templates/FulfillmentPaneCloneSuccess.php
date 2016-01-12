@@ -204,8 +204,8 @@
 $(document).ready(function() {
 	$('#clone_fulfillment_form').form(function(data) {
 		$.rad.notify('You have cloned this fulfillment', 'You have cloned this fulfillment.');
-		if (data.meta.insert_id) {
-			location.href='/admin/fulfillment?_id=' + data.meta.insert_id;
+		if (data.meta.insert_id.$id) {
+			location.href='/admin/fulfillment?_id=' + data.meta.insert_id.$id;
 		}
 	}, {keep_form: true});
 
