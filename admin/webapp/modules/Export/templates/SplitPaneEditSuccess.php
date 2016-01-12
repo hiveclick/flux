@@ -383,6 +383,7 @@ $(document).ready(function() {
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
 		dropdownWidthOffset: 150,
+		dropdownParent: 'body',
 		render: {
 			item: function(item, escape) {
 				var label = item.name || item.key;
@@ -446,7 +447,8 @@ $(document).ready(function() {
 		sortDirection: 'ASC',
 		diacritics:true,
 		create: true,
-		createOnBlur: true
+		createOnBlur: true,
+		dropdownParent: 'body'
 	};
 
 	$('#filter_container .selectize').selectize($selectize_options);
