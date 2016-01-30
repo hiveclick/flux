@@ -160,7 +160,7 @@ class Fulfill extends BaseDaemon
 				'next_attempt_time' => array('$lt' => new \MongoDate()),
 				'is_processing' => false,
 				'is_catch_all' => false,
-				'disposition' => 0,
+				'disposition' => \Flux\LeadSplit::DISPOSITION_UNFULFILLED,
 				'attempt_count' => array('$lte' => 5)
 			),
 			array('$set' => array(
