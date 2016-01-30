@@ -542,6 +542,7 @@ class LeadSplit extends MongoForm {
 			// Add the attempt to the array
 			$attempts = $this->getAttempts();
 			array_push($attempts, $arg0);
+			$this->setAttemptCount(count($attempts));
 			$this->setAttempts($attempts);
 		} else if (is_array($arg0)) {
 			/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
@@ -551,6 +552,7 @@ class LeadSplit extends MongoForm {
 			// Add the attempt to the array
 			$attempts = $this->getAttempts();
 			array_push($attempts, $lead_split_attempt);
+			$this->setAttemptCount(count($attempts));
 			$this->setAttempts($attempts);
 		}
 		$this->addModifiedColumn('attempts');
@@ -671,7 +673,7 @@ class LeadSplit extends MongoForm {
 		$indexes = array();
 		$indexes[] = array('idx' => array('lead._id' => 1), 'options' => array('background' => true));
 		$indexes[] = array('idx' => array('split._id' => 1), 'options' => array('background' => true));
-		$indexes[] = array('idx' => array('status' => 1), 'options' => array('background' => true));
+		$indexes[] = array('idx' => array('disposition' => 1, 'last_attempt_time' => 1), 'options' => array('background' => true));
 	
 		foreach ($indexes as $index) {
 			try {

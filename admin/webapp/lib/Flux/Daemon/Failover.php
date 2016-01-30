@@ -24,6 +24,7 @@ class Failover extends BaseDaemon
 				$this->log('Assigning Lead as Failover', array($this->pid, $lead_split_item->getId()));
 				$lead_split_item->setErrorMessage('Attempt set to Failover because it wasn\'t confirmed');
 				$lead_split_item->setDisposition(\Flux\LeadSplit::DISPOSITION_FAILOVER);
+				$lead_split_item->setIsProcessing(false);
 				$lead_split_item->update();
 				
 				
@@ -74,10 +75,11 @@ class Failover extends BaseDaemon
 		
 		$lead_split = new \Flux\LeadSplit();
 		// Find active splits with no pid, set the pid, and return the split
-		$criteria = array('next_attempt_time' => array('$gte' => new \MongoDate(strtotime('now - 2 days')), '$lt' => new \MongoDate()),
+		$criteria = array('last_attempt_time' => array('$gte' => new \MongoDate(strtotime('now - 2 days')), '$lt' => new \MongoDate()),
 				'is_processing' => false,
 				'is_catch_all' => false,
 				'is_confirmed' => false,
+				'is_returned' => false,
 				'disposition' => \Flux\LeadSplit::DISPOSITION_FULFILLED,
 				'split._id' => array('$in' => $failover_split_id_array),
 				'attempt_count' => array('$lte' => 5));
@@ -93,6 +95,32 @@ class Failover extends BaseDaemon
 				'sort' => array('_id' => 1)
 			)
 		);
+		
+		// If we don't find anybody, then attempt to find pending leads that can't be fulfilled
+		if (is_null($lead_split_item)) {
+			$criteria = array(
+					'last_attempt_time' => array('$gte' => new \MongoDate(strtotime('now - 8 days')), '$lt' => new \MongoDate()),
+					'is_processing' => false,
+					'is_catch_all' => false,
+					'is_confirmed' => false,
+					'is_returned' => false,
+					'disposition' => \Flux\LeadSplit::DISPOSITION_PENDING,
+					'split._id' => array('$in' => $failover_split_id_array),
+					'attempt_count' => array('$gte' => 5));
+			
+			$lead_split_item = $lead_split->findAndModify(
+					$criteria,
+					array('$set' => array(
+						'is_processing' => true
+					)),
+					null,
+					array(
+						'new' => true,
+						'sort' => array('_id' => 1)
+					)
+			);
+		}
+		
 		return $lead_split_item;
 	}
 }
