@@ -124,7 +124,7 @@ class Cake extends BaseNetwork {
 										$lead_split = new \Flux\LeadSplit();
 										$lead_split->setId($transaction_id);
 										$lead_split->query();
-										if (\MongoId::isValid($lead_split->getId())) {
+										if (is_object($lead_split) && \MongoId::isValid($lead_split->getId())) {
 											if (floatval($revenue_entry["revenue"]) > 0) {
 												$lead_split->setIsConfirmed(true);
 												$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);

@@ -43,6 +43,20 @@ class Diablo extends BaseNetwork {
 					foreach ($revenue_response['data'] as $revenue_entry) {
 						$transaction_id = $revenue_entry["trxid"];
 						if (trim($transaction_id) != '' && \MongoId::isValid(trim($transaction_id))) {
+							$lead_split = new \Flux\LeadSplit();
+							$lead_split->setId($transaction_id);
+							$lead_split->query();
+							if (is_object($lead_split) && \MongoId::isValid($lead_split->getId())) {
+								if (floatval($revenue_entry["revenue"]) > 0) {
+									$lead_split->setIsConfirmed(true);
+									$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);
+									$lead_split->setBounty(floatval($revenue_entry["revenue"]));
+									$lead_split->setConfirmedNote('Split confirmed by Diablo sync on ' . date('m/d/Y'));
+									$lead_split->update();
+								}
+							}
+							
+							
 							/* @var $report_lead \Flux\ReportLead */
 							$report_lead = new \Flux\ReportLead();
 							$report_lead->setClient($this->getClient()->getId());

@@ -66,7 +66,7 @@
 						</div>
 						<div class="col-md-3 text-right">
 							<input type="hidden" name="trigger_fulfillment_flag" value="0" />
-							<input type="checkbox" id="trigger_fulfillment_flag_1" name="trigger_fulfillment_flag" value="1" />
+							<input type="checkbox" id="trigger_fulfillment_flag_1" name="trigger_fulfillment_flag" value="1" <?php echo ($fulfillment->getTriggerFulfillmentFlag() == 1) ? 'checked' : '' ?> />
 						</div>
 					</div>
 				</div>

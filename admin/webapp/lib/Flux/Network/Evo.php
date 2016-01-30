@@ -33,6 +33,19 @@ class Evo extends BaseNetwork {
 				// Store any offers not found into a separate array
 				$transaction_id = (string)$click_obj->SA0;
 				if (trim($transaction_id) != '' && \MongoId::isValid(trim($transaction_id))) {
+					$lead_split = new \Flux\LeadSplit();
+					$lead_split->setId($transaction_id);
+					$lead_split->query();
+					if (is_object($lead_split) && \MongoId::isValid($lead_split->getId())) {
+						if (floatval($click_obj->SaleAmount) > 0) {
+							$lead_split->setIsConfirmed(true);
+							$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);
+							$lead_split->setBounty(floatval($click_obj->SaleAmount));
+							$lead_split->setConfirmedNote('Split confirmed by Evo sync on ' . date('m/d/Y'));
+							$lead_split->update();
+						}
+					}
+					
 					/* @var $report_lead \Flux\ReportLead */
 					$report_lead = new \Flux\ReportLead();
 					$report_lead->setLead(trim($transaction_id));

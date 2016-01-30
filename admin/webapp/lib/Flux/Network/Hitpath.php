@@ -48,6 +48,20 @@ class Hitpath extends BaseNetwork {
 				foreach ($sub_id_data as $transaction_id => $revenue_data) {
 					if (\MongoId::isValid(trim($transaction_id))) {
 						// We found a record, so update it's revenue for this day
+						$lead_split = new \Flux\LeadSplit();
+						$lead_split->setId($transaction_id);
+						$lead_split->query();
+						if (is_object($lead_split) && \MongoId::isValid($lead_split->getId())) {
+							if (floatval($revenue_data["revenue"]) > 0) {
+								$lead_split->setIsConfirmed(true);
+								$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_CONFIRMED);
+								$lead_split->setBounty(floatval($revenue_data["revenue"]));
+								$lead_split->setConfirmedNote('Split confirmed by Hitpath sync on ' . date('m/d/Y'));
+								$lead_split->update();
+							}
+						}
+						
+						// We found a record, so update it's revenue for this day
 						$report_lead = new \Flux\ReportLead();
 						$report_lead->setClient($this->getClient()->getId());
 						$report_lead->setLead(trim($transaction_id));
