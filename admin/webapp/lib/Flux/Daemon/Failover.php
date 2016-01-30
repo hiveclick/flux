@@ -99,7 +99,7 @@ class Failover extends BaseDaemon
 		// If we don't find anybody, then attempt to find pending leads that can't be fulfilled
 		if (is_null($lead_split_item)) {
 			$criteria = array(
-					'last_attempt_time' => array('$gte' => new \MongoDate(strtotime('now - 8 days')), '$lt' => new \MongoDate()),
+					'last_attempt_time' => array('$gte' => new \MongoDate(strtotime('now - 8 days')), '$lt' => new \MongoDate(strtotime('now + 8 hours'))),
 					'is_processing' => false,
 					'is_catch_all' => false,
 					'is_confirmed' => false,
