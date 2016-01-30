@@ -51,8 +51,8 @@ class Failover extends BaseDaemon
 				
 				return true;
 			} else {
-				throw new \Exception('Item is not an instance of \Flux\LeadSplit (' . var_export($lead_split_item, true) . ')');
-				
+				$this->log('No more leads to process, resting...', array($this->pid));
+				sleep(5);				
 			}
 		} catch (\Exception $e) {
 			$this->log('FAILED - ' . $e->getMessage(), array($this->pid));
