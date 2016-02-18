@@ -4,7 +4,7 @@
 <div class="panel panel-default loginbox">
 	<div class="panel-heading">
 		<div class="text-center header">
-			<h1 class="text-uppercase"><img class="" style="width:48px;" src="/images/logo.png" border="0" /> Flux</h1>
+			<h1 class="text-uppercase"> Flux</h1>
 		</div>
 	</div>
 	<div class="panel-body">
