@@ -249,9 +249,9 @@ class LeadSplitAttempt extends CommonForm {
 	 * Sets the debug_screenshots
 	 * @var array
 	 */
-	function addDebugScreenshot($arg0) {
+	function addDebugScreenshot($screenshot, $source = '') {
 		$tmp_array = $this->getDebugScreenshots();
-		$tmp_array[] = $arg0;
+		$tmp_array[] = array('screenshot' => $screenshot, 'source' => $source);
 		$this->debug_screenshots = $tmp_array;
 		$this->addModifiedColumn("debug_screenshots");
 		return $this;

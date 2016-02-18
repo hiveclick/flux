@@ -46,15 +46,15 @@
 				<h3><?php echo $key + 1 ?></h3>
 				<?php if (is_array($debug_screenshot) && isset($debug_screenshot['screenshot'])) { ?>
 					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#debug_screenshot_<?php echo $i ?>" role="tab" data-toggle="tab">Screenshot</a></li>
-						<li role="presentation" class=""><a href="#debug_source_<?php echo $i ?>" role="tab" data-toggle="tab">Source</a></li>
+						<li role="presentation" class="active"><a href="#debug_screenshot_<?php echo $key ?>" role="tab" data-toggle="tab">Screenshot</a></li>
+						<li role="presentation" class=""><a href="#debug_source_<?php echo $key ?>" role="tab" data-toggle="tab">Source</a></li>
 					</ul>
 					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane fade in active" id="debug_screenshot_<?php echo $i ?>">
+						<div role="tabpanel" class="tab-pane fade in active" id="debug_screenshot_<?php echo $key ?>">
 							<img src="data:image/png;base64,<?php echo $debug_screenshot['screenshot'] ?>" border="0" class="img-thumbnail" />
 						</div>
-						<div role="tabpanel" class="tab-pane fade in" id="debug_source_<?php echo $i ?>">
-							<textarea name="debug_source_<?php echo $i ?>_textarea" class="form-control" rows="10"><?php echo $debug_screenshot['source'] ?></textarea>
+						<div role="tabpanel" class="tab-pane fade in" id="debug_source_<?php echo $key ?>">
+							<textarea name="debug_source_<?php echo $key ?>_textarea" class="form-control" rows="10"><?php echo $debug_screenshot['source'] ?></textarea>
 						</div>
 					</div>
 				<?php } else { ?>

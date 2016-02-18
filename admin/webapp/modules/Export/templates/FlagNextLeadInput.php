@@ -33,13 +33,13 @@
 	<div class="form-group">
 		<label for="error_message">Upload screenshots of other pages:</label>
 		<?php for ($i=0;$i<20;$i++) { ?>
-			<input type="file" name="debug_screenshots[<?php echo $i ?>][screenshot]" id="debug_screenshot_<?php echo $i ?>" class="form-control" />
+			<input type="file" name="debug_screenshots[<?php echo $i ?>]" id="debug_screenshot_<?php echo $i ?>" class="form-control" />
 		<?php } ?>
 	</div>
 	<div class="form-group">
 		<label for="error_message">Upload source code of other pages:</label>
 		<?php for ($i=0;$i<20;$i++) { ?>
-			<input type="file" name="debug_source[<?php echo $i ?>][source]" id="debug_source_<?php echo $i ?>" class="form-control" />
+			<input type="file" name="debug_source[<?php echo $i ?>]" id="debug_source_<?php echo $i ?>" class="form-control" />
 		<?php } ?>
 	</div>
 	<div class="form-group">

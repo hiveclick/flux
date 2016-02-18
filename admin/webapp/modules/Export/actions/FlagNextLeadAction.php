@@ -44,6 +44,7 @@ class FlagNextLeadAction extends BasicAction
 			$lead_split_attempt->setAttemptTime(new \MongoDate());
 			$lead_split_attempt->setFulfillment(array('fulfillment_id' => 0, 'fulfillment_name' => 'uBot Script'));
 			$lead_split_attempt->setResponse($_POST['response']);
+			$lead_split_attempt->setSource($_POST['source']);
 			if (isset($_POST['error_message']) && trim($_POST['error_message']) != '') {
 				$lead_split_attempt->setErrorMessage($_POST['error_message']);
 				$lead_split_attempt->setIsError(true);
@@ -57,14 +58,35 @@ class FlagNextLeadAction extends BasicAction
 					$lead_split_attempt->setScreenshot(base64_encode(file_get_contents($_FILES['screenshot']['tmp_name'])));
 				}
 			}
+			
+			$debug_screenshot_array = array();
+			
+			
 			if (isset($_FILES['debug_screenshots']['tmp_name'])) {
-				foreach ($_FILES['debug_screenshots']['tmp_name'] as $debug_screenshot) {
+				foreach ($_FILES['debug_screenshots']['tmp_name'] as $key => $debug_screenshot) {
 					if (trim($debug_screenshot) != '') {
 						if (file_exists($debug_screenshot)) {
-							$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot)));
+							$debug_screenshot_array[] = array('screenshot' => $debug_screenshot, 'source' => '');
+							//$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot)));
 						}
 					}
 				}
+			}
+			if (isset($_FILES['debug_source']['tmp_name'])) {
+				$counter = 0;
+				foreach ($_FILES['debug_source']['tmp_name'] as $debug_source) {
+					if (trim($debug_source) != '') {
+						if (file_exists($debug_source)) {
+							$debug_screenshot_array[$counter]['source'] = $debug_source;
+							//$lead_split_attempt->addDebugSource(base64_encode(file_get_contents($debug_source)));
+						}
+					}
+					$counter++;
+				}
+			}
+			foreach ($debug_screenshot_array as $debug_screenshot_item) {
+				echo "Uploading debug screenshot: " . $debug_screenshot_item['screenshot'] . "\n";
+				$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot_item['screenshot'])), file_get_contents($debug_screenshot_item['source']));
 			}
 			$lead_split->addAttempt($lead_split_attempt);
 			$lead_split->setLastAttemptTime(new \MongoDate());
