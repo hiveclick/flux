@@ -153,15 +153,26 @@ class GraphConversionByHour extends GoogleChart {
 		));
 		
 		
+		$ops[] = array(
+				'$group' => array(
+								'_id' => '$_id', 
+								'event_date' => array('$max' => '$_e.t'), 
+								'event_offer' => array('$max' => '$_e.offer._id'),
+								'offer_name' => array('$max' => '$_e.offer.name'),
+								'event_name' => array('$max' => '$_e.data_field.data_field_key_name'),
+								'subid' => array('$max' => '$_t.s1')
+				)
+		);
+		
 		$ops[] = array('$project' => array(
 			'_id' => '$_id',
 			'event_date' => array('$substr' => 
-								array('$_e.t', 0, 13)
+								array('$event_date', 0, 13)
 							),
-			'event_offer' => '$_e.offer._id',
-			'event_name' => '$_e.data_field.data_field_key_name',
-			'offer_name' => '$_t.offer.name',
-			'subid' => '$_t.s1',
+			'event_offer' => '$event_offer',
+			'event_name' => '$event_name',
+			'offer_name' => '$offer_name',
+			'subid' => '$subid',
 			'clicks' => 1
 		));
 		

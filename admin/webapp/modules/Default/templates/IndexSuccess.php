@@ -171,8 +171,9 @@ function drawClickByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-		chartType: "LineChart",
+		chartType: "AreaChart",
 		options: {
+			isStacked: true,
 			animation:{ duration: 250, easing: 'out' },
 			hAxis: {
 				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},
@@ -226,8 +227,9 @@ function drawTrafficSourceByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('traffic_source_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-		chartType: "LineChart",
+		chartType: "AreaChart",
 		options: {
+			isStacked: true,
 			animation:{ duration: 250, easing: 'out' },
 			hAxis: {
 				gridlines: {color: '#eaeaea', count: -1, units: { days: {format: ["MMM dd"]}, hours: {format: ["h a", "ha"]}}},

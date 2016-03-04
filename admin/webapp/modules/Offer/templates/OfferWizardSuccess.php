@@ -145,6 +145,7 @@
 						<input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
 						<div id="docroot_dir_browse" class="input-group-addon" data-toggle="modal" data-target="#docroot_dir_browse_modal" style="cursor:pointer;">browse</div>
 					</div>
+					<div class="help-block small">This folder should end in /docroot/</div>
 				</div>
 			</div>
 			

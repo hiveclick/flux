@@ -442,30 +442,40 @@ class Server extends Base\Server {
 <?php
 	\$root_folder = "{$this->getRootDir()}";
 	\$docroot_folder = "{$offer->getDocrootDir()}";
+	\$cache_user = "{$this->getWebUser()}";
+	\$cache_group = "{$this->getWebGroup()}";
 	if (!file_exists(\$root_folder)) {
-		mkdir(\$root_folder);
+		mkdir(\$root_folder, 0775, true);
+		chown(\$root_folder, \$cache_user);
+		chgrp(\$root_folder, \$cache_group);
 	}
 	if (!file_exists(\$root_folder . "/lib")) {
-		mkdir(\$root_folder . "/lib");
+		mkdir(\$root_folder . "/lib", 0775, true);
+		chown(\$root_folder . "/lib", \$cache_user);
+		chgrp(\$root_folder . "/lib", \$cache_group);
 	}
 	if (!file_exists(\$docroot_folder)) {
 		mkdir(\$docroot_folder, 0775, true);
+		chown(\$root_folder . "/lib", \$cache_user);
+		chgrp(\$root_folder . "/lib", \$cache_group);
 	}
 	if (!file_exists(\$root_folder . "/docroot")) {
-		mkdir(\$root_folder . "/docroot");
+		mkdir(\$root_folder . "/docroot", 0775, true);
+		chown(\$root_folder . "/docroot", \$cache_user);
+		chgrp(\$root_folder . "/docroot", \$cache_group);
 	}
 	if (!file_exists(\$docroot_folder . "/.cache")) {
 		mkdir(\$docroot_folder . '/.cache/', 0775, true);
+		chown(\$docroot_folder . '/.cache/', \$cache_user);
+		chgrp(\$docroot_folder . '/.cache/', \$cache_group);
 	}
 	if (file_exists(\$docroot_folder . "/.cache/config.php")) {
 		@unlink(\$docroot_folder . "/.cache/config.php");
 	}
-	chgrp(\$root_folder . "/lib", "{MO_CACHE_GROUP}");
-	chmod(\$root_folder . "/lib", 0775);
 	
-	\$cmd = "chown {MO_CACHE_USER}:{MO_CACHE_GROUP} \$docroot_folder -Rf";
+	\$cmd = "chown \$cache_user:\$cache_group \$root_folder -Rf";
 	shell_exec(\$cmd);
-	\$cmd = "chmod 0775 \$docroot_folder -Rf";
+	\$cmd = "chmod 0775 \$root_folder -Rf";
 	shell_exec(\$cmd);
 EOL;
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
@@ -474,6 +484,9 @@ EOL;
 		
 		$this->writeRemoteFile($init_php_contents, $this->getRootDir() . "/lib/init.php");
 		$this->writeRemoteFile($config_ini_contents, $this->getDocrootDir() . "/config.ini");
+		
+		$this->runRemoteCommand("chown " . $this->getWebUser() . ":" . $this->getWebGroup() . " " . $this->getRootDir() . " -Rf");
+		$this->runRemoteCommand("chmod 0777 " . $this->getRootDir() . " -Rf");
 	}
 
 	/**
@@ -481,6 +494,7 @@ EOL;
 	 * @return boolean
 	 */
 	function createRemoteFolderSkeleton($offer) {
+		$this->recreateLibFolder($offer);
 		if ($this->getRootDir() == self::DEFAULT_DOCROOT_DIR ||
 			(dirname($this->getRootDir()) == dirname(self::DEFAULT_DOCROOT_DIR) && basename($this->getRootDir()) == basename(self::DEFAULT_DOCROOT_DIR))
 		) {
@@ -492,37 +506,14 @@ EOL;
 		$wp_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/wp-config.php");
 		$offer_key = (basename($this->getRootDir()) . (trim($offer->getFolderName()) != '' ? '.' : '') . trim($offer->getFolderName()));
 		
-		$install_php_contents = <<<EOL
-<?php
-	\$root_folder = "{$this->getRootDir()}";
-	\$docroot_folder = "{$this->getDocrootDir()}";
-	if (!file_exists(\$root_folder)) {
-		mkdir(\$root_folder);
-	}
-	if (!file_exists(\$root_folder . "/docroot")) {
-		mkdir(\$root_folder . "/docroot");
-	}
-	if (!file_exists(\$docroot_folder)) {
-		mkdir(\$docroot_folder, 0775, true);
-	}
-	if (!file_exists(\$docroot_folder . '/.cache/')) {
-		mkdir(\$docroot_folder . '/.cache/', 0775, true);
-	}
-	\$cmd = "chown {MO_CACHE_USER}:{MO_CACHE_GROUP} \$docroot_folder -Rf";
-	shell_exec(\$cmd);
-	\$cmd = "chmod 0775 \$docroot_folder -Rf";
-	shell_exec(\$cmd);
-EOL;
-		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install.php");
-		$this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install.php", 0775);
-		$this->runRemoteCommand("php /tmp/offer_" . $offer->getId() . "_install.php");
-		
 		// Now upload the wordpress tar and extract it only if wp-config.php doesn't exist
 		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/wp-config.php ];then echo "1";else echo "0";fi')) == '0') {
-			$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/latest.tar.gz', $this->getDocrootDir() . '/latest.tar.gz');
-			$this->runRemoteCommand('/bin/tar xzvf ' . $this->getDocrootDir() . '/latest.tar.gz -C ' . $this->getDocrootDir());
-			$db_prefix = preg_replace("/[^a-zA-Z0-9]/", "", $this->getDomain());
-			$db_prefix = preg_replace("/^www\\./", "", $db_prefix);
+			$this->runRemoteCommand('wget -O ' . $this->getDocrootDir() . '/latest.tar.gz https://wordpress.org/latest.tar.gz');
+			$this->runRemoteCommand('/bin/tar xzvf ' . $this->getDocrootDir() . '/latest.tar.gz --skip-old-files --strip-components=1 -C ' . $this->getDocrootDir());
+			$db_prefix = substr($this->getDomain(), 0, strrpos($this->getDomain(), '.'));
+			$db_prefix = preg_replace("/[^a-zA-Z0-9]/", "", $db_prefix);
+			$db_prefix = ('wp_' . preg_replace("/^www/", "", $db_prefix));
+			if ($db_prefix == 'wp_') { throw new \Exception('We cannot set the mysql database from the domain name, please check that the domain name is properly formatted.'); }
 			$wp_contents = str_replace('[MYSQLUSERNAME]', $this->getMysqlUsername(), $wp_contents);
 			$wp_contents = str_replace('[MYSQLPASSWORD]', $this->getMysqlPassword(), $wp_contents);
 			$wp_contents = str_replace('[MYSQLDB]', $db_prefix, $wp_contents);
@@ -532,6 +523,85 @@ EOL;
 			$this->runRemoteCommand('/usr/bin/mysqladmin create ' . $db_prefix);			
 		}
 		
+		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/wp-content/flux.php ];then echo "1";else echo "0";fi')) == '0') {
+			$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/flux.php', $this->getDocrootDir() . '/wp-content/flux.php');
+		}
+		
+		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/shortcodes-ultimate-maker.zip ];then echo "1";else echo "0";fi')) == '0') {
+			$this->copyFile(MO_WEBAPP_DIR . '/meta/frontend/shortcodes-ultimate-maker.zip', $this->getDocrootDir() . '/shortcodes-ultimate-maker.zip');
+		}
+		
+		if (trim($this->runRemoteCommand('if [ -f ' . $this->getRootDir() . '/docroot/wp-cli.phar ];then echo "1";else echo "0";fi')) == '0') {
+			$this->runRemoteCommand('wget -O ' . $this->getDocrootDir() . '/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar');
+			$this->runRemoteCommand('chmod 0775 ' . $this->getDocrootDir() . '/wp-cli.phar');
+		}
+		
+		$this->runRemoteCommand("chown " . $this->getWebUser() . ":" . $this->getWebGroup() . " " . $this->getRootDir() . " -Rf");
+		$this->runRemoteCommand("chmod 0777 " . $this->getRootDir() . " -Rf");
+		
+		$install_php_contents = <<<EOL
+<?php
+	\$root_folder = "{$this->getRootDir()}";
+	\$docroot_folder = "{$offer->getDocrootDir()}";
+	\$domain = "{$this->getDomain()}";
+	\$cache_user = "{$this->getWebUser()}";
+	\$cache_group = "{$this->getWebGroup()}";
+	if (!file_exists(\$docroot_folder . "/wp-cli.phar")) {
+		die("Missing wp-cli.phar, please install wordpress manually.");
+	}
+	\$cmd = "chown {$this->getWebGroup()}:{$this->getWebUser()} {$this->getRootDir()} -Rf";
+	\$result = shell_exec(\$cmd);
+	echo \$result . "\n";
+	
+	\$cmd = "chmod 0775 {$this->getRootDir()} -Rf";
+	\$result = shell_exec(\$cmd);
+	echo \$result . "\n";	
+	
+	echo "Installing wordpress...\n";	
+	\$cmd = "ls -l {$offer->getDocrootDir()};";
+	echo \$cmd . "\n";
+	\$result = shell_exec(\$cmd);
+	echo \$result . "\n";
+	
+	\$cmd = "cd {$offer->getDocrootDir()};sudo -u {$this->getWebUser()} ./wp-cli.phar core install --url=\"{$this->getDomain()}\" --title=\"{$this->getDomain()}\" --admin_user=admin --admin_password=ncc1701b --admin_email=mark@hiveclick.com --skip-email";
+	echo \$cmd . "\n";
+	\$result = shell_exec(\$cmd);
+	echo \$result . "\n";
+EOL;
+		
+		$plugins = array(
+				'wordpress-seo' => 'wordpress-seo',
+				'shortcodes-ultimate' => 'shortcodes-ultimate',
+				'shortcodes-ultimate-maker' => $this->getDocrootDir() . '/shortcodes-ultimate-maker.zip',
+				'wptouch' => 'wptouch'
+		);
+		foreach ($plugins as $key => $plugin) {
+			$install_php_contents .= <<<EOL
+				// Install script for plugin {$key}
+				\$cmd = "cd {$offer->getDocrootDir()};sudo -u {$this->getWebUser()} ./wp-cli.phar plugin list --name=\"{$key}\" | grep \"{$key}\"";
+				\$plugin_installed = shell_exec(\$cmd);
+				if (trim(\$plugin_installed) == '') {
+					echo "Installing plugin {$key}...\n";
+					\$cmd = "cd {$offer->getDocrootDir()};sudo -u {$this->getWebUser()} ./wp-cli.phar plugin install \"{$plugin}\" --activate";
+					\$result = shell_exec(\$cmd);
+					echo \$result . "\n";				
+				}
+				\$cmd = "cd {$offer->getDocrootDir()};sudo -u {$this->getWebUser()} ./wp-cli.phar plugin list --name=\"{$key}\" --status=inactive | grep \"{$key}\"";
+				\$plugin_inactive = shell_exec(\$cmd);
+				if (trim(\$plugin_inactive) != '') {
+					echo "Activating plugin {$key}...\n";
+					\$cmd = "cd {$offer->getDocrootDir()};sudo -u {$this->getWebUser()} ./wp-cli.phar plugin activate \"{$key}\"";
+					\$result = shell_exec(\$cmd);
+					echo \$result . "\n";				
+				}
+EOL;
+
+		}
+		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Saving install contents to /tmp/offer_" . $offer->getId() . "_install_wp.php");
+		$this->writeRemoteFile($install_php_contents, "/tmp/offer_" . $offer->getId() . "_install_wp.php", 0775);
+		$result = $this->runRemoteCommand("php /tmp/offer_" . $offer->getId() . "_install_wp.php");
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Running /tmp/offer_" . $offer->getId() . "_install_wp.php: " . $result);
 		return true;
 	}
 	

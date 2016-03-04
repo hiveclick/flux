@@ -23,7 +23,7 @@
 	</div>
 	<div class="form-group">
 		<label for="source">Enter the document source (for debugging purposes):</label>
-		<textarea name="source" id="source" class="form-control" placeholder="Enter the document source (for debugging purposes)..."></textarea>
+		<input type="file" name="source" id="source" class="form-control" />
 	</div>
 	<div class="form-group">
 		<label for="error_message">Upload screenshot of final page:</label>

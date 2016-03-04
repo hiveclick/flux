@@ -35,6 +35,20 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
 							<input type="text" id="support_email" class="form-control" placeholder="enter email addresses that should receive support emails" name="preferences_array[support_email]" value="<?php echo \Flux\Preferences::getPreference('SUPPORT_EMAIL'); ?>" />
 						</div>
 						<br />
+						<h3 class="sub-header">Google Adwords OAuth</h3>
+						<div class="form-group">
+							<div class="help-block">Enter the client id used in the Google Developer Platform found <a href="https://console.cloud.google.com/apis/credentials?project=silken-campus-123118">here</a></div>
+							<input type="text" id="oauth_client_id" class="form-control" placeholder="enter the client id for Google OAuth" name="preferences_array[google_oauth_client_id]" value="<?php echo \Flux\Preferences::getPreference('GOOGLE_OAUTH_CLIENT_ID'); ?>" />
+						</div>
+						<div class="form-group">
+							<div class="help-block">Enter the client secret used in the Google Developer Platform found <a href="https://console.cloud.google.com/apis/credentials?project=silken-campus-123118">here</a></div>
+							<input type="text" id="oauth_client_secret" class="form-control" placeholder="enter the client secret for Google OAuth" name="preferences_array[google_oauth_client_secret]" value="<?php echo \Flux\Preferences::getPreference('GOOGLE_OAUTH_CLIENT_SECRET'); ?>" />
+						</div>
+						<div class="form-group">
+							<div class="help-block">Enter the oauth request token.  If you do not have one, you will need to <a target="_blank" href="/admin/oauth-request-token">generate a new one</a></div>
+							<input type="text" id="oauth_client_secret" class="form-control" placeholder="enter the client secret for Google OAuth" name="preferences_array[google_oauth_token]" value="<?php echo \Flux\Preferences::getPreference('GOOGLE_OAUTH_TOKEN'); ?>" />
+						</div>
+						<br />
 						<h3 class="sub-header">Interface Options</h3>
 						<div class="form-group">
 							<div class="help-block">Select how many items to show on search pages by default</div>
@@ -189,6 +203,9 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
 		</div>
 	</div>
 </div>
+
+<!-- edit domain group modal -->
+<div class="modal fade" id="oauth_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 <script>
 //<!--
 $(document).ready(function() {

@@ -44,7 +44,6 @@ class FlagNextLeadAction extends BasicAction
 			$lead_split_attempt->setAttemptTime(new \MongoDate());
 			$lead_split_attempt->setFulfillment(array('fulfillment_id' => 0, 'fulfillment_name' => 'uBot Script'));
 			$lead_split_attempt->setResponse($_POST['response']);
-			$lead_split_attempt->setSource($_POST['source']);
 			if (isset($_POST['error_message']) && trim($_POST['error_message']) != '') {
 				$lead_split_attempt->setErrorMessage($_POST['error_message']);
 				$lead_split_attempt->setIsError(true);
@@ -52,6 +51,12 @@ class FlagNextLeadAction extends BasicAction
 			}
 			if (isset($_POST['disposition']) && trim($_POST['disposition']) != '') {
 				$lead_split->setDisposition($_POST['disposition']);
+			}
+			if (isset($_FILES['source'])) {
+				if (file_exists($_FILES['source']['tmp_name'])) {
+					$source = str_replace('"//', '"http://', file_get_contents($_FILES['source']['tmp_name']));
+					$lead_split_attempt->setSource($source);
+				}
 			}
 			if (isset($_FILES['screenshot'])) {
 				if (file_exists($_FILES['screenshot']['tmp_name'])) {
@@ -66,7 +71,7 @@ class FlagNextLeadAction extends BasicAction
 				foreach ($_FILES['debug_screenshots']['tmp_name'] as $key => $debug_screenshot) {
 					if (trim($debug_screenshot) != '') {
 						if (file_exists($debug_screenshot)) {
-							$debug_screenshot_array[] = array('screenshot' => $debug_screenshot, 'source' => '');
+							$debug_screenshot_array[] = array('screenshot' => $debug_screenshot, 'source' => 'No file loaded');
 							//$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot)));
 						}
 					}
@@ -79,14 +84,21 @@ class FlagNextLeadAction extends BasicAction
 						if (file_exists($debug_source)) {
 							$debug_screenshot_array[$counter]['source'] = $debug_source;
 							//$lead_split_attempt->addDebugSource(base64_encode(file_get_contents($debug_source)));
+						} else {
+							$debug_screenshot_array[$counter]['source'] = 'Cannot find source file: ' . $debug_source;
 						}
 					}
 					$counter++;
 				}
 			}
-			foreach ($debug_screenshot_array as $debug_screenshot_item) {
-				echo "Uploading debug screenshot: " . $debug_screenshot_item['screenshot'] . "\n";
-				$lead_split_attempt->addDebugScreenshot(base64_encode(file_get_contents($debug_screenshot_item['screenshot'])), file_get_contents($debug_screenshot_item['source']));
+			foreach ($debug_screenshot_array as $key => $debug_screenshot_item) {
+				$screenshot = base64_encode(file_get_contents($debug_screenshot_item['screenshot']));
+				if (file_exists($debug_screenshot_item['source'])) {
+					$source = str_replace('"//', '"http://', file_get_contents($debug_screenshot_item['source']));
+				} else {
+					$source = 'Cannot find file: ' . $debug_screenshot_item['source'];
+				}
+				$lead_split_attempt->addDebugScreenshot($screenshot, $source);
 			}
 			$lead_split->addAttempt($lead_split_attempt);
 			$lead_split->setLastAttemptTime(new \MongoDate());

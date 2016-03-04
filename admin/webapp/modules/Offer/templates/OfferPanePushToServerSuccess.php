@@ -29,7 +29,7 @@
 			<label class="col-sm-2 control-label" for="docroot_dir">Document Root</label>
 			<div class="col-sm-10">
 				<input type="text" id="modal_docroot_dir" name="docroot_dir" class="form-control" value="" placeholder="Docroot Dir (/var/www/sites/...)" />
-				<small class="help-block">Specifies the root folder on the server where this offer is located</small>
+				<small class="help-block">Specifies the root folder on the server where this offer is located (should end in /docroot/)</small>
 			</div>
 		</div>
 		<div class="row form-group">
