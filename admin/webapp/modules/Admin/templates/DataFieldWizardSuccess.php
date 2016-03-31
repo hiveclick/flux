@@ -131,10 +131,10 @@
 			<div role="tabpanel" class="tab-pane fade" id="fields">
 				<div class="help-block">These are the values that can be used in this data field.  Use these when adding data fields to a lead</div>
 				<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
-				<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
+				<div class="col-xs-5 col-sm-5 col-md-6 col-lg-6">
 					<b>Display Name</b>
 				</div>
-				<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 					<b>Value</b>
 				</div>
 				<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
@@ -151,15 +151,14 @@
 							<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 								<label for="data_field_set_value_<?php echo $counter ?>">#<?php echo $counter + 1 ?></label>
 							</div>
-							<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
-								<textarea name="data_field_set[<?php echo $counter ?>][name]" class="form-control" placeholder="enter display name"><?php echo $data_field_set->getName() ?></textarea>
+							<div class="col-xs-5 col-sm-5 col-md-6 col-lg-6">
+								<input type="text" name="data_field_set[<?php echo $counter ?>][name]" class="form-control" placeholder="enter display name" value="<?php echo $data_field_set->getName() ?>" />
 							</div>
-							<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 								<input type="text" id="data_field_set_value_<?php echo $counter ?>" name="data_field_set[<?php echo $counter;?>][value]" class="form-control" value="<?php echo $data_field_set->getValue() ?>" placeholder="enter value for data field #<?php echo $counter + 1 ?>" />
-								<div class="text-right hidden-xs hidden-sm"><small><?php echo number_format($data_field_set->getLeadTotal(), 0, null, ',') ?> leads total, <?php echo number_format($data_field_set->getDailyTotal(), 0, null, ',') ?> leads today</small></div>
 							</div>
 							<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
-								<button type="button" class="form-control btn btn-danger btn-remove-item"><span class="glyphicon glyphicon-remove"></span></button>
+								<button type="button" class="btn-sm btn btn-danger btn-remove-item"><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
 							<div class="clearfix"></div>
 						</div>
@@ -172,6 +171,16 @@
 					</div>
 				</div>
 				<div class="clearfix"></div>
+				<hr />
+				<div class="help-block">You can also import a tab-delimited list of field names and values.  Specify the value first, then the name separated by tabs.</div>
+				<div class="row">
+					<div class="col-md-10">
+						<textarea class="form-control" name="field_value_import" id="field_value_import"></textarea>	
+					</div>
+					<div class="col-md-2">
+						<div class="btn btn-info btn-block" id="field_value_import_btn">import</div>
+					</div>
+				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="html">
 				<div class="help-block">Use this HTML code when placing this field on your paths</div>
@@ -305,15 +314,14 @@
 	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 		<label for="data_field_set_value_dummy_set_id">#dummy_set_counter</label>
 	</div>
-	<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
-		<textarea name="data_field_set[dummy_set_id][name]" class="form-control" placeholder="enter display name"></textarea>
+	<div class="col-xs-5 col-sm-5 col-md-6 col-lg-6">
+		<input type="text" name="data_field_set[dummy_set_id][name]" class="form-control" placeholder="enter display name" value="dummy_set_name" />
 	</div>
-	<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-		<input type="text" id="data_field_set_value_dummy_set_id" name="data_field_set[dummy_set_id][value]" class="form-control" value="" placeholder="enter value" />
-		<div class="text-right hidden-xs hidden-sm"><small>0 leads total, 0 leads today</small></div>
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+		<input type="text" id="data_field_set_value_dummy_set_id" name="data_field_set[dummy_set_id][value]" class="form-control" value="dummy_set_value" placeholder="enter value" />
 	</div>
 	<div class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
-		<button type="button" class="form-control btn btn-danger btn-remove-item"><span class="glyphicon glyphicon-remove"></span></button>
+		<button type="button" class="btn-sm btn btn-danger btn-remove-item"><span class="glyphicon glyphicon-remove"></span></button>
 	</div>
 	<div class="clearfix"></div>
 </div>
@@ -456,6 +464,8 @@ $(document).ready(function() {
 		data_field_set_div.html(function(i, oldHTML) {
 			oldHTML = oldHTML.replace(/dummy_set_id/g, index_number);
 			oldHTML = oldHTML.replace(/dummy_set_counter/g, (index_number + 1));
+			oldHTML = oldHTML.replace(/dummy_set_name/g, "");
+			oldHTML = oldHTML.replace(/dummy_set_value/g, "");
 			return oldHTML;
 		});
 		$('#data_field_set_groups').append(data_field_set_div);
@@ -464,6 +474,29 @@ $(document).ready(function() {
 
 	$('#data_field_set_groups').on('click', '.btn-remove-item', function() {
 		$(this).closest('.form-group').remove();
+	});
+
+	$('#field_value_import_btn').click(function() {
+		var lines = $('#field_value_import').val().split("\n");
+		for(var i=0;i<lines.length;i++) {
+			var line = lines[i];
+			if (line.indexOf("\t") >= 0) {
+				var line_parts = line.split("\t");
+				
+				var index_number = $('#data_field_set_groups > .data-field-set-group-item').length;
+				var data_field_set_div = $('#dummy_data_field_set_div').clone(true);
+				data_field_set_div.removeAttr('id');
+				data_field_set_div.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_set_id/g, index_number);
+					oldHTML = oldHTML.replace(/dummy_set_counter/g, (index_number + 1));
+					oldHTML = oldHTML.replace(/dummy_set_name/g, line_parts[1]);
+					oldHTML = oldHTML.replace(/dummy_set_value/g, line_parts[0]);
+					return oldHTML;
+				});
+				$('#data_field_set_groups').append(data_field_set_div);
+				data_field_set_div.show();
+			}
+		}
 	});
 
 	$('#custom_code_examples').selectize().on('change', function() {

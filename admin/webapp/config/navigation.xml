@@ -49,6 +49,18 @@
 				<class>nav-secondary</class>
 				<permission>1</permission>
 			</spacer>
+			<adcampaignsearch>
+                <label>Google Campaigns</label>
+                <uri>/adwords/ad-campaign-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </adcampaignsearch>
+            <spacer2>
+				<label></label>
+				<uri></uri>
+				<class>nav-secondary</class>
+				<permission>1</permission>
+			</spacer2>
 			<!-- Insert Campaign Saved Searches -->
 			<!-- <saved_searches_campaign /> -->
             <campaignwizard>

@@ -131,12 +131,12 @@
 					</div>
 					<div class="help-block">Enter the FORM POST url below.  You can retrieve this from viewing the source of the landing page</div>
 					<div class="form-group">
-						<label class="control-label" for="post_url">Post URL</label>
-						<textarea name="post_url" id="post_url" class="form-control" rows="4" placeholder="enter posting url here..."></textarea>
+						<label class="control-label" for="form_post_url">Post URL</label>
+						<textarea name="form_post_url" id="form_post_url" class="form-control" rows="4" placeholder="enter posting url here..."></textarea>
 					</div>
 					<div class="form-group">
-						<label class="control-label" for="post_url">Response success text</label>
-						<textarea name="success_msg" id="success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"></textarea>
+						<label class="control-label" for="form_success_msg">Response success text</label>
+						<textarea name="form_success_msg" id="form_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"></textarea>
 					</div>
 				</div>
 			   
@@ -312,7 +312,7 @@ $(document).ready(function() {
 	$('#fulfillment_form_<?php echo $fulfillment->getId() ?>').form(function(data) {
 		$.rad.notify('Fulfillment Updated', 'The fulfillment handler has been added/updated in the system');
 		$('#fulfillment_search_form').trigger('submit');
-		$('#edit_domain_group_modal').modal('hide');
+		$('#edit_fulfillment_modal').modal('hide');
 	}, {keep_form:1});
 
 	$('#status,#export_type,#client_id,#scheduling_interval,#scheduling_days,#mailchimp_list').selectize();

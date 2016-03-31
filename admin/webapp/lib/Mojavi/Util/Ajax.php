@@ -62,13 +62,12 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendXmlAsAjax($func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
-		$ret_val = self::sendXml($func, $request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+	static function sendXmlAsAjax($func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
+		$ret_val = self::sendXml($func, $request, $method, $url, $headers, $remove_unsafe_params);
 		return \Zend\Json\Json::encode(\Zend\Json\Json::decode($ret_val, \Zend\Json\Json::TYPE_ARRAY), true);
 	}
 
@@ -79,12 +78,11 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendXmlAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendXmlAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		// use APCu instead of the file cache
 		if (ini_get('apc.enabled')) {
 			$cache_key = md5($cache_filename);
@@ -101,7 +99,7 @@ class Ajax extends MojaviObject {
 			}
 		}
 		// Request is not cached, so make a request, cache the response, and return it
-		$cache_contents = self::sendRaw($func, $request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$cache_contents = self::sendRaw($func, $request, $method, $url, $headers, $remove_unsafe_params);
 
 		if (ini_get('apc.enabled')) {
 			$cache_key = md5($cache_filename);
@@ -122,15 +120,14 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendXml($func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendXml($func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		$ajax = new Ajax();
 		$ajax->setFunc($func);
-		$response = $ajax->send($request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$response = $ajax->send($request, $method, $url, $headers, $remove_unsafe_params);
 		try {
 			$ret_val = simplexml_load_string(utf8_encode($response->getBody()));
 		} catch (Exception $e) {
@@ -146,12 +143,11 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendAjaxAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendAjaxAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		// use APCu instead of the file cache
 		if (ini_get('apc.enabled')) {
 			$cache_key = basename($cache_filename);
@@ -168,7 +164,7 @@ class Ajax extends MojaviObject {
 			}
 		}
 		// Request is not cached, so make a request, cache the response, and return it
-		$cache_contents = self::sendRaw($func, $request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$cache_contents = self::sendRaw($func, $request, $method, $url, $headers, $remove_unsafe_params);
 
 		if (ini_get('apc.enabled')) {
 			$cache_key = basename($cache_filename);
@@ -189,15 +185,14 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendAjax($func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendAjax($func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		$ajax = new Ajax();
 		$ajax->setFunc($func);
-		$response = $ajax->send($request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$response = $ajax->send($request, $method, $url, $headers, $remove_unsafe_params);
 		try {
 			$ret_val = \Zend\Json\Json::decode($response->getBody(), \Zend\Json\Json::TYPE_ARRAY);
 		} catch (Exception $e) {
@@ -213,12 +208,11 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendRawAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendRawAndCache($cache_filename, $func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		// use APCu instead of the file cache
 		if (ini_get('apc.enabled')) {
 			$cache_key = md5($cache_filename);
@@ -235,7 +229,7 @@ class Ajax extends MojaviObject {
 			}
 		}
 		// Request is not cached, so make a request, cache the response, and return it
-		$cache_contents = self::sendRaw($func, $request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$cache_contents = self::sendRaw($func, $request, $method, $url, $headers, $remove_unsafe_params);
 
 		if (ini_get('apc.enabled')) {
 			$cache_key = md5($cache_filename);
@@ -256,15 +250,14 @@ class Ajax extends MojaviObject {
 	 * @param Request|array $request
 	 * @param integer $method
 	 * @param string $url
-	 * @param string $user_token
-	 * @param string $api_token
+	 * @param array $headers
 	 * @param boolean $remove_unsafe_params
 	 * @return array
 	 */
-	static function sendRaw($func, $request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	static function sendRaw($func, $request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		$ajax = new Ajax();
 		$ajax->setFunc($func);
-		$response = $ajax->send($request, $method, $url, $user_token, $api_token, $remove_unsafe_params);
+		$response = $ajax->send($request, $method, $url, $headers, $remove_unsafe_params);
 		try {
 			$ret_val = $response->getBody();
 		} catch (Exception $e) {
@@ -279,7 +272,7 @@ class Ajax extends MojaviObject {
 	 * @param integer $method
 	 * @return Zend_Http_Response
 	 */
-	function send($request, $method = Request::GET, $url = null, $user_token = '', $api_token = '', $remove_unsafe_params = true) {
+	function send($request, $method = Request::GET, $url = null, $headers = array(), $remove_unsafe_params = true) {
 		if ($this->getFunc() === '') {
 			throw new Exception('Param \'func\' is required.');
 		}
@@ -291,7 +284,7 @@ class Ajax extends MojaviObject {
 		}
 		try {
 			/* @var $response Zend\Http\Response */
-			$response = $this->curl($url, $params, $method, $user_token, $api_token, $remove_unsafe_params);
+			$response = $this->curl($url, $params, $method, $headers, $remove_unsafe_params);
 		} catch (\Zend\Http\Client\Exception\RuntimeException $e) {
 			if (self::DEBUG) { \Mojavi\Logging\LoggerManager::error('Error connecting to ' . $url . $this->getFunc()); }
 			if (self::DEBUG) { \Mojavi\Logging\LoggerManager::error($e->getMessage()); }
@@ -326,7 +319,7 @@ class Ajax extends MojaviObject {
 	 * @param string $raw_body
 	 * @return Zend_Http_Response
 	 */
-	private function curl($orig_url, $params = array(), $method = Request::GET, $user_token = "", $api_token = "", $remove_unsafe_params = true, $retry_count = 0) {
+	private function curl($orig_url, $params = array(), $method = Request::GET, $headers = array(), $remove_unsafe_params = true, $retry_count = 0) {
 		try {
 			if (is_null($orig_url) && defined('MO_API_URL')) {
 				$orig_url = MO_API_URL;
@@ -374,6 +367,8 @@ class Ajax extends MojaviObject {
 			// Set the token authentication
 			$request->getHeaders()->addHeaderLine('Accept-Encoding', 'gzip,deflate');
 			$request->getHeaders()->addHeaderLine('Content-Type', \Zend\Http\Client::ENC_URLENCODED);
+			$request->getHeaders()->addHeaders($headers);
+			
 
 			if ($request->getUri() === null) {
 				throw new Exception('No URI given. Param \'func\' is required.');
@@ -414,11 +409,11 @@ class Ajax extends MojaviObject {
 			return $response;
 		} catch (Exception $e) {
 			if (strpos($e->getMessage(), 'connect() timed out!') !== false && $retry_count < 3) {
-				return $this->curl($orig_url, $params, $method, $user_token, $api_token, $remove_unsafe_params, ++$retry_count);
+				return $this->curl($orig_url, $params, $method, $headers, $remove_unsafe_params, ++$retry_count);
 			} else if (strpos($e->getMessage(), 'couldn\'t connect to host') !== false && $retry_count < 3) {
-				return $this->curl($orig_url, $params, $method, $user_token, $api_token, $remove_unsafe_params, ++$retry_count);
+				return $this->curl($orig_url, $params, $method, $headers, $remove_unsafe_params, ++$retry_count);
 			} else if (strpos($e->getMessage(), 'Operation timed out') !== false && $retry_count < 3) {
-				return $this->curl($orig_url, $params, $method, $user_token, $api_token, $remove_unsafe_params, ++$retry_count);
+				return $this->curl($orig_url, $params, $method, $headers, $remove_unsafe_params, ++$retry_count);
 			}
 			throw $e;
 		}

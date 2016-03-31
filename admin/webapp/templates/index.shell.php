@@ -215,7 +215,7 @@ $(document).ready(function() {
 		},
 		onItemAdd: function(value,item) {
 			// Redirect to whatever was selected
-			location.replace(value);
+			location.href = value;
 		}
 	});
 });
