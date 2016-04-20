@@ -111,6 +111,33 @@
 					</div>
 				</div>
 				
+				<!-- PING-POST specific settings -->
+				<div id="ping_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the PING url below.  Any POST parameters not in the list of filtered fields will be added to the mapping</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Ping URL</label>
+						<textarea name="ping_url" id="ping_url" class="form-control" rows="4" placeholder="enter ping url here..."><?php echo $fulfillment->getPingUrl() ?></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_success_msg">Response success text</label>
+						<textarea name="ping_success_msg" id="ping_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful ping"><?php echo $fulfillment->getPingSuccessMsg() ?></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_field_filter">Ping Fields</label>
+						<input type="text" name="ping_field_filter" id="ping_field_filter" class="form-control" placeholder="enter fields that should be ommitted from the ping (PII fields)" value="<?php echo implode(",", $fulfillment->getPingFieldFilter()) ?>" />
+					</div>
+					
+					<div class="help-block">Enter the POST url below.  Any POST parameters will be added to the mapping</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_post_url">Post URL</label>
+						<textarea name="ping_post_url" id="ping_post_url" class="form-control" rows="4" placeholder="enter posting url here..."><?php echo $fulfillment->getPingPostUrl() ?></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_post_success_msg">Response success text</label>
+						<textarea name="ping_post_success_msg" id="ping_post_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"><?php echo $fulfillment->getPingPostSuccessMsg() ?></textarea>
+					</div>
+				</div>
+				
 				<!-- POST specific settings -->
 				<div id="post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the POST url and what to check in the result for a successful post.  Column mappings should be done on the <i>Post Mapping</i> tab below.</div>

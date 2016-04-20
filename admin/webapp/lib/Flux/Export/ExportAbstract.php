@@ -18,6 +18,7 @@ abstract class ExportAbstract extends MongoForm {
 	const FULFILLMENT_TYPE_MANUAL = 6;
 	const FULFILLMENT_TYPE_UBOT = 7;
 	const FULFILLMENT_TYPE_MAILCHIMP = 8;
+	const FULFILLMENT_TYPE_PING_POST = 9;
 	
 	protected $name;
 	protected $description;

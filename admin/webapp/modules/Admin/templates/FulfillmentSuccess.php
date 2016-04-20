@@ -70,6 +70,13 @@
 								This export will <strong>POST</strong> to the following URL:
 								<p />
 								<pre><?php echo $fulfillment->getPostUrl() ?></pre>
+							<?php } else if ($fulfillment->getExportClass()->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST) { ?>
+								This export will <strong>PING</strong> to the following URL:
+								<p />
+								<pre><?php echo $fulfillment->getPingUrl() ?></pre>
+								And, if successful, it will <strong>POST</strong> to the following URL:
+								<p />
+								<pre><?php echo $fulfillment->getPingPostUrl() ?></pre>
 							<?php } else if ($fulfillment->getExportClass()->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT) { ?>
 								This export send data to <strong>InfusionSoft</strong> using the following credentials:
 								<p />

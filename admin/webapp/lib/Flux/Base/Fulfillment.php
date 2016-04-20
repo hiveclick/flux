@@ -39,6 +39,12 @@ class Fulfillment extends MongoForm {
 	protected $tracking_url;
 	protected $post_url;
 	
+	protected $ping_url;
+	protected $ping_success_msg;
+	protected $ping_field_filter;
+	protected $ping_post_url;
+	protected $ping_post_success_msg;
+	
 	protected $infusionsoft_host;
 	protected $infusionsoft_api_key;
 	
@@ -249,6 +255,120 @@ class Fulfillment extends MongoForm {
 		$this->success_msg = $arg0;
 		$this->addModifiedColumn('success_msg');
 		return $this;
+	}
+	
+	/**
+	 * Returns the ping_url
+	 * @return string
+	 */
+	function getPingUrl() {
+	    if (is_null($this->ping_url)) {
+	        $this->ping_url = "";
+	    }
+	    return $this->ping_url;
+	}
+	
+	/**
+	 * Sets the ping_url
+	 * @var string
+	 */
+	function setPingUrl($arg0) {
+	    $this->addModifiedColumn("ping_url");
+	    $this->ping_url = $arg0;
+	    return $this;
+	}
+	
+	/**
+	 * Returns the ping_success_msg
+	 * @return string
+	 */
+	function getPingSuccessMsg() {
+	    if (is_null($this->ping_success_msg)) {
+	        $this->ping_success_msg = "";
+	    }
+	    return $this->ping_success_msg;
+	}
+	
+	/**
+	 * Sets the ping_success_msg
+	 * @var string
+	 */
+	function setPingSuccessMsg($arg0) {
+	    $this->addModifiedColumn("ping_success_msg");
+	    $this->ping_success_msg = $arg0;
+	    return $this;
+	}
+	
+	/**
+	 * Returns the ping_field_filter
+	 * @return array
+	 */
+	function getPingFieldFilter() {
+	    if (is_null($this->ping_field_filter)) {
+	        $this->ping_field_filter = array();
+	    }
+	    return $this->ping_field_filter;
+	}
+	
+	/**
+	 * Sets the ping_field_filter
+	 * @var array
+	 */
+	function setPingFieldFilter($arg0) {
+	    $this->addModifiedColumn("ping_field_filter");
+	    if (is_array($arg0)) {
+	        $this->ping_field_filter = $arg0;
+	    } else if (is_string($arg0)) {
+	        if (strpos(",", $arg0) !== false) {
+	            $this->ping_field_filter = explode(",", $arg0);
+	        } else {
+	            $this->ping_field_filter = array($arg0);
+	        }
+	    }
+	    $this->ping_field_filter = $arg0;
+	    return $this;
+	}	
+	
+	/**
+	 * Returns the ping_post_url
+	 * @return string
+	 */
+	function getPingPostUrl() {
+	    if (is_null($this->ping_post_url)) {
+	        $this->ping_post_url = "";
+	    }
+	    return $this->ping_post_url;
+	}
+	
+	/**
+	 * Sets the ping_post_url
+	 * @var string
+	 */
+	function setPingPostUrl($arg0) {
+	    $this->addModifiedColumn("ping_post_url");
+	    $this->ping_post_url = $arg0;
+	    return $this;
+	}
+	
+	/**
+	 * Returns the ping_post_success_msg
+	 * @return string
+	 */
+	function getPingPostSuccessMsg() {
+	    if (is_null($this->ping_post_success_msg)) {
+	        $this->ping_post_success_msg = "";
+	    }
+	    return $this->ping_post_success_msg;
+	}
+	
+	/**
+	 * Sets the ping_post_success_msg
+	 * @var string
+	 */
+	function setPingPostSuccessMsg($arg0) {
+	    $this->addModifiedColumn("ping_post_success_msg");
+	    $this->ping_post_success_msg = $arg0;
+	    return $this;
 	}
 
 	/**

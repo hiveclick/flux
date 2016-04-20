@@ -109,6 +109,33 @@
 					</div>
 				</div>
 				
+				<!-- PING-POST specific settings -->
+				<div id="ping_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST ? 'hidden' : ''; ?>">
+					<div class="help-block">Enter the PING url below.  Any POST parameters not in the list of filtered fields will be added to the mapping</div>
+					<div class="form-group">
+						<label class="control-label" for="post_url">Ping URL</label>
+						<textarea name="ping_url" id="ping_url" class="form-control" rows="4" placeholder="enter ping url here..."></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_success_msg">Response success text</label>
+						<textarea name="ping_success_msg" id="ping_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful ping"></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_field_filter">Ping Fields</label>
+						<input type="text" name="ping_field_filter" id="ping_field_filter" class="form-control" placeholder="enter fields that should be ommitted from the ping (PII fields)" value="" />
+					</div>
+					
+					<div class="help-block">Enter the POST url below.  Any POST parameters will be added to the mapping</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_post_url">Post URL</label>
+						<textarea name="ping_post_url" id="ping_post_url" class="form-control" rows="4" placeholder="enter posting url here..."></textarea>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="ping_post_success_msg">Response success text</label>
+						<textarea name="ping_post_success_msg" id="ping_post_success_msg" class="form-control" rows="2" placeholder="enter the response text that denotes a successful post"></textarea>
+					</div>
+				</div>
+				
 				<!-- POST specific settings -->
 				<div id="post_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_POST ? 'hidden' : ''; ?>">
 					<div class="help-block">Enter the POST url below.  Any POST parameters will be added to the mapping</div>
@@ -342,6 +369,17 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#ping_field_filter').selectize({
+		delimiter: ',',
+		persist: false,
+		create: function(input) {
+			return {
+				value: input,
+				text: input
+			}
+		}
+	});
+
 	var $selectize_options = {
 		labelField: 'name',
 		searchField: ['name', 'description', 'request_names'],
@@ -436,6 +474,7 @@ $(document).ready(function() {
 
 	$('#export_class_name').change(function() {
 		$('#formfill_settings').addClass('hidden');
+		$('#ping_settings').addClass('hidden');
 		$('#export_settings').addClass('hidden');
 		$('#ftp_settings').addClass('hidden');
 		$('#email_settings').addClass('hidden');
@@ -460,6 +499,8 @@ $(document).ready(function() {
 		 			$('#infusionsoft_settings').removeClass('hidden');
 				<?php } if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MAILCHIMP) { ?>
 		 			$('#mailchimp_settings').removeClass('hidden');
+				<?php } if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST) { ?>
+		 			$('#ping_settings').removeClass('hidden');
 				<?php } ?>
 				return true;
 			}
