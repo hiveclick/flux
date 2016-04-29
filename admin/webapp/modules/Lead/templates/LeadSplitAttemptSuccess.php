@@ -23,7 +23,7 @@
 		<div role="tabpanel" class="tab-pane fade in active" id="basic">
 			<div class="help-block">Below is what was sent to the fulfillment</div>
 			<div class="form-group">
-				<textarea readonly class="form-control" rows="10"><?php echo $lead_split_attempt->getRequest() ?></textarea>
+				<textarea readonly class="form-control" rows="10"><?php echo htmlentities($lead_split_attempt->getRequest()) ?></textarea>
 			</div>
 			<hr />
 			<div class="help-block">This is the response received from the fulfillment</div>
