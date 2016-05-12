@@ -319,7 +319,7 @@ class Fulfillment extends MongoForm {
 	    if (is_array($arg0)) {
 	        $this->ping_field_filter = $arg0;
 	    } else if (is_string($arg0)) {
-	        if (strpos(",", $arg0) !== false) {
+	        if (strpos($arg0, ",") !== false) {
 	            $this->ping_field_filter = explode(",", $arg0);
 	        } else {
 	            $this->ping_field_filter = array($arg0);

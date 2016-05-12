@@ -113,6 +113,12 @@ $(document).ready(function() {
 					ret_val += '<div class="small text-muted">Leads will just be submitted to Mailchimp for email correspondence</div>';
 					ret_val += '</div>';
 				return ret_val;
+			} else if (value == '<?php echo json_encode(\Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST) ?>') {
+				var ret_val = '<div style="line-height:16pt;">'
+					ret_val += 'Ping/Post';
+					ret_val += '<div class="small text-muted">Leads will just be submitted as a ping, then a post</div>';
+					ret_val += '</div>';
+				return ret_val;
 			}
 		}}
 	];

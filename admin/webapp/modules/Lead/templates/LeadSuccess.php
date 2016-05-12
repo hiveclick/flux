@@ -199,7 +199,7 @@
 							<?php foreach ($lead->getE() as $key => $value) { ?>
 								<tr>
 									<td><?php echo $value->getDataField()->getName() ?></td>
-									<td><?php echo date('m/d/Y g:i a', $value->getT()->sec) ?></td>
+									<td><?php echo date('m/d/Y g:i a', ($value->getT() instanceof \MongoDate) ? $value->getT()->sec : 0) ?></td>
 								</tr>
 							<?php } ?>
 						</tbody>
@@ -331,7 +331,7 @@
 										<i class="fa fa-stack-1x fa-inverse"><?php echo strtoupper(substr($event->getDataField()->getName(), 0, 1)) ?></i>
 									</span>
 									<div><?php echo $event->getDataField()->getName() ?></div>
-									<div class="text-muted"><?php echo date('m/d/Y g:i a', $event->getT()->sec) ?></div>
+									<div class="text-muted"><?php echo date('m/d/Y g:i a', ($event->getT() instanceof \MongoDate) ? $event->getT()->sec : 0) ?></div>
 								</div> 
 							<?php } ?>
 						</div> 
