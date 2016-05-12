@@ -109,6 +109,8 @@ class GenericPingPost extends ExportAbstract {
 		$curl_request = $url . '?' . http_build_query($params, null, '&');
 		$lead_split_attempt->setRequest($curl_request);
 		
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Pinging to " . $curl_request);
+		
 		// Setup Curl for this request
 		$ch = curl_init();
 		
@@ -136,13 +138,20 @@ class GenericPingPost extends ExportAbstract {
 	 * @param $export_queue_item \Flux\ExportQueue
 	 * @return resource
 	 */
-	function preparePostRequest($lead_split_attempt) {
+	function preparePostRequest($lead_split_attempt, $ping_response = '') {
 	    $start_time = microtime(true);
 	    $params = $lead_split_attempt->mergeLead();
 	    $url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
 	
+	    if (strpos($ping_response, "Confirmation")) {
+	    	$confirmation_id = \Mojavi\Util\StringTools::getStringBetween($ping_response, "<Confirmation>", "</Confirmation>");
+	    	$params['confirmation_id'] = $confirmation_id;
+	    }
+	    
 	    $curl_request = $url . '?' . http_build_query($params, null, '&');
 	    $lead_split_attempt->setRequest($curl_request);
+	    
+	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Posting to " . $curl_request);
 	
 	    // Setup Curl for this request
 	    $ch = curl_init();
