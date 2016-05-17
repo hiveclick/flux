@@ -141,14 +141,13 @@ class GenericPingPost extends ExportAbstract {
 	function preparePostRequest($lead_split_attempt, $ping_response = '') {
 	    $start_time = microtime(true);
 	    $params = $lead_split_attempt->mergeLead();
-	    $url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
-	
+	    $url = $this->getFulfillment()->getFulfillment()->getPingPostUrl();
 	    if (strpos($ping_response, "Confirmation")) {
 	    	$confirmation_id = \Mojavi\Util\StringTools::getStringBetween($ping_response, "<Confirmation>", "</Confirmation>");
 	    	$params['confirmation_id'] = $confirmation_id;
 	    }
 	    
-	    $curl_request = $url . '?' . http_build_query($params, null, '&');
+	    $curl_request = ($url . '?' . http_build_query($params, null, '&'));
 	    $lead_split_attempt->setRequest($curl_request);
 	    
 	    \Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Posting to " . $curl_request);
@@ -175,7 +174,7 @@ class GenericPingPost extends ExportAbstract {
 	    $response = curl_exec($ch);
 	    
 	    /* @var $lead_split_attempt \Flux\LeadSplitAttempt */
-	    $lead_split_attempt->setResponse($response);
+	    $lead_split_attempt->setResponse($lead_split_attempt->getResponse() . "\n\nPOST\n" . $response);
 	    $lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 	    if ($this->getFulfillment()->getFulfillment()->getPingPostSuccessMsg() != '') {
 	        if (strpos($response, $this->getFulfillment()->getFulfillment()->getPingPostSuccessMsg()) !== false) {
@@ -200,13 +199,13 @@ class GenericPingPost extends ExportAbstract {
 	 */
 	function mergePingResponse($lead_split_attempt, $response) {
 		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
-		$lead_split_attempt->setResponse($response);
+		$lead_split_attempt->setResponse("PING\n" . $response);
 		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 		if ($this->getFulfillment()->getFulfillment()->getPingSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getPingSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
 				// If we got a successful ping, then send the real POST request
-			    return $this->preparePostRequest($lead_split_attempt);				
+			    return $this->preparePostRequest($lead_split_attempt, $response);
 			} else {
 				$lead_split_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
 				$lead_split_attempt->setIsError(true);
