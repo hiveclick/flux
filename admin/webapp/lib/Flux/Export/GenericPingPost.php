@@ -145,6 +145,10 @@ class GenericPingPost extends ExportAbstract {
 	    if (strpos($ping_response, "Confirmation")) {
 	    	$confirmation_id = \Mojavi\Util\StringTools::getStringBetween($ping_response, "<Confirmation>", "</Confirmation>");
 	    	$params['confirmation_id'] = $confirmation_id;
+	    } else {
+		    $lead_split_attempt->setErrorMessage("Cannot find ConfirmationId in Ping Response");
+		    $lead_split_attempt->setIsError(true);
+		    return $lead_split_attempt;
 	    }
 	    
 	    $curl_request = ($url . '?' . http_build_query($params, null, '&'));
