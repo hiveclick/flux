@@ -328,6 +328,11 @@ $(document).ready(function() {
 				<?php } else { ?>
 					$('#post_settings').addClass('hidden');
 				<?php } ?>
+				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_PING_POST) { ?>
+					$('#ping_settings').removeClass('hidden');
+				<?php } else { ?>
+					$('#ping_settings').addClass('hidden');
+				<?php } ?>
 				<?php if ($export_class_instance->getFulfillmentType() == \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_INFUSIONSOFT) { ?>
 		 			$('#infusionsoft_settings').removeClass('hidden');
 				<?php } else { ?>

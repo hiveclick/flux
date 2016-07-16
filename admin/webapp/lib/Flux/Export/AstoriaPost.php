@@ -12,16 +12,16 @@
 namespace Flux\Export;
 
 
-class AstoriaPingPost extends GenericPingPost
+class AstoriaPost extends GenericPost
 {
 	/**
 	 * Constructs this export
 	 * @return void
 	 */
 	function __construct() {
-		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_PING_POST);
-		$this->setName('Astoria PING/POST Export');
-		$this->setDescription('Send leads to Astoria Company (Solar, Tax) and records the variable payouts');
+		$this->setFulfillmentType(parent::FULFILLMENT_TYPE_POST);
+		$this->setName('Astoria POST Export');
+		$this->setDescription('Send leads to Astoria Company (Harp) and records the variable payouts');
 	}
 
 	/**
