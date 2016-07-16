@@ -72,6 +72,18 @@
 					<?php } ?>
 				</select>
 			</div>
+			<div class="form-group">
+				<label>Filter conversions by date range: </label>
+				<select class="form-control selectize" name="query_string[conversion_date_range]" id="conversion_date_range" placeholder="Filter by recent conversions" <?php echo $saved_search->getSearchType() == \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ? '' : 'disabled'; ?>>
+					<option value="1" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "1" ? 'selected' : '' ?>>Today</option>
+					<option value="2" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "2" ? 'selected' : '' ?>>Yesterday</option>
+					<option value="3" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "3" ? 'selected' : '' ?>>Today &amp; Yesterday</option>
+					<option value="4" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "4" ? 'selected' : '' ?>>Past 7 Days</option>
+					<option value="5" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "5" ? 'selected' : '' ?>>Past Month</option>
+					<option value="6" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "6" ? 'selected' : '' ?>>Past 3 Months</option>
+					<option value="0" <?php echo $saved_search->getQueryStringParam('conversion_date_range', "") == "0" ? 'selected' : '' ?>>All Time</option>
+				</select>
+			</div>
 		</div>
 		<!-- Offer Search settings -->
 		<div id="saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>" class="<?php echo $saved_search->getSearchType() != \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ? 'hidden' : ''; ?>">
@@ -195,6 +207,7 @@ $(document).ready(function() {
 				$('#required_fields','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
 				$('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
 				$('#campaign_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
+				$('#conversion_date_range','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize()[0].selectize.enable();
 			} else if (val == '<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>') {
 				$('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize()[0].selectize.enable();
 				$('#client_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize()[0].selectize.enable();
@@ -237,6 +250,11 @@ $(document).ready(function() {
 	});
 
 	$('#offer_id_array','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_CAMPAIGN ?>').selectize({
+		dropdownWidthOffset: 150,
+		allowEmptyOption: true
+	});
+
+	$('#conversion_date_range','#saved_qs_<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_LEAD ?>').selectize({
 		dropdownWidthOffset: 150,
 		allowEmptyOption: true
 	});

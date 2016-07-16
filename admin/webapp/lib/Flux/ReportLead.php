@@ -195,9 +195,9 @@ class ReportLead extends Base\ReportLead {
 	function queryByLead() {
 		$criteria = array();
 		if (\MongoId::isValid($this->getLead()->getLeadId())) {
-			$criteria['lead.lead_id'] = $this->getLead()->getLeadId();
+			$criteria['lead._id'] = $this->getLead()->getLeadId();
 		} else if (\MongoId::isValid($this->getId())) {
-			$criteria['lead.lead_id'] = $this->getId();
+			$criteria['lead._id'] = $this->getId();
 		}
 		return parent::query($criteria, false);
 	}

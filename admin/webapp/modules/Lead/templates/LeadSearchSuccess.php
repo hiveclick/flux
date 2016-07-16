@@ -59,13 +59,13 @@
 							<div class="input-group">
 								<span class="input-group-addon">since</span>
 								<select name="conversion_date_range" id="conversion_date_range" placeholder="only show leads that have converted since...">
-									<option value="1">Today</option>
-									<option value="2">Yesterday</option>
-									<option value="3">Today &amp; Yesterday</option>
-									<option value="4">Past 7 Days</option>
-									<option value="5">Past Month</option>
-									<option value="6">Past 3 Months</option>
-									<option value="0">All Time</option>
+									<option value="1" <?php echo $lead_search->getConversionDateRange() == '1' ? 'selected' : '' ?>>Today</option>
+									<option value="2" <?php echo $lead_search->getConversionDateRange() == '2' ? 'selected' : '' ?>>Yesterday</option>
+									<option value="3" <?php echo $lead_search->getConversionDateRange() == '3' ? 'selected' : '' ?>>Today &amp; Yesterday</option>
+									<option value="4" <?php echo $lead_search->getConversionDateRange() == '4' ? 'selected' : '' ?>>Past 7 Days</option>
+									<option value="5" <?php echo $lead_search->getConversionDateRange() == '5' ? 'selected' : '' ?>>Past Month</option>
+									<option value="6" <?php echo $lead_search->getConversionDateRange() == '6' ? 'selected' : '' ?>>Past 3 Months</option>
+									<option value="0" <?php echo $lead_search->getConversionDateRange() == '0' ? 'selected' : '' ?>>All Time</option>
 								</select>
 							</div>
 						</div>

@@ -233,6 +233,7 @@ $(document).ready(function() {
 	$('.btn-geo-lookup').on('click', function() {
 		$.rad.get('/api', { func: '/lead/lead-geo-lookup', 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
 			if (data.record) {
+				console.log(data.record);
 				// Add the City dropdown		
 				var index_number = $('#data_field_posting_url_container > .form-group').length;
 				var $dataFieldRow = $('#dummy_posting_url_data_field').clone(true);
@@ -285,6 +286,90 @@ $(document).ready(function() {
 				$dataFieldRow2.show('fast', function() {
 					$select2.setValue('st');
 					$select_text2.setValue(data.record.state);
+				});
+
+				// Add the postal code dropdown
+				var index_number = $('#data_field_posting_url_container > .form-group').length;
+				var $dataFieldRow3 = $('#dummy_posting_url_data_field').clone(true);
+				$dataFieldRow3.removeAttr('id');
+				$dataFieldRow3.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+					return oldHTML;
+				});
+
+				$('#data_field_posting_url_container').append($dataFieldRow3);
+				$select3 = $dataFieldRow3.find('.selectize').selectize($selectize_options)[0].selectize;
+				$select_text3 = $dataFieldRow3.find('.selectize-text').selectize({
+					valueField: 'value',
+					labelField: 'name',
+					searchField: ['name'],
+					sortField: 'name',
+					sortDirection: 'ASC',
+					diacritics:true,
+					create: true,
+					createOnBlur: true
+				})[0].selectize;
+				$dataFieldRow3.show('fast', function() {
+					$select3.setValue('zi');
+					$select_text3.addOption({name:data.record.postal_code,value:data.record.postal_code});
+					$select_text3.refreshOptions();
+					$select_text3.setValue(data.record.postal_code);
+				});
+
+				// Add the Firstname dropdown
+				var index_number = $('#data_field_posting_url_container > .form-group').length;
+				var $dataFieldRow4 = $('#dummy_posting_url_data_field').clone(true);
+				$dataFieldRow4.removeAttr('id');
+				$dataFieldRow4.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+					return oldHTML;
+				});
+
+				$('#data_field_posting_url_container').append($dataFieldRow4);
+				$select4 = $dataFieldRow4.find('.selectize').selectize($selectize_options)[0].selectize;
+				$select_text4 = $dataFieldRow4.find('.selectize-text').selectize({
+					valueField: 'value',
+					labelField: 'name',
+					searchField: ['name'],
+					sortField: 'name',
+					sortDirection: 'ASC',
+					diacritics:true,
+					create: true,
+					createOnBlur: true
+				})[0].selectize;
+				$dataFieldRow4.show('fast', function() {
+					$select4.setValue('fn');
+					$select_text4.addOption({name:data.record.firstname,value:data.record.firstname});
+					$select_text4.refreshOptions();
+					$select_text4.setValue(data.record.firstname);
+				});
+
+				// Add the Lastname dropdown
+				var index_number = $('#data_field_posting_url_container > .form-group').length;
+				var $dataFieldRow5 = $('#dummy_posting_url_data_field').clone(true);
+				$dataFieldRow5.removeAttr('id');
+				$dataFieldRow5.html(function(i, oldHTML) {
+					oldHTML = oldHTML.replace(/dummy_id/g, (index_number + 1));
+					return oldHTML;
+				});
+
+				$('#data_field_posting_url_container').append($dataFieldRow5);
+				$select5 = $dataFieldRow5.find('.selectize').selectize($selectize_options)[0].selectize;
+				$select_text5 = $dataFieldRow5.find('.selectize-text').selectize({
+					valueField: 'value',
+					labelField: 'name',
+					searchField: ['name'],
+					sortField: 'name',
+					sortDirection: 'ASC',
+					diacritics:true,
+					create: true,
+					createOnBlur: true
+				})[0].selectize;
+				$dataFieldRow5.show('fast', function() {
+					$select5.setValue('ln');
+					$select_text5.addOption({name:data.record.lastname,value:data.record.lastname});
+					$select_text5.refreshOptions();
+					$select_text5.setValue(data.record.lastname);
 				});
 			}
 		});

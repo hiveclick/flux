@@ -50,6 +50,9 @@
 				<div class="btn-group" role="group">
 					<a class="btn btn-sm btn-info" href="#" id="clear_pid"><span class="fa fa-eraser"></span> clear pid</a>
 				</div>
+				<div class="btn-group" role="group">
+					<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#clone_modal" href="/export/split-pane-clone?_id=<?php echo $split->getId() ?>"><span class="fa fa-files-o"></span> clone</a>
+				</div>
 				<a data-toggle="modal" id="btn_delete" data-target="#delete_modal" class="btn btn-sm btn-danger" href="#"><span class="fa fa-trash-o"></span> delete</a>
 			</div>
 		</div>
@@ -277,6 +280,8 @@
 
 <!-- edit split modal -->
 <div class="modal fade" id="edit_split_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
+<!-- clone split modal -->
+<div class="modal fade" id="clone_modal"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>
 <!-- confirm delete modal -->
 <div class="modal fade" id="delete_modal"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-body text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Are you certain you want to delete this split?  All data associated with it will be removed as well.<p /></div><div class="modal-footer"><div id="confirm_delete" class="btn btn-danger">Yes, I'm sure</div> <div class="btn btn-default" data-dismiss="modal">No, close</div></div></div></div></div></div>
 <!-- Flag Split modal -->

@@ -126,7 +126,7 @@ class GenericPost extends ExportAbstract {
 	
 	/**
 	 * Merges the response with the lead
-	 * @param $lead_split_attempt Flux\SplitQueueAttempt
+	 * @param $lead_split_attempt \Flux\SplitQueueAttempt
 	 * @param $response string
 	 * @return boolean
 	 */
@@ -137,6 +137,7 @@ class GenericPost extends ExportAbstract {
 		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
+				$this->recordLeadPayout($lead_split_attempt, $response);
 			} else {
 				$lead_split_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
 				$lead_split_attempt->setIsError(true);
@@ -223,5 +224,15 @@ class GenericPost extends ExportAbstract {
 			throw new \Exception('No queue items to process');
 		}
 		return $ret_val;
+	}
+
+	/**
+	 * Record Lead payout
+	 * @param \Flux\LeadSplitAttempt $lead_split_attempt
+	 * @param string $response
+	 * @return boolean
+	 */
+	function recordLeadPayout($lead_split_attempt, $response) {
+		return true;
 	}
 }

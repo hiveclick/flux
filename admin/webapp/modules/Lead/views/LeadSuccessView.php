@@ -23,9 +23,11 @@ class LeadSuccessView extends LeadIndexView
 	{
 		parent::execute();
 		// set our template
+		/* @var $lead \Flux\Lead */
+		$lead = $this->getContext()->getRequest()->getAttribute("lead", array());
 
 		// set the title
-		$this->setTitle('Leads');
+		$this->setTitle($lead->getLeadName());
 
 	}
 

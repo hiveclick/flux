@@ -59,9 +59,7 @@ class MailChimp extends GenericPost {
 		// Now setup multi curl
 		$mh = curl_multi_init();
 		
-		foreach ($lead_split_attempts as $cursor_item) {
-			$lead_split_attempt = new \Flux\SplitQueueAttempt();
-			$lead_split_attempt->populate($cursor_item);
+		foreach ($lead_split_attempts as $lead_split_attempt) {
 			$lead_split_attempt->setStartTime(microtime(true));
 			// Prepare the cURL request
 			$ch = $this->prepareCurlRequest($lead_split_attempt);
@@ -159,12 +157,12 @@ class MailChimp extends GenericPost {
 	
 	/**
 	 * Merges the response with the lead
-	 * @param $lead_split_attempt Flux\SplitQueueAttempt
+	 * @param $lead_split_attempt \Flux\LeadSplitAttempt
 	 * @param $response string
 	 * @return boolean
 	 */
 	function mergeResponse($lead_split_attempt, $response) {
-		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
+		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 		$lead_split_attempt->setResponse($response);
 		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 		// The response is in json format

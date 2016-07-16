@@ -84,6 +84,7 @@ class ManualFulfillCustomAction extends BasicRestAction
 				
 					/* @var $result \Flux\LeadSplitAttempt */
 					foreach ($results as $key => $result) {
+
 						// Save the split queue attempts back to the split queue item
 						$lead_split->addAttempt($result);
 						

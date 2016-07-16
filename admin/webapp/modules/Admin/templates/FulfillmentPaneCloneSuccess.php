@@ -20,7 +20,7 @@
 		<input type="hidden" name="mapping[<?php echo $key ?>][data_field]" value="<?php echo $mapping->getDataField()->getDataFieldId() ?>" />
 		<input type="hidden" name="mapping[<?php echo $key ?>][mapping_func]" value="<?php echo htmlspecialchars($mapping->getMappingFunc()) ?>" />
 	<?php } ?>
-	<input type="hidden" name="client[client_id]" value="<?php echo $fulfillment->getClient()->getClientId() ?>" />
+	<input type="hidden" name="client[_id]" value="<?php echo $fulfillment->getClient()->getClientId() ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">

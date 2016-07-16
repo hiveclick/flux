@@ -95,6 +95,50 @@ class Lead extends Base\Lead {
 		$this->addModifiedColumn("fulfill_export_id");
 		return $this;
 	}
+
+	/**
+	 * Returns the lead name
+	 * @return string
+	 */
+	function getLeadName() {
+		if ($this->getValue('name') != '') {
+			return $this->getValue('name');
+		} else if ($this->getValue('fn') != '' || $this->getValue('ln') != '') {
+			return trim($this->getValue('fn') . ' ' . $this->getValue('ln'));
+		} else {
+			return $this->getId();
+		}
+	}
+
+	/**
+	 * Helper method to find the derived firstname
+	 * @return string
+	 */
+	function getDerivedFirstname() {
+		if ($this->getValue('fn') != '') {
+			return $this->getValue('fn');
+		} else if ($this->getValue('name') != '') {
+			return substr(trim($this->getValue('name')), 0, strpos(trim($this->getValue('name')), ' '));
+		} else {
+			return substr(trim($this->getLeadName()), 0, strpos(trim($this->getLeadName()), ' '));
+		}
+		return "";
+	}
+
+	/**
+	 * Helper method to find the derived lastname
+	 * @return string
+	 */
+	function getDerivedLastname() {
+		if ($this->getValue('ln') != '') {
+			return $this->getValue('ln');
+		} else if ($this->getValue('name') != '') {
+			return substr(trim($this->getValue('name')), strrpos(trim($this->getValue('name')), " ") + 1);
+		} else {
+			return substr(trim($this->getValue('name')), strrpos(trim($this->getValue('name')), " ") + 1);
+		}
+		return "";
+	}
 	
 	/**
 	 * Helper method to find the derived city

@@ -6,6 +6,8 @@ class LeadGeoLookup extends \Flux\Link\Lead {
 	protected $city;
 	protected $state;
 	protected $postal_code;
+	protected $firstname;
+	protected $lastname;
 	
 	/**
 	 * Returns the city
@@ -69,6 +71,46 @@ class LeadGeoLookup extends \Flux\Link\Lead {
 		$this->addModifiedColumn("postal_code");
 		return $this;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFirstname()
+	{
+		if (is_null($this->firstname)) {
+			$this->firstname = "";
+		}
+		return $this->firstname;
+	}
+
+	/**
+	 * @param mixed $firstname
+	 */
+	public function setFirstname($firstname)
+	{
+		$this->firstname = $firstname;
+		$this->addModifiedColumn("firstname");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLastname()
+	{
+		if (is_null($this->lastname)) {
+			$this->lastname = "";
+		}
+		return $this->lastname;
+	}
+
+	/**
+	 * @param mixed $lastname
+	 */
+	public function setLastname($lastname)
+	{
+		$this->lastname = $lastname;
+		$this->addModifiedColumn("lastname");
+	}
 	
 	/**
 	 * Performs the geo ip lookup
@@ -83,6 +125,7 @@ class LeadGeoLookup extends \Flux\Link\Lead {
 		if ($this->getCity() == '' || $this->getState() == '') {
 			if ($this->getLead()->getValue('zi') != '') {
 				$zip = \Flux\Zip::lookup($this->getLead()->getValue('zi'));
+				$this->setPostalCode($this->getLead()->getValue('zi'));
 				if ($this->getCity() == '') { $this->setCity($zip->getCity()); }
 				if ($this->getState() == '') { $this->setState($zip->getStateAbbreviation()); }
 			}
@@ -95,6 +138,8 @@ class LeadGeoLookup extends \Flux\Link\Lead {
 				if ($this->getPostalCode() == '') { $this->setState($geo_result['postal_code']); }
 			}
 		}
+		$this->setFirstname($this->getLead()->getDerivedFirstname());
+		$this->setLastname($this->getLead()->getDerivedLastname());
 	}
 }
 ?>

@@ -99,7 +99,7 @@
 								foreach ($lead->getD() as $key => $value) {
 									if ($key == $known_field) {
 										$known_field_found = true;
-										$data_field = \Flux\DataField::retrieveDataFieldFromKeyName($key); 
+										$data_field = \Flux\DataField::retrieveDataFieldFromKeyName($key);
 										if (!is_null($data_field)) {
 											 $display_value = $value;
 											 if ($data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_BIRTHDATE) {
@@ -126,12 +126,25 @@
 								}
 								if (!$known_field_found) { 
 									$data_field = \Flux\DataField::retrieveDataFieldFromKeyName($known_field);
-						?>
+									if ($known_field == 'name') {
+										$display_name = $lead->getLeadName();
+									} else if ($known_field == 'fn') {
+										$display_name = ('<i class="text-muted">' . $lead->getDerivedFirstname() . '</i>');
+									} else if ($known_field == 'ln') {
+										$display_name = ('<i class="text-muted">' . $lead->getDerivedLastname() . '</i>');
+									} else if ($known_field == 'cy') {
+										$display_name = ('<i class="text-muted">' . $lead->getDerivedCity() . '</i>');
+									} else if ($known_field == 'st') {
+										$display_name = ('<i class="text-muted">' . $lead->getDerivedState() . '</i>');
+									} else {
+										$display_name = '&nbsp;';
+									}
+								?>
 							<tr>
 								<td>
 									<a data-toggle="modal" data-target="#add-data-field-modal" href="/lead/lead-pane-data-field?_id=<?php echo $lead->getId() ?>&data_field_id=<?php echo $data_field->getId() ?>"><?php echo $data_field->getName() ?></a>
 								</td>
-								<td>&nbsp;</td>
+								<td><?php echo $display_name ?></td>
 							</tr>
 						<?php 
 								}
