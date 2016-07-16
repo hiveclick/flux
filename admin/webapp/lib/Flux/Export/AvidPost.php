@@ -23,23 +23,4 @@ class AvidPost extends GenericPost
 		$this->setName('AvidAds POST Export');
 		$this->setDescription('Send leads to AvidAds and records the payout based on the bounty');
 	}
-
-	/**
-	 * Record Lead payout
-	 * @param \Flux\LeadSplitAttempt $lead_split_attempt
-	 * @param string $response
-	 * @return boolean
-	 */
-	function recordLeadPayout($lead_split_attempt, $response) {
-		// Parse the response and set the revenue
-		$report_lead = new \Flux\ReportLead();
-		$report_lead->setLead($lead_split_attempt->getLeadSplit()->getLeadSplit()->getLead()->getId());
-		$report_lead->setClient($lead_split_attempt->getFulfillment()->getFulfillment()->getClient()->getId());
-		$report_lead->setStartDate(new \MongoDate());
-		$report_lead->setAccepted(true);
-		$report_lead->setRevenue($this->getFulfillment()->getFulfillment()->getBounty());
-		$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-		$report_lead->insert();
-	}
-
 }

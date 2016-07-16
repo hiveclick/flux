@@ -7,7 +7,7 @@ use \Flux\Export\ExportAbstract;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class GenericUbot extends ExportAbstract {
+class GenericUbot extends Generic {
 	
 	/**
 	 * Constructs this export
@@ -45,6 +45,7 @@ class GenericUbot extends ExportAbstract {
 		foreach ($lead_split_attempts as $lead_split_attempt) {
 			$lead_split_attempt->setStartTime(microtime(true));
 			$lead_split_attempt->setResponse('MANUALLY FULFILLED');
+			$this->recordLeadPayout($lead_split_attempt, 'MANUALLY FULFILLED');
 			$lead_split_attempt->setIsError(false);
 			$lead_split_attempt->setAttemptTime(new \MongoDate());
 			$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());

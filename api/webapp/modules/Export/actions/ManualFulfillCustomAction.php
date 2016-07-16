@@ -130,7 +130,7 @@ class ManualFulfillCustomAction extends BasicRestAction
 							$report_lead->setLead($lead->getId());
 							$report_lead->setClient($lead->getTracking()->getClient()->getId());
 							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-							$report_lead->setRevenue($fulfillment->getBounty());
+							$report_lead->setRevenue($lead_split_attempt->getBounty());
 							if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
 								$report_lead->setPayout($lead->getTracking()->getCampaign()->getCampaign()->getPayout());
 							} else {

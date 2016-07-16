@@ -169,6 +169,7 @@ class MailChimp extends GenericPost {
 		$response_obj = json_decode($response, true);
 		if (isset($response_obj['id'])) {
 			$lead_split_attempt->setIsError(false);
+			$this->recordLeadPayout($lead_split_attempt, $response);
 		} else if (isset($response_obj['detail'])) {
 			$lead_split_attempt->setIsError(true);
 			$lead_split_attempt->setErrorMessage($response_obj['detail']);

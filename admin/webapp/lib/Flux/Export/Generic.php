@@ -32,9 +32,21 @@ class Generic extends ExportAbstract {
 			$url = $url . '?' . http_build_query($params, null, '&');
 			$lead_split_attempt->setRequest($url);
 			$lead_split_attempt->setResponse('SUCCESSFUL TEST');
+			$this->recordLeadPayout($lead_split_attempt, 'SUCCESSFUL TEST');
 			$lead_split_attempt->setIsError(false);
 		}
 		return $lead_split_attempts;
+	}
+
+	/**
+	 * Record Lead payout
+	 * @param \Flux\LeadSplitAttempt $lead_split_attempt
+	 * @param string $response
+	 * @return boolean
+	 */
+	function recordLeadPayout($lead_split_attempt, $response) {
+		$lead_split_attempt->setBounty($this->getFulfillment()->getFulfillment()->getBounty());
+		return true;
 	}
 }
 ?>

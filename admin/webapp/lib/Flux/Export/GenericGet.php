@@ -7,7 +7,7 @@ use \Flux\Export\ExportAbstract;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class GenericGet extends ExportAbstract {
+class GenericGet extends Generic {
 	
 	const WINDOW_SIZE = 10;
 	
@@ -126,7 +126,7 @@ class GenericGet extends ExportAbstract {
 	
 	/**
 	 * Merges the response with the lead
-	 * @param $lead_split_attempt Flux\SplitQueueAttempt
+	 * @param $lead_split_attempt \Flux\LeadSplitAttempt
 	 * @param $response string
 	 * @return boolean
 	 */
@@ -137,6 +137,7 @@ class GenericGet extends ExportAbstract {
 		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
+				$this->recordLeadPayout($lead_split_attempt, $response);
 			} else {
 				$lead_split_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
 				$lead_split_attempt->setIsError(true);

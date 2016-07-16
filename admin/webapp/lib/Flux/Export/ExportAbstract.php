@@ -147,5 +147,16 @@ abstract class ExportAbstract extends MongoForm {
 		// If we get this far, then return true
 		return true;
 	}
+
+	/**
+	 * Record Lead payout
+	 * @param \Flux\LeadSplitAttempt $lead_split_attempt
+	 * @param string $response
+	 * @return boolean
+	 */
+	function recordLeadPayout($lead_split_attempt, $response) {
+		$lead_split_attempt->setBounty($this->getFulfillment()->getFulfillment()->getBounty());
+		return true;
+	}
 	
 } 

@@ -7,7 +7,7 @@ use \Flux\Export\ExportAbstract;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class GenericFormfill extends ExportAbstract {
+class GenericFormfill extends Generic {
 	
 	const WINDOW_SIZE = 10;
 	
@@ -100,6 +100,7 @@ class GenericFormfill extends ExportAbstract {
 			$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
+				$this->recordLeadPayout($lead_split_attempt, $response);
 			} else {
 				$lead_split_attempt->setErrorMessage(str_replace("<", "&lt;", $response));
 				$lead_split_attempt->setIsError(true);

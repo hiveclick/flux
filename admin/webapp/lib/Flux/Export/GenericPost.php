@@ -7,7 +7,7 @@ use \Flux\Export\ExportAbstract;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class GenericPost extends ExportAbstract {
+class GenericPost extends Generic {
 	
 	const WINDOW_SIZE = 10;
 	
@@ -224,15 +224,5 @@ class GenericPost extends ExportAbstract {
 			throw new \Exception('No queue items to process');
 		}
 		return $ret_val;
-	}
-
-	/**
-	 * Record Lead payout
-	 * @param \Flux\LeadSplitAttempt $lead_split_attempt
-	 * @param string $response
-	 * @return boolean
-	 */
-	function recordLeadPayout($lead_split_attempt, $response) {
-		return true;
 	}
 }

@@ -8,7 +8,7 @@ use Mojavi\Util\StringTools;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class GenericSingleEmail extends ExportAbstract {
+class GenericSingleEmail extends Generic {
 	
 	/**
 	 * Constructs this export
@@ -94,16 +94,19 @@ class GenericSingleEmail extends ExportAbstract {
 					$transport->send($message);
 					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 					$lead_split_attempt->setResponse('Sent');
+					$this->recordLeadPayout($lead_split_attempt, 'Sent');
 					$lead_split_attempt->setIsError(false);
 				} catch (\Exception $e) {
 					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 					$lead_split_attempt->setResponse($e->getMessage());
 					$lead_split_attempt->setErrorMessage($e->getMessage());
+					$this->recordLeadPayout($lead_split_attempt, $e->getMessage());
 					$lead_split_attempt->setIsError(false);
 				}
 			} else {
 				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 				$lead_split_attempt->setResponse('Sent');
+				$this->recordLeadPayout($lead_split_attempt, 'Sent');
 				$lead_split_attempt->setIsError(false);
 			}
 		}

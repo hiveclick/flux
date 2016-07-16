@@ -33,14 +33,7 @@ class AstoriaPingPost extends GenericPingPost
 	function recordLeadPayout($lead_split_attempt, $response) {
 		// Parse the response and set the revenue
 		$revenue = \Mojavi\Util\StringTools::getStringBetween($response, "<Price>", "</Price>");
-		$report_lead = new \Flux\ReportLead();
-		$report_lead->setLead($lead_split_attempt->getLeadSplit()->getLeadSplit()->getLead()->getId());
-		$report_lead->setClient($lead_split_attempt->getFulfillment()->getFulfillment()->getClient()->getId());
-		$report_lead->setStartDate(new \MongoDate());
-		$report_lead->setAccepted(true);
-		$report_lead->setRevenue($revenue);
-		$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-		$report_lead->insert();
+		$lead_split_attempt->setBounty($revenue);
 		return true;
 	}
 

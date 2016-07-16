@@ -15,6 +15,7 @@ class LeadSplitAttempt extends CommonForm {
 	protected $screenshot;
 	protected $debug_screenshots;
 	protected $source;
+	protected $bounty;
 		
 	private $attempt_index;
 	
@@ -121,6 +122,26 @@ class LeadSplitAttempt extends CommonForm {
 	function setResponse($arg0) {
 		$this->response = $arg0;
 		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getBounty()
+	{
+		if (is_null($this->bounty)) {
+			$this->bounty = 0.00;
+		}
+		return $this->bounty;
+	}
+
+	/**
+	 * @param mixed $bounty
+	 */
+	public function setBounty($bounty)
+	{
+		$this->bounty = (float)$bounty;
+		$this->addModifiedColumn("bounty");
 	}
 	
 	/**

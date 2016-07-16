@@ -8,7 +8,7 @@ use Mojavi\Util\StringTools;
  * Processes leads by sending them via email in an attachment
  * @author Mark Hobson
  */
-class InfusionSoft extends ExportAbstract {
+class InfusionSoft extends Generic {
 	
 	/**
 	 * Constructs this export
@@ -73,6 +73,7 @@ class InfusionSoft extends ExportAbstract {
 				$lead_split_attempt->setResponse('SUCCESS: ' . $contact_id);
 				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 				$lead_split_attempt->setIsError(false);
+				$this->recordLeadPayout($lead_split_attempt, ('SUCCESS: ' . $contact_id));
 			
 				// Now add tags to the contact
 				if (count($tags) > 0) {
