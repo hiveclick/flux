@@ -20,12 +20,12 @@ class ReportLead extends BaseNetwork
 	 * @return boolean
 	 */
 	function syncNetworkRevenue($start_date, $end_date) {
+		\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue', date('m/d/Y', strtotime($start_date)) . ' - ' . date('m/d/Y', strtotime($end_date)), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
 		try {
 			$report_lead = new \Flux\ReportLead();
-			$report_lead->setClientIdArray($this->getClient()->getId());
-			$report_lead->setDispositionArray(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
-			$report_lead->setStartDate($start_date);
-			$report_lead->setEndDate($end_date);
+
+			$start_date = date('m/d/Y 00:00:00', strtotime($start_date));
+			$end_date = date('m/d/Y 23:59:59', strtotime($end_date));
 
 			$criteria = array(
 				'client._id' => array('$in' => array($this->getClient()->getId())),
@@ -42,30 +42,36 @@ class ReportLead extends BaseNetwork
 			));
 
 			if (isset($results['result'])) {
-				foreach ($results['result'] as $result) {
-					// We found a record, so update it's revenue for this day
-					$report_client = new \Flux\ReportClient();
-					$report_client->setClient($this->getClient()->getId());
-					$report_client->setReportDate(new \MongoDate(strtotime($result['_id']['month'] . '/' . $result['_id']['day'] . '/' . $result['_id']['year'])));
-					$report_client->setClickCount($result['count']);
-					$report_client->setConversionCount($result['count']);
-					$report_client->setRevenue(floatval($result['revenue']));
-					\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
-					$report_client->updateMultiple(
-						array('client._id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
-						array(
-							'$setOnInsert' => array(
-								'report_date' => $report_client->getReportDate()
-							),
-							'$set' => array(
-								'client' => $report_client->getClient()->toArray(true, true, true),
-								'click_count' => $report_client->getClickCount(),
-								'conversion_count' => $report_client->getConversionCount(),
-								'revenue' => $report_client->getRevenue()
+				if (count($results['result']) > 0) {
+					foreach ($results['result'] as $result) {
+						// We found a record, so update it's revenue for this day
+						$report_client = new \Flux\ReportClient();
+						$report_client->setClient($this->getClient()->getId());
+						$report_client->setReportDate(new \MongoDate(strtotime($result['_id']['month'] . '/' . $result['_id']['day'] . '/' . $result['_id']['year'])));
+						$report_client->setClickCount($result['count']);
+						$report_client->setConversionCount($result['count']);
+						$report_client->setRevenue(floatval($result['revenue']));
+						\Mojavi\Util\StringTools::consoleWrite(' - Syncing ' . $this->getClient()->getName() . ' Network Revenue on ' . date('m/d/Y', $report_client->getReportDate()->sec), '$' . number_format($report_client->getRevenue(), 2, null, ','), \Mojavi\Util\StringTools::CONSOLE_COLOR_CYAN, true);
+						$report_client->updateMultiple(
+							array('client._id' => $report_client->getClient()->getId(), 'report_date' => $report_client->getReportDate()),
+							array(
+								'$setOnInsert' => array(
+									'report_date' => $report_client->getReportDate()
+								),
+								'$set' => array(
+									'client' => $report_client->getClient()->toArray(true, true, true),
+									'click_count' => $report_client->getClickCount(),
+									'conversion_count' => $report_client->getConversionCount(),
+									'revenue' => $report_client->getRevenue()
+								)
 							)
-						)
-					);
+						);
+					}
+				} else {
+					throw new \Exception('No results found for date range');
 				}
+			} else {
+				throw new \Exception('No result element found for date range');
 			}
 
 		} catch (\Exception $e) {
