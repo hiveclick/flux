@@ -16,7 +16,7 @@
 	<div class="page-header">
 		<div class="pull-right">
 			<form id="revenue_report_form" name="revenue_report_form" method="GET" action="/report/revenue-report" autocomplete="off">
-				<select id="report_date" name="report_date" class="form-control" style="width:200px;">
+				<select id="report_date" name="report_date" class="selectize" style="width:200px;">
 					<option value="<?php echo date('m/01/Y') ?>" <?php echo $revenue_report->getReportDate()->sec == strtotime(date('m/01/Y')) ? 'selected' : '' ?>><?php echo date('F Y') ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 					<?php for ($i=1;$i<14;$i++) { ?>
 						<option value="<?php echo date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>" <?php echo $revenue_report->getReportDate()->sec == strtotime(date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months'))) ? 'selected' : '' ?>><?php echo date('F Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>

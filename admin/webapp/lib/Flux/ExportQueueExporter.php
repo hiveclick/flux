@@ -92,7 +92,7 @@ class ExportQueueExporter extends CommonForm {
 			StringTools::consoleWrite('  Finding records in queue', 'Finding', StringTools::CONSOLE_COLOR_RED);
 			$export_queue = new \Flux\ExportQueue($this->getExportId());
 			$export_queue->setIgnorePagination(true);
-			$queue_items = $export_queue->queryAll(array(), false);
+			$queue_items = $export_queue->queryAll(array(), array(), false);
 			$this->getExport()->setNumRecords($queue_items->count());
 			$this->getExport()->setFindingRecordsTime((microtime(true) - $start_time));
 			StringTools::consoleWrite('  Finding records in queue', 'Found ' . $queue_items->count() . ' items (' . number_format((microtime(true) - $start_time), 3) . 's)', StringTools::CONSOLE_COLOR_GREEN, true);

@@ -29,7 +29,7 @@
 				<input type="hidden" id="sord" name="sord" value="asc" />
 				<div class="text-right">
 					<div class="form-group text-left">
-						<select class="form-control" name="storage_type_array[]" id="storage_type_array" placeholder="only display selected storage types" multiple>
+						<select class="selectize" name="storage_type_array[]" id="storage_type_array" placeholder="only display selected storage types" multiple>
 							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Default</option>
 							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_EVENT, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Events</option>
 							<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>" <?php echo in_array(\Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING, $datafield->getStorageTypeArray()) ? 'selected' : '' ?>>Tracking</option>
@@ -37,7 +37,7 @@
 						</select>
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control" name="tags[]" id="tags" placeholder="only display selected tags" multiple></select>
+						<select class="selectize" name="tags[]" id="tags" placeholder="only display selected tags" multiple></select>
 					</div>
 					<div class="form-group text-left">
 						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />

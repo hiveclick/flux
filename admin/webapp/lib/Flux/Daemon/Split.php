@@ -100,7 +100,7 @@ class Split extends BaseDaemon
 			$lead = new \Flux\Lead();
 			$lead->setSort("-1");
 			$lead->setIgnorePagination(true);
-			$matched_leads = $lead->queryAll($criteria, false);
+			$matched_leads = $lead->queryAll($criteria, array(), false);
 						
 			if ($matched_leads->hasNext()) {				
 				// Save the # of leads to the split for accounting reasons

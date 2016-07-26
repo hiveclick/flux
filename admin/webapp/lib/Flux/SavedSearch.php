@@ -19,7 +19,7 @@ class SavedSearch extends Base\SavedSearch {
 	 * Queries all the records
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if ($this->getSearchType() > 0) {
 			$criteria['search_type'] = $this->getSearchType();
 		}
@@ -29,7 +29,7 @@ class SavedSearch extends Base\SavedSearch {
 		if (\MongoId::isValid($this->getUser()->getUserId())) {
 			$criteria['$or'] = array(array('user._id' => $this->getUser()->getUserId()), array('is_global' => true));
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 }

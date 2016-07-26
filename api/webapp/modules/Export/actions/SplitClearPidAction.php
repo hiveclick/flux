@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -43,7 +43,7 @@ class SplitClearPidAction extends BasicRestAction
 	 * Executes a PUT request
 	 */
 	function executePost($input_form) {
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		/* @var $split_form \Flux\Split */
 		$split_form = new \Flux\Split();
 		$split_form->setId($input_form->getId());

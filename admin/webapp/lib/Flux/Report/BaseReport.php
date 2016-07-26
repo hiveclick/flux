@@ -63,6 +63,22 @@ class BaseReport extends MongoForm {
 	 * Returns the start_time
 	 * @return string
 	 */
+	function getStartDate() {
+		return $this->getStartTime();
+	}
+
+	/**
+	 * Sets the start_time
+	 * @var string
+	 */
+	function setStartDate($arg0) {
+		return $this->setStartTime($arg0);
+	}
+
+	/**
+	 * Returns the start_time
+	 * @return string
+	 */
 	function getStartTime() {
 		if (is_null($this->start_time)) {
 			$this->start_time = "";
@@ -77,6 +93,22 @@ class BaseReport extends MongoForm {
 	function setStartTime($arg0) {
 		$this->start_time = $arg0;
 		return $this;
+	}
+
+	/**
+	 * Returns the end_time
+	 * @return string
+	 */
+	function getEndDate() {
+		return $this->getEndTime();
+	}
+
+	/**
+	 * Sets the end_time
+	 * @var string
+	 */
+	function setEndDate($arg0) {
+		return $this->setEndTime($arg0);
 	}
 
 	/**

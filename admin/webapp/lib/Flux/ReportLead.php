@@ -205,7 +205,7 @@ class ReportLead extends Base\ReportLead {
 	/**
 	 * Queries entries by filters
 	 */
-	function queryAll(array $criteria = array(), $hydrate = false, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if (count($this->getDispositionArray()) > 0) {
 			$criteria['disposition'] = array('$in' => $this->getDispositionArray());
 		}
@@ -236,7 +236,7 @@ class ReportLead extends Base\ReportLead {
 			$criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($base_report->getStartTime())), '$lte' => new \MongoDate(strtotime($base_report->getEndTime())));
 		}
 		
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 	/**

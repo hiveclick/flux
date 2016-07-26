@@ -27,7 +27,7 @@
 				<input type="hidden" id="sord" name="hide_unfulfillable" value="1" />
 				<div class="text-right">
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
+						<select class="selectize" name="split_id_array[]" id="split_queue_spy_split_id" multiple placeholder="Filter by split">
 							<optgroup label="Normal Splits">
 							<?php
 								/* @var $split \Flux\Split */ 
@@ -54,7 +54,7 @@
 						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="date_range" id="date_range" placeholder="Filter by date range">
+						<select class="selectize" name="date_range" id="date_range" placeholder="Filter by date range">
 							<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_2_DAYS ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_2_DAYS ? 'SELECTED' : '' ?>>Yesterday&nbsp;&amp;&nbsp;Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
 							<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ? 'SELECTED' : '' ?>>Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
 							<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ?>" <?php echo $lead_split->getDateRange() == \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ? 'SELECTED' : '' ?>>Yesterday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</options>
@@ -65,7 +65,7 @@
 						</select>
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+						<select class="selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_UNFULFILLED ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_UNFULFILLED, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Unfulfilled</options>
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PENDING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
 							<option value="<?php echo \Flux\LeadSplit::DISPOSITION_PROCESSING ?>" <?php echo in_array(\Flux\LeadSplit::DISPOSITION_PROCESSING, $lead_split->getDispositionArray()) ? "selected" : "" ?>>Processing</options>

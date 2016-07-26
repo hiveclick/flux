@@ -6,18 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>Flux</title>
 <link rel="icon" type="image/png" href="favicon.png" />
-<!-- Jquery files -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<!--  Bootstrap files -->
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
-<!-- Font awesome files -->
-<link rel="stylesheet" type="text/css" media="screen" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-
-<!-- Local CSS -->
-<link rel="stylesheet" type="text/css" media="screen" href="/css/login.css">
+<!-- Default site css -->
+<script type="text/javascript" src="/js/main.min.js"></script>
+<link href="/css/main.min.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container">

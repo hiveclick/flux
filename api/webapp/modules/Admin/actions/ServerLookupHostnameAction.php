@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -33,11 +33,11 @@ class ServerLookupHostnameAction extends BasicRestAction
 
 	/**
 	 * Looks up the server hostname
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		$input_form->lookupHostname();
 		$ajax_form->setRecord($input_form);
 		return $ajax_form;

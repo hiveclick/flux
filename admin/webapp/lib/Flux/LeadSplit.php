@@ -172,7 +172,7 @@ class LeadSplit extends Base\LeadSplit {
 	 * Queries all records from a queue
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array('attempts.screenshot' => false, 'attempts.debug_screenshots' => false)) {
+	function queryAll(array $criteria = array(), array $fields = array('attempts.screenshot' => false, 'attempts.debug_screenshots' => false), $hydrate = true, $timeout = 30000) {
 		if (\MongoId::isValid($this->getLead()->getId())) {
 			$criteria['lead._id'] = $this->getLead()->getId();
 		} else {
@@ -197,7 +197,7 @@ class LeadSplit extends Base\LeadSplit {
 				);
 			}
 		}		
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 }

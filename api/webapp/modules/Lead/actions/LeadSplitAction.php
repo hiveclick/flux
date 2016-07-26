@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|

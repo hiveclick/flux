@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -37,8 +37,8 @@ class OfferPageOrganizeAction extends BasicRestAction
 	 */
 	function executePost($input_form) {
 		// Handle GET Requests
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		$input_form->updateMultiplePriority();
 		$ajax_form->setRecord($input_form);
 		return $ajax_form;

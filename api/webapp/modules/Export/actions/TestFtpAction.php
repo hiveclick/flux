@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -34,11 +34,11 @@ class TestFtpAction extends BasicRestAction
 	
 	/**
 	 * Executes a GET request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		$input_form->testFtp();
 		$ajax_form->setRecord($input_form);
 		return $ajax_form;

@@ -53,11 +53,11 @@ class Daemon extends Base\Daemon {
 	 * Returns the campaign based on the campaign key
 	 * @return Flux\DomainGroup
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName()  . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 	/**

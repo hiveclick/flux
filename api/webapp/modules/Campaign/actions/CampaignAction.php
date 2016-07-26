@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,8 +36,8 @@ class CampaignAction extends BasicRestAction
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 				
 		if ($input_form->getId() instanceof \MongoId) {
 			$input_form->query();

@@ -291,11 +291,11 @@ class Server extends Base\Server {
 	 * Returns the user based on the criteria
 	 * @return Flux\User
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if (trim($this->getHostname()) != '') {
 			$criteria['hostname'] = new \MongoRegex("/" . $this->getHostname() . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 	/**

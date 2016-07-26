@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,8 +36,8 @@ class RAction extends BasicRestAction
 	 * @var $input_form \Flux\Lead
 	 */
 	function executeGet($input_form) {
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		// First try to find the lead
 		if (\MongoId::isValid($input_form->getId())) {

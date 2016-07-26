@@ -28,13 +28,7 @@ define('MO_DOCROOT_DIR', dirname(__FILE__) . "/../docroot");
 // | An absolute filesystem path to the mojavi package. This directory         |
 // | contains all the Mojavi packages.                                         |
 // +---------------------------------------------------------------------------+
-if (trim('') != '') {
-    define('MO_COMMON_DIR', ''); // Usually /var/www/common
-} else {
-    define('MO_COMMON_DIR', dirname(__FILE__) . '/lib/'); // Usually /var/www/common
-}
-
-define('MO_APP_DIR', MO_COMMON_DIR . '/Mojavi');
+define('MO_APP_DIR', MO_WEBAPP_DIR . '/lib/vendor/hiveclick/mojavi/src/Mojavi');
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |

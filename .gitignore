@@ -9,14 +9,20 @@
 .DS_Store
 ._.DS_Store
 
+# Ignore lock files
+admin/webapp/lib/composer.lock
+admin/theme/node_modules/
+admin/theme/bower_components/
+
 # Ignore library files
 init/config.ini
 admin/webapp/cache/*
 api/webapp/cache/*
-api/webapp/lib/*
-api/webapp/lib/Zend
-api/webapp/lib/Mojavi
+pub/webapp/cache/*
+fe/webapp/cache/*
 api/webapp/lib/Flux
+pub/webpap/lib/Flux
+fe/webapp/lib/Flux
 
 # Ignore config files
 admin/webapp/config.php
@@ -31,8 +37,7 @@ api/webapp/config/logging.ini
 api/webapp/config/settings.ini
 
 # Ignore vendor files
-admin/webapp/vendor/ioki
-admin/webapp/vendor/knplabs
-admin/webapp/vendor/novaksolutions
-admin/webapp/vendor/oyejorge
-admin/webapp/vendor/twbs
+admin/webapp/lib/vendor
+api/webapp/lib/vendor
+pub/webapp/lib/vendor
+fe/webapp/lib/vendor

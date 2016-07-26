@@ -255,7 +255,7 @@ class SplitQueue extends Base\SplitQueue {
 	 * Queries all records from a queue
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if (count($this->getSplitIdArray()) > 0) {
 			$criteria['split._id'] = array('$in' => $this->getSplitIdArray());
 		}
@@ -281,6 +281,6 @@ class SplitQueue extends Base\SplitQueue {
 				array('lead.name' =>  new \MongoRegex('/' . trim($this->getKeywords()) . '/i'))
 			);
 		}
-		return parent::queryAll($criteria, $hydrate, array('attempts.screenshot' => false));
+		return parent::queryAll($criteria, array('attempts.screenshot' => false), $hydrate, $timeout);
 	}
 }

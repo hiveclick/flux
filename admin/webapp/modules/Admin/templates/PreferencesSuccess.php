@@ -32,7 +32,7 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
 						<div class="form-group">
 							<div class="help-block">Emails sent when there are <b class="text-danger">issues or bugs</b> found in the site</div>
 							<input type="hidden" name="preferences_array[support_email]" value="" />
-							<input type="text" id="support_email" class="form-control" placeholder="enter email addresses that should receive support emails" name="preferences_array[support_email]" value="<?php echo \Flux\Preferences::getPreference('SUPPORT_EMAIL'); ?>" />
+							<input type="text" id="support_email" class="selectize" placeholder="enter email addresses that should receive support emails" name="preferences_array[support_email]" value="<?php echo \Flux\Preferences::getPreference('SUPPORT_EMAIL'); ?>" />
 						</div>
 						<br />
 						<h3 class="sub-header">Google Adwords OAuth</h3>
@@ -52,7 +52,7 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
 						<h3 class="sub-header">Interface Options</h3>
 						<div class="form-group">
 							<div class="help-block">Select how many items to show on search pages by default</div>
-							<select id="items_per_page" name="preferences_array[items_per_page]" placeholder="enter default number of items to show on search pages">
+							<select id="items_per_page" class="selectize" name="preferences_array[items_per_page]" placeholder="enter default number of items to show on search pages">
 								<option value="10" <?php echo \Flux\Preferences::getPreference('ITEMS_PER_PAGE') == '10' ? 'selected' : '' ?>>Show up to 10 records per page</option>
 								<option value="25" <?php echo \Flux\Preferences::getPreference('ITEMS_PER_PAGE') == '25' ? 'selected' : '' ?>>Show up to 25 records per page</option>
 								<option value="50" <?php echo \Flux\Preferences::getPreference('ITEMS_PER_PAGE') == '50' ? 'selected' : '' ?>>Show up to 50 records per page</option>

@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -36,7 +36,7 @@ class BuildPostUrlAction extends BasicRestAction
 	 * Handles the GET
 	 */
 	function executeGet($input_form) {
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 
 		$params = array();
 		$url = substr($input_form->getPostUrl(), 0, strpos($input_form->getPostUrl(), '?'));

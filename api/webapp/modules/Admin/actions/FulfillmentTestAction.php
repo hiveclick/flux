@@ -1,7 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
-use Mojavi\Logging\LoggerManager;
+
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,8 +35,8 @@ class FulfillmentTestAction extends BasicRestAction
 	 * Executes a POST request
 	 */
 	function executePost($input_form) {
-		/* @var $ajax_form \Mojavi\Form\BasicAjaxForm */
-		$ajax_form = new \Mojavi\Form\BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Testing fulfillment with lead: " . $input_form->getLead()->getId());
 		

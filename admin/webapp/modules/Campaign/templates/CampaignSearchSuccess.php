@@ -33,12 +33,12 @@
 				<input type="hidden" id="sord" name="sord" value="asc" />
 				<div class="text-right">
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
+						<select class="selectize" name="offer_id_array[]" id="offer_id_array" multiple placeholder="Filter by offer">
 							
 						</select>
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+						<select class="selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
 							<optgroup label="Administrators">
 							<?php
 								/* @var $client \Flux\Client */ 
@@ -62,7 +62,7 @@
 						</select>
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source"></select>
+						<select class="selectize" name="traffic_source_id_array[]" id="traffic_source_id_array" multiple placeholder="Filter by traffic source"></select>
 					</div>
 					<div class="form-group text-left">
 						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="<?php echo $campaign->getKeywords() ?>" />

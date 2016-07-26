@@ -1,0 +1,12 @@
+{
+    "minimum-stability": "dev",
+    "require": {
+        "zendframework/zend-navigation": "^2.5",
+        "zendframework/zend-config": "^2.6",
+        "hiveclick/mojavi": "dev-master",
+        "novaksolutions/infusionsoft-php-sdk": "dev-master",
+        "knplabs/knp-snappy": "0.3.*",
+        "ioki/wkhtmltopdf-amd64-centos6": "dev-master",
+        "googleads/googleads-php-lib": "dev-experimental"
+    }
+}

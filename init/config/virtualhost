@@ -1,12 +1,12 @@
 <VirtualHost *:80>
     DocumentRoot /home/flux/admin/docroot/
-    ServerName www.flux.local
+    ServerName www.flux.dev
 
     RewriteEngine On
     RewriteRule ^/css/(.*) /css/$1 [QSA,L]
-    RewriteRule ^/scripts/(.*) /scripts/$1 [QSA,L]
+    RewriteRule ^/js/(.*) /js/$1 [QSA,L]
+    RewriteRule ^/fonts/(.*) /fonts/$1 [QSA,L]
     RewriteRule ^/images/(.*) /images/$1 [QSA,L]
-    RewriteRule ^/img/(.*) /img/$1 [QSA,L]
     RewriteRule ^/opcache\.php$ /opcache.php [QSA,L]
     
     RewriteCond %{REQUEST_URI} !/$
@@ -31,9 +31,9 @@
 
     RewriteEngine On
     RewriteRule ^/css/(.*) /css/$1 [QSA,L]
-    RewriteRule ^/scripts/(.*) /scripts/$1 [QSA,L]
+    RewriteRule ^/js/(.*) /js/$1 [QSA,L]
+    RewriteRule ^/fonts/(.*) /fonts/$1 [QSA,L]
     RewriteRule ^/images/(.*) /images/$1 [QSA,L]
-    RewriteRule ^/img/(.*) /img/$1 [QSA,L]
     RewriteRule ^/opcache\.php$ /opcache.php [QSA,L]
     
     RewriteCond %{REQUEST_URI} !/$
@@ -54,7 +54,7 @@
 
 <VirtualHost *:80>
     DocumentRoot /home/flux/api/docroot
-    ServerName api.flux.local
+    ServerName api.flux.dev
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !/$
@@ -70,3 +70,24 @@
     </Directory>
 
 </VirtualHost>
+
+<VirtualHost *:80>
+    DocumentRoot /home/flux/fe/docroot/
+    ServerName fe.flux.dev
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !/$
+    RewriteRule ^/([^.]+)/([^.]+)\.json$ /api.php?module=$1&action=$2 [L,QSA]
+    RewriteRule ^/([^.]+)\.json$ /api.php?module=Default&action=$1 [L,QSA]
+    RewriteRule ^/([^.]+)/([^.]+)$ /index.php?module=$1&action=$2 [L,QSA]
+    RewriteRule ^/([^.]+)$ /index.php?module=Default&action=$1 [L,QSA]
+
+    <Directory "/home/flux/fe/docroot/">
+        Options FollowSymLinks
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+</VirtualHost>
+

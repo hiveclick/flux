@@ -36,7 +36,7 @@ class LeadExportAction extends BasicAction
 			$lead->setIgnorePagination(true);
 		}
 
-		$leads = $lead->queryAll(array(), false);
+		$leads = $lead->queryAll(array(), array(), false);
 		$leads_found = $leads->count();
 				
 		$header_names = array('id','created');

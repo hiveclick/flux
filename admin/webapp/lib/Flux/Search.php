@@ -7,7 +7,7 @@ class Search extends Base\Search {
 	 * Searches for multiple items and returns them
 	 * @see \Mojavi\Form\OrmForm::queryAll()
 	 */
-	function queryAll() {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		$results = array();
 		
 		/* @var $offer \Flux\Offer */

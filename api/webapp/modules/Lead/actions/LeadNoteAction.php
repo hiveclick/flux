@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -35,7 +35,7 @@ class LeadNoteAction extends BasicRestAction
 	 * Handle a POST the same as a GET
 	 */
 	function executePost($input_form) {
-		$ret_val = new BasicAjaxForm();
+		$ret_val = new \Mojavi\Form\AjaxForm();
 		$lead = new \Flux\Lead();
 		$lead->setId($input_form->getId());
 		if ($lead->query() !== false) {

@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,7 +36,7 @@ class ManualFulfillRosieTvmAction extends BasicRestAction
 	 * @return \Flux\Offer
 	 */
 	function executePost($input_form) {
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		$lead = new \Flux\Lead();
 		$lead->setId($input_form->getId());

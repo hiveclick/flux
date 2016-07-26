@@ -62,11 +62,11 @@ class ReportClient extends Base\ReportClient {
 	/**
 	 * Queries entries by filters
 	 */
-	function queryAll(array $criteria = array(), $hydrate = false, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if ($this->getStartDate() != '' && $this->getEndDate() != '') {
 			$criteria['report_date'] = array('$gte' => new \MongoDate(strtotime($this->getStartDate())), '$lte' => new \MongoDate(strtotime($this->getEndDate())));
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 	/**

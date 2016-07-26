@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
@@ -37,7 +37,7 @@ class ClientExportMapValidateAction extends BasicRestAction
 	 * @param $input_form \Flux\ClientExportMap
 	 */
 	function executePost($input_form) {
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		
 		/* @var $export_form \Flux\ClientExportMap */

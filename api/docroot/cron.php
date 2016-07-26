@@ -8,6 +8,7 @@ try {
     // +---------------------------------------------------------------------------+
     // | An absolute filesystem path to the mojavi/mojavi.php script.              |
     // +---------------------------------------------------------------------------+
+    require_once(MO_WEBAPP_DIR . '/lib/vendor/autoload.php');
     require_once(MO_APP_DIR . '/mojavi.php');
     
     // +---------------------------------------------------------------------------+

@@ -43,7 +43,7 @@ class ReturnsAction extends BasicRestAction
 	 * @return \Flux\Offer
 	 */
 	function executePost($input_form) {
-		$ajax_form = new \Mojavi\Form\BasicAjaxForm();	
+		$ajax_form = new \Mojavi\Form\AjaxForm();	
 		$post_response = new \Flux\PostResponse();
 		try {
 			$fulfillment_id = $this->getContext()->getRequest()->getParameter('token', null);

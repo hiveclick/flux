@@ -32,7 +32,7 @@ class DataFieldAction extends BasicRestAction
 	
 	/**
 	 * Executes a POST request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executePost($input_form) {
 		if (\MongoId::isValid($input_form->getId())) {

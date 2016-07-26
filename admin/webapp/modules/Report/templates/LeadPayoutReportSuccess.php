@@ -31,7 +31,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="client_id_array">Filter by clients</label>
-							<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+							<select class="selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
 								<optgroup label="Administrators">
 									<?php
 										/* @var $client \Flux\Client */
@@ -58,7 +58,7 @@
 					<div class="col-md-2">
 						<div class="form-group">
 							<label for="date_range">Date Range:</label>
-							<select name="date_range" id="date_range">
+							<select name="date_range" id="date_range" class="selectize">
 								<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_TODAY ?>">Today</option>
 								<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_YESTERDAY ?>">Yesterday</option>
 								<option value="<?php echo \Mojavi\Form\DateRangeForm::DATE_RANGE_LAST_7_DAYS ?>">Last 7 days</option>
@@ -91,7 +91,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="client_id_array">Filter by disposition</label>
-							<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+							<select class="selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
 								<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_PENDING, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
 								<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Accepted</options>
 								<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Disqualified</options>

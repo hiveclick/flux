@@ -32,11 +32,11 @@ class ZipDownloadAction extends BasicRestAction
 	
 	/**
 	 * Executes a POST request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executeGet($input_form) {
 		// Handle POST Requests
-		$ajax_form = new \Mojavi\Form\BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		// Download the Zip file
 		try {
 			set_time_limit(0);

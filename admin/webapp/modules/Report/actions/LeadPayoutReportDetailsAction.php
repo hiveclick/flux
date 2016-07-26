@@ -26,7 +26,7 @@ class LeadPayoutReportDetailsAction extends BasicAction
 		$report_lead = new \Flux\ReportLead();
 		$report_lead->populate($_GET);
 		$report_lead->setIgnorePagination(true);
-		$leads = $report_lead->queryAll(array(), true);
+		$leads = $report_lead->queryAll(array(), array(), true);
 
 		/* @var $client \Flux\Client */
 		$client = new \Flux\Client();

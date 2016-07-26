@@ -15,7 +15,7 @@
 	<div class="page-header">
 		<div class="pull-right">
 			<a id="save_search_btn" data-toggle="modal" data-target="#edit_saved_search_modal" href="/admin/saved-search-wizard?search_type=<?php echo \Flux\SavedSearch::SAVED_SEARCH_TYPE_OFFER ?>" class="btn btn-info">Save Search</a>
-			<a href="/offer/offer-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Offer</a>
+			<a href="/offer/offer-wizard" class="btn btn-success"><span class="fa fa-plus"></span> Add New Offer</a>
 		</div>
 	   <h1>Offers</h1>
 	</div>
@@ -32,10 +32,10 @@
 				
 				<div class="text-right">
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="vertical_id_array[]" id="vertical_id_array" multiple placeholder="Filter by vertical"></select>
+						<select class="selectize" name="vertical_id_array[]" id="vertical_id_array" multiple placeholder="Filter by vertical"></select>
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+						<select class="selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
 							<optgroup label="Administrators">
 							<?php 
 								/* @var $client \Flux\Client */

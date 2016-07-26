@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,8 +36,8 @@ class GraphClickByHourAction extends BasicRestAction
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		$input_form->compileReport();
 		$ajax_form->setRecord($input_form);
 		$ajax_form->setTotal($input_form->getTotal());

@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -35,7 +35,7 @@ class LeadGeoLookupAction extends BasicRestAction
 	 * Handle a POST the same as a GET
 	 */
 	function executeGet($input_form) {
-		$ret_val = new \Mojavi\Form\BasicAjaxForm();
+		$ret_val = new \Mojavi\Form\AjaxForm();
 		$input_form->lookup();
 		$ret_val->setRecord($input_form);
 		return $ret_val;

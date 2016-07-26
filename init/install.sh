@@ -12,6 +12,7 @@ try {
     $admin_base_dir = $base_dir . 'admin/';
     $api_base_dir = $base_dir . 'api/';
     $pub_base_dir = $base_dir . 'pub/';
+    $fe_base_dir = $base_dir . 'fe/';
     $settings_file = $init_dir . 'config.ini';
     
     $is_silent = false;
@@ -36,14 +37,26 @@ try {
         throw new Exception('We cannot find the config.ini settings file.  Please create one with your settings in it before continuing.  You can use the config.ini.sample as a reference.');
     }
     if (!$is_silent) { StringTools::consoleWrite(' - loading settings', 'Loaded', StringTools::CONSOLE_COLOR_GREEN, true); }
-    
+
+    // +------------------------------------------------------------------------+
+    // | Update bower, composer and npm for dependencies                        |
+    // +------------------------------------------------------------------------+
+    if (!$is_silent) { StringTools::consoleWrite(' - updating dependencies', 'Updating', StringTools::CONSOLE_COLOR_YELLOW); }
+    $cmd = 'composer update -d ' . $admin_base_dir . 'webapp/lib/';
+    shell_exec($cmd);
+
+    // Push patch to Zend/Http/Client.php until official ZF repo is updated - 06/23/16
+    $zend_client_contents = file_get_contents($init_dir . "/config/Client.php");
+    file_put_contents($admin_base_dir . "webapp/lib/vendor/zendframework/zend-http/src/Client.php", $zend_client_contents);
+
+    if (!$is_silent) { StringTools::consoleWrite(' - updating dependencies', 'Updated', StringTools::CONSOLE_COLOR_GREEN, true); }
+
     // +------------------------------------------------------------------------+
     // | Setup the DAO modules and any other links that need to be setup        |
     // +------------------------------------------------------------------------+
     $lib_folders = array(
         'Flux' => 'Flux',
-        'Mojavi' => 'Mojavi',
-        'Zend' => 'Zend',
+        'vendor' => 'vendor'
     );
     
     
@@ -72,6 +85,17 @@ try {
                 $cmd = 'ln -s ' . $admin_base_dir . 'webapp/lib/' . $lib_folder . ' ' . $pub_base_dir . 'webapp/lib/' . $lib_folder;
                 shell_exec($cmd);
             }
+            // Setup lib for fe
+            if (!file_exists($fe_base_dir . "webapp/lib/" . $lib_folder) && !is_link($fe_base_dir . "webapp/lib/" . $lib_folder)) {
+                $cmd = 'ln -s ' . $admin_base_dir . '/webapp/lib/' . $lib_folder . ' ' . $fe_base_dir . 'webapp/lib/' . $lib_folder;
+                shell_exec($cmd);
+            } else if (is_link($fe_base_dir . "webapp/lib/" . $lib_folder)) {
+                $cmd = 'rm -f  ' . $fe_base_dir . 'webapp/lib/' . $lib_folder;
+                shell_exec($cmd);
+
+                $cmd = 'ln -s ' . $admin_base_dir . 'webapp/lib/' . $lib_folder . ' ' . $fe_base_dir . 'webapp/lib/' . $lib_folder;
+                shell_exec($cmd);
+            }
         }
     }
     if (!$is_silent) { StringTools::consoleWrite(' - dao path', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
@@ -97,6 +121,16 @@ try {
             shell_exec($cmd);
             
             $cmd = 'ln -s ' . $admin_base_dir . 'webapp/vendor' . ' ' . $pub_base_dir . 'webapp/vendor';
+            shell_exec($cmd);
+        }
+        if (!file_exists($fe_base_dir . 'webapp/vendor') && !is_link($fe_base_dir . 'webapp/vendor')) {
+            $cmd = 'ln -s ' . $admin_base_dir . '/webapp/vendor' . ' ' . $fe_base_dir . 'webapp/vendor';
+            shell_exec($cmd);
+        } else if (file_exists($fe_base_dir . 'webapp/vendor/') && is_link($fe_base_dir . 'webapp/vendor/')) {
+            $cmd = 'rm -f  ' . $fe_base_dir . 'webapp/vendor/';
+            shell_exec($cmd);
+
+            $cmd = 'ln -s ' . $admin_base_dir . 'webapp/vendor' . ' ' . $fe_base_dir . 'webapp/vendor';
             shell_exec($cmd);
         }
 	}
@@ -130,6 +164,7 @@ try {
         file_put_contents($admin_base_dir . "webapp/config/databases.ini", $config_contents);
         file_put_contents($api_base_dir . "webapp/config/databases.ini", $config_contents);
         file_put_contents($pub_base_dir . "webapp/config/databases.ini", $config_contents);
+        file_put_contents($fe_base_dir . "webapp/config/databases.ini", $config_contents);
         if (isset($ini_settings['db_host']) && trim($ini_settings['db_host']) != '') {
             if (!$is_silent) { StringTools::consoleWrite(' - databases', $ini_settings['db_host'], StringTools::CONSOLE_COLOR_GREEN, true); }
         } else {
@@ -158,6 +193,7 @@ try {
         file_put_contents($admin_base_dir . "webapp/config.php", $config_contents);
         file_put_contents($api_base_dir . "webapp/config.php", $config_contents);
         file_put_contents($pub_base_dir . "webapp/config.php", $config_contents);
+        file_put_contents($fe_base_dir . "webapp/config.php", $config_contents);
         if (isset($ini_settings['common_path']) && trim($ini_settings['common_path']) != '') {
             if (!$is_silent) { StringTools::consoleWrite(' - mojavi framework', $ini_settings['common_path'], StringTools::CONSOLE_COLOR_GREEN, true); }
         } else {
@@ -178,6 +214,7 @@ try {
     file_put_contents($admin_base_dir . "docroot/.htaccess", $htaccess_contents);
     file_put_contents($api_base_dir . "docroot/.htaccess", $htaccess_contents);
     file_put_contents($pub_base_dir . "docroot/.htaccess", $htaccess_contents);
+    file_put_contents($fe_base_dir . "docroot/.htaccess", $htaccess_contents);
     if (!$is_silent) { StringTools::consoleWrite(' - htaccess', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
     */
     // +------------------------------------------------------------------------+
@@ -200,6 +237,7 @@ try {
         file_put_contents($admin_base_dir . "webapp/config/factories.ini", $factory_contents);
         file_put_contents($api_base_dir . "webapp/config/factories.ini", $factory_contents);
         file_put_contents($pub_base_dir . "webapp/config/factories.ini", $factory_contents);
+        file_put_contents($fe_base_dir . "webapp/config/factories.ini", $factory_contents);
         if (!$is_silent) { StringTools::consoleWrite(' - project', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
     }
     
@@ -216,6 +254,7 @@ try {
         file_put_contents($admin_base_dir . "webapp/config/logging.ini", $logging_contents);
         file_put_contents($api_base_dir . "webapp/config/logging.ini", $logging_contents);
         file_put_contents($pub_base_dir . "webapp/config/logging.ini", $logging_contents);
+        file_put_contents($fe_base_dir . "webapp/config/logging.ini", $logging_contents);
         if (!$is_silent) { StringTools::consoleWrite(' - logging', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
     }
     
@@ -346,9 +385,15 @@ try {
         } else {
             $settings_contents = preg_replace("/<<analytic_domain>>/", 'directdrivehosting.com', $settings_contents);
         }
+        if (isset($ini_settings['cookie_name'])) {
+            $settings_contents = preg_replace("/<<cookie_name>>/", $ini_settings['cookie_name'], $settings_contents);
+        } else {
+            $settings_contents = preg_replace("/<<cookie_name>>/", 'flux', $settings_contents);
+        }
         file_put_contents($admin_base_dir . "webapp/config/settings.ini", $settings_contents);
         file_put_contents($api_base_dir . "webapp/config/settings.ini", $settings_contents);
         file_put_contents($pub_base_dir . "webapp/config/settings.ini", $settings_contents);
+        file_put_contents($fe_base_dir . "webapp/config/settings.ini", $settings_contents);
         if (!$is_silent) { StringTools::consoleWrite(' - settings', 'Saved', StringTools::CONSOLE_COLOR_GREEN, true); }
     }
 
@@ -360,7 +405,8 @@ try {
     $cache_folders = array(
         $admin_base_dir . 'webapp/cache/',
         $api_base_dir . 'webapp/cache/',
-        $pub_base_dir . 'webapp/cache/'
+        $pub_base_dir . 'webapp/cache/',
+        $fe_base_dir . 'webapp/cache/'
     );
     foreach ($cache_folders as $cache_folder) {
         if ($cache_handle = opendir($cache_folder)) {
@@ -392,6 +438,8 @@ try {
         "Meta (api)" => $api_base_dir . 'webapp/meta/',
         "Cache (pub)" => $pub_base_dir . 'webapp/cache/',
         "Meta (pub)" => $pub_base_dir . 'webapp/meta/',
+        "Cache (fe)" => $fe_base_dir . 'webapp/cache/',
+        "Meta (fe)" => $fe_base_dir . 'webapp/meta/'
     );
     
     foreach ($global_folders as $key => $global_folder) {

@@ -1,7 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
-use Mojavi\Logging\LoggerManager;
+
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -38,7 +37,7 @@ class DataFieldValidateAction extends BasicRestAction
 	 */
 	function executePost($input_form) {
 		/* @var $input_form \Flux\DataField */
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		
 		/* @var $lead \Flux\Lead */

@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
@@ -36,8 +36,8 @@ class TestFulfillAction extends BasicRestAction
 	 * @var $input_form \Flux\Lead
 	 */
 	function executeGet($input_form) {
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		//$this->getErrors()->addError('error', 'Error fulfilling lead, bad email');
 		// First try to find the lead
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Received sample lead");

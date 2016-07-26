@@ -28,7 +28,7 @@
 				<input type="hidden" id="date_range" name="date_range" value="<?php echo \Flux\Report\BaseReport::DATE_RANGE_CUSTOM ?>" />
 				<div class="pull-right">
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
+						<select class="selectize" name="client_id_array[]" id="client_id_array" multiple placeholder="Filter by client">
 							<optgroup label="Administrators">
 								<?php
 									/* @var $client \Flux\Client */
@@ -55,7 +55,7 @@
 						<input type="text" class="form-control" placeholder="filter by name" size="35" id="txtSearch" name="keywords" value="" />
 					</div>
 					<div class="form-group text-left">
-						<select class="form-control selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
+						<select class="selectize" name="disposition_array[]" id="disposition_array" multiple placeholder="Filter by disposition">
 							<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_PENDING ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_PENDING, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Pending</options>
 							<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Accepted</options>
 							<option value="<?php echo \Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED ?>" <?php echo in_array(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED, $report_lead->getDispositionArray()) ? "selected" : "" ?>>Disqualified</options>
@@ -63,7 +63,7 @@
 						</select>
 					</div>
 					<div class="form-group text-left">
-						<select id="report_date" name="report_date" class="form-control" style="width:200px;">
+						<select id="report_date" name="report_date" class="selectize" style="width:200px;">
 							<option value="<?php echo date('m/01/Y') ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y')) ? 'selected' : '' ?>><?php echo date('F Y') ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 							<?php for ($i=1;$i<14;$i++) { ?>
 								<option value="<?php echo date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>" <?php echo $report_lead->getReportDate()->sec == strtotime(date('m/01/Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months'))) ? 'selected' : '' ?>><?php echo date('F Y', strtotime(date('m/01/Y') . ' - ' . $i . ' months')) ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>

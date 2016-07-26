@@ -1,6 +1,6 @@
 <?php
 use \Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 /**
 * SettingAction goes to a page allowing you to use REST verbs for the setting table.
 *  
@@ -30,12 +30,12 @@ class UpdateProgressAction extends BasicRestAction {
 	
 	/**
 	 * Executes a GET request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
 		
-		$ajax_form = new BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		try {
 			$input_form->checkProgress();
 		} catch (\Exception $e) {

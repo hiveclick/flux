@@ -18,6 +18,7 @@
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#ppctraffic" role="tab" data-toggle="tab">PPC Traffic</a></li>
 		<li role="presentation" class=""><a href="#hostnpost" role="tab" data-toggle="tab">Host &amp; Post Instructions</a></li>
+		<li role="presentation" class=""><a href="#clickfunnels" role="tab" data-toggle="tab">ClickFunnels Instructions</a></li>
 	</ul>
 	<!-- Tab panes -->
 	<div class="tab-content">
@@ -36,11 +37,27 @@
 		<div role="tabpanel" class="tab-pane fade in" id="hostnpost">
 			<iframe src="/campaign/campaign-post-instruction?_id=<?php echo $campaign->getId() ?>" style="height:600px;width:100%;" seamless frameborder="0"></iframe>
 		</div>
+		<div role="tabpanel" class="tab-pane fade in" id="clickfunnels">
+			<div class="help-block">Use this form within ClickFunnels to integrate with this campaign</div>
+			<br />
+			<textarea readonly class="form-control" rows="20">&lt;form action="<?php echo str_replace("http://", "https://", (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "")) ?>/cf" method="GET"&gt;
+	&lt;input type="hidden" name="redirect" value="CF REDIRECT URL HERE" /&gt;
+	&lt;input type="hidden" name="_ck" value="<?php echo $campaign->getId() ?>" /&gt;
+	&lt;!-- Uncomment this __clear input if you want to create a new lead every time (no multi-page funnels) --&gt;
+	&lt;!--	&lt;input type="hidden" name="__clear" value="1" /&gt; --&gt;
+
+	&lt;!-- Insert other fields here --&gt;
+	&lt;input type="text" name="fn" value="" /&gt;
+	&lt;input type="text" name="ln" value="" /&gt;
+	&lt;input type="text" name="em" value="" /&gt;
+	&lt;input type="text" name="ph" value="" /&gt;
+&lt;/form&gt;</textarea>
+		</div>
 	</div>
 </div>
 <div class="modal-footer">
-	<a class="btn btn-info hidden" id="campaign_download_pdf" href="/campaign/campaign-post-instruction-download?_id=<?php echo $campaign->getId() ?>"><span class="glyphicon glyphicon-download"></span> Download PDF</a>
-	<button type="button" class="btn btn-success btn-add-dataField"><span class="glyphicon glyphicon-plus"></span> Add Data Field</button>
+	<a class="btn btn-info hidden" id="campaign_download_pdf" href="/campaign/campaign-post-instruction-download?_id=<?php echo $campaign->getId() ?>"><span class="fa fa-download"></span> Download PDF</a>
+	<button type="button" class="btn btn-success btn-add-dataField"><span class="fa fa-plus"></span> Add Data Field</button>
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 

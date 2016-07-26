@@ -252,9 +252,7 @@
 								</span>
 								<div><?php echo $lead->getId() ?></div>
 								<div class="text-muted small">C: <?php echo date('m/d/Y g:i:s a', $lead->getId()->getTimestamp()) ?></div>
-								<?php if ($lead->getModified() instanceof \MongoDate) { ?>
-									<div class="text-muted small">U: <?php echo date('m/d/Y g:i:s a', $lead->getModified()->sec) ?></div>
-								<?php } ?>
+
 							</div>
 						</div> 
 					</div>  

@@ -1,6 +1,6 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\BasicAjaxForm;
+use Mojavi\Form\AjaxForm;
 use Mojavi\Logging\LoggerManager;
 use Flux\Server;
 use Flux\OfferPage;
@@ -39,8 +39,8 @@ class OfferPageSourceAction extends BasicRestAction
 	 */
 	function executePost($input_form) {
 		// Handle POST Requests
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 	
 		/* @var $offer_page \Flux\OfferPage */
 		$offer_page = new OfferPage();
@@ -70,8 +70,8 @@ class OfferPageSourceAction extends BasicRestAction
 	 */
 	function executeGet($input_form) {
 		// Handle GET Requests
-		/* @var $ajax_form BasicAjaxForm */
-		$ajax_form = new BasicAjaxForm();
+		/* @var $ajax_form \Mojavi\Form\AjaxForm */
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		/* @var $offer_page \Flux\OfferPage */
 		$offer_page = new OfferPage();

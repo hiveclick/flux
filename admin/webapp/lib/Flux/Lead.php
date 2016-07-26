@@ -196,9 +196,9 @@ class Lead extends Base\Lead {
 			$lead_split->setLead($this->getId());
 			$lead_split->setIgnorePagination(true);
 			if ($include_screenshots) {
-				$this->lead_splits = $lead_split->queryAll(array(), true, array());
+				$this->lead_splits = $lead_split->queryAll(array(), array(), true);
 			} else {
-				$this->lead_splits = $lead_split->queryAll(array(), true, array('attempts.screenshot' => false, 'attempts.debug_screenshots' => false));
+				$this->lead_splits = $lead_split->queryAll(array(), array('attempts.screenshot' => false, 'attempts.debug_screenshots' => false), true);
 			}
 		}
 		return $this->lead_splits;

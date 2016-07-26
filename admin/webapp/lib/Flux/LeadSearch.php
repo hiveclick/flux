@@ -334,7 +334,7 @@ class LeadSearch extends Lead {
 	 * Queries the leads
 	 * @return array
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		// Query by the offer ids
 		if (count($this->getOfferIdArray()) > 0) {
 			$criteria[\Flux\DataField::DATA_FIELD_TRACKING_CONTAINER . '.offer._id'] = array('$in' => $this->getOfferIdArray());
@@ -443,7 +443,7 @@ class LeadSearch extends Lead {
 		$ops = str_replace('"$gte"', '$gte', $ops);
 		$ops = str_replace('"$lte"', '$lte', $ops);
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . $ops);
-		$results = parent::queryAll($criteria, $hydrate, $fields);
+		$results = parent::queryAll($criteria, $fields, $hydrate, $timeout);
 		return $results;
 	}
 	

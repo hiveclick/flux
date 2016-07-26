@@ -7,10 +7,51 @@ class GraphLeadByHour extends GoogleChart {
 	
 	const GROUP_TYPE_OFFER = 1;
 	const GROUP_TYPE_SUBID = 2;
+
+	private $start_date;
+	private $end_date;
 	
 	private $offer_id_array;
 	private $campaign_id_array;
 	private $group_type;
+
+	/**
+	 * @return mixed
+	 */
+	public function getStartDate()
+	{
+		if (is_null($this->start_date)) {
+			$this->start_date = strtotime("now");
+		}
+		return $this->start_date;
+	}
+
+	/**
+	 * @param mixed $start_date
+	 */
+	public function setStartDate($start_date)
+	{
+		$this->start_date = $start_date;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getEndDate()
+	{
+		if (is_null($this->end_date)) {
+			$this->end_date = strtotime("now");
+		}
+		return $this->end_date;
+	}
+
+	/**
+	 * @param mixed $end_date
+	 */
+	public function setEndDate($end_date)
+	{
+		$this->end_date = $end_date;
+	}
 	
 	/**
 	 * Runs the report and stores the data

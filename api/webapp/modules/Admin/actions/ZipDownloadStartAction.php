@@ -32,11 +32,11 @@ class ZipDownloadStartAction extends BasicRestAction
 	
 	/**
 	 * Executes a POST request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executePost($input_form) {
 		// Handle POST Requests
-		$ajax_form = new \Mojavi\Form\BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		// Download the Zip file
 		$cmd = 'ps aux | grep -v "grep" | grep "ZipDownload" | awk \'{print $2}\'';
 		$existing_pids = explode("\n", shell_exec($cmd));

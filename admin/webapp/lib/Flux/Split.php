@@ -143,7 +143,7 @@ class Split extends Base\Split {
 	 * Returns the user based on the criteria
 	 * @return Flux\User
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if ($this->getSplitType() > 0) {
 			$criteria['split_type'] = $this->getSplitType();
 		}
@@ -153,7 +153,7 @@ class Split extends Base\Split {
 		if (count($this->getOfferIdArray()) > 0) {
 			$criteria['offers._id'] = array('$in' => $this->getOfferIdArray());
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 	
 	/**

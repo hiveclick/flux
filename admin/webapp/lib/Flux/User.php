@@ -121,7 +121,7 @@ class User extends Base\User {
 	 * Returns the user based on the criteria
 	 * @return Flux\User
 	 */
-	function queryAll(array $criteria = array(), $hydrate = true, $fields = array()) {
+	function queryAll(array $criteria = array(), array $fields = array(), $hydrate = true, $timeout = 30000) {
 		if (\MongoId::isValid($this->getClient()->getId())) {
 			$criteria['client._id'] = $this->getClient()->getId();
 		}
@@ -131,12 +131,12 @@ class User extends Base\User {
 		if (trim($this->getName()) != '') {
 			$criteria['name'] = new \MongoRegex("/" . $this->getName() . "/i");
 		}
-		return parent::queryAll($criteria, $hydrate, $fields);
+		return parent::queryAll($criteria, $fields, $hydrate, $timeout);
 	}
 
 	/**
 	 * Attempts to login the user
-	 * @return Flux\User
+	 * @return \Flux\User
 	 */
 	function queryAllByClient() {
 		return $this->queryAll(array('client._id' => $this->getClient()->getId()));
@@ -167,7 +167,7 @@ class User extends Base\User {
 
 	/**
 	 * Attempts to login the user
-	 * @return Flux\User
+	 * @return \Flux\User
 	 */
 	function tryLogin() {
 		$user = $this->query(array('email' => $this->getEmail(), 'password' => $this->getPassword(), 'status' => self::USER_STATUS_ACTIVE), false);

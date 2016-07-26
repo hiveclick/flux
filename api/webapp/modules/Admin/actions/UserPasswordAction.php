@@ -32,11 +32,11 @@ class UserPasswordAction extends BasicRestAction
 	
 	/**
 	 * Executes a POST request
-	 * @return \Mojavi\Form\BasicAjaxForm
+	 * @return \Mojavi\Form\AjaxForm
 	 */
 	function executePost($input_form) {
 		// Handle POST Requests
-		$ajax_form = new \Mojavi\Form\BasicAjaxForm();
+		$ajax_form = new \Mojavi\Form\AjaxForm();
 		
 		$rows_affected = $input_form->updatePassword();
 		if (isset($rows_affected['n'])) {
