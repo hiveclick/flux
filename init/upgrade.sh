@@ -6,7 +6,8 @@ try {
     set_time_limit(0);
     require_once(dirname(__FILE__) . '/lib/Connection.php');
     require_once(dirname(__FILE__) . '/../admin/webapp/config.php');
-    require_once(dirname(__FILE__) . '/../admin/webapp/lib/Mojavi/mojavi.php');
+    require_once(dirname(__FILE__) . '/../admin/webapp/lib/vendor/autoload.php');
+    require_once(dirname(__FILE__) . '/../admin/webapp/lib/vendor/hiveclick/mojavi/src/Mojavi/mojavi.php');
     
     \Mojavi\Controller\Controller::newInstance('\Mojavi\Controller\BasicConsoleController');
     \Mojavi\Controller\Controller::getInstance()->loadContext();
