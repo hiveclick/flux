@@ -21,7 +21,7 @@ api/webapp/cache/*
 pub/webapp/cache/*
 fe/webapp/cache/*
 api/webapp/lib/Flux
-pub/webpap/lib/Flux
+pub/webapp/lib/Flux
 fe/webapp/lib/Flux
 
 # Ignore config files
