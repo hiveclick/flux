@@ -8,6 +8,7 @@
 .htaccess
 .DS_Store
 ._.DS_Store
+.idea
 
 # Ignore lock files
 admin/webapp/lib/composer.lock
