@@ -46,7 +46,7 @@ class MailChimp extends GenericPost {
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
 				$lead_split_attempt->setIsError(false);
 				$lead_split_attempt->setAttemptTime(new \MongoDate());
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 				$lead_split_attempt->setIsError(false);
 			}
 			 
@@ -60,7 +60,7 @@ class MailChimp extends GenericPost {
 		$mh = curl_multi_init();
 		
 		foreach ($lead_split_attempts as $lead_split_attempt) {
-			$lead_split_attempt->setStartTime(microtime(true));
+			$lead_split_attempt->setAttemptTime(microtime(true));
 			// Prepare the cURL request
 			$ch = $this->prepareCurlRequest($lead_split_attempt);
 			$key = (string)$ch;
@@ -164,7 +164,7 @@ class MailChimp extends GenericPost {
 	function mergeResponse($lead_split_attempt, $response) {
 		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 		$lead_split_attempt->setResponse($response);
-		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 		// The response is in json format
 		$response_obj = json_decode($response, true);
 		if (isset($response_obj['id'])) {

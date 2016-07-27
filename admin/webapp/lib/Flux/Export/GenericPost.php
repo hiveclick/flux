@@ -133,7 +133,7 @@ class GenericPost extends Generic {
 	function mergeResponse($lead_split_attempt, $response) {
 		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
 		$lead_split_attempt->setResponse($response);
-		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
@@ -157,6 +157,7 @@ class GenericPost extends Generic {
 	function send($lead_split_attempts, $is_test = false) {
 		if ($is_test) {
 			// If this is just a test, then do basic formatting, then exit
+			/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 			foreach ($lead_split_attempts as $lead_split_attempt) {
 				$params = $lead_split_attempt->mergeLead();
 				$url = $lead_split_attempt->getFulfillment()->getFulfillment()->getPostUrl();
@@ -166,7 +167,7 @@ class GenericPost extends Generic {
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
 				$lead_split_attempt->setIsError(false);
 				$lead_split_attempt->setAttemptTime(new \MongoDate());
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 				$lead_split_attempt->setIsError(false);
 			}
 			
@@ -178,9 +179,10 @@ class GenericPost extends Generic {
 		
 		// Now setup multi curl
 		$mh = curl_multi_init();
-		
+
+		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 		foreach ($lead_split_attempts as $lead_split_attempt) {
-			$lead_split_attempt->setStartTime(microtime(true));
+			$lead_split_attempt->setAttemptTime(microtime(true));
 			// Prepare the cURL request
 			$ch = $this->prepareCurlRequest($lead_split_attempt);
 			$key = (string)$ch;

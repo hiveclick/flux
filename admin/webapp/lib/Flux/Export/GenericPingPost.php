@@ -179,7 +179,7 @@ class GenericPingPost extends Generic {
 	    
 	    /* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 	    $lead_split_attempt->setResponse($lead_split_attempt->getResponse() . "\n\nPOST\n" . $response);
-	    $lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+	    $lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 	    if ($this->getFulfillment()->getFulfillment()->getPingPostSuccessMsg() != '') {
 	        if (strpos($response, $this->getFulfillment()->getFulfillment()->getPingPostSuccessMsg()) !== false) {
 	            $lead_split_attempt->setIsError(false);
@@ -204,7 +204,7 @@ class GenericPingPost extends Generic {
 	function mergePingResponse($lead_split_attempt, $response) {
 		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
 		$lead_split_attempt->setResponse("PING\n" . $response);
-		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 		if ($this->getFulfillment()->getFulfillment()->getPingSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getPingSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
@@ -238,7 +238,7 @@ class GenericPingPost extends Generic {
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
 				$lead_split_attempt->setIsError(false);
 				$lead_split_attempt->setAttemptTime(new \MongoDate());
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 				$lead_split_attempt->setIsError(false);
 			}
 			
@@ -252,7 +252,7 @@ class GenericPingPost extends Generic {
 		$mh = curl_multi_init();
 		
 		foreach ($lead_split_attempts as $lead_split_attempt) {
-			$lead_split_attempt->setStartTime(microtime(true));
+			$lead_split_attempt->setAttemptTime(microtime(true));
 			// Prepare the cURL request
 			$ch = $this->preparePingRequest($lead_split_attempt);
 			$key = (string)$ch;

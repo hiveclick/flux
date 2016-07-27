@@ -38,7 +38,7 @@ class InfusionSoft extends Generic {
 			/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 			$lead_split_attempt = new \Flux\LeadSplitAttempt();
 			$lead_split_attempt->populate($cursor_item);
-			$lead_split_attempt->setStartTime(microtime(true));
+			$lead_split_attempt->setAttemptTime(microtime(true));
 
 			$params = $lead_split_attempt->mergeLead();
 			$api_key = '';
@@ -71,7 +71,7 @@ class InfusionSoft extends Generic {
 				
 				$lead_split_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
 				$lead_split_attempt->setResponse('SUCCESS: ' . $contact_id);
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 				$lead_split_attempt->setIsError(false);
 				$this->recordLeadPayout($lead_split_attempt, ('SUCCESS: ' . $contact_id));
 			
@@ -86,7 +86,7 @@ class InfusionSoft extends Generic {
 			} else {
 				$lead_split_attempt->setRequest('http://' . $this->getFulfillment()->getFulfillment()->getInfusionsoftHost() . '?' . http_build_query($contact->toArray(), null, '&'));
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
 				$lead_split_attempt->setIsError(false);
 			}
 			
