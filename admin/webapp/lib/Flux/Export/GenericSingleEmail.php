@@ -32,7 +32,7 @@ class GenericSingleEmail extends Generic {
 
 		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 		foreach ($lead_split_attempts as $key => $lead_split_attempt) {
-			$lead_split_attempt->setAttemptTime(microtime(true));
+			$lead_split_attempt->setStartTime(microtime(true));
 						
 			$buffer = array();
 			$buffer[] = 'Please review the following lead:';
@@ -92,19 +92,19 @@ class GenericSingleEmail extends Generic {
 			if (!$is_test) {
 				try {
 					$transport->send($message);
-					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 					$lead_split_attempt->setResponse('Sent');
 					$this->recordLeadPayout($lead_split_attempt, 'Sent');
 					$lead_split_attempt->setIsError(false);
 				} catch (\Exception $e) {
-					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+					$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 					$lead_split_attempt->setResponse($e->getMessage());
 					$lead_split_attempt->setErrorMessage($e->getMessage());
 					$this->recordLeadPayout($lead_split_attempt, $e->getMessage());
 					$lead_split_attempt->setIsError(false);
 				}
 			} else {
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 				$lead_split_attempt->setResponse('Sent');
 				$this->recordLeadPayout($lead_split_attempt, 'Sent');
 				$lead_split_attempt->setIsError(false);

@@ -36,19 +36,19 @@ class GenericManual extends Generic {
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
 				$lead_split_attempt->setIsError(false);
 				$lead_split_attempt->setAttemptTime(new \MongoDate());
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 			}
 			
 			return $lead_split_attempts;
 		}
 		// If this is just a test, then do basic formatting, then exit
 		foreach ($lead_split_attempts as $lead_split_attempt) {
-			$lead_split_attempt->setAttemptTime(microtime(true));
+			$lead_split_attempt->setStartTime(microtime(true));
 			$lead_split_attempt->setResponse('MANUALLY FULFILLED');
 			$this->recordLeadPayout($lead_split_attempt, 'MANUALLY FULFILLED');
 			$lead_split_attempt->setIsError(false);
 			$lead_split_attempt->setAttemptTime(new \MongoDate());
-			$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+			$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 		}
 		 
 		return $lead_split_attempts;

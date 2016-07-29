@@ -7,7 +7,27 @@ class LeadSplitAttempt extends Base\LeadSplitAttempt {
 	private $lead_split;
 	private $test;
 	private $override_fulfillment;
-	
+	private $start_time;
+
+	/**
+	 * @return mixed
+	 */
+	public function getStartTime()
+	{
+		if (is_null($this->start_time)) {
+			$this->start_time = 0;
+		}
+		return $this->start_time;
+	}
+
+	/**
+	 * @param mixed $start_time
+	 */
+	public function setStartTime($start_time)
+	{
+		$this->start_time = $start_time;
+	}
+
 	/**
 	 * Returns the lead_split
 	 * @return \Flux\LeadSplit

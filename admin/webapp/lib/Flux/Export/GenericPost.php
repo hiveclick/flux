@@ -133,7 +133,7 @@ class GenericPost extends Generic {
 	function mergeResponse($lead_split_attempt, $response) {
 		/* @var $lead_split_attempt \Flux\SplitQueueAttempt */
 		$lead_split_attempt->setResponse($response);
-		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+		$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 		if ($this->getFulfillment()->getFulfillment()->getSuccessMsg() != '') {
 			if (strpos($response, $this->getFulfillment()->getFulfillment()->getSuccessMsg()) !== false) {
 				$lead_split_attempt->setIsError(false);
@@ -167,7 +167,7 @@ class GenericPost extends Generic {
 				$lead_split_attempt->setResponse('SUCCESSFUL TEST');
 				$lead_split_attempt->setIsError(false);
 				$lead_split_attempt->setAttemptTime(new \MongoDate());
-				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getAttemptTime());
+				$lead_split_attempt->setResponseTime(microtime(true) - $lead_split_attempt->getStartTime());
 				$lead_split_attempt->setIsError(false);
 			}
 			
@@ -182,7 +182,7 @@ class GenericPost extends Generic {
 
 		/* @var $lead_split_attempt \Flux\LeadSplitAttempt */
 		foreach ($lead_split_attempts as $lead_split_attempt) {
-			$lead_split_attempt->setAttemptTime(microtime(true));
+			$lead_split_attempt->setStartTime(microtime(true));
 			// Prepare the cURL request
 			$ch = $this->prepareCurlRequest($lead_split_attempt);
 			$key = (string)$ch;
