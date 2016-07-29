@@ -102,9 +102,8 @@ class ManualFulfillCustomAction extends BasicRestAction
 							
 							/* @var $report_lead \Flux\ReportLead */
 							$report_lead = new \Flux\ReportLead();
-							$lead = $lead_split->getLead()->getLead();
 							$report_lead->setLead($lead_split->getLead()->getLead()->getId());
-							$report_lead->setClient($lead->getTracking()->getClient()->getId());
+							$report_lead->setClient($fulfillment->getClient()->getId());
 							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
 							$report_lead->setRevenue(0.00);
 							$report_lead->setPayout(0.00);
@@ -128,7 +127,7 @@ class ManualFulfillCustomAction extends BasicRestAction
 							/* @var $report_lead \Flux\ReportLead */
 							$report_lead = new \Flux\ReportLead();
 							$report_lead->setLead($lead->getId());
-							$report_lead->setClient($lead->getTracking()->getClient()->getId());
+							$report_lead->setClient($fulfillment->getClient()->getId());
 							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);
 							$report_lead->setRevenue($lead_split_attempt->getBounty());
 							if ($lead->getTracking()->getCampaign()->getCampaign()->getPayout() > 0) {
