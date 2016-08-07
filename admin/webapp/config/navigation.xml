@@ -209,6 +209,18 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </importleadpayout>
+            <spacer3>
+                <label></label>
+                <uri></uri>>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </spacer3>
+            <linkcheckreport>
+                <label>Link Check Report</label>
+                <uri>/report/link-check-report</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </linkcheckreport>
        </pages>
 	</reports>
 	<admin>

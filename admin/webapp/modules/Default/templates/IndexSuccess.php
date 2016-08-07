@@ -22,6 +22,8 @@
 		<div class="clearfix"></div>
 		<hr />
 		<a href="/export/split-queue-search" class="btn btn-info col-xs-12">Queued Leads</a>
+		<hr />
+		<a href="/report/link-check-report" class="btn btn-info col-xs-12">Check Links</a>
 	</div>
 </div>
 <div class="visible-md visible-lg visible-sm hidden-xs">
