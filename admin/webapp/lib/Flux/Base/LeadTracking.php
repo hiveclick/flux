@@ -484,9 +484,10 @@ class LeadTracking extends MojaviForm {
 	 * @return \Crossjoin\Browscap\Browscap
 	 */
 	public static function getUserAgentInfo() {
-		$bc = new \Crossjoin\Browscap\Browscap();
+		//$bc = new \Crossjoin\Browscap\Browscap();
 		// Get information about the current browser's user agent
-		$current_browser = $bc->getBrowser(self::getUserAgent());
+		//$current_browser = $bc->getBrowser(self::getUserAgent());
+		$current_browser = self::getUserAgent();
 		return $current_browser;
 	}
 	
