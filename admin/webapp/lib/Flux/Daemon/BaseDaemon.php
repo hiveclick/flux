@@ -96,16 +96,27 @@ abstract class BaseDaemon {
 		}
 		echo $full_msg . PHP_EOL;
 	}
-	
+
 	/**
 	 * Finds the number of pending records
-	 * @return \Rdm\Record
+	 * @return \Flux\Daemon
 	 */
-	protected function updateLastRunTime() {
+	protected function getDaemon() {
 		$daemon = new \Flux\Daemon();
 		$daemon->setClassName('\\' . get_class($this));
 		$daemon->queryByClass();
 		if (\MongoId::isValid($daemon->getId())) {
+			return $daemon;
+		}
+		return false;
+	}
+	
+	/**
+	 * Finds the number of pending records
+	 * @return boolean
+	 */
+	protected function updateLastRunTime() {
+		if (($daemon = $this->getDaemon()) !== false) {
 			$daemon->setStartTime(new \MongoDate());
 			$daemon->update();
 		}
@@ -114,13 +125,10 @@ abstract class BaseDaemon {
 	
 	/**
 	 * Finds the number of pending records
-	 * @return \Rdm\Record
+	 * @return boolean
 	 */
 	protected function updatePendingRecordCount($pending_record_count) {
-		$daemon = new \Flux\Daemon();
-		$daemon->setClassName('\\' . get_class($this));
-		$daemon->queryByClass();
-		if (\MongoId::isValid($daemon->getId())) {
+		if (($daemon = $this->getDaemon()) !== false) {
 			$daemon->setPendingRecords($pending_record_count);
 			$daemon->update();
 		}

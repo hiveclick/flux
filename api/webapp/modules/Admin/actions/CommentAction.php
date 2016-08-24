@@ -1,31 +1,33 @@
 <?php
 use Mojavi\Action\BasicRestAction;
-use Mojavi\Form\CommonForm;
 // +----------------------------------------------------------------------------+
 // | This file is part of the Flux package.									  |
 // |																			|
 // | For the full copyright and license information, please view the LICENSE	|
 // | file that was distributed with this source code.						   |
 // +----------------------------------------------------------------------------+
-class IndexAction extends BasicRestAction
+class CommentAction extends BasicRestAction
 {
+
+	// +-----------------------------------------------------------------------+
+	// | METHODS															   |
+	// +-----------------------------------------------------------------------+
+
 	/**
-	 * Executes logic for this action
-	 * @return void
+	 * Execute any application/business logic for this action.
+	 * @return mixed - A string containing the view name associated with this action
 	 */
-	function execute() {
-		$ajax_form = new \Mojavi\Form\AjaxForm();
-		$this->getErrors()->addError('error', 'You must access this api from an approved page');
-		$this->getRequest()->setAttribute('ajax_form', $ajax_form);
-		return View::SUCCESS;
+	public function execute ()
+	{
+		return parent::execute();
 	}
-	
+
 	/**
 	 * Returns the input form to use for this rest action
-	 * @return \MongoForm
+	 * @return \Flux\Comment
 	 */
 	function getInputForm() {
-		return null;
+		return new \Flux\Comment();
 	}
 }
 

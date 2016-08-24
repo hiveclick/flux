@@ -126,6 +126,7 @@ class ManualFulfillCustomAction extends BasicRestAction
 							// Add/Update the lead reporting
 							/* @var $report_lead \Flux\ReportLead */
 							$report_lead = new \Flux\ReportLead();
+							$report_lead->setLeadSplit($lead_split->getId());
 							$report_lead->setLead($lead->getId());
 							$report_lead->setClient($fulfillment->getClient()->getId());
 							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_ACCEPTED);

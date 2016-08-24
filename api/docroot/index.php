@@ -25,7 +25,7 @@ try {
     $controller->dispatch();
 } catch (Exception $e) {
     header('Content-Type: application/json');
-    $ajax_form = new \Mojavi\Form\BasicAjaxForm();
+    $ajax_form = new \Mojavi\Form\AjaxForm();
     $ajax_form->getErrors()->addError('error', new \Mojavi\Error\Error('API: ' . $e->getMessage()));
     $output = $ajax_form->toArray();
     error_log(json_encode($output));

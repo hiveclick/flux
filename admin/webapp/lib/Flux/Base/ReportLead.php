@@ -9,7 +9,8 @@ class ReportLead extends MongoForm {
 	const LEAD_DISPOSITION_ACCEPTED = 2;
 	const LEAD_DISPOSITION_DISQUALIFIED = 3;
 	const LEAD_DISPOSITION_DUPLICATE = 4;
-	
+
+	protected $lead_split;
 	protected $lead;
 	protected $report_date;
 	protected $client;
@@ -95,6 +96,37 @@ class ReportLead extends MongoForm {
 			$this->addModifiedColumn("client");
 		}
 		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLeadSplit()
+	{
+		if (is_null($this->lead_split)) {
+			$this->lead_split = new \Flux\Link\LeadSplit();
+		}
+		return $this->lead_split;
+	}
+
+	/**
+	 * @param mixed $lead_split
+	 */
+	public function setLeadSplit($lead_split)
+	{
+		if ($lead_split instanceof \Flux\Link\LeadSplit) {
+			$this->lead_split = $lead_split;
+		} else if ($lead_split instanceof \Flux\LeadSplit) {
+			$this->lead_split = new \Flux\Link\LeadSplit();
+			$this->lead_split->setId($lead_split->getId());
+		} else if ($lead_split instanceof \MongoId) {
+			$this->lead_split = new \Flux\Link\LeadSplit();
+			$this->lead_split->setId($lead_split);
+		} else if (is_string($lead_split) && \MongoId::isValid($lead_split)) {
+			$this->lead_split = new \Flux\Link\LeadSplit();
+			$this->lead_split->setId($lead_split);
+		}
+		$this->addModifiedColumn("lead_split");
 	}
 	
 	/**

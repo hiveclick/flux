@@ -29,11 +29,11 @@ class LinkCheckReportAction extends BasicAction
 		$links[] = array('name' => 'Probiotic America Hiveclick', 'url' => 'http://smldtrk.com/?a=16&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
 		$links[] = array('name' => 'Probiotic America Hobby6', 'url' => 'http://smldtrk.com/?a=203&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
 		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=518&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
-		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=519&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
-		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=520&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
-		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=521&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
-		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=522&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
-		$links[] = array('name' => 'Probiotic America Hive01', 'url' => 'http://smldtrk.com/?a=523&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
+		$links[] = array('name' => 'Probiotic America Hive02', 'url' => 'http://smldtrk.com/?a=519&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
+		$links[] = array('name' => 'Probiotic America Hive03', 'url' => 'http://smldtrk.com/?a=520&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
+		$links[] = array('name' => 'Probiotic America Hive04', 'url' => 'http://smldtrk.com/?a=521&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
+		$links[] = array('name' => 'Probiotic America Hive05', 'url' => 'http://smldtrk.com/?a=522&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
+		$links[] = array('name' => 'Probiotic America Hive06', 'url' => 'http://smldtrk.com/?a=523&c=1119&s1=sitecheck', 'error' => '404 - File or directory not found.');
 
 		foreach ($links as $key => $link) {
 			$ch = curl_init($link['url']);

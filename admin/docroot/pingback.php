@@ -33,7 +33,7 @@ function get_response($URL, $context) {
 */
 function demo_pingback() {
 	global $BLOGURL;
-	$source_url = 'http://www.miraclebust.us/optin9653656?s2=miraclebust';
+	$source_url = 'http://nutrapalcoupons.com/optin9644841';
 	$remote_urls = array(
 		array('http://allentownjazzfest.org/' => 'http://allentownjazzfest.org/allentown-art-museum-joins-the-allentown-jazzfest/'),
 		array('http://ja.colezhu.com/' => 'http://ja.colezhu.com/support-2/chunichi_ipad'),

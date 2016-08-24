@@ -7,6 +7,7 @@
         "novaksolutions/infusionsoft-php-sdk": "dev-master",
         "knplabs/knp-snappy": "0.3.*",
         "ioki/wkhtmltopdf-amd64-centos6": "dev-master",
-        "googleads/googleads-php-lib": "dev-experimental"
+        "googleads/googleads-php-lib": "dev-experimental",
+        "crossjoin/browscap": "^1.0"
     }
 }

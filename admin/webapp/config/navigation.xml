@@ -223,6 +223,20 @@
             </linkcheckreport>
        </pages>
 	</reports>
+    <tools>
+        <label>Tools</label>
+        <uri>/tools/generate-pingback-keywords-wizard</uri>
+        <class>nav-primary</class>
+        <permission>1</permission>
+        <pages>
+            <pingbackwizard>
+                <label>Generate Pingback Keywords</label>
+                <uri>/tools/pingback-keyword-queue-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </pingbackwizard>
+        </pages>
+    </tools>
 	<admin>
         <label>Admin</label>
         <uri>/admin/preferences</uri>
@@ -247,6 +261,18 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </domaingroups>
+            <pingbacks>
+                <label>Pingback URLs</label>
+                <uri>/admin/pingback-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </pingbacks>
+            <comments>
+                <label>Comments</label>
+                <uri>/admin/comment-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </comments>
             <servers>
                 <label>Servers</label>
                 <uri>/admin/server-search</uri>

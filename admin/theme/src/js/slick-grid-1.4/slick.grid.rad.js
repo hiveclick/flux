@@ -1066,13 +1066,13 @@ if (!jQuery.fn.drag) {
             var columnIndex = getColumnIndex(sortColumnId);
 
             $headers.children().removeClass("slick-header-column-sorted");
-            $headers.find(".slick-sort-indicator").removeClass("slick-sort-indicator-asc slick-sort-indicator-desc");
+            $headers.find(".slick-sort-indicator").removeClass("fa fa-caret-up fa-caret-down");
 
             if (columnIndex != null) {
                 $headers.children().eq(columnIndex)
                     .addClass("slick-header-column-sorted")
                     .find(".slick-sort-indicator")
-                        .addClass(sortAsc ? "slick-sort-indicator-asc" : "slick-sort-indicator-desc");
+                        .addClass(sortAsc ? "fa fa-caret-up" : "fa fa-caret-down");
             }
         }
 		
