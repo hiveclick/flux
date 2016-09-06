@@ -16,13 +16,13 @@
 		<form name="login_form" method="POST" action="/login" class="form-horizontal">
 			<input type="hidden" name="forward" value="/<?php echo isset($_REQUEST['module']) ? strtolower($_REQUEST['module']) : 'index' ?><?php echo isset($_REQUEST['action']) ? ('/' . strtolower($_REQUEST['action'])) : '' ?>" />
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="name">Email</label>
+				<label class="col-sm-2 control-label" for="name">Email</label>
 				<div class="col-sm-10">
 					<input type="text" id="username" class="form-control" name="username" value="<?php echo $user->getUsername() ?>" placeholder="Enter email to login" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="name">Password</label>
+				<label class="col-sm-2 control-label" for="name">Password</label>
 				<div class="col-sm-10">
 					<input type="password" id="password" class="form-control" name="password" placeholder="Enter password to login" />
 				</div>

@@ -26,31 +26,31 @@
   			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">Data Fields define which data can be collected on offer pages</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Name:</label>
+					<label class="control-label" for="name">Name:</label>
 					<input type="text" id="name_<?php echo $data_field->getId() ?>" name="name" class="form-control" placeholder="Name" value="<?php echo $data_field->getName() ?>" />
 				</div>
 			
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="description">Description:</label>
+					<label class="control-label" for="description">Description:</label>
 					<textarea type="text" id="description_<?php echo $data_field->getId() ?>" name="description" class="form-control" placeholder="Enter description..."><?php echo $data_field->getDescription() ?></textarea>
 				</div>
 				<hr />
 			
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="key_name">Unique Key Name:</label>
+					<label class="control-label" for="key_name">Unique Key Name:</label>
 					<input type="text" id="key_name_<?php echo $data_field->getId() ?>" name="key_name" class="form-control" placeholder="Enter unique key name" value="<?php echo $data_field->getKeyName() ?>" />
 					<div class="small help-block">This is the primary request name used to save this field.  Click the HTML tab to see the HTML code to place</div>
 				</div>
 			
 			
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="request_name">Additional Request Fields:</label>
+					<label class="control-label" for="request_name">Additional Request Fields:</label>
 					<input type="text" id="request_name_<?php echo $data_field->getId() ?>" name="request_name" class="form-control" placeholder="Request Name" value="<?php echo implode(",", $data_field->getRequestName()) ?>" />
 					<div class="help-block small">Enter any additional request names (other than the unique key name) here (i.e. zip, postal_code, zipcode, etc)</div>
 				</div>
 		
 				 <div class="form-group">
-					<label class="control-label hidden-xs" for="tags">Tags:</label>
+					<label class="control-label" for="tags">Tags:</label>
 					<input type="text" id="tags_<?php echo $data_field->getId() ?>" name="tags" class="form-control" placeholder="Tags" value="<?php echo implode(",", $data_field->getTags()) ?>" />
 					<div class="help-block small">Categorize this data field by tagging it with category tags</div>
 				</div>
@@ -58,7 +58,7 @@
 			<div role="tabpanel" class="tab-pane fade" id="storage">
 				<div class="help-block">Set how and where this data field will be stored and accessed</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="access_type">Access Type</label>
+					<label class="control-label" for="access_type">Access Type</label>
 					<select class="form-control" name="access_type" id="access_type_<?php echo $data_field->getId() ?>" placeholder="Access Type">
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_ACCESS_TYPE_SYSTEM ?>" <?php echo $data_field->getAccessType() == \Flux\DataField::DATA_FIELD_ACCESS_TYPE_SYSTEM ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'System', 'value' => \Flux\DataField::DATA_FIELD_ACCESS_TYPE_SYSTEM, 'description' => 'SYSTEM fields cannot be edited nor populate from realtime'))) ?>">System</option>
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_ACCESS_TYPE_RESERVED ?>" <?php echo $data_field->getAccessType() == \Flux\DataField::DATA_FIELD_ACCESS_TYPE_RESERVED ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Reserved', 'value' => \Flux\DataField::DATA_FIELD_ACCESS_TYPE_RESERVED, 'description' => 'RESERVED fields can be edited but not populated from realtime'))) ?>">Reserved</option>
@@ -68,7 +68,7 @@
 				</div>
 				<hr />
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="storage_type">Storage Type</label>
+					<label class="control-label" for="storage_type">Storage Type</label>
 					<select class="form-control" name="storage_type" id="storage_type_<?php echo $data_field->getId() ?>" placeholder="Storage Type">
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ?>" <?php echo $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Default', 'value' => \Flux\DataField::DATA_FIELD_STORAGE_TYPE_DEFAULT, 'description' => 'Default storage for most saved data'))) ?>">Default</option>
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ?>" <?php echo $data_field->getStorageType() == \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Tracking', 'value' => \Flux\DataField::DATA_FIELD_STORAGE_TYPE_TRACKING, 'description' => 'Tracking storage for subids, user agent, and campaign data'))) ?>">Tracking</option>
@@ -79,7 +79,7 @@
 				</div>
 				<hr />
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="type">Data Type</label>
+					<label class="control-label" for="type">Data Type</label>
 					<select class="form-control" name="field_type" id="field_type_<?php echo $data_field->getId() ?>" placeholder="Data Type">
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_TYPE_STRING ?>" <?php echo $data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_STRING ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'String', 'value' => \Flux\DataField::DATA_FIELD_TYPE_STRING, 'description' => 'Stores single string data such as names, phone numbers, yes/no, and other information'))) ?>">String</option>
 						<option value="<?php echo \Flux\DataField::DATA_FIELD_TYPE_ARRAY ?>" <?php echo $data_field->getFieldType() == \Flux\DataField::DATA_FIELD_TYPE_ARRAY ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Array', 'value' => \Flux\DataField::DATA_FIELD_TYPE_ARRAY, 'description' => 'Used to store multiple values such as side effects, multi-selects, and checkboxes'))) ?>">Array</option>

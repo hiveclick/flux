@@ -14,7 +14,7 @@
 	<div class="modal-body">
 		<div class="help-block">Manage if this lead is paid out to the publisher</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="name">Affiliate</label>
+			<label class="control-label" for="name">Affiliate</label>
 			<select name="client[client_id]" class="form-control" id="client_id_<?php echo $report_lead->getId() ?>">
 				<optgroup label="Administrators">
 					<?php
@@ -39,14 +39,14 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="revenue">Bounty</label>
+			<label class="control-label" for="revenue">Bounty</label>
 			<div class="input-group">
 				<div class="input-group-addon">$</div>
 				<input type="text" class="form-control" name="revenue" placeholder="Enter bounty..." value="<?php echo number_format($report_lead->getRevenue(), 2) ?>" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="payout">Payout</label>
+			<label class="control-label" for="payout">Payout</label>
 			<div class="input-group">
 				<div class="input-group-addon">$</div>
 				<input type="text" class="form-control" name="payout" placeholder="Enter payout..." value="<?php echo number_format($report_lead->getPayout(), 2) ?>" />

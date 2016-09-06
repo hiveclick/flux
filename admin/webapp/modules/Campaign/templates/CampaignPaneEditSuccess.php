@@ -25,12 +25,12 @@
 			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">These are the main settings for this campaign.</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="description">Description</label>
+					<label class="control-label" for="description">Description</label>
 					<textarea id="description" name="description" class="form-control" placeholder="Enter Descriptive Name"><?php echo $campaign->getDescription(); ?></textarea>
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="status">Status</label>
+					<label class="control-label" for="status">Status</label>
 					<select class="form-control" name="status" id="status" placeholder="Status">
 						<option value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>"<?php echo $campaign->getStatus() == \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ? ' selected="selected"' : ''; ?>>Active</option>
 						<option value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_INACTIVE ?>"<?php echo $campaign->getStatus() == \Flux\Campaign::CAMPAIGN_STATUS_INACTIVE ? ' selected="selected"' : ''; ?>>Inactive</option>
@@ -38,7 +38,7 @@
 				</div>		  
 			
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="client_id">Affiliate</label>
+					<label class="control-label" for="client_id">Affiliate</label>
 					<select class="form-control" name="client[client_id]" id="client_id" placeholder="Choose an owner of this campaign...">
 						<optgroup label="Administrators">
 							<?php
@@ -64,7 +64,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="payout">Payout</label>
+					<label class="control-label" for="payout">Payout</label>
 					<div class="input-group">
 						<span class="input-group-addon">$</span>
 						<input type="text" name="payout" id="payout" placeholder="enter payout to publisher (leave blank to use offer payout of $<?php echo number_format($campaign->getOffer()->getOffer()->getPayout(), 2) ?>)" class="form-control" value="<?php echo $campaign->getPayout() > 0 ? number_format($campaign->getPayout(), 2) : '' ?>">
@@ -72,7 +72,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="traffic_source">Traffic Source</label>
+					<label class="control-label" for="traffic_source">Traffic Source</label>
 					<select class="form-control" name="traffic_source[traffic_source_id]" id="traffic_source" placeholder="Choose where the traffic is originating from...">
 						<option value=""></option>
 						<?php
@@ -87,7 +87,7 @@
 			<div role="tabpanel" class="tab-pane fade in" id="redirects">
 				<div class="help-block">These urls define how traffic comes into this campaign and where it goes</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="offer_id">Offer</label>
+					<label class="control-label" for="offer_id">Offer</label>
 					<select class="form-control" name="offer[offer_id]" id="offer_id" placeholder="Select an offer to redirect to...">
 						<option value=""></option>
 						<?php
@@ -110,7 +110,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="redirect_link">Redirect Link</label>
+					<label class="control-label" for="redirect_link">Redirect Link</label>
 					<textarea name="redirect_link" rows="3" id="redirect_link" class="form-control" placeholder="enter a url to redirect traffic to (like http://www.metalhiplawsuits.us/index.php?_id=#_id#)..."><?php echo $campaign->getRedirectLink() ?></textarea>
 				</div>
 				
@@ -121,19 +121,19 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="redirect_link">Adwords Url</label>
+					<label class="control-label" for="redirect_link">Adwords Url</label>
 					<textarea id="adwords_url" class="form-control" placeholder="<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>&__clear=1"><?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?' . \Flux\DataField::DATA_FIELD_REF_CAMPAIGN_KEY . '=' . $campaign->getId() ?>&amp;__clear=1</textarea>
 				</div>
 				<hr />
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="tracking_pixel">Tracking Pixel</label>
+					<label class="control-label" for="tracking_pixel">Tracking Pixel</label>
 					<textarea id="tracking_pixel" name="tracking_pixel" class="form-control" rows="4" placeholder="Enter the tracking pixel (HTML or Javascript) from the ad network..."><?php echo $campaign->getTrackingPixel() ?></textarea>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade in" id="whitelisted_ips">
 				<div class="help-block">If you want to limit incoming traffic, you can specify a list of whitelisted IPs</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="redirect_link">Whitelisted IPs</label>
+					<label class="control-label" for="redirect_link">Whitelisted IPs</label>
 					<input type="text" name="whitelist_ips[]" id="whitelist_ips" class="form-control" placeholder="enter IPs to whitelist" value="<?php echo implode(",", $campaign->getWhitelistIps()) ?>" />
 				</div>
 			</div>

@@ -26,14 +26,14 @@
 		<form class="form-horizontal" name="user_form" method="POST" action="" autocomplete="off" enctype="multipart/form-data">
 			<input type="hidden" name="_id" value="<?php echo $user->getId() ?>" />
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
+				<label class="col-sm-2 control-label" for="name">Name</label>
 				<div class="col-sm-10">
 					<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $user->getName() ?>" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="type">Timezone</label>
+				<label class="col-sm-2 control-label" for="type">Timezone</label>
 				<div class="col-sm-10">
 					<select class="form-control" name="timezone" id="timezone" placeholder="Timezone">
 						<?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
@@ -46,14 +46,14 @@
 			<hr />
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="email">Email</label>
+				<label class="col-sm-2 control-label" for="email">Email</label>
 				<div class="col-sm-10">
 					<input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?php echo $user->getEmail() ?>" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="password">Password</label>
+				<label class="col-sm-2 control-label" for="password">Password</label>
 				<div class="col-sm-10">
 					<input type="text" id="password" name="password" class="form-control" placeholder="Password" value="<?php echo $user->getPassword() ?>" />
 				</div>
@@ -62,7 +62,7 @@
 			<hr />
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Profile Image</label>
+				<label class="col-sm-2 control-label" for="image_data">Profile Image</label>
 				<div class="col-sm-10">
 					<input type="file" id="image_data" name="image_data" class="form-control" placeholder="Upload image" />
 				</div>

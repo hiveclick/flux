@@ -15,12 +15,12 @@
 	<div class="modal-body">
 		<div class="help-block">Create a new vertical that you can use to organize offers</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="name">Name</label>
+			<label class="control-label" for="name">Name</label>
 			<input type="text" id="name" name="name" class="form-control" placeholder="Enter Name..." value="<?php echo $vertical->getName() ?>" />
 		</div>
 	
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="description">Description</label>
+			<label class="control-label" for="description">Description</label>
 			<textarea name="description" id="description" class="form-control" placeholder="Enter Description..."><?php echo $vertical->getDescription() ?></textarea>
 		</div>
 	</div>

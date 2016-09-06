@@ -14,25 +14,25 @@
 	<div class="modal-body">
 		<div class="help-block">Enter the pingback details so you can use it to build SEO backlinks</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="name">Name</label>
+			<label class="control-label" for="name">Name</label>
 			<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $pingback->getName() ?>" />
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="description">Description</label>
+			<label class="control-label" for="description">Description</label>
 			<textarea name="description" id="description" class="form-control" placeholder="Enter Description..."><?php echo $pingback->getDescription() ?></textarea>
 		</div>
 		<hr />
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="url">Blog URL</label>
+			<label class="control-label" for="url">Blog URL</label>
 			<textarea name="url" class="form-control" placeholder="http://www.domain.com/blog/2016/01/01/article.html"><?php echo $pingback->getUrl() ?></textarea>
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="rpc_url">XML-RPC Url</label>
+			<label class="control-label" for="rpc_url">XML-RPC Url</label>
 			<input type="text" id="rpc_url" name="rpc_url" class="form-control" placeholder="http://www.domain.com/xmlrpc.php" value="<?php echo $pingback->getRpcUrl() ?>" />
 		</div>
 		<hr />
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="rpc_url">Status</label>
+			<label class="control-label" for="rpc_url">Status</label>
 			<select name="active" id="active">
 				<option value="1" <?php echo $pingback->getActive() ? 'selected' : '' ?>>This pingback is active and will be used</option>
 				<option value="0" <?php echo !$pingback->getActive() ? 'selected' : '' ?>>This pingback is NOT active and won't be used</option>

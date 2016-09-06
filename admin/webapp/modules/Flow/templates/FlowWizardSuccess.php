@@ -11,21 +11,21 @@
 	<form name="main_form" method="POST" class="form-horizontal" autocomplete="off">
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
+			<label class="col-sm-2 control-label" for="name">Name</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $flow->retrieveValueHtml('name'); ?>" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="request_name">Request Name</label>
+			<label class="col-sm-2 control-label" for="request_name">Request Name</label>
 			<div class="col-sm-10">
 				<input type="text" id="request_name" name="request_name" class="form-control" placeholder="Request Name" value="<?php echo $flow->retrieveValueHtml('request_name'); ?>" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="status">Status</label>
+			<label class="col-sm-2 control-label" for="status">Status</label>
 			<div class="col-sm-10">
 				<select class="form-control" name="status" id="status" placeholder="Status">
 					<?php foreach(\Flux\Flow::retrieveStatuses() AS $status_id => $status_name) { ?>

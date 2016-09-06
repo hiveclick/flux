@@ -28,24 +28,24 @@
   			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">Create a new server that can host landing pages</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="ip_address">IP Address</label>
+					<label class="control-label" for="ip_address">IP Address</label>
 					<input type="text" id="ip_address" name="ip_address" class="form-control" placeholder="Server Main IP Address" value="<?php echo $server->getIpAddress() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="root_username">Root Username</label>
+					<label class="control-label" for="root_username">Root Username</label>
 					<input type="text" id="root_username" name="root_username" class="form-control" placeholder="Root Username" value="<?php echo $server->getRootUsername() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="root_password">Root Password</label>
+					<label class="control-label" for="root_password">Root Password</label>
 					<input type="text" id="root_password" name="root_password" class="form-control" placeholder="Root Password" value="<?php echo $server->getRootPassword() ?>" />
 				</div>
 
 				<hr />
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="hostname">Hostname</label>
+					<label class="control-label" for="hostname">Hostname</label>
 					<div class="input-group">
 						<input type="text" id="hostname" name="hostname" class="form-control" placeholder="Server Hostname" value="<?php echo $server->getHostname() ?>" />
 						<a href="#" class="input-group-addon btn btn-info btn-block" id="btn_lookup_hostname">lookup hostname</a>
@@ -53,7 +53,7 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="alternate_hostname">Alternate Hostname</label>
+					<label class="control-label" for="alternate_hostname">Alternate Hostname</label>
 					<input type="text" id="alternate_hostname" name="alternate_hostname" class="form-control" placeholder="Alternate Hostname" value="<?php echo $server->getAlternateHostname() ?>" />
 					<div class="help-block small">If the hostname on the server is not accessible, you can specify an alternate hostname</div>
 				</div>
@@ -62,12 +62,12 @@
 				<div class="help-block">Setup FTP access to this server</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="ftp_username">Username</label>
+					<label class="control-label" for="ftp_username">Username</label>
 					<input type="text" id="ftp_username" name="ftp_username" class="form-control" placeholder="FTP Username" value="<?php echo $server->getFtpUsername() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="ftp_password">Password</label>
+					<label class="control-label" for="ftp_password">Password</label>
 					<input type="text" id="ftp_password" name="ftp_password" class="form-control" placeholder="FTP Password" value="<?php echo $server->getFtpPassword() ?>" />
 				</div>				
 			</div>
@@ -75,29 +75,29 @@
 				<div class="help-block">Setup MySQL/Wordpress access to this server</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="mysql_username">Username</label>
+					<label class="control-label" for="mysql_username">Username</label>
 					<input type="text" id="mysql_username" name="mysql_username" class="form-control" placeholder="MySQL Username" value="<?php echo $server->getMysqlUsername() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="mysql_password">Password</label>
+					<label class="control-label" for="mysql_password">Password</label>
 					<input type="text" id="mysql_password" name="mysql_password" class="form-control" placeholder="MySQL Password" value="<?php echo $server->getMysqlPassword() ?>" />
 				</div>		
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="mysql_db">Database Name</label>
+					<label class="control-label" for="mysql_db">Database Name</label>
 					<input type="text" id="mysql_db" name="mysql_db" class="form-control" placeholder="Wordpress Database name" value="<?php echo $server->getMysqlDb() ?>" />
 				</div>			
 			</div>
 			<div role="tabpanel" class="tab-pane fade" id="apache">
 				<div class="help-block">These settings are used to configure Apache and when pushing new files to the server</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="docroot_dir">DocRoot Folder</label>
+					<label class="control-label" for="docroot_dir">DocRoot Folder</label>
 					<input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Location of web sites" value="<?php echo $server->getDocrootDir() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="Fluxfe_lib_dir">FluxFE LIB Folder</label>
+					<label class="control-label" for="Fluxfe_lib_dir">FluxFE LIB Folder</label>
 					<input type="text" id="Fluxfe_lib_dir" name="Fluxfe_lib_dir" class="form-control" placeholder="Location of FluxFE webapp/lib folder" value="<?php echo $server->getFluxfeLibDir() ?>" />
 				</div>
 
@@ -106,12 +106,12 @@
 				<div class="help-block">The web user and group will be assigned as the default owner of new files and folders</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="web_user">Web User</label>
+					<label class="control-label" for="web_user">Web User</label>
 					<input type="text" id="web_user" name="web_user" class="form-control" placeholder="Website owner" value="<?php echo $server->getWebUser() ?>" />
 				</div>
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="web_group">Web Group</label>
+					<label class="control-label" for="web_group">Web Group</label>
 					<input type="text" id="web_group" name="web_group" class="form-control" placeholder="Website owner" value="<?php echo $server->getWebGroup() ?>" />
 				</div>
 			</div>

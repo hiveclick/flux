@@ -81,10 +81,10 @@ class ReturnsAction extends BasicRestAction
 
 							// Remove the reporting data
 							$report_lead = new \Flux\ReportLead();
-							$report_lead = $report_lead->query(array('lead_split._id' => $lead_split->getId()), false);
-							if (\MongoId::isValid($report_lead->setId())) {
+							$report_lead->query(array('lead_split._id' => $lead_split->getId()), false);
+							if (\MongoId::isValid($report_lead->getId())) {
 								$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DISQUALIFIED);
-								$report_lead->setBounty(0);
+								$report_lead->setRevenue(0);
 								$report_lead->update();
 							}
 

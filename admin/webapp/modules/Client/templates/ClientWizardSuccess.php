@@ -27,12 +27,12 @@
   			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">Clients are used as advertisers or publishers to either manage offers or send traffic</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Name</label>
+					<label class="control-label" for="name">Name</label>
 					<input type="text" id="name" name="name" class="form-control" placeholder="Enter client's name..." value="<?php echo $client->getName() ?>" />
 				</div>
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="type">Client Type</label>
+					<label class="control-label" for="type">Client Type</label>
 					<select class="form-control" name="client_type" id="client_type" placeholder="Select the role of this client...">
 						<option value="<?php echo \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_PRIMARY_ADMIN ? ' selected' : '' ?>>Primary Administrator</option>
 						<option value="<?php echo \Flux\Client::CLIENT_TYPE_AFFILIATE ?>" <?php echo $client->getClientType() == \Flux\Client::CLIENT_TYPE_AFFILIATE ? ' selected' : '' ?>>Affiliate</option>
@@ -40,29 +40,29 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="type">Status</label>
+					<label class="control-label" for="type">Status</label>
 					<select class="form-control" name="status" id="status" placeholder="Select the status of this client...">
 						<option value="<?php echo \Flux\Client::CLIENT_STATUS_ACTIVE ?>" <?php echo $client->getStatus() == \Flux\Client::CLIENT_STATUS_ACTIVE ? ' selected' : '' ?>>Active</option>
 						<option value="<?php echo \Flux\Client::CLIENT_STATUS_INACTIVE ?>" <?php echo $client->getStatus() == \Flux\Client::CLIENT_STATUS_INACTIVE ? ' selected' : '' ?>>Inactive</option>
 					</select>
 				</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="email">Email</label>
+					<label class="control-label" for="email">Email</label>
 					<input type="email" id="email" name="email" class="form-control" placeholder="Enter client's email..." value="<?php echo $client->getEmail() ?>" />
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane fade in" id="network">
 				<div class="help-block">You can enter the login and report syncing class here</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="login_url">Login URL</label>
+					<label class="control-label" for="login_url">Login URL</label>
 					<input type="text" id="login_url" name="network_url" class="form-control" placeholder="Enter login url" value="<?php echo $client->getNetworkUrl() ?>" />
 				</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="username">Username</label>
+					<label class="control-label" for="username">Username</label>
 					<input type="text" id="username" name="network_username" class="form-control" placeholder="Enter login username" value="<?php echo $client->getNetworkUsername() ?>" />
 				</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="password">Password</label>
+					<label class="control-label" for="password">Password</label>
 					<input type="text" id="password" name="network_password" class="form-control" placeholder="Enter login password" value="<?php echo $client->getNetworkPassword() ?>" />
 				</div>
 				<hr />
@@ -77,7 +77,7 @@
 				<hr />
 				<div class="help-block">You can sync reporting from this network by entering the API credentials below</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="reporting_api_class">Network</label>
+					<label class="control-label" for="reporting_api_class">Network</label>
 					<select name="reporting_api_class" id="reporting_api_class">
 						 <?php foreach ($network_handlers as $key => $network_handler) { ?>
 							 <option value="<?php echo get_class($network_handler) ?>" <?php echo $client->getReportingApiClass() == get_class($network_handler) ? 'SELECTED' : '' ?>><?php echo get_class($network_handler) ?></option>
@@ -85,11 +85,11 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="reporting_api_url">API Url</label>
+					<label class="control-label" for="reporting_api_url">API Url</label>
 					<input type="text" id="reporting_api_url" name="reporting_api_url" class="form-control" placeholder="Enter API url" value="<?php echo $client->getReportingApiUrl() ?>" />
 				</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="reporting_api_token">API Token</label>
+					<label class="control-label" for="reporting_api_token">API Token</label>
 					<textarea id="reporting_api_token" name="reporting_api_token" class="form-control" placeholder="Enter API token"><?php echo $client->getReportingApiToken() ?></textarea>
 				</div>
 			</div>

@@ -29,14 +29,14 @@
 		<input type="hidden" name="status" value="<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>" />
 	
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
+			<label class="col-sm-2 control-label" for="name">Name</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $offer->getName() ?>" />
 			</div>
 		</div>
 	
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="name">Vertical</label>
+			<label class="col-sm-2 control-label" for="name">Vertical</label>
 			<div class="col-sm-10">
 				<select id="vertical" name="vertical[vertical_id]" class="form-control selectize" placeholder="Assign a vertical...">
 					<option value=""></option>
@@ -48,7 +48,7 @@
 		</div>
 	
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="client_id">Advertising Client</label>
+			<label class="col-sm-2 control-label" for="client_id">Advertising Client</label>
 			<div class="col-sm-10">
 				<select class="form-control" name="client[client_id]" id="client_id" placeholder="Advertising Client">
 					<optgroup label="Administrators">
@@ -76,7 +76,7 @@
 		</div>
 	
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="payout">Payout</label>
+			<label class="col-sm-2 control-label" for="payout">Payout</label>
 			<div class="col-sm-10">
 				<div class="input-group">
 					<span class="input-group-addon">$</span>
@@ -88,7 +88,7 @@
 		<div class="help-block">Choose if you want to direct traffic to a flow or to an external url</div>
 	
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="redirect_type">Offer Type</label>
+			<label class="col-sm-2 control-label" for="redirect_type">Offer Type</label>
 			<div class="col-sm-10">
 				<select class="form-control" name="redirect_type" id="redirect_type" placeholder="Redirect Type">
 					<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Hosted', 'value' => \Flux\Offer::REDIRECT_TYPE_HOSTED, 'description' => 'Send traffic to a landing page you own that uses FluxFE'))) ?>">Hosted</option>
@@ -100,7 +100,7 @@
 	
 		<div id="redirect_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? '': 'display:none;' ?>">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="redirect_url">Redirect URL</label>
+				<label class="col-sm-2 control-label" for="redirect_url">Redirect URL</label>
 				<div class="col-sm-10">
 					<textarea id="redirect_url" name="redirect_url" rows="4" class="form-control" placeholder="Redirect URL"><?php echo $offer->getRedirectUrl() ?></textarea>
 				</div>
@@ -109,7 +109,7 @@
 		
 		<div id="post_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? '': 'display:none;' ?>">
 			<div class="form-group" id="domain_name_form_group">
-				<label class="col-sm-2 control-label hidden-xs" for="split_id">Host &amp; Post Split</label>
+				<label class="col-sm-2 control-label" for="split_id">Host &amp; Post Split</label>
 				<div class="col-sm-10">
 					<select id="split_id" name="split[split_id]" class="form-control" placeholder="select a split to use for fulfillment...">
 						<?php 
@@ -125,21 +125,21 @@
 	
 		<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">		
 			<div class="form-group" id="domain_name_form_group">
-				<label class="col-sm-2 control-label hidden-xs" for="domain_name">Domain Name</label>
+				<label class="col-sm-2 control-label" for="domain_name">Domain Name</label>
 				<div class="col-sm-10">
 					<input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to use in apache vhost file" value="<?php echo $offer->getDomainName() ?>" />
 				</div>
 			</div>
 		
 			<div class="form-group" id="folder_name_form_group">
-				<label class="col-sm-2 control-label hidden-xs" for="folder_name">Folder Name</label>
+				<label class="col-sm-2 control-label" for="folder_name">Folder Name</label>
 				<div class="col-sm-10">
 					<input type="text" id="folder_name" name="folder_name" class="form-control" placeholder="Folder name containing offer pages (v1, v2, etc)" value="<?php echo $offer->getFolderName() ?>" />
 				</div>
 			</div>
 			
 			<div class="form-group" id="docroot_dir_form_group">
-				<label class="col-sm-2 control-label hidden-xs" for="docroot_dir">Document Root</label>
+				<label class="col-sm-2 control-label" for="docroot_dir">Document Root</label>
 				<div class="col-sm-10">
 					<div class="input-group">
 						<input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
@@ -150,7 +150,7 @@
 			</div>
 			
 			<div class="form-group" id="domain_name_form_group">
-				<label class="col-sm-2 control-label hidden-xs" for="landing_pages">Landing page</label>
+				<label class="col-sm-2 control-label" for="landing_pages">Landing page</label>
 				<div class="col-sm-10">
 					<input type="hidden" name="landing_pages[0][name]" value="Primary Landing Page" />
 					<input type="text" id="landing_pages" name="landing_pages[0][url]" class="form-control" placeholder="Url to landing page (http://www.offer-domain.com/index.php)" value="" />

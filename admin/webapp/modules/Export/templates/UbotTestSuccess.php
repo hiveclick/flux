@@ -39,6 +39,24 @@
 				</div>
 			</form>
 		</div>
+		<div class="col-md-3">
+			<h3>Get Next Comment</h3>
+			<hr />
+			<form method="GET" class="form-horizontal" action="/export/get-next-comment" target="ubot_test_iframe" id="get_next_comment_form">
+				<input type="submit" class="btn btn-info" value="Get Next Comment" />
+			</form>
+		</div>
+		<div class="col-md-3">
+			<h3>Flag Next Comment</h3>
+			<hr />
+			<form method="GET" class="form-horizontal" action="/export/flag-next-comment" target="ubot_test_iframe" id="flag_next_comment_form">
+				<input type="text" name="_id" value="" class="form-control" placeholder="enter comment id" />
+				<br />
+				<div>
+					<input type="submit" class="btn btn-info" value="Flag Next Comment" />
+				</div>
+			</form>
+		</div>
 	</div>
 	<hr />
 	<iframe name="ubot_test_iframe" frameborder="0" width="100%" height="1000"></iframe>

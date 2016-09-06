@@ -11,21 +11,21 @@
 	<form class="form-horizontal" name="offer_asset_form" method="POST" action="" autocomplete="off" enctype="multipart/form-data">
 		<input type="hidden" name="offer_id" value="<?php echo $offer_asset->getOfferId() ?>" />
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
+			<label class="col-sm-2 control-label" for="name">Name</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $offer_asset->getName() ?>" />
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="description">Description</label>
+			<label class="col-sm-2 control-label" for="description">Description</label>
 			<div class="col-sm-10">
 				<textarea id="description" name="description" class="form-control" placeholder="Enter Description..."><?php echo $offer_asset->getDescription() ?></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="asset_type">Asset Type</label>
+			<label class="col-sm-2 control-label" for="asset_type">Asset Type</label>
 			<div class="col-sm-10">
 				<select id="asset_type" name="asset_type">
 					<option value="1" data-data="<?php echo htmlentities(json_encode(array('asset_type' => 1, 'name' => 'Banner', 'description' => 'Banners are used for impressions and can have different sizes', 'img' => '/images/asset_banner.png'))) ?>">Banner</option>
@@ -41,7 +41,7 @@
 		
 		<div id="banner-options" style="display:block;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="banner_size">Banner Size</label>
+				<label class="col-sm-2 control-label" for="banner_size">Banner Size</label>
 				<div class="col-sm-10">
 					<select id="banner_size" name="asset_type" class="form-control">
 						<option value="1">728x90 - Leaderboard</option>
@@ -63,7 +63,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Banner</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Banner</label>
 				<div class="col-sm-10">
 				   <input type="file" name="image_data" class="form-control" />
 				</div>
@@ -72,25 +72,25 @@
 		
 		<div id="wall-options" style="display:none;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Title</label>
+				<label class="col-sm-2 control-label" for="ad_title">Title</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="" placeholder="Ad Title..." />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_description">Description</label>
+				<label class="col-sm-2 control-label" for="ad_description">Description</label>
 				<div class="col-sm-10">
 					<textarea name="ad_description" class="form-control" placeholder="Ad description..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_link">Link</label>
+				<label class="col-sm-2 control-label" for="ad_link">Link</label>
 				<div class="col-sm-10">
 					<textarea name="ad_link" class="form-control" placeholder="Enter pop-out link..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Image (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Image (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" value="" />
 				</div>
@@ -99,25 +99,25 @@
 		
 		<div id="path-options" style="display:none;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Title</label>
+				<label class="col-sm-2 control-label" for="ad_title">Title</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="" placeholder="Ad Title..." />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_description">Description</label>
+				<label class="col-sm-2 control-label" for="ad_description">Description</label>
 				<div class="col-sm-10">
 					<textarea name="ad_description" class="form-control" placeholder="Ad description..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_link">Link</label>
+				<label class="col-sm-2 control-label" for="ad_link">Link</label>
 				<div class="col-sm-10">
 					<textarea name="ad_link" class="form-control" placeholder="Enter pop-out link..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Image (336x280)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Image (336x280)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" value="" />
 				</div>
@@ -126,19 +126,19 @@
 		
 		<div id="html-options" style="display:none;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Name</label>
+				<label class="col-sm-2 control-label" for="ad_title">Name</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="" placeholder="HTML Creative Name..." />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="html_source">Source</label>
+				<label class="col-sm-2 control-label" for="html_source">Source</label>
 				<div class="col-sm-10">
 					<textarea name="html_source" class="form-control" placeholder="Enter HTML Source..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Preview (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Preview (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" value="" />
 				</div>
@@ -147,19 +147,19 @@
 		
 		<div id="text-options" style="display:none;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Name</label>
+				<label class="col-sm-2 control-label" for="ad_title">Name</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="" placeholder="Text Creative Name..." />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="text_source">Source</label>
+				<label class="col-sm-2 control-label" for="text_source">Source</label>
 				<div class="col-sm-10">
 					<textarea name="text_source" class="form-control" placeholder="Enter Text Source..."></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Preview (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Preview (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" value="" />
 				</div>
@@ -251,21 +251,21 @@
 		<input type="hidden" name="_id" value="<?php echo $offer_asset->getId() ?>" />
 		<input type="hidden" name="offer_id" value="<?php echo $offer_asset->getOfferId() ?>" />
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="name">Name</label>
+			<label class="col-sm-2 control-label" for="name">Name</label>
 			<div class="col-sm-10">
 				<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $offer_asset->getName() ?>" />
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="description">Description</label>
+			<label class="col-sm-2 control-label" for="description">Description</label>
 			<div class="col-sm-10">
 				<textarea id="description" name="description" class="form-control" placeholder="Enter Description..."><?php echo $offer_asset->getDescription() ?></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label hidden-xs" for="asset_type">Asset Type</label>
+			<label class="col-sm-2 control-label" for="asset_type">Asset Type</label>
 			<div class="col-sm-10">
 				<select id="asset_type" name="asset_type">
 					<option value="1" <?php echo $offer_asset->getAssetType() == 1 ? "SELECTED" : "" ?> data-data="<?php echo htmlentities(json_encode(array('asset_type' => 1, 'name' => 'Banner', 'description' => 'Banners are used for impressions and can have different sizes', 'img' => '/images/asset_banner.png'))) ?>">Banner</option>
@@ -289,7 +289,7 @@
 			</div>
 			<br />
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="banner_size">Banner Size</label>
+				<label class="col-sm-2 control-label" for="banner_size">Banner Size</label>
 				<div class="col-sm-10">
 					<select id="banner_size" name="banner_size" class="form-control" <?php echo $offer_asset->getAssetType() != 1 ? 'disabled' : '' ?>>
 						<optgroup label="Custom Size">
@@ -316,13 +316,13 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_link">Link</label>
+				<label class="col-sm-2 control-label" for="ad_link">Link</label>
 				<div class="col-sm-10">
 					<textarea name="ad_link" class="form-control" placeholder="Enter pop-out link..." <?php echo $offer_asset->getAssetType() != 1 ? 'disabled' : '' ?>><?php echo $offer_asset->getAdLink() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Banner</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Banner</label>
 				<div class="col-sm-10">
 				   <input type="file" id="banner_image_data" name="image_data" class="" <?php echo $offer_asset->getAssetType() != 1 ? 'disabled' : '' ?> />
 				</div>
@@ -341,25 +341,25 @@
 			</div>
 		
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Title</label>
+				<label class="col-sm-2 control-label" for="ad_title">Title</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="ad_title_wall" name="ad_title" value="<?php echo $offer_asset->getAdTitle() ?>" placeholder="Ad Title..." <?php echo $offer_asset->getAssetType() != 2 ? 'disabled' : '' ?> />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_description">Description</label>
+				<label class="col-sm-2 control-label" for="ad_description">Description</label>
 				<div class="col-sm-10">
 					<textarea name="ad_description" class="form-control" id="ad_description_wall" placeholder="Ad description..." <?php echo $offer_asset->getAssetType() != 2 ? 'disabled' : '' ?>><?php echo $offer_asset->getAdDescription() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_link">Link</label>
+				<label class="col-sm-2 control-label" for="ad_link">Link</label>
 				<div class="col-sm-10">
 					<textarea name="ad_link" class="form-control" id="ad_link_wall" placeholder="Enter pop-out link..." <?php echo $offer_asset->getAssetType() != 2 ? 'disabled' : '' ?>><?php echo $offer_asset->getAdLink() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Image (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Image (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" id="image_data_wall" name="image_data" <?php echo $offer_asset->getAssetType() != 2 ? 'disabled' : '' ?> />
 				</div>
@@ -378,25 +378,25 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Title</label>
+				<label class="col-sm-2 control-label" for="ad_title">Title</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="ad_title_path" name="ad_title" value="<?php echo $offer_asset->getAdTitle() ?>" placeholder="Ad Title..." <?php echo $offer_asset->getAssetType() != 3 ? 'disabled' : '' ?> />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_description">Description</label>
+				<label class="col-sm-2 control-label" for="ad_description">Description</label>
 				<div class="col-sm-10">
 					<textarea name="ad_description" class="form-control" id="ad_description_path" placeholder="Ad description..." <?php echo $offer_asset->getAssetType() != 3 ? 'disabled' : '' ?>><?php echo $offer_asset->getAdDescription() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_link">Link</label>
+				<label class="col-sm-2 control-label" for="ad_link">Link</label>
 				<div class="col-sm-10">
 					<textarea name="ad_link" class="form-control" id="ad_link_path" placeholder="Enter pop-out link..." <?php echo $offer_asset->getAssetType() != 3 ? 'disabled' : '' ?>><?php echo $offer_asset->getAdLink() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Image (336x280)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Image (336x280)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" id="image_data_path" name="image_data" <?php echo $offer_asset->getAssetType() != 3 ? 'disabled' : '' ?> />
 				</div>
@@ -405,19 +405,19 @@
 		
 		<div id="html-options" style="display:<?php echo $offer_asset->getAssetType() == 4 ? 'block' : 'none' ?>;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Name</label>
+				<label class="col-sm-2 control-label" for="ad_title">Name</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="<?php echo $offer_asset->getAdTitle() ?>" placeholder="HTML Creative Name..." <?php echo $offer_asset->getAssetType() != 4 ? 'disabled' : '' ?> />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="html_source">Source</label>
+				<label class="col-sm-2 control-label" for="html_source">Source</label>
 				<div class="col-sm-10">
 					<textarea name="html_source" class="form-control" placeholder="Enter HTML Source..." <?php echo $offer_asset->getAssetType() != 4 ? 'disabled' : '' ?>><?php echo $offer_asset->getHtmlSource() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Preview (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Preview (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" <?php echo $offer_asset->getAssetType() != 4 ? 'disabled' : '' ?> />
 				</div>
@@ -426,19 +426,19 @@
 		
 		<div id="text-options" style="display:<?php echo $offer_asset->getAssetType() == 5 ? 'block' : 'none' ?>;">
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="ad_title">Name</label>
+				<label class="col-sm-2 control-label" for="ad_title">Name</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="ad_title" value="<?php echo $offer_asset->getAdTitle() ?>" placeholder="Text Creative Name..." <?php echo $offer_asset->getAssetType() != 5 ? 'disabled' : '' ?> />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="text_source">Source</label>
+				<label class="col-sm-2 control-label" for="text_source">Source</label>
 				<div class="col-sm-10">
 					<textarea name="text_source" class="form-control" placeholder="Enter Text Source..." <?php echo $offer_asset->getAssetType() != 5 ? 'disabled' : '' ?>><?php echo $offer_asset->getTextSource() ?></textarea>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="image_data">Upload Preview (125x125)</label>
+				<label class="col-sm-2 control-label" for="image_data">Upload Preview (125x125)</label>
 				<div class="col-sm-10">
 				   <input type="file" class="form-control" name="image_data" <?php echo $offer_asset->getAssetType() != 5 ? 'disabled' : '' ?> />
 				</div>

@@ -29,14 +29,14 @@
 			<input type="hidden" name="payout" value="0" />
 			<input type="hidden" name="status" value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>" />
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="description">Description</label>
+				<label class="col-sm-2 control-label" for="description">Description</label>
 				<div class="col-sm-10">
 					<textarea id="description" name="description" class="form-control" placeholder="Enter descriptive text about where you will run this campaign"><?php echo $campaign->getDescription(); ?></textarea>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="client_id">Affiliate</label>
+				<label class="col-sm-2 control-label" for="client_id">Affiliate</label>
 				<div class="col-sm-10">
 					<select class="" name="client[client_id]" id="client_id" placeholder="Choose an owner of this campaign...">
 						<optgroup label="Administrators">
@@ -64,7 +64,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="traffic_source">Traffic Source</label>
+				<label class="col-sm-2 control-label" for="traffic_source">Traffic Source</label>
 				<div class="col-sm-10">
 					<select class="" name="traffic_source[traffic_source_id]" id="traffic_source" placeholder="Traffic Source">
 						<?php
@@ -78,7 +78,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="offer_id">Offer</label>
+				<label class="col-sm-2 control-label" for="offer_id">Offer</label>
 				<div class="col-sm-10">
 					<select class="" name="offer[offer_id]" id="offer_id" placeholder="Select an offer to redirect to...">
 						<option value=""></option>
@@ -93,7 +93,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="offer_id"></label>
+				<label class="col-sm-2 control-label" for="offer_id"></label>
 				<div class="col-sm-10">
 					<select class="" name="landing_page" id="landing_page" placeholder="Select a landing page to redirect to..."></select>
 				</div>
@@ -101,7 +101,7 @@
 
 
 			<div class="form-group">
-				<label class="col-sm-2 control-label hidden-xs" for="redirect_link">Redirect Link</label>
+				<label class="col-sm-2 control-label" for="redirect_link">Redirect Link</label>
 				<div class="col-sm-10">
 					<textarea name="redirect_link" id="redirect_link" class="form-control" placeholder="Select an offer and landing page above to generate a redirect link..."><?php echo $campaign->getRedirectLink() ?></textarea>
 				</div>

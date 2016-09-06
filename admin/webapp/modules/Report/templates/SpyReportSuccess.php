@@ -19,7 +19,7 @@
 	<input type="hidden" name="func" value="/report/spy-report" />
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="date_range">Report Date</label>
+		<label class="col-sm-2 control-label" for="date_range">Report Date</label>
 		<div class="col-sm-5 col-xs-6">
 			<select name="date_range" class="form-control">
 				<?php foreach(\Flux\SpyReport::retrieveDateRanges() AS $date_range_id => $date_range_name) { ?>
@@ -37,7 +37,7 @@
 	</div>
 
 	<div class="form-group custom-range">
-		<label class="col-sm-2 control-label hidden-xs" for="date_range">Custom Date</label>
+		<label class="col-sm-2 control-label" for="date_range">Custom Date</label>
 		<div class="col-sm-5 col-xs-6">
 			<div class="input-group">
 				<input type="text" id="start_time" name="start_time" placeholder="Start Date" class="form-control" value="<?php echo $spy_report->retrieveValue('start_time'); ?>" />
@@ -53,7 +53,7 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="date_range">Offers</label>
+		<label class="col-sm-2 control-label" for="date_range">Offers</label>
 		<div class="col-sm-10">
 			<select class="form-control selectize" name="offer_id[]" id="offer_id" multiple placeholder="No Offers">
 				<?php foreach($offers AS $offer) { ?>
@@ -64,7 +64,7 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="date_range">Columns</label>
+		<label class="col-sm-2 control-label" for="date_range">Columns</label>
 		<div class="col-sm-10">
 			<select class="form-control selectize" name="column_id[]" id="column_id" multiple placeholder="No Columns">
 				<?php foreach($spy_columns AS $spy_column) { ?>
@@ -75,7 +75,7 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-2 control-label hidden-xs" for="date_range">Limit</label>
+		<label class="col-sm-2 control-label" for="date_range">Limit</label>
 		<div class="col-sm-10">
 			<select name="limit" class="form-control" placeholder="Limit">
 				<option value="10">Limit 10</option>

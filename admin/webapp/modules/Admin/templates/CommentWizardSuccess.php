@@ -14,7 +14,7 @@
 	<div class="modal-body">
 		<div class="help-block">Enter the comment details so you can use it to build SEO backlinks</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="comment">Comment</label>
+			<label class="control-label" for="comment">Comment</label>
 			<textarea name="comment" id="comment" rows="7" class="form-control" placeholder="Enter Comment..."><?php echo $comment->getComment() ?></textarea>
 		</div>
 		<div class="help-block">

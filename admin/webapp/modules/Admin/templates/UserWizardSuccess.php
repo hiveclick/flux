@@ -24,23 +24,23 @@
   			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">Create a new user with access to log into the system</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Name</label>
+					<label class="control-label" for="name">Name</label>
 					<input type="text" id="name" name="name" class="form-control" placeholder="Enter user's name" value="<?php echo $user->getName() ?>" />
 				</div>
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="email">Email</label>
+					<label class="control-label" for="email">Email</label>
 					<input type="email" id="email" name="email" class="form-control" placeholder="Enter email address..." value="<?php echo $user->getEmail() ?>" />
 					<div class="help-block small">This user will login using their email address</div>
 				</div>
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="password">Password</label>
+					<label class="control-label" for="password">Password</label>
 					<input type="text" id="password" name="password" class="form-control" placeholder="Enter password..." value="<?php echo $user->getPassword() ?>" />
 				</div>
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="type">Timezone</label>
+					<label class="control-label" for="type">Timezone</label>
 					<select class="form-control" name="timezone" id="timezone" placeholder="Select the user's timezone...">
 						<?php foreach(\Flux\Timezone::retrieveTimezonesFormatted() AS $timezone_id => $timezone_string) { ?>
 						<option value="<?php echo $timezone_id; ?>"<?php echo $user->getTimezone() == $timezone_id ? ' selected="selected"' : ''; ?>><?php echo $timezone_string; ?></option>
@@ -50,7 +50,7 @@
 				<hr />
 				<div class="help-block">Users can either see everything in the site or do data entry only</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="user_type">Role</label>
+					<label class="control-label" for="user_type">Role</label>
 					<select class="form-control" name="user_type" id="user_type" placeholder="Assign this user a role">
 						<option value="<?php echo \Flux\User::USER_TYPE_ADMIN ?>" <?php echo $user->getUserType() == \Flux\User::USER_TYPE_ADMIN ? 'selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => \Flux\User::USER_TYPE_ADMIN, 'name' => 'Administrator', 'description' => 'This user will be able to see and edit everything in the system including revenue reports, lead data, and users'))) ?>">Administrator</option>
 						<option value="<?php echo \Flux\User::USER_TYPE_DATA_ENTRY ?>" <?php echo $user->getUserType() == \Flux\User::USER_TYPE_DATA_ENTRY ? 'selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('_id' => \Flux\User::USER_TYPE_DATA_ENTRY, 'name' => 'Data Entry', 'description' => 'This user will be able to view lead reports and alter lead information only'))) ?>">Data Entry</option>
@@ -60,7 +60,7 @@
 				<div class="help-block">Users are assigned to a default client's account for reporting</div>	
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="client_id">Client</label>
+					<label class="control-label" for="client_id">Client</label>
 					<select class="form-control" name="client[client_id]" id="client_id" placeholder="Assign this user to a client...">
 						<optgroup label="Administrators">
 						<?php
@@ -88,7 +88,7 @@
 			<div role="tabpanel" class="tab-pane fade in" id="token">
 				<div class="help-block">You can access this site without a login by using the token below.  Simply pass it in the request using the TOKEN parameter</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="token">Token</label>
+					<label class="control-label" for="token">Token</label>
 					<div id="token_<?php echo $user->getId() ?>"><?php echo $user->getToken() ?></div>
 				</div>
 				<hr />

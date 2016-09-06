@@ -15,12 +15,12 @@
 	<div class="modal-body">
 		<div class="help-block">Create a new traffic source</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="name">Name</label>
+			<label class="control-label" for="name">Name</label>
 			<input type="text" id="name" name="name" class="form-control" placeholder="Enter nickname..." value="<?php echo $traffic_source->getName() ?>" />
 		</div>
 
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="description">Description</label>
+			<label class="control-label" for="description">Description</label>
 			<textarea id="description" name="description" class="form-control" placeholder="Enter description..."><?php echo $traffic_source->getDescription() ?></textarea>
 		</div>
 		
@@ -42,17 +42,17 @@
 		<div class="help-block">Enter the url, username and password for this traffic source so you don't have to memorize it</div>	
 		
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="url">Login url</label>
+			<label class="control-label" for="url">Login url</label>
 			<textarea id="url" name="url" class="form-control" placeholder="Enter url..."><?php echo $traffic_source->getUrl() ?></textarea>
 		</div>
 		
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="username">Username</label>
+			<label class="control-label" for="username">Username</label>
 			<input type="text" id="username" name="username" class="form-control" placeholder="Enter username..." value="<?php echo $traffic_source->getUsername() ?>" />
 		</div>
 		
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="password">Password</label>
+			<label class="control-label" for="password">Password</label>
 			<input type="text" id="password" name="password" class="form-control" placeholder="Enter password..." value="<?php echo $traffic_source->getPassword() ?>" />
 		</div>
 	</div>

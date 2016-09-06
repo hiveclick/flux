@@ -15,15 +15,15 @@
 	<div class="modal-body">
 		<div class="help-block">Create a new domain group that you can use to organize emails</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="name">Name</label>
+			<label class="control-label" for="name">Name</label>
 			<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $domain_group->getName() ?>" />
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="description">Description</label>
+			<label class="control-label" for="description">Description</label>
 			<textarea name="description" id="description" class="form-control" placeholder="Enter Description..."><?php echo $domain_group->getDescription() ?></textarea>
 		</div>
 		<div class="form-group">
-			<label class="control-label hidden-xs" for="domains">Domains</label>
+			<label class="control-label" for="domains">Domains</label>
 			<input type="text" name="domains" id="domains" class="form-control" placeholder="Enter Domains..." value="<?php echo implode(",", $domain_group->getDomains()) ?>" />
 		</div>
 	</div>

@@ -153,12 +153,6 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </fulfillmentsearch>
-            <ubottest>
-                <label>Test Ubot Scripts</label>
-                <uri>/export/ubot-test</uri>
-                <class>nav-secondary</class>
-                <permission>1</permission>
-            </ubottest>
        </pages>
 	</export>
 	<reports>
@@ -235,6 +229,18 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </pingbackwizard>
+            <ubotqueuewizard>
+                <label>Generate Ubot Comments</label>
+                <uri>/tools/ubot-queue-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </ubotqueuewizard>
+            <ubottest>
+                <label>Test Ubot Scripts</label>
+                <uri>/export/ubot-test</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </ubottest>
         </pages>
     </tools>
 	<admin>
@@ -279,6 +285,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </servers>
+            <ubotscripts>
+                <label>Ubot Scripts</label>
+                <uri>/admin/ubot-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </ubotscripts>
             <zipcodes>
                 <label>Zipcodes</label>
                 <uri>/admin/zip-search</uri>

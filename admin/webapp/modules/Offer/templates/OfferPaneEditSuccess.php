@@ -26,12 +26,12 @@
 			<div role="tabpanel" class="tab-pane fade in active" id="basic">
 				<div class="help-block">These are the main settings for this offer.</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Name</label>
+					<label class="control-label" for="name">Name</label>
 					<input type="text" id="name" name="name" class="form-control" placeholder="Name" value="<?php echo $offer->getName() ?>" />
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="client_id">Advertiser</label>
+					<label class="control-label" for="client_id">Advertiser</label>
 					<select class="form-control selectize" name="client[client_id]" id="client_id" placeholder="Advertising Client">
 						<optgroup label="Administrators">
 							<?php
@@ -57,7 +57,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="payout">Payout</label>
+					<label class="control-label" for="payout">Payout</label>
 					<div class="input-group">
 						<span class="input-group-addon">$</span>
 						<input type="text" name="payout" id="payout" placeholder="enter default payout to publishers..." class="form-control" value="<?php echo $offer->getPayout() > 0 ? number_format($offer->getPayout(), 2) : '' ?>">
@@ -65,7 +65,7 @@
 				</div>
 		
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="default_campaign_id">Default Campaign</label>
+					<label class="control-label" for="default_campaign_id">Default Campaign</label>
 					<select class="form-control" name="default_campaign_id" id="default_campaign_id" placeholder="Default Campaign">
 						<?php foreach($campaigns AS $campaign) { ?>
 						<option value="<?php echo $campaign->getId(); ?>"<?php echo $offer->getDefaultCampaignId() == $campaign->getId() ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('campaign_key' => $campaign->getKey(), 'description' => $campaign->getDescription(), 'client_name' => $campaign->getClient()->getClientName()))) ?>"><?php echo $campaign->getDescription() ?></option>
@@ -76,7 +76,7 @@
 				<hr />
 
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="name">Vertical</label>
+					<label class="control-label" for="name">Vertical</label>
 					<select id="vertical" name="vertical[vertical_id]" class="form-control selectize" placeholder="Vertical">
 						<?php foreach ($verticals as $vertical) { ?>
 							<option value="<?php echo $vertical->getId() ?>" <?php echo $offer->getVertical()->getVerticalId() == $vertical->getName() ? "selected" : "" ?> data-data="<?php echo htmlentities(json_encode(array('_id' => (string)$vertical->getId(), 'name' => $vertical->getName(), 'description' => $vertical->getDescription()))) ?>"><?php echo $vertical->getName() ?></option>
@@ -87,7 +87,7 @@
 				<hr />
 	
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="status">Status</label>
+					<label class="control-label" for="status">Status</label>
 					<select class="form-control selectize" name="status" id="status" placeholder="Status">
 						<option value="<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>"<?php echo $offer->getStatus() == \Flux\Offer::OFFER_STATUS_ACTIVE ? ' selected' : ''; ?>>Active</option>
 						<option value="<?php echo \Flux\Offer::OFFER_STATUS_INACTIVE ?>"<?php echo $offer->getStatus() == \Flux\Offer::OFFER_STATUS_INACTIVE ? ' selected' : ''; ?>>Inactive</option>
@@ -97,7 +97,7 @@
 			<div role="tabpanel" class="tab-pane fade in" id="advanced">
 				<div class="help-block">Select how traffic is sent to this offer and configure advanced settings.</div>
 				<div class="form-group">
-					<label class="control-label hidden-xs" for="redirect_type">Redirect Type</label>
+					<label class="control-label" for="redirect_type">Redirect Type</label>
 					<select class="form-control selectize" name="redirect_type" id="redirect_type" placeholder="Redirect Type">
 						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_HOSTED ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Hosted', 'value' => \Flux\Offer::REDIRECT_TYPE_HOSTED, 'description' => 'Send traffic to a landing page you own that uses FluxFE'))) ?>">Hosted</option>
 						<option value="<?php echo \Flux\Offer::REDIRECT_TYPE_REDIRECT ?>"<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? ' selected' : ''; ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Redirect', 'value' => \Flux\Offer::REDIRECT_TYPE_REDIRECT, 'description' => 'Send traffic to another site and fire events with placed pixels'))) ?>">Redirect</option>
@@ -108,17 +108,17 @@
 				<div id="hosted_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_HOSTED ? '': 'display:none;' ?>">
 				
 					<div class="form-group" id="domain_name_form_group">
-						<label class="control-label hidden-xs" for="folder_name">Domain Name</label>
+						<label class="control-label" for="folder_name">Domain Name</label>
 						<input type="text" id="domain_name" name="domain_name" class="form-control" placeholder="Domain to landing page (www.offer-domain.com)" value="<?php echo $offer->getDomainName() ?>" />
 					</div>
 				
 					<div class="form-group" id="folder_name_form_group">
-						<label class="control-label hidden-xs" for="folder_name">Folder Name</label>
+						<label class="control-label" for="folder_name">Folder Name</label>
 						<input type="text" id="folder_name" name="folder_name" class="form-control" placeholder="Folder name containing offer pages (v1, v2, etc)" value="<?php echo $offer->getFolderName() ?>" />
 					</div>
 					
 					<div class="form-group" id="docroot_dir_form_group">
-						<label class="control-label hidden-xs" for="docroot_dir">Document Root</label>
+						<label class="control-label" for="docroot_dir">Document Root</label>
 						<div class="input-group">
 							<input type="text" id="docroot_dir" name="docroot_dir" class="form-control" placeholder="Document root folder (/var/www/sites/...)" value="<?php echo $offer->getDocrootDir() ?>" />
 							<div class="input-group-btn">
@@ -130,7 +130,7 @@
 				
 				<div id="post_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_POST ? '': 'display:none;' ?>">
 					<div class="form-group" id="domain_name_form_group">
-						<label class="control-label hidden-xs" for="split_id">Host &amp; Post Split</label>
+						<label class="control-label" for="split_id">Host &amp; Post Split</label>
 						<select id="split_id" name="split[split_id]" class="form-control" placeholder="select a split to use for fulfillment...">
 							<?php 
 								/* @var $split \Flux\Split */
@@ -144,7 +144,7 @@
 	
 				<div id="redirect_form_group" style="<?php echo $offer->getRedirectType() == \Flux\Offer::REDIRECT_TYPE_REDIRECT ? '': 'display:none;' ?>">
 					 <div class="form-group">
-						<label class="control-label hidden-xs" for="redirect_url">Redirect URL</label>
+						<label class="control-label" for="redirect_url">Redirect URL</label>
 						<textarea id="redirect_url" name="redirect_url" rows="4" class="form-control" placeholder="Redirect URL"><?php echo $offer->getRedirectUrl() ?></textarea>
 					</div>
 				</div>
