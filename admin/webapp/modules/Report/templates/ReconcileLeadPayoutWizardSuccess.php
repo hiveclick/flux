@@ -131,7 +131,7 @@ $(document).ready(function() {
 
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this payout from the system?\n\nIt is better to flag it as unpayable.')) {
-		$.rad.del({ func: '/report/report-lead/<?php echo $report_lead->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/report/report-lead/<?php echo $report_lead->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this payout', 'You have deleted this payout.  You will need to refresh this page to see your changes.');
 			$('#reconcile_lead_payout_search_form').trigger('submit');
 			$('#edit_report_lead_modal').modal('hide');

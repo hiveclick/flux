@@ -17,6 +17,10 @@
 			<label class="control-label" for="comment">Comment</label>
 			<textarea name="comment" id="comment" rows="7" class="form-control" placeholder="Enter Comment..."><?php echo $comment->getComment() ?></textarea>
 		</div>
+		<div class="form-group">
+			<input type="hidden" name="is_multicomment" value="0" />
+			<label><input type="checkbox" name="is_multicomment" value="1" /> Split the comments by lines and insert multiple comments</label>
+		</div>
 		<div class="help-block">
 			You can inject placeholders that will be used within the comment.
 			<table class="table table-responsive">
@@ -33,7 +37,6 @@
 					<td>Full anchor including the keyword and url.  Shortcut for &lt;a href="<code>[url]</code>"&gt;<code>[keyword]</code>&lt;/a&gt;</td>
 				</tr>
 			</table>
-
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -57,7 +60,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($comment->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this comment from the system?')) {
-		$.rad.del({ func: '/admin/comment/<?php echo $comment->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/comment/<?php echo $comment->getId() ?>' }, function() {
 			$.rad.notify('You have deleted this comment', 'You have deleted this comment.  You will need to refresh this page to see your changes.');
 			$('#comment_search_form').trigger('submit');
 		});

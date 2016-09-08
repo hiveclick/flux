@@ -310,7 +310,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($saved_search->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this saved search from the system?')) {
-		$.rad.del({ func: '/admin/saved-search/<?php echo $saved_search->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/saved-search/<?php echo $saved_search->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this saved search', 'You have deleted this saved search.  You will need to refresh this page to see your changes.');
 			$('#saved-search_search_form').trigger('submit');
 		});

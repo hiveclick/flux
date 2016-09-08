@@ -59,7 +59,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($domain_group->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this domain group from the system?')) {
-		$.rad.del({ func: '/admin/domain-group/<?php echo $domain_group->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/domain-group/<?php echo $domain_group->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this domain_group', 'You have deleted this domain group.  You will need to refresh this page to see your changes.');
 			$('#domain_group_search_form').trigger('submit');
 		});

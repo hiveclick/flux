@@ -546,7 +546,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($data_field->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this data field from the system?')) {
-		$.rad.del({ func: '/admin/data-field/<?php echo $data_field->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/data-field/<?php echo $data_field->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this data field', 'You have deleted this data field.  You will need to refresh this page to see your changes.');
 			$('#datafield_search_form').trigger('submit');
 		});

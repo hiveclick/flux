@@ -45,7 +45,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($vertical->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this vertical from the system?')) {
-		$.rad.del({ func: '/admin/vertical/<?php echo $vertical->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/vertical/<?php echo $vertical->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this vertical', 'You have deleted this vertical.  You will need to refresh this page to see your changes.');
 			$('#vertical_search_form').trigger('submit');
 		});

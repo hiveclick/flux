@@ -69,7 +69,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($pingback->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this pingback from the system?')) {
-		$.rad.del({ func: '/admin/pingback/<?php echo $pingback->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/pingback/<?php echo $pingback->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this pingback', 'You have deleted this pingback.  You will need to refresh this page to see your changes.');
 			$('#pingback_search_form').trigger('submit');
 		});

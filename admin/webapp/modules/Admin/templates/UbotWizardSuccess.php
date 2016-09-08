@@ -91,7 +91,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($ubot->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this ubot script from the system?')) {
-		$.rad.del({ func: '/admin/ubot/<?php echo $ubot->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/ubot/<?php echo $ubot->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this ubot script', 'You have deleted this ubot script.');
 			$('#ubot_search_form').trigger('submit');
 		});

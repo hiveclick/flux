@@ -123,7 +123,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($client->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this client from the system?')) {
-		$.rad.del({ func: '/client/client/<?php echo $client->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/client/client/<?php echo $client->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this client', 'You have deleted this client.  You will need to refresh this page to see your changes.');
 			$('#client_search_form').trigger('submit');
 		});

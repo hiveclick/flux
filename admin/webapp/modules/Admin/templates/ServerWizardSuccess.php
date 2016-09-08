@@ -155,7 +155,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($server->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this server from the system?')) {
-		$.rad.del({ func: '/admin/server/<?php echo $server->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/server/<?php echo $server->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this server', 'You have deleted this server.  You will need to refresh this page to see your changes.');
 			$('#server_search_form').trigger('submit');
 		});

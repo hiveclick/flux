@@ -97,7 +97,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
-		$.rad.del({ func: '/admin/traffic-source/<?php echo $traffic_source->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/traffic-source/<?php echo $traffic_source->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this traffic source', 'You have deleted this traffic source.  You will need to refresh this page to see your changes.');
 			$('#traffic-source_search_form').trigger('submit');
 		});

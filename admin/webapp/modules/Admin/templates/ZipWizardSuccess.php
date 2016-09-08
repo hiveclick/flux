@@ -106,7 +106,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($zip->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this zip from the system?')) {
-		$.rad.del({ func: '/admin/zip/<?php echo $zip->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/zip/<?php echo $zip->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this zipcode', 'You have deleted this zipcode.  You will need to refresh this page to see your changes.');
 			$('#zip_search_form').trigger('submit');
 		});

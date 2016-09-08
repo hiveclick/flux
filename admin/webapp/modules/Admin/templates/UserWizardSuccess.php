@@ -160,7 +160,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($user->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
-		$.rad.del({ func: '/admin/user/<?php echo $user->getId() ?>' }, function(data) {
+		$.rad.del('/api', { func: '/admin/user/<?php echo $user->getId() ?>' }, function(data) {
 			$.rad.notify('You have deleted this user', 'You have deleted this user.  You will need to refresh this page to see your changes.');
 			$('#user_search_form').trigger('submit');
 		});

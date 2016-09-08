@@ -16,6 +16,46 @@ class Comment extends Base\Comment
 {
 	static private $_comments;
 
+	private $is_multicomment;
+
+	/**
+	 * @return mixed
+	 */
+	public function getIsMulticomment()
+	{
+		if (is_null($this->is_multicomment)) {
+			$this->is_multicomment = false;
+		}
+		return $this->is_multicomment;
+	}
+
+	/**
+	 * @param mixed $is_multicomment
+	 */
+	public function setIsMulticomment($is_multicomment)
+	{
+		$this->is_multicomment = (boolean)$is_multicomment;
+		$this->addModifiedColumn("is_multicomment");
+	}
+
+	/**
+	 * Inserts a new comment
+	 */
+	function insert() {
+		if ($this->getIsMulticomment()) {
+			// if we have to parse the comments, then do that first
+			$comments = explode("\n", $this->getComment());
+			foreach ($comments as $item) {
+				$comment = new \Flux\Comment();
+				$comment->setComment($item);
+				$comment->setIsMulticomment(false);
+				$comment->insert();
+			}
+		} else {
+			return parent::insert();
+		}
+	}
+
 	/**
 	 * Returns a random comment
 	 * @return string
