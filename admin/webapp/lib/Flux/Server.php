@@ -427,7 +427,7 @@ class Server extends Base\Server {
 		$config_ini_contents = file_get_contents(MO_WEBAPP_DIR . "/meta/frontend/config.ini");
 		$offer_key = $offer->getId();
 		
-		$config_ini_contents = str_replace("[[FE_LIB]]", "/home/fluxfe/frontend/webapp/lib", $config_ini_contents);
+		$config_ini_contents = str_replace("[[FE_LIB]]", "/home/flux/fe/webapp/lib", $config_ini_contents);
 		if (defined("MO_API_URL")) {
 			$config_ini_contents = str_replace("[[API_URL]]", MO_API_URL, $config_ini_contents);
 		} else {
@@ -676,7 +676,7 @@ EOL;
 			throw new \Exception('Virtualhost file already exists and will not be overwritten (' . $offer_key . '.conf)');
 		}
 		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Restarting Apache");
-		$cmd = "nohup /home/fluxfe/frontend/webapp/meta/crons/reload_vhost.sh";
+		$cmd = "nohup /home/flux/fe/webapp/meta/crons/reload_vhost.sh";
 		$apache_response = $this->runRemoteCommand($cmd);
 		// If apache fails to restart, then remove the virtualhost, try again, and throw an error
 		return true;
