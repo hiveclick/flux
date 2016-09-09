@@ -17,8 +17,6 @@ class Ubot extends BasicLink
 
 	private $ubot;
 
-	protected $url;
-
 	/**
 	 * Sets the id field
 	 */
@@ -27,29 +25,6 @@ class Ubot extends BasicLink
 		if (\MongoId::isValid($this->getId()) && $this->getName() == '') {
 			$this->setName($this->getUbot()->getName());
 		}
-		if (\MongoId::isValid($this->getId()) && $this->getUrl() == '') {
-			$this->setUrl($this->getUbot()->getUrl());
-		}
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getUrl()
-	{
-		if (is_null($this->url)) {
-			$this->url = "";
-		}
-		return $this->url;
-	}
-
-	/**
-	 * @param mixed $url
-	 */
-	public function setUrl($url)
-	{
-		$this->url = $url;
-		$this->addModifiedColumn("url");
 	}
 
 	/**

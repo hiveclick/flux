@@ -22,6 +22,7 @@ class UbotQueue extends MongoForm
 	protected $keyword;
 	protected $comment;
 	protected $link;
+	protected $url;
 	protected $name;
 	protected $email;
 
@@ -128,6 +129,26 @@ class UbotQueue extends MongoForm
 			$this->is_processed = false;
 		}
 		return $this->is_processed;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUrl()
+	{
+		if (is_null($this->url)) {
+			$this->url = "";
+		}
+		return $this->url;
+	}
+
+	/**
+	 * @param mixed $url
+	 */
+	public function setUrl($url)
+	{
+		$this->url = $url;
+		$this->addModifiedColumn("url");
 	}
 
 	/**

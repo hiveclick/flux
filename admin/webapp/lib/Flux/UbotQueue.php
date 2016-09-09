@@ -81,18 +81,21 @@ class UbotQueue extends Base\UbotQueue
 
 		foreach ($this->getKeywordArray() as $keyword) {
 			foreach ($ubots as $ubot) {
-				/* @var $ubot_item \Flux\UbotQueue */
-				$ubot_item = new \Flux\UbotQueue();
-				$ubot_item->setComment(\Flux\Comment::getRandomComment());
-				$ubot_item->setName('Sally Beaumont');
-				$ubot_item->setEmail('sally@hotmail.com');
-				$ubot_item->setLink($this->getLink());
-				$ubot_item->setKeyword($keyword);
-				$ubot_item->setUbot($ubot->getId());
-				$ubot_item->setCreatedAt(new \MongoDate());
-				$ubot_item->setExpireAt(new \MongoDate(strtotime("now + 1 day")));
-				$ubot_item->insert();
-				$rows_affected++;
+				foreach ($ubot->getUrls() as $url) {
+					/* @var $ubot_item \Flux\UbotQueue */
+					$ubot_item = new \Flux\UbotQueue();
+					$ubot_item->setComment(\Flux\Comment::getRandomComment());
+					$ubot_item->setName('Sally Beaumont');
+					$ubot_item->setEmail('sally@hotmail.com');
+					$ubot_item->setLink($this->getLink());
+					$ubot_item->setUrl($url);
+					$ubot_item->setKeyword($keyword);
+					$ubot_item->setUbot($ubot->getId());
+					$ubot_item->setCreatedAt(new \MongoDate());
+					$ubot_item->setExpireAt(new \MongoDate(strtotime("now + 1 day")));
+					$ubot_item->insert();
+					$rows_affected++;
+				}
 			}
 			$next_ping_time_in_seconds += 20;
 		}

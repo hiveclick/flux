@@ -54,8 +54,11 @@ $(document).ready(function() {
 		{id:'password', name:'password', field:'password', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
 		}},
-		{id:'url', name:'url', field:'url', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'script_filename', name:'script', field:'script_filename', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
+		}},
+		{id:'urls', name:'urls', field:'urls', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			return value.length + ' urls';
 		}},
 		{id:'active', name:'active', field:'active', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value) {
@@ -64,7 +67,7 @@ $(document).ready(function() {
 				return '<span class="text-muted">No</span>';
 			}
 		}},
-		{id:'type', name:'type', field:'type', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+		{id:'type', name:'type', field:'type', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Ubot::TYPE_COMMENT ?>') {
 				return 'Comment Script';
 			}

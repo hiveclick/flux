@@ -60,7 +60,7 @@ $(document).ready(function() {
 			var ret_val = '<div style="line-height:16pt;">'
 			if (value && value.name) {
 				ret_val += value.name;
-				ret_val += '<div><a href="' + value.url + '">' + value.url + '</a></div>';
+				ret_val += '<div><a href="' + dataContext.url + '">' + dataContext.url + '</a></div>';
 			} else {
 				ret_val += '<i class="text-muted">Unknown</i>';
 			}

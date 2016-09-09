@@ -67,7 +67,7 @@
 				</div>
 				<div class="form-group">
 					<label for="url">Url <span class="small text-muted">(url)<span>: </label>
-					<input type="text" class="form-control" name="url" value="<?php echo $ubot_queue->getUbot()->getUbot()->getUrl() ?>" id="url" />
+					<input type="text" class="form-control" name="url" value="<?php echo $ubot_queue->getUrl() ?>" id="url" />
 				</div>
 			</div>
 		</div>

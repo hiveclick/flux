@@ -28,6 +28,9 @@ class Ubot extends MongoForm
 	protected $active;
 	protected $type;
 	protected $script_filename;
+	protected $rss_url;
+	protected $last_rss_update_at;
+	protected $urls;
 
 	/**
 	 * Constructs new user
@@ -218,4 +221,86 @@ class Ubot extends MongoForm
 		$this->addModifiedColumn("script_filename");
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getRssUrl()
+	{
+		if (is_null($this->rss_url)) {
+			$this->rss_url = "";
+		}
+		return $this->rss_url;
+	}
+
+	/**
+	 * @param mixed $rss_url
+	 */
+	public function setRssUrl($rss_url)
+	{
+		$this->rss_url = $rss_url;
+		$this->addModifiedColumn("rss_url");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLastRssUpdateAt()
+	{
+		if (is_null($this->last_rss_update_at)) {
+			$this->last_rss_update_at = new \MongoDate();
+		}
+		return $this->last_rss_update_at;
+	}
+
+	/**
+	 * @param mixed $last_rss_update_at
+	 */
+	public function setLastRssUpdateAt($last_rss_update_at)
+	{
+		if ($last_rss_update_at instanceof \MongoDate) {
+			$this->last_rss_update_at = $last_rss_update_at;
+		} else if (is_int($last_rss_update_at)) {
+			$this->last_rss_update_at = new \MongoDate($last_rss_update_at);
+		} else if (is_string($last_rss_update_at)) {
+			$this->last_rss_update_at = new \MongoDate(strtotime($last_rss_update_at));
+		}
+		$this->addModifiedColumn("last_rss_update_at");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUrls()
+	{
+		if (is_null($this->urls)) {
+			$this->urls = array();
+		}
+		return $this->urls;
+	}
+
+	/**
+	 * @param mixed $urls
+	 */
+	public function setUrls($urls)
+	{
+		if (is_array($urls)) {
+			$this->urls = array();
+			foreach ($urls as $url) {
+				if (trim($url) == '') { continue; }
+				$this->urls[] = trim($url);
+			}
+		} else if (is_string($urls)) {
+			if (strpos($urls, "\n") !== false) {
+				$this->urls = array();
+				foreach (explode("\n", $urls) as $url) {
+					if (trim($url) == '') { continue; }
+					$this->urls[] = trim($url);
+				}
+			} else if (trim($urls) != '') {
+				$this->urls = array();
+				$this->urls[] = trim($urls);
+			}
+		}
+		$this->addModifiedColumn("urls");
+	}
 }

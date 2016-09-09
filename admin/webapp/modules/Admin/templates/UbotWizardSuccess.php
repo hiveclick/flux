@@ -12,58 +12,84 @@
 		<input type="hidden" name="_id" value="<?php echo $ubot->getId() ?>" />
 	<?php } ?>
 	<div class="modal-body">
-		<div class="help-block">Name this uBot Script</div>
-		<div class="form-group">
-			<label class="control-label" for="name">Name</label>
-			<input type="text" name="name" class="form-control" value="<?php echo $ubot->getName() ?>" />
-		</div>
-		<div class="form-group">
-			<label class="control-label" for="name">Description</label>
-			<input type="text" name="description" class="form-control" value="<?php echo $ubot->getDescription() ?>" />
-		</div>
-		<hr />
-		<div class="form-group">
-			<label class="control-label" for="name">Url</label>
-			<textarea name="url" class="form-control"><?php echo $ubot->getUrl() ?></textarea>
-		</div>
-		<hr />
-		<div class="form-group">
-			<div class="row">
-				<div class="col-xs-9">
-					<label class="control-label" for="active_1">Active</label>
-					<i class="help-block">Set whether this script should be used to generate comments in the queue</i>
-				</div>
-				<div class="col-xs-3 text-right">
-					<input type="hidden" name="active" id="active_0" value="0" />
-					<input type="checkbox" name="active" id="active_1" value="1" <?php echo $ubot->getActive() ? 'checked' : '' ?> />
-				</div>
-			</div>
-		</div>
-		<hr />
-		<div class="help-block">Set the filename and location of the uBot script on the remote server</div>
-		<div class="form-group">
-			<label class="control-label" for="script_filename">Script Filename</label>
-			<textarea name="script_filename" class="form-control"><?php echo $ubot->getScriptFilename() ?></textarea>
-		</div>
-		<hr />
-		<div class="help-block">These additional fields are not required on all scripts, but fill them out if you have them</div>
-		<div class="row">
-			<div class="col-md-6">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="active"><a href="#basic" role="tab" data-toggle="tab">Basic</a></li>
+			<li><a href="#urls" role="tab" data-toggle="tab">Urls</a></li>
+			<li><a href="#login" role="tab" data-toggle="tab">Login</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="basic">
+				<div class="help-block">Name this uBot Script</div>
 				<div class="form-group">
-					<label class="control-label" for="username">Username</label>
-					<input type="text" name="username" class="form-control" value="<?php echo $ubot->getUsername() ?>" />
+					<label class="control-label" for="name">Name</label>
+					<input type="text" name="name" class="form-control" value="<?php echo $ubot->getName() ?>" />
 				</div>
-			</div>
-			<div class="col-md-6">
 				<div class="form-group">
-					<label class="control-label" for="password">Password</label>
-					<input type="text" name="password" class="form-control" value="<?php echo $ubot->getPassword() ?>" />
+					<label class="control-label" for="name">Description</label>
+					<input type="text" name="description" class="form-control" value="<?php echo $ubot->getDescription() ?>" />
+				</div>
+				<hr />
+				<div class="help-block">Set the filename and location of the uBot script on the remote server</div>
+				<div class="form-group">
+					<label class="control-label" for="script_filename">Script Filename</label>
+					<textarea name="script_filename" class="form-control"><?php echo $ubot->getScriptFilename() ?></textarea>
+				</div>
+				<hr />
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-9">
+							<label class="control-label" for="active_1">Active</label>
+							<i class="help-block">Set whether this script should be used to generate comments in the queue</i>
+						</div>
+						<div class="col-xs-3 text-right">
+							<input type="hidden" name="active" id="active_0" value="0" />
+							<input type="checkbox" name="active" id="active_1" value="1" <?php echo $ubot->getActive() ? 'checked' : '' ?> />
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="form-group">
+					<label class="control-label" for="rss_url">RSS Url <span class="text-muted">(Optional)</span></label>
+					<textarea name="rss_url" id="rss_url" class="form-control"><?php echo $ubot->getRssUrl() ?></textarea>
 				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label" for="login_url">Login Url</label>
-			<textarea name="login_url" class="form-control"><?php echo $ubot->getLoginUrl() ?></textarea>
+			<div role="tabpanel" class="tab-pane" id="urls">
+				<div class="help-block">Enter the urls that can have comments added to them.  These urls may be generated from the RSS Url</div>
+				<div class="form-group">
+					<label class="control-label" for="urls">Urls</label>
+					<textarea name="urls" id="urls_textarea" class="form-control" rows="25"><?php echo implode("\n", $ubot->getUrls()) ?></textarea>
+				</div>
+				<div class="text-center">
+					<div class="btn btn-info" id="rss_refresh"><i class="fa fa-rss"></i> Refresh from RSS</div>
+					<p />
+					<div class="text-muted small">RSS Last Updated on <?php echo date('m/d/Y g:i a', $ubot->getLastRssUpdateAt()->sec) ?></div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="login">
+				<div class="help-block">These additional fields are not required on all scripts, but fill them out if you have them</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label" for="username">Username</label>
+							<input type="text" name="username" class="form-control" value="<?php echo $ubot->getUsername() ?>" />
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label" for="password">Password</label>
+							<input type="text" name="password" class="form-control" value="<?php echo $ubot->getPassword() ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="login_url">Login Url</label>
+					<textarea name="login_url" class="form-control"><?php echo $ubot->getLoginUrl() ?></textarea>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -85,6 +111,19 @@ $(document).ready(function() {
 
 	$('#active_1').bootstrapSwitch({
 
+	});
+
+	$('#rss_refresh').on('click', function() {
+		$.rad.get('/api', { func: '/admin/ubot-rss-refresh', _id: '<?php echo $ubot->getId() ?>', rss_url: $('#rss_url').val() }, function(data) {
+			if (data.record) {
+				urls = '';
+				$.each(data.record.urls, function(i, url) {
+					console.log(url);
+					urls += (url + "\n");
+				});
+				$('#urls_textarea').val(urls);
+			}
+		});
 	});
 });
 
