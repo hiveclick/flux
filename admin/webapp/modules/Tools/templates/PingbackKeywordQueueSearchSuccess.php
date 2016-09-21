@@ -21,8 +21,7 @@
 	<div class="help-block">Below is the list of keywords that are pending pingbacks.  As each one is processed, it will be updated with the results</div>
 	<div class="panel panel-primary">
 		<div id='pingback_keyword-header' class='grid-header panel-heading clearfix'>
-			<form id="pingback_keyword_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/pingback-keyword-queue">
+			<form id="pingback_keyword_search_form" method="GET" action="/admin/pingback-keyword-queue">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
@@ -123,7 +122,7 @@ $(document).ready(function() {
 
 	$('#flush-queue').on('click', function() {
 		if (confirm('This will remove everything from the queue.  Are you sure you want to do this?')) {
-			$.rad.post('/api', { func: '/admin/pingback-keyword-queue-flush' }, function() {
+			$.rad.post('/admin/pingback-keyword-queue-flush', { }, function() {
 				$.rad.notify('Queue Flushed', 'The items in the queue have been removed.');
 				$('#pingback_keyword_search_form').trigger('submit');
 			});

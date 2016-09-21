@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Add to Split</h4>
 </div>
-<form action="/api" id="lead_split_form" method="POST">
-	<input type="hidden" name="func" value="/lead/lead-split" />
+<form action="/lead/lead-split" id="lead_split_form" method="POST">
 	<input type="hidden" name="lead" value="<?php echo $lead->getId() ?>" />
 	<input type="hidden" name="disposition" value="<?php echo \Flux\SplitQueue::DISPOSITION_UNFULFILLED ?>" />
 	<div class="modal-body">

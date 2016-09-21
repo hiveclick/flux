@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title" id="myModalLabel">Add New Page</h4>
 </div>
-<form class="form-horizontal" id="offer_page_wizard_form" name="offer_page_wizard_form" method="POST" action="/api" autocomplete="off">
-	<input type="hidden" name="func" value="/offer/offer-page" />
+<form class="form-horizontal" id="offer_page_wizard_form" name="offer_page_wizard_form" method="POST" action="/offer/offer-page" autocomplete="off">
 	<input type="hidden" name="offer_id" value="<?php echo $offer_page->getOffer()->getOfferId() ?>" />
 	<input type="hidden" name="priority" value="100" />
 	<div class="modal-body">

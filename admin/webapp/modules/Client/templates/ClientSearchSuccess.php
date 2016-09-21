@@ -19,8 +19,7 @@
 	<div class="help-block">Clients are owners of exports, offers, and campaigns</div>
 	<div class="panel panel-primary">
 		<div id='client-header' class='grid-header panel-heading clearfix'>
-			<form id="client_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/client/client">
+			<form id="client_search_form" method="GET" action="/client/client">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

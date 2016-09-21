@@ -24,8 +24,7 @@
 	<div class="help-block">These are all the campaigns assigned to the clients and offers</div>
 	<div class="panel panel-primary">
 		<div id='campaign-header' class='grid-header panel-heading clearfix'>
-			<form id="campaign_search_form" class="form-inline" method="GET" action="/api">
-				<input type="hidden" name="func" value="/campaign/campaign">
+			<form id="campaign_search_form" class="form-inline" method="GET" action="/campaign/campaign">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

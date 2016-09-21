@@ -20,8 +20,7 @@
 	<br/>
 	<div class="panel panel-primary">
 		<div id='traffic-source-header' class='grid-header panel-heading clearfix'>
-			<form id="traffic-source_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/traffic-source">
+			<form id="traffic-source_search_form" method="GET" action="/admin/traffic-source">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Reconcile Lead Payout</h4>
 </div>
-<form class="" id="report_lead_form_<?php echo $report_lead->getId() ?>" method="PUT" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/report/report-lead" />
+<form class="" id="report_lead_form_<?php echo $report_lead->getId() ?>" method="PUT" action="/report/report-lead" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $report_lead->getId() ?>" />
 	<input type="hidden" name="lead[lead_id]" value="<?php echo $report_lead->getLead()->getLeadId() ?>" />
 	<div class="modal-body">
@@ -131,7 +130,7 @@ $(document).ready(function() {
 
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this payout from the system?\n\nIt is better to flag it as unpayable.')) {
-		$.rad.del('/api', { func: '/report/report-lead/<?php echo $report_lead->getId() ?>' }, function(data) {
+		$.rad.del('/report/report-lead/<?php echo $report_lead->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this payout', 'You have deleted this payout.  You will need to refresh this page to see your changes.');
 			$('#reconcile_lead_payout_search_form').trigger('submit');
 			$('#edit_report_lead_modal').modal('hide');

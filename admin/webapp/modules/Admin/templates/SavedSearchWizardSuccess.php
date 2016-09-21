@@ -12,8 +12,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($saved_search->getId()) ? 'Edit' : 'Add' ?> Saved Search</h4>
 </div>
-<form id="saved_search_form_<?php echo $saved_search->getId() ?>" method="<?php echo \MongoId::isValid($saved_search->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/saved-search" />
+<form id="saved_search_form_<?php echo $saved_search->getId() ?>" method="<?php echo \MongoId::isValid($saved_search->getId()) ? 'PUT' : 'POST' ?>" action="/admin/saved-search" autocomplete="off" role="form">
 	<input type="hidden" name="is_global" value="0" />
 	<?php if (\MongoId::isValid($saved_search->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $saved_search->getId() ?>" />
@@ -310,7 +309,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($saved_search->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this saved search from the system?')) {
-		$.rad.del('/api', { func: '/admin/saved-search/<?php echo $saved_search->getId() ?>' }, function(data) {
+		$.rad.del('/admin/saved-search/<?php echo $saved_search->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this saved search', 'You have deleted this saved search.  You will need to refresh this page to see your changes.');
 			$('#saved-search_search_form').trigger('submit');
 		});

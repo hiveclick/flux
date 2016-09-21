@@ -8,16 +8,14 @@
 </div>
 <div class="help-block">Import subid reports from advertisers to flag leads as accepted and paid</div>
 <div class="help-block"><b>1)</b> Import file containing lead ids (and optionally payouts)</div>
-<form id="import_lead_payout_form" method="POST" action="/api" enctype="multipart/form-data">
-	<input type="hidden" name="func" value="/report/import-lead-payout-file">
+<form id="import_lead_payout_form" method="POST" action="/report/import-lead-payout-file" enctype="multipart/form-data">
 	<input type="hidden" name="format" value="json" />
 	<div class="form-group text-left">
 		<input type="file" name="filename" value="" />
 	</div>
 	<input class="btn btn-info" type="submit" name="btn_submit" value="upload file" />
 </form>
-<form id="import_lead_payout_confirm_form" method="GET" class="form-inline" action="/api">
-	<input type="hidden" name="func" value="/report/import-lead-payout">
+<form id="import_lead_payout_confirm_form" method="GET" class="form-inline" action="/report/import-lead-payout">
 	<input type="hidden" name="format" value="json" />
 	<div class="help-block"><b>2)</b> Leads below have been verified and payouts will be imported</div>
 	<table class="table">

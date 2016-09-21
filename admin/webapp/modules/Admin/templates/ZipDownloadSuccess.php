@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Download Zip Updates</h4>
 </div>
-<form id="zip_download_form_<?php echo $zip->getId() ?>" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/zip-download-start" />
+<form id="zip_download_form_<?php echo $zip->getId() ?>" method="POST" action="/admin/zip-download-start" autocomplete="off" role="form">
 	<div class="modal-body">
 		<div class="help-block">You can download updates to the zipcode database here.  Updates are available every few months.</div>
 		<div class="text-center">
@@ -37,7 +36,7 @@ $(document).ready(function() {
 });
 
 function findZipProgress() {
-	$.getJSON('/api', {func: '/admin/zip-progress' }, function(data) {
+	$.getJSON('/admin/zip-progress', { }, function(data) {
 		if (data.record) {
 			if (data.record.is_complete || data.record.progress == 100) {
 				$('#zip_download_progress').removeClass('active');

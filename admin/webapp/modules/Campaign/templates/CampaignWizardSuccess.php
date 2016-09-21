@@ -24,8 +24,7 @@
 	<div class="help-block">Associate an offer to a client to create a campaign to use for tracking traffic</div>
 	<br/>
 	<div id="tab-content-container" class="tab-content">
-		<form class="form-horizontal" name="campaign_form" id="campaign_form" method="POST" action="/api" autocomplete="off">
-			<input type="hidden" name="func" value="/campaign/campaign" />
+		<form class="form-horizontal" name="campaign_form" id="campaign_form" method="POST" action="/campaign/campaign" autocomplete="off">
 			<input type="hidden" name="payout" value="0" />
 			<input type="hidden" name="status" value="<?php echo \Flux\Campaign::CAMPAIGN_STATUS_ACTIVE ?>" />
 			<div class="form-group">
@@ -179,7 +178,7 @@ $(document).ready(function() {
 		},
 		onChange: function(value) {
 			if (!value.length) return;
-			$.rad.get('/api', {func:'/offer/offer', _id:value}, function(data) {
+			$.rad.get('/offer/offer', { _id:value}, function(data) {
 				if (data.record) {
 					$('#landing_page').selectize()[0].selectize.clearOptions();
 					$.each(data.record.landing_pages, function(i, item) {

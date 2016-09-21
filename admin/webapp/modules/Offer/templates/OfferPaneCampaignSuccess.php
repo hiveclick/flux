@@ -17,8 +17,7 @@
 	<tbody>
 	</tbody>
 </table>
-<form id="offer_campaign_search_form" method="GET" action="/api">
-	<input type="hidden" name="func" value="/campaign/campaign">
+<form id="offer_campaign_search_form" method="GET" action="/campaign/campaign">
 	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>">
 </form>
 <script>

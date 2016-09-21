@@ -107,7 +107,7 @@ $(document).ready(function() {
 
 	$('#btn_delete').click(function() {
 		if (confirm('Are you sure you want to delete this user and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/admin/user/<?php echo $user->getId() ?>' }, function(data) {
+			$.rad.del('/admin/user/<?php echo $user->getId() ?>', { }, function(data) {
 				$.rad.notify('User Removed', 'This user has been removed from the system.');
 			});
 		}

@@ -8,8 +8,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Clone Fulfillment</h4>
 </div>
-<form id="clone_fulfillment_form" name="export_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/fulfillment" />
+<form id="clone_fulfillment_form" name="export_form" method="POST" action="/admin/fulfillment" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_ACTIVE ?>" />
 	<?php
 	   /* @var $mapping \Flux\FulfillmentMap */ 
@@ -252,7 +251,7 @@ $(document).ready(function() {
 		// Refresh the mailchimp lists based on the api key
 		$mc_api_key = $('#mailchimp_api_key').val();
 		$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-		$.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+		$.get('/lists/list', { apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
 			$select = $('#mailchimp_list').selectize()[0].selectize;
 			$select.clearOptions();
 			data.data.forEach(function(item) {
@@ -263,7 +262,7 @@ $(document).ready(function() {
 	});
 	
 	$('#clone_parse_url').click(function() {
-		$.rad.get('/api', { func: '/admin/build-post-url', 'post_url': $('#post_url').val() }, function(data) {
+		$.rad.get('/admin/build-post-url', { 'post_url': $('#post_url').val() }, function(data) {
 			if (data.record) {
 				$('#post_url').val(data.record.post_url);
 			}
@@ -300,7 +299,7 @@ $(document).ready(function() {
 
 	$('#clone_test_ftp').click(function() {
 		if (confirm('This will test the connection to the FTP server and verify that the username and password is correct.')) {
-			$.rad.get('/api', { func: '/export/test-ftp', ftp_hostname: $('#ftp_hostname').val(), ftp_port: $('#ftp_port').val(), ftp_username: $('#ftp_username').val(), ftp_password: $('#ftp_password').val(), ftp_folder: $('#ftp_folder').val() }, function(data) {
+			$.rad.get('/export/test-ftp', { ftp_hostname: $('#ftp_hostname').val(), ftp_port: $('#ftp_port').val(), ftp_username: $('#ftp_username').val(), ftp_password: $('#ftp_password').val(), ftp_folder: $('#ftp_folder').val() }, function(data) {
 				if (data.record) {
 					$.rad.notify('FTP Connection Successful', 'We were able to connect to the FTP server and verify that it is correct.');
 				}

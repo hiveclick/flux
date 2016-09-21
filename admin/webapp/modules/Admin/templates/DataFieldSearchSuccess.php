@@ -20,8 +20,7 @@
 	<div class="help-block">Data Fields set what data can be collected on the offer pages via request names</div>
 	<div class="panel panel-primary">
 		<div id='datafield-header' class='grid-header panel-heading clearfix'>
-			<form id="datafield_search_form" class="form-inline" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/data-field">
+			<form id="datafield_search_form" class="form-inline" method="GET" action="/admin/data-field">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

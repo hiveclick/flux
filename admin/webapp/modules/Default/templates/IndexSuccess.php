@@ -173,7 +173,7 @@ function drawClickByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('click_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-		chartType: "AreaChart",
+		chartType: "ColumnChart",
 		options: {
 			isStacked: true,
 			animation:{ duration: 250, easing: 'out' },
@@ -229,7 +229,7 @@ function drawTrafficSourceByHourChart(response) {
 	var data = response.getDataTable();
 	var dashboard = new google.visualization.Dashboard(document.getElementById('traffic_source_by_hour_div'));
 	var chart = new google.visualization.ChartWrapper({
-		chartType: "AreaChart",
+		chartType: "ColumnChart",
 		options: {
 			isStacked: true,
 			animation:{ duration: 250, easing: 'out' },

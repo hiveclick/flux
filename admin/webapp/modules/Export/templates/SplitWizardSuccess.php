@@ -9,8 +9,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Add Split</h4>
 </div>
-<form class="" id="split_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/export/split" />
+<form class="" id="split_form" method="POST" action="/export/split" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\Split::SPLIT_STATUS_ACTIVE ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->

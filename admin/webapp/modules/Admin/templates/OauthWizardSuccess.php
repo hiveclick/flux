@@ -15,7 +15,7 @@
 //<!--
 $(document).ready(function() {
 	$('#request_token_btn').click(function() {
-		$('/api', {func: '/admin/oauth-request-auth-url'}, function(data) {
+		$('/admin/oauth-request-auth-url', { }, function(data) {
 			if (data.record.authorization_url) {
 				$('#oauth_request_iframe').attr('src', data.record.authorization_url);
 			} else {

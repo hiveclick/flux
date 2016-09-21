@@ -7,10 +7,9 @@
 ?>
 <div class="help-block">Easily spy on the current traffic received on this offer</div>
 <br/>
-<form class="form-horizontal" id="offer_spy_form" name="offer_spy_form" method="GET" action="/api" autocomplete="off" role="form">
+<form class="form-horizontal" id="offer_spy_form" name="offer_spy_form" method="GET" action="/lead/spy" autocomplete="off" role="form">
 	<input type="hidden" name="last_end_time" value="" />
 	<input type="hidden" name="offer_id[]" value="<?php echo $offer->getId() ?>" />
-	<input type="hidden" name="func" value="/lead/spy" />
 	<input type="hidden" name="sort" value="_e.*.t" />
 	<input type="hidden" name="sord" value="desc" />
 
@@ -120,7 +119,7 @@ $(document).ready(function() {
 		serverSide: true,
 		pageLength: $('#offer_spy_form input[name=limit]').val(),
 		ajax: function(d, callback, settings) {
-			$.rad.get('/api', $('#offer_spy_form').serialize(), function(data) {
+			$.rad.get('/lead/spy', $('#offer_spy_form').serialize(), function(data) {
 				if ($('#run_spy').val() == 'Spy Running') {
 					spy_timeout = setTimeout(function(){
 						$('#spy_table').DataTable().ajax.reload();
@@ -234,7 +233,7 @@ $(document).ready(function() {
 		if(spy_exporting === false) {
 			spy_exporting = true;
 			//$('#wait-animation').show();
-			document.location.href = '/api?func=/lead/spy&type=export&' + $('form[name=offer_spy_form]').serialize();
+			document.location.href = '/lead/spy?type=export&' + $('form[name=offer_spy_form]').serialize();
 			//$('#wait-animation').hide();
 			spy_exporting = false;
 		}

@@ -45512,6 +45512,18 @@ if (typeof jQuery === 'undefined') {
 
 }));
 
+/**
+ * @preserve
+ * Project: Bootstrap Hover Dropdown
+ * Author: Cameron Spear
+ * Version: v2.2.1
+ * Contributors: Mattia Larentis
+ * Dependencies: Bootstrap's Dropdown plugin, jQuery
+ * Description: A simple plugin to enable Bootstrap dropdowns to active on hover and provide a nice user experience.
+ * License: MIT
+ * Homepage: http://cameronspear.com/blog/bootstrap-dropdown-on-hover-plugin/
+ */
+!function(e,n){var o=e();e.fn.dropdownHover=function(t){return"ontouchstart"in document?this:(o=o.add(this.parent()),this.each(function(){function r(){d.parents(".navbar").find(".navbar-toggle").is(":visible")||(n.clearTimeout(a),n.clearTimeout(i),i=n.setTimeout(function(){o.find(":focus").blur(),v.instantlyCloseOthers===!0&&o.removeClass("open"),n.clearTimeout(i),d.attr("aria-expanded","true"),s.addClass("open"),d.trigger(h)},v.hoverDelay))}var a,i,d=e(this),s=d.parent(),u={delay:500,hoverDelay:0,instantlyCloseOthers:!0},l={delay:e(this).data("delay"),hoverDelay:e(this).data("hover-delay"),instantlyCloseOthers:e(this).data("close-others")},h="show.bs.dropdown",c="hide.bs.dropdown",v=e.extend(!0,{},u,t,l);s.hover(function(e){return s.hasClass("open")||d.is(e.target)?void r(e):!0},function(){n.clearTimeout(i),a=n.setTimeout(function(){d.attr("aria-expanded","false"),s.removeClass("open"),d.trigger(c)},v.delay)}),d.hover(function(e){return s.hasClass("open")||s.is(e.target)?void r(e):!0}),s.find(".dropdown-submenu").each(function(){var o,t=e(this);t.hover(function(){n.clearTimeout(o),t.children(".dropdown-menu").show(),t.siblings().children(".dropdown-menu").hide()},function(){var e=t.children(".dropdown-menu");o=n.setTimeout(function(){e.hide()},v.delay)})})}))},e(document).ready(function(){e('[data-hover="dropdown"]').dropdownHover()})}(jQuery,window);
 /*
 PNotify 2.0.1 sciactive.com/pnotify/
 (C) 2014 Hunter Perrin
@@ -46248,7 +46260,7 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 		rad: {
 			ajax: function(options) {
 				options = $.extend(true, {}, this.ajax.options.defaults, options || {});
-				options['data'] = this.ajax.data(options['data']);
+				//options['data'] = this.ajax.data(options['data']);
 
 				if(options['global'] && $.isFunction(options['success'])) {
 					// move success callback so that global success callback is called first
@@ -46261,9 +46273,12 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 						return false;
 					}
 				}
-				
 				if(options['type'] == 'DELETE') {
 					options['url'] += ('?' + options['data']);
+				}
+				var pattern = /^((http|https):\/\/)/;
+				if(!pattern.test(options['url'])) {
+					options['url'] = (options['host'] + options['url']);
 				}
 				this.ajax.setup(options);
 				var xhr = null;
@@ -46608,6 +46623,7 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 			if (dataType == undefined) {
 				dataType = 'json';
 			}
+
 			return $.rad.ajax({
 				type: type,
 				url: url,
@@ -46634,11 +46650,13 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 			if(data == undefined) {
 				data = defaults;
 			}
+			/*
 			if(!$.isPlainObject(data)) {
 				data = $.param(defaults) + '&' + data;
 			} else {
 				data = $.param(data);
-			}	
+			}
+			*/
 
 			return data;
 		},
@@ -46794,6 +46812,8 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 		defaults: {
 			global: true,
 			url: '/api',
+			contentType: false,
+			processData: false,
 			dataType: 'json',
 			data: {
 				format: 'json'
@@ -46894,7 +46914,29 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 			var $buttons = $('input[type="submit"]:enabled, :button:enabled', $form);
 			// disable form buttons
 			$buttons.attr('disabled', true);
-			
+
+			// new code to upload files
+			if ($('input:file', $form).length > 0) {
+				var data = new FormData();
+				var params = $form.serializeArray();
+				data.append('format', 'json');
+				$.each(params, function (i, val) {
+					data.append(val.name, val.value);
+				});
+				if ($('input:file', $form).length > 0) {
+					$('input:file', $form).each(function (i) {
+						var files = $(this)[0].files;
+						for (var i = 0; i < files.length; i++) {
+							data.append($(this).attr('name'), files[i]);
+						}
+					});
+				}
+			} else {
+				var data = $form.serialize();
+			}
+
+			/*
+
 			// If we are uploading files, we have to process the form differently
 			if ($('input:file', $form).length > 0) {
 				var t = new Date().getTime();
@@ -46913,7 +46955,10 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 					// enable form buttons
 					$buttons.attr('disabled', false);
 					//* form submission is complete,,
+					console.log($iframe);
+					console.log($iframe.contents());
 					var response = $iframe.contents().find('pre').html();
+					console.log(response);
 					var data = $.parseJSON(response);
 
 					setTimeout(function() {
@@ -46930,11 +46975,12 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 				});
 				return true;
 			}
+			*/
 			
 			var options = $.extend({
 				url: $form.attr('action'),
 				type: $form.attr('method'),
-				data: $form.serialize()
+				data: data
 			}, _this._options);
 						
 			$.extend(options, {
@@ -46945,7 +46991,6 @@ c.extend(e.styling.bootstrap2,{closer:"icon-remove",pin_up:"icon-pause",pin_down
 					_this.onsuccess(data, textStatus, xhr);
 				}
 			});
-			
 			$.rad.ajax(options);
 			
 			// enable form buttons
@@ -48755,13 +48800,13 @@ if (!jQuery.fn.drag) {
             var columnIndex = getColumnIndex(sortColumnId);
 
             $headers.children().removeClass("slick-header-column-sorted");
-            $headers.find(".slick-sort-indicator").removeClass("slick-sort-indicator-asc slick-sort-indicator-desc");
+            $headers.find(".slick-sort-indicator").removeClass("fa fa-caret-up fa-caret-down");
 
             if (columnIndex != null) {
                 $headers.children().eq(columnIndex)
                     .addClass("slick-header-column-sorted")
                     .find(".slick-sort-indicator")
-                        .addClass(sortAsc ? "slick-sort-indicator-asc" : "slick-sort-indicator-desc");
+                        .addClass(sortAsc ? "fa fa-caret-up" : "fa fa-caret-down");
             }
         }
 		

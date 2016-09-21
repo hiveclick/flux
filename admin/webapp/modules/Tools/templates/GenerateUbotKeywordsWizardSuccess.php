@@ -12,8 +12,7 @@
 		<ul id="tabs" class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="#generate" role="tab" data-toggle="tab">Step #1: Generate Ubot Comments</a></li>
 		</ul>
-		<form method="POST" action="/api" id="generate_ubot_keyword_form">
-			<input type="hidden" name="func" value="/admin/ubot-queue" />
+		<form method="POST" action="/admin/ubot-queue" id="generate_ubot_keyword_form">
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane fade in active" id="generate">
 					<div class="form-group">

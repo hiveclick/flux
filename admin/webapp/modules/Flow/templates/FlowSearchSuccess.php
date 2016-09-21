@@ -20,8 +20,7 @@
 	<tbody>
 	</tbody>
 </table>
-<form id="flow_search_form" method="GET" action="/api">
-	<input type="hidden" name="func" value="/flow/flow">
+<form id="flow_search_form" method="GET" action="/flow/flow">
 </form>
 <script>
 //<!--
@@ -31,7 +30,7 @@ $(document).ready(function() {
 		serverSide: true,
 		pageLength: 15,
 		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
+			url: '/flow/flow',
 			data: $('#flow_search_form').serializeObject()
 		}),
 		searching: false,

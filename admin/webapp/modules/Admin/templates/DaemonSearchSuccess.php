@@ -12,15 +12,14 @@
 <div class="container-fluid">
 	<div class="page-header">
 		<div class="pull-right">
-			<a data-toggle="modal" data-target="#edit_daemon_modal" href="/admin/daemon-wizard" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Daemon</a>
+			<a data-toggle="modal" data-target="#edit_daemon_modal" href="/admin/daemon-wizard" class="btn btn-success"><span class="fa fa-plus"></span> Add New Daemon</a>
 		</div>
 	   <h1>Daemons</h1>
 	</div>
 	<div class="help-block">Daemons are scripts that run constantly in the background checking leads, splits and exports</div>
 	<div class="panel panel-primary">
 		<div id='daemon-header' class='grid-header panel-heading clearfix'>
-			<form id="daemon_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/daemon">
+			<form id="daemon_search_form" method="GET" action="/admin/daemon">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

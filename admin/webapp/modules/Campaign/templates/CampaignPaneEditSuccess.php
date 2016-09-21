@@ -10,8 +10,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Edit Campaign #<?php echo $campaign->getId() ?></h4>
 </div>
-<form action="/api" id="campaign_form" method="PUT">
-	<input type="hidden" name="func" value="/campaign/campaign" />
+<form action="/campaign/campaign" id="campaign_form" method="PUT">
 	<input type="hidden" name="_id" value="<?php echo $campaign->getId() ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->
@@ -225,7 +224,7 @@ $(document).ready(function() {
 		},
 		onChange: function(value) {
 			if (!value.length) return;
-			$.rad.get('/api', {func:'/offer/offer', _id:value}, function(data) {
+			$.rad.get('/offer/offer', { _id:value}, function(data) {
 				if (data.record) {
 					$('#landing_page').selectize()[0].selectize.clearOptions();
 					$.each(data.record.landing_pages, function(i, item) {

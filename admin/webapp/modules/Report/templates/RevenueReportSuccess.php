@@ -186,7 +186,7 @@ function initialize() {
 }
 
 function loadRevenue() {
-	$.rad.get('/api', {func: '/report/report-client', start_date: '<?php echo date('m/1/Y', $revenue_report->getReportDate()->sec) ?>', end_date: '<?php echo date('m/t/Y', $revenue_report->getReportDate()->sec) ?>', ignore_pagination: '1' }, function(data) {
+	$.rad.get('/report/report-client', { start_date: '<?php echo date('m/1/Y', $revenue_report->getReportDate()->sec) ?>', end_date: '<?php echo date('m/t/Y', $revenue_report->getReportDate()->sec) ?>', ignore_pagination: '1' }, function(data) {
 		var revenue_array = new Array();
 		var revenue_total_array = new Array();
 		if (data.entries) {

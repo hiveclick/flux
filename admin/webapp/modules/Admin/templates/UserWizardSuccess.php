@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($user->getId()) ? 'Edit' : 'Add' ?> User</h4>
 </div>
-<form class="" id="user_form_<?php echo $user->getId() ?>" method="<?php echo \MongoId::isValid($user->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/user" />
+<form class="" id="user_form_<?php echo $user->getId() ?>" method="<?php echo \MongoId::isValid($user->getId()) ? 'PUT' : 'POST' ?>" action="/admin/user" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\User::USER_STATUS_ACTIVE ?>" />
 	<?php if (\MongoId::isValid($user->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $user->getId() ?>" />
@@ -148,7 +147,7 @@ $(document).ready(function() {
 
 	$('#generate_token_<?php echo $user->getId() ?>').click(function() {
 		if (confirm('You have chosen to generate a new token.  This will make the existing token invalid and all scripts that use it will BREAK.\n\nAre you sure you want to do this?')) {
-			$.rad.post('/api', { func: '/admin/user-generate-token', _id: '<?php echo $user->getId() ?>' }, function(data) {
+			$.rad.post('/admin/user-generate-token', { _id: '<?php echo $user->getId() ?>' }, function(data) {
 				if (data.record) {
 					$('#token_<?php echo $user->getId() ?>,#token_url_<?php echo $user->getId() ?>').html(data.record.token);
 				}
@@ -160,7 +159,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($user->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
-		$.rad.del('/api', { func: '/admin/user/<?php echo $user->getId() ?>' }, function(data) {
+		$.rad.del('/admin/user/<?php echo $user->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this user', 'You have deleted this user.  You will need to refresh this page to see your changes.');
 			$('#user_search_form').trigger('submit');
 		});

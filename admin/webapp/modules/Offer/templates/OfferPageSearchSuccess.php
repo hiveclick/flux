@@ -31,8 +31,7 @@
 
 <div class="help-block">Shows the pages that have been tracked or found for this offer</div>
 <p />
-<form id="offer_page_organize" method="POST" action="/api">
-	<input type="hidden" name="func" value="/offer/offer-page-organize" />
+<form id="offer_page_organize" method="POST" action="/offer/offer-page-organize">
 	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
 	<div id="offer_pages">
 		<?php

@@ -19,8 +19,7 @@
 	<div class="help-block">These ubot scripts are used to automate comment posting and forum posts.</div>
 	<div class="panel panel-primary">
 		<div id='ubot-header' class='grid-header panel-heading clearfix'>
-			<form id="ubot_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/ubot">
+			<form id="ubot_search_form" method="GET" action="/admin/ubot">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

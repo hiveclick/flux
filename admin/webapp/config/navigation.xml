@@ -279,6 +279,12 @@
                 <class>nav-secondary</class>
                 <permission>1</permission>
             </comments>
+            <rando>
+                <label>Random Data</label>
+                <uri>/admin/rando-search</uri>
+                <class>nav-secondary</class>
+                <permission>1</permission>
+            </rando>
             <servers>
                 <label>Servers</label>
                 <uri>/admin/server-search</uri>

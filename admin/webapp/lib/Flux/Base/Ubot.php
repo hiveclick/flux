@@ -18,6 +18,7 @@ class Ubot extends MongoForm
 {
 
 	const TYPE_COMMENT = 1;
+	const TYPE_PINGOMATIC = 2;
 
 	protected $name;
 	protected $description;

@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($zip->getId()) ? 'Edit' : 'Add' ?> Zipcode</h4>
 </div>
-<form class="" id="zip_form_<?php echo $zip->getId() ?>" method="<?php echo \MongoId::isValid($zip->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/zip" />
+<form class="" id="zip_form_<?php echo $zip->getId() ?>" method="<?php echo \MongoId::isValid($zip->getId()) ? 'PUT' : 'POST' ?>" action="/admin/zip" autocomplete="off" role="form">
 	<?php if (\MongoId::isValid($zip->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $zip->getId() ?>" />
 	<?php } ?>
@@ -106,7 +105,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($zip->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this zip from the system?')) {
-		$.rad.del('/api', { func: '/admin/zip/<?php echo $zip->getId() ?>' }, function(data) {
+		$.rad.del('/admin/zip/<?php echo $zip->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this zipcode', 'You have deleted this zipcode.  You will need to refresh this page to see your changes.');
 			$('#zip_search_form').trigger('submit');
 		});

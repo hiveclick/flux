@@ -13,8 +13,7 @@
 			<li class="active"><a href="#generate" role="tab" data-toggle="tab">Step #1: Generate Pingbacks</a></li>
 			<li class="disabled" id="save_link_li"><a href="#save" role="tab">Step #2: Save Links</a></li>
 		</ul>
-		<form method="POST" action="/api" id="generate_pingback_keyword_form">
-			<input type="hidden" name="func" value="/admin/pingback-keyword-queue" />
+		<form method="POST" action="/admin/pingback-keyword-queue" id="generate_pingback_keyword_form">
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane fade in active" id="generate">
 					<div class="form-group">
@@ -60,7 +59,7 @@
 			$('#set_title_li a').removeAttr('data-toggle', 'tab');
 			$('#progress .progress-bar').css('width', '0%');
 			$('#progress').removeClass('hidden');
-			$.rad.get('/api', {func: '/admin/pingback', ignore_pagination: 1 }, function(data) {
+			$.rad.get('/admin/pingback', {ignore_pagination: 1 }, function(data) {
 				if (data.entries) {
 					var html = "<div style=\"display:none;\">\n";
 					$.each($('#keyword_array').val().split("\n"), function(j, keyword) {

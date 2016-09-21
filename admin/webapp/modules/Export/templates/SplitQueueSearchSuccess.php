@@ -23,8 +23,7 @@
 	<p />
 	<div class="panel panel-primary">
 		<div id='split-header' class='grid-header panel-heading clearfix'>
-			<form id="split_search_form" method="GET" class="form-inline" action="/api">
-				<input type="hidden" name="func" value="/export/split-queue">
+			<form id="split_search_form" method="GET" class="form-inline" action="/export/split-queue">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />
@@ -239,7 +238,7 @@ $(document).ready(function() {
 	slick_grid.slickGetDataView().onRowsChanged.subscribe(function() {
 		$('[data-toggle="tooltip"]').tooltip({container:'body'}).click(function() {
 			var item = $.parseJSON($(this).attr('data-data'));
-			$.rad.put('/api', { func: '/export/split-queue', _id: item._id, disposition: item.disposition }, function(data) {
+			$.rad.put('/export/split-queue', { _id: item._id, disposition: item.disposition }, function(data) {
 				$('#split_search_form').trigger('submit');
 			});
 		});

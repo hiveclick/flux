@@ -47,8 +47,7 @@
 <div class="help-block">Edit the HTML source for this page and push your changes back to the server</div>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<form role="form" method="GET" action="/api" id="load_page_from_server_form" name="load_page_from_server_form">
-			<input type="hidden" name="func" value="/offer/offer-page-source" />
+		<form role="form" method="GET" action="/offer/offer-page-source" id="load_page_from_server_form" name="load_page_from_server_form">
 			<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
 			<div class="form-group">
 				<label class="control-label" for="server_id">Choose the server from where you want to load the page contents:</label>
@@ -67,8 +66,7 @@
 <div id="base_tag_warning" class="alert small alert-warning">
 	If images do not load, you may need to add <code>&lt;base href="http://<?php echo $offer_page->getOffer()->getOffer()->getDomainName() ?>/<?php echo $offer_page->getOffer()->getOffer()->getFolderName() != '' ? $offer_page->getOffer()->getOffer()->getFolderName() . '/' : '' ?>" /&gt;</code> to the top of your template
 </div>
-<form class="form-inline" role="form" method="POST" action="/api" id="push_page_to_server_form" name="push_page_to_server_form">
-	<input type="hidden" name="func" value="/offer/offer-page-source" />
+<form class="form-inline" role="form" method="POST" action="/offer/offer-page-source" id="push_page_to_server_form" name="push_page_to_server_form">
 	<input type="hidden" name="file_path" value="<?php echo $offer_page->getFilePath() ?>" />
 	<input type="hidden" id="push_server_id" name="server_id" value="" />
 	<div class="panel panel-default">
@@ -129,7 +127,7 @@ $(document).ready(function() {
 
 	$('#btn_delete,#btn_delete_sm').click(function() {
 		if (confirm('Are you sure you want to delete this page and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/offer/offer-page/<?php echo $offer_page->getId() ?>' }, function(data) {
+			$.rad.del('/offer/offer-page/<?php echo $offer_page->getId() ?>', { }, function(data) {
 				$.rad.notify('Page Removed', 'This page has been removed from the system.');
 				location.replace('/offer/offer-page-search?_id=<?php echo $offer_page->getOffer()->getOfferId() ?>')
 			});

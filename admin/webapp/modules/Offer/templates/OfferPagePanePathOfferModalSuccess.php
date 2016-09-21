@@ -79,7 +79,7 @@ $(document).ready(function() {
 	var $asset_selectize = $('#offer_page_path_offer_modal_<?php echo $offer_page_path->getPosition() ?>_offer_asset_id').selectize($selectize_options);
 	
 	$('#offer_page_path_offer_modal_<?php echo $offer_page_path->getPosition() ?>_offer_id').selectize().on('change', function() {
-		$.rad.get('/api', { func: '/offer/offer-asset', offer_id: $(this).val() }, function(data) {
+		$.rad.get('/offer/offer-asset', { offer_id: $(this).val() }, function(data) {
 			$('#offer_page_path_offer_modal_<?php echo $offer_page_path->getPosition() ?>_offer_asset_id').html('');
 			if (data.entries) {
 				$.each(data.entries, function(i, item) {

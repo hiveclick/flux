@@ -60,8 +60,7 @@
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="mapping">
-				<form id="export_map_form" name="export_map_form" method="POST" action="/api" autocomplete="off" role="form">
-					<input type="hidden" name="func" value="/admin/fulfillment-map" />
+				<form id="export_map_form" name="export_map_form" method="POST" action="/admin/fulfillment-map" autocomplete="off" role="form">
 					<input type="hidden" name="_id" value="<?php echo $fulfillment->getId() ?>" />
 					<br />
 					<div class="row">
@@ -372,7 +371,7 @@ $(document).ready(function() {
 
 	// delete the client information
 	$('#confirm_delete').click(function() {
-		$.rad.del('/api', {func: '/admin/fulfillment/<?php echo $fulfillment->getId() ?>' }, function() {
+		$.rad.del('/admin/fulfillment/<?php echo $fulfillment->getId() ?>', { }, function() {
 			window.location = '/admin/fulfillment-search';
 		});
 	});

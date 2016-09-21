@@ -28,8 +28,7 @@
 	</div>
 	<div class="help-block">These are all the leads in the system.  Search by offer, campaign, lead name or id.</div>
 	<br/>
-	<form id="lead_search_form" method="GET" action="/api">
-		<input type="hidden" name="func" value="/lead/lead-search">
+	<form id="lead_search_form" method="GET" action="/lead/lead-search">
 		<input type="hidden" name="format" value="json" />
 		<input type="hidden" id="page" name="page" value="1" />
 		<input type="hidden" id="items_per_page" name="items_per_page" value="100" />

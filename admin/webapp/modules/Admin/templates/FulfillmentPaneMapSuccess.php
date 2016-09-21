@@ -53,8 +53,7 @@
 	</div>
 </div>
 
-<form class="form-horizontal" id="export_map_form" name="export_map_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/fulfillment-map" />
+<form class="form-horizontal" id="export_map_form" name="export_map_form" method="POST" action="/admin/fulfillment-map" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $fulfillment->getId() ?>" />
 	<div id="map_groups">
 		<?php

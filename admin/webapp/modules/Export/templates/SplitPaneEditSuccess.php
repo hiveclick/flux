@@ -10,8 +10,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Edit Split</h4>
 </div>
-<form class="" id="split_form" method="PUT" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/export/split" />
+<form class="" id="split_form" method="PUT" action="/export/split" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $split->getId() ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->

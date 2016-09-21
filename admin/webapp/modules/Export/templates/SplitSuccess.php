@@ -291,7 +291,7 @@
 //<!--
 $(document).ready(function() {
 	$('#clear_pid,#clear_pid_sm').click(function() {
-		$.rad.post('/api', { func: '/export/split-clear-pid', _id: '<?php echo $split->getId() ?>' }, function(data) {
+		$.rad.post('/export/split-clear-pid', { _id: '<?php echo $split->getId() ?>' }, function(data) {
 			$.rad.notify('Split PID Cleared', 'The Split PID has been cleared and this split should start promptly.');
 		});
 	});
@@ -306,7 +306,7 @@ $(document).ready(function() {
 
 	// delete the client information
 	$('#confirm_delete').click(function() {
-		$.rad.del('/api', {func: '/export/split/<?php echo $split->getId() ?>' }, function() {
+		$.rad.del('/export/split/<?php echo $split->getId() ?>', { }, function() {
 			window.location = '/export/split-search';
 		});
 	});

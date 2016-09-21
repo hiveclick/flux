@@ -56,6 +56,13 @@
     DocumentRoot /home/flux/api/docroot
     ServerName api.flux.dev
 
+    # Always set these headers.
+    Header always set Access-Control-Allow-Origin "http://www.flux.dev"
+    Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+    Header always set Access-Control-Max-Age "1000"
+    Header always set Access-Control-Allow-Headers "x-requested-with, Content-Type, origin, authorization, accept, client-security-token"
+    Header always set Content-Security-Policy "default-src *.flux.dev;"
+
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !/$
     RewriteRule ^/([^.]+)/([^.]+)/([a-z0-9]+)$ /index.php?module=$1&action=$2&_id=$3 [L,QSA]

@@ -4,8 +4,7 @@
 ?>
 <div class="panel panel-primary">
 	<div id='split-lead-fulfilled-header' class='grid-header panel-heading clearfix'>
-		<form id="split-lead-fulfilled-form" method="GET" action="/api" class="form-inline">
-			<input type="hidden" name="func" value="/lead/lead-split" />
+		<form id="split-lead-fulfilled-form" method="GET" action="/lead/lead-split" class="form-inline">
 			<input type="hidden" name="format" value="json" />
 			<input type="hidden" id="page" name="page" value="1" />
 			<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

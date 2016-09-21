@@ -10,8 +10,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($client->getId()) ? 'Edit' : 'Add' ?> Client</h4>
 </div>
-<form id="client_form_<?php echo $client->getId() ?>" method="<?php echo \MongoId::isValid($client->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/client/client" />
+<form id="client_form_<?php echo $client->getId() ?>" method="<?php echo \MongoId::isValid($client->getId()) ? 'PUT' : 'POST' ?>" action="/client/client" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\Client::CLIENT_STATUS_ACTIVE ?>" />
 	<?php if (\MongoId::isValid($client->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $client->getId() ?>" />
@@ -123,7 +122,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($client->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this client from the system?')) {
-		$.rad.del('/api', { func: '/client/client/<?php echo $client->getId() ?>' }, function(data) {
+		$.rad.del('/client/client/<?php echo $client->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this client', 'You have deleted this client.  You will need to refresh this page to see your changes.');
 			$('#client_search_form').trigger('submit');
 		});

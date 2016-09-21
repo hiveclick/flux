@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Edit Offer Page</h4>
 </div>
-<form id="offer_page_edit_form" method="PUT" action="/api" autocomplete="off">
-	<input type="hidden" name="func" value="/offer/offer-page" />
+<form id="offer_page_edit_form" method="PUT" action="/offer/offer-page" autocomplete="off">
 	<input type="hidden" name="_id" value="<?php echo $offer_page->getId() ?>" />
 	<input type="hidden" name="offer_id" value="<?php echo $offer_page->getOffer()->getOfferId() ?>" />
 	<input type="hidden" name="preview_url" value="<?php echo $offer_page->getPreviewUrl() ?>" />

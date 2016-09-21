@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Add Note to Lead</h4>
 </div>
-<form action="/api" id="lead_note_form" method="POST">
-	<input type="hidden" name="func" value="/lead/lead-note" />
+<form action="/lead/lead-note" id="lead_note_form" method="POST">
 	<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 	<div class="modal-body">
 		<div class="help-block">Add a note to this client using the form below</div>

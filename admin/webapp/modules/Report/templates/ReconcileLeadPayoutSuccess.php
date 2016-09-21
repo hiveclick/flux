@@ -18,8 +18,7 @@
 	<div class="help-block">Reconcile leads that need to be paid out to publishers</div>
 	<div class="panel panel-primary">
 		<div id='reconcile_lead_payout-header' class='grid-header panel-heading clearfix'>
-			<form id="reconcile_lead_payout_search_form" method="GET" class="form-inline" action="/api">
-				<input type="hidden" name="func" value="/report/report-lead">
+			<form id="reconcile_lead_payout_search_form" method="GET" class="form-inline" action="/report/report-lead">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

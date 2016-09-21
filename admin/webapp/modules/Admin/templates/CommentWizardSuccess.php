@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($comment->getId()) ? 'Edit' : 'Add' ?> Comment</h4>
 </div>
-<form class="" id="comment_form_<?php echo $comment->getId() ?>" method="<?php echo \MongoId::isValid($comment->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/comment" />
+<form class="" id="comment_form_<?php echo $comment->getId() ?>" method="<?php echo \MongoId::isValid($comment->getId()) ? 'PUT' : 'POST' ?>" action="/admin/comment" autocomplete="off" role="form">
 	<?php if (\MongoId::isValid($comment->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $comment->getId() ?>" />
 	<?php } ?>
@@ -60,7 +59,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($comment->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this comment from the system?')) {
-		$.rad.del('/api', { func: '/admin/comment/<?php echo $comment->getId() ?>' }, function() {
+		$.rad.del('/admin/comment/<?php echo $comment->getId() ?>', { }, function() {
 			$.rad.notify('You have deleted this comment', 'You have deleted this comment.  You will need to refresh this page to see your changes.');
 			$('#comment_search_form').trigger('submit');
 		});

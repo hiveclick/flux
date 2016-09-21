@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($traffic_source->getId()) ? 'Edit' : 'Add' ?> Traffic Source</h4>
 </div>
-<form id="traffic_source_form_<?php echo $traffic_source->getId() ?>" method="<?php echo \MongoId::isValid($traffic_source->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/traffic-source" />
+<form id="traffic_source_form_<?php echo $traffic_source->getId() ?>" method="<?php echo \MongoId::isValid($traffic_source->getId()) ? 'PUT' : 'POST' ?>" action="/admin/traffic-source" autocomplete="off" role="form">
 	<?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $traffic_source->getId() ?>" />
 	<?php } ?>
@@ -35,6 +34,7 @@
 				<option value="fb" <?php echo ($traffic_source->getIcon() == 'fb') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Facebook', 'value' => 'fb', 'description' => 'Facebook Ads', 'icon' => 'fb'))) ?>">Facebook</option>
 				<option value="trafficvance" <?php echo ($traffic_source->getIcon() == 'trafficvance') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'TrafficVance', 'value' => 'trafficvance', 'description' => 'TrafficVance Banner Exchange', 'icon' => 'trafficvance'))) ?>">TrafficVance</option>
 				<option value="email" <?php echo ($traffic_source->getIcon() == 'email') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'Obmedia', 'value' => 'email', 'description' => 'Obmedia Email Platform', 'icon' => 'email'))) ?>">Obmedia</option>
+				<option value="revcontent" <?php echo ($traffic_source->getIcon() == 'revcontent') ? 'selected' : '' ?> data-data="<?php echo htmlentities(json_encode(array('name' => 'RevContent', 'value' => 'revcontent', 'description' => 'Revcontent Banner Platform', 'icon' => 'revcontent'))) ?>">Revcontent</option>
 			</select>
 		</div>
 
@@ -97,7 +97,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($traffic_source->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
-		$.rad.del('/api', { func: '/admin/traffic-source/<?php echo $traffic_source->getId() ?>' }, function(data) {
+		$.rad.del('/admin/traffic-source/<?php echo $traffic_source->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this traffic source', 'You have deleted this traffic source.  You will need to refresh this page to see your changes.');
 			$('#traffic-source_search_form').trigger('submit');
 		});

@@ -19,8 +19,7 @@
 	<div class="help-block">These random comments are used to post comments on forums and blogs.  They are also used for pingbacks.</div>
 	<div class="panel panel-primary">
 		<div id='comment-header' class='grid-header panel-heading clearfix'>
-			<form id="comment_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/comment">
+			<form id="comment_search_form" method="GET" action="/admin/comment">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

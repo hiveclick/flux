@@ -19,8 +19,7 @@
 	<div class="help-block">You can save custom searches here and use them throughout the system.</div>
 	<div class="panel panel-primary">
 		<div id='saved-search-header' class='grid-header panel-heading clearfix'>
-			<form id="saved-search_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/saved-search">
+			<form id="saved-search_search_form" method="GET" action="/admin/saved-search">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

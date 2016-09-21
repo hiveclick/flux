@@ -46,9 +46,7 @@ $(document).ready(function() {
 	/* Validate the mapping function */
 	$('#btn_validate').click(function() {
 		var params = $('#fulfillment_map_modal_form').serialize();
-		params += "&func=/admin/fulfillment-map-validate";
-		console.log(params);
-		$.rad.post('/api', params, function(data) {
+		$.rad.post('/admin/fulfillment-map-validate', params, function(data) {
 			$.rad.notify('Function validated', 'Validation was successful for this function');
 		});
 	});

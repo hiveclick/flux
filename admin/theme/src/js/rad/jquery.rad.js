@@ -141,9 +141,12 @@
 						return false;
 					}
 				}
-				
 				if(options['type'] == 'DELETE') {
 					options['url'] += ('?' + options['data']);
+				}
+				var pattern = /^((http|https):\/\/)/;
+				if(!pattern.test(options['url'])) {
+					options['url'] = (options['host'] + options['url']);
 				}
 				this.ajax.setup(options);
 				var xhr = null;
@@ -488,6 +491,7 @@
 			if (dataType == undefined) {
 				dataType = 'json';
 			}
+
 			return $.rad.ajax({
 				type: type,
 				url: url,
@@ -514,11 +518,14 @@
 			if(data == undefined) {
 				data = defaults;
 			}
+
 			if(!$.isPlainObject(data)) {
-				data = $.param(defaults) + '&' + data;
+				if (!(data instanceof FormData)) {
+					data = $.param(defaults) + '&' + data;
+				}
 			} else {
 				data = $.param(data);
-			}	
+			}
 
 			return data;
 		},
@@ -674,6 +681,8 @@
 		defaults: {
 			global: true,
 			url: '/api',
+			contentType: false,
+			processData: false,
 			dataType: 'json',
 			data: {
 				format: 'json'
@@ -774,7 +783,29 @@
 			var $buttons = $('input[type="submit"]:enabled, :button:enabled', $form);
 			// disable form buttons
 			$buttons.attr('disabled', true);
-			
+
+			// new code to upload files
+			if ($('input:file', $form).length > 0) {
+				var data = new FormData();
+				var params = $form.serializeArray();
+				data.append('format', 'json');
+				$.each(params, function (i, val) {
+					data.append(val.name, val.value);
+				});
+				if ($('input:file', $form).length > 0) {
+					$('input:file', $form).each(function (i) {
+						var files = $(this)[0].files;
+						for (var i = 0; i < files.length; i++) {
+							data.append($(this).attr('name'), files[i]);
+						}
+					});
+				}
+			} else {
+				var data = $form.serialize();
+			}
+
+			/*
+
 			// If we are uploading files, we have to process the form differently
 			if ($('input:file', $form).length > 0) {
 				var t = new Date().getTime();
@@ -793,7 +824,10 @@
 					// enable form buttons
 					$buttons.attr('disabled', false);
 					//* form submission is complete,,
+					console.log($iframe);
+					console.log($iframe.contents());
 					var response = $iframe.contents().find('pre').html();
+					console.log(response);
 					var data = $.parseJSON(response);
 
 					setTimeout(function() {
@@ -810,11 +844,12 @@
 				});
 				return true;
 			}
+			*/
 			
 			var options = $.extend({
 				url: $form.attr('action'),
 				type: $form.attr('method'),
-				data: $form.serialize()
+				data: data
 			}, _this._options);
 						
 			$.extend(options, {
@@ -825,7 +860,6 @@
 					_this.onsuccess(data, textStatus, xhr);
 				}
 			});
-			
 			$.rad.ajax(options);
 			
 			// enable form buttons

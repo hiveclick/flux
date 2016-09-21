@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title" id="myModalLabel">Fulfill Lead</h4>
 </div>
-<form id="lead_fulfill_manual_form" action="/api" method="POST">
-	<input type="hidden" name="func" value="/lead/manual-fulfill-custom" />
+<form id="lead_fulfill_manual_form" action="/lead/manual-fulfill-custom" method="POST">
 	<input type="hidden" name="test" value="1" />
 	<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 	<div class="modal-body">

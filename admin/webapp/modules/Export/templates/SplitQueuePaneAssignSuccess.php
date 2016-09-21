@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title" id="myModalLabel">Assign to Split</h4>
 </div>
-<form id="split_queue_assign_form" action="/api" method="PUT">
-	<input type="hidden" name="func" value="/export/split-queue" />
+<form id="split_queue_assign_form" action="/export/split-queue" method="PUT">
 	<input type="hidden" name="test" value="0" />
 	<input type="hidden" name="_id" value="<?php echo $split_queue->getId() ?>" />
 	<input type="hidden" name="is_catch_all" value="0" />

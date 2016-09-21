@@ -414,8 +414,7 @@
 <!-- Add Note modal -->
 <div class="modal fade" id="add_note_modal"><div class="modal-dialog"><div class="modal-content">
 	<div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title">Add Note to Lead</h4></div>
-	<form action="/api" id="lead_note_form" method="POST">
-		<input type="hidden" name="func" value="/lead/lead-note" />
+	<form action="/lead/lead-note" id="lead_note_form" method="POST">
 		<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 		<div class="modal-body">
 			<div class="help-block">Add a note to this client using the form below</div>
@@ -486,7 +485,7 @@
 $(document).ready(function() {
 	// delete the client information
 	$('#confirm_delete').click(function() {
-		$.rad.del('/api', {func: '/lead/lead/<?php echo $lead->getId() ?>' }, function() {
+		$.rad.del('/lead/lead/<?php echo $lead->getId() ?>', { }, function() {
 			window.location = '/lead/lead-search';
 		});
 	});
@@ -494,7 +493,7 @@ $(document).ready(function() {
 	$('#lead_note_form').form(function(data) {
 		$.rad.notify('Note Saved', 'The note has been added to the lead successfully.');
 
-		$.rad.get('/api', { func: '/lead/lead', _id: '<?php echo $lead->getId() ?>' }, function(data) {
+		$.rad.get('/lead/lead', { _id: '<?php echo $lead->getId() ?>' }, function(data) {
 			if (data.record && data.record.notes) {
 				$('#note_tbody').html('');
 				notes = data.record.notes;
@@ -689,7 +688,7 @@ $(document).ready(function() {
 });
 
 function confirmLeadSplitDelete(_id) {
-	$.rad.del('/api', { func: '/lead/lead-split/' + _id }, function(data) {
+	$.rad.del('/lead/lead-split/' + _id, { }, function(data) {
 		$('#lead_split_item_' + _id).trigger('remove', {_id: _id });
 	});
 }

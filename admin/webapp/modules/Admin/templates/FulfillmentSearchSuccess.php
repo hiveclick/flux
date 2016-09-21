@@ -18,8 +18,7 @@
 	<div class="help-block">Leads can be exported out of the system through various ways.  These fulfilllment handlers take care of formatting the outgoing lead data in the appropriate format.</div>
 	<div class="panel panel-primary">
 		<div id='fulfillment-header' class='grid-header panel-heading clearfix'>
-			<form id="fulfillment_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/fulfillment">
+			<form id="fulfillment_search_form" method="GET" action="/admin/fulfillment">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

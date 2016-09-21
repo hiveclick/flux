@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($server->getId()) ? 'Edit' : 'Add' ?> Server</h4>
 </div>
-<form class="" id="server_form_<?php echo $server->getId() ?>" method="<?php echo \MongoId::isValid($server->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/server" />
+<form class="" id="server_form_<?php echo $server->getId() ?>" method="<?php echo \MongoId::isValid($server->getId()) ? 'PUT' : 'POST' ?>" action="/admin/server" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\Server::SERVER_STATUS_ACTIVE ?>" />
 	<?php if (\MongoId::isValid($server->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $server->getId() ?>" />
@@ -143,7 +142,7 @@ $(document).ready(function() {
 	}, {keep_form:1});
 	
 	$('#btn_lookup_hostname').click(function() {
-		$.rad.get('/api', { func: '/admin/server-lookup-hostname', ip_address: $('#ip_address').val(), root_username: $('#root_username').val(), root_password: $('#root_password').val() }, function(data) {
+		$.rad.get('/admin/server-lookup-hostname', { ip_address: $('#ip_address').val(), root_username: $('#root_username').val(), root_password: $('#root_password').val() }, function(data) {
 			if (data.record && data.record.hostname) {
 				$('#hostname').val(data.record.hostname);
 				$('#hostname').addClass('focus');
@@ -155,7 +154,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($server->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this server from the system?')) {
-		$.rad.del('/api', { func: '/admin/server/<?php echo $server->getId() ?>' }, function(data) {
+		$.rad.del('/admin/server/<?php echo $server->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this server', 'You have deleted this server.  You will need to refresh this page to see your changes.');
 			$('#server_search_form').trigger('submit');
 		});

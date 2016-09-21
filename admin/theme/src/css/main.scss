@@ -33,6 +33,9 @@ body {
 #main-navbar ul li ul.dropdown-menu { right: auto }
 #main-navbar ul li ul.dropdown-menu::before { left:12px;right:auto }
 #main-navbar ul li ul.dropdown-menu::after { left:13px;right:auto }
+#main-navbar ul li:nth-last-child(2) ul.dropdown-menu { left: auto;right:0; }
+#main-navbar ul li:nth-last-child(2) ul.dropdown-menu::before { left:12px;left:auto;right:0; }
+#main-navbar ul li:nth-last-child(2) ul.dropdown-menu::after { left:13px;left:auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu { left: auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu::before { left:12px;left:auto;right:0; }
 #main-navbar ul li:last-child ul.dropdown-menu::after { left:13px;left:auto;right:0; }

@@ -10,6 +10,11 @@
 		<!-- Default site css -->
 		<script type="text/javascript" src="/js/main.min.js"></script>
 		<link href="/css/main.min.css" rel="stylesheet">
+		<script>
+			//<!--
+			$.rad.ajax.options.defaults.host = '<?php echo MO_API_URL ?>';
+			//-->
+		</script>
 	</head>
 	<body>
 		<nav class="navbar navbar-fixed-top navbar-inverse navbar-collapse" role="navigation">

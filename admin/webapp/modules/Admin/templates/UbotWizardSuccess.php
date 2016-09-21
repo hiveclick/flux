@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($ubot->getId()) ? 'Edit' : 'Add' ?> Ubot Script</h4>
 </div>
-<form class="" id="ubot_form_<?php echo $ubot->getId() ?>" method="<?php echo \MongoId::isValid($ubot->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/ubot" />
+<form class="" id="ubot_form_<?php echo $ubot->getId() ?>" method="<?php echo \MongoId::isValid($ubot->getId()) ? 'PUT' : 'POST' ?>" action="/admin/ubot" autocomplete="off" role="form">
 	<?php if (\MongoId::isValid($ubot->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $ubot->getId() ?>" />
 	<?php } ?>
@@ -58,10 +57,18 @@
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="urls">
+				<div class="help-block">Select the type of ubot script you want to run</div>
+				<div class="form-group">
+					<label class="control-label" for="type">Script Type</label>
+					<select name="type" id="type">
+						<option value="<?php echo \Flux\Ubot::TYPE_COMMENT ?>" <?php echo $ubot->getType() == \Flux\Ubot::TYPE_COMMENT ? 'selected' : '' ?>>This is a commenting script and will use the urls below</option>
+						<option value="<?php echo \Flux\Ubot::TYPE_PINGOMATIC ?>" <?php echo $ubot->getType() == \Flux\Ubot::TYPE_PINGOMATIC ? 'selected' : '' ?>>This is a ping-o-matic script and will be assigned a url</option>
+					</select>
+				</div>
 				<div class="help-block">Enter the urls that can have comments added to them.  These urls may be generated from the RSS Url</div>
 				<div class="form-group">
 					<label class="control-label" for="urls">Urls</label>
-					<textarea name="urls" id="urls_textarea" class="form-control" rows="25"><?php echo implode("\n", $ubot->getUrls()) ?></textarea>
+					<textarea name="urls" id="urls_textarea" class="form-control" rows="25" <?php echo $ubot->getType() == \Flux\Ubot::TYPE_PINGOMATIC ? 'DISABLED' : '' ?>><?php echo implode("\n", $ubot->getUrls()) ?></textarea>
 				</div>
 				<div class="text-center">
 					<div class="btn btn-info" id="rss_refresh"><i class="fa fa-rss"></i> Refresh from RSS</div>
@@ -113,8 +120,18 @@ $(document).ready(function() {
 
 	});
 
+	$('#type').selectize({
+		onChange: function(value) {
+			if (value == '<?php echo \Flux\Ubot::TYPE_COMMENT ?>') {
+				$('#urls_textarea').removeAttr('disabled');
+			} else {
+				$('#urls_textarea').attr('disabled', 'disabled');
+			}
+		}
+	});
+
 	$('#rss_refresh').on('click', function() {
-		$.rad.get('/api', { func: '/admin/ubot-rss-refresh', _id: '<?php echo $ubot->getId() ?>', rss_url: $('#rss_url').val() }, function(data) {
+		$.rad.get('/admin/ubot-rss-refresh', { _id: '<?php echo $ubot->getId() ?>', rss_url: $('#rss_url').val() }, function(data) {
 			if (data.record) {
 				urls = '';
 				$.each(data.record.urls, function(i, url) {
@@ -130,7 +147,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($ubot->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this ubot script from the system?')) {
-		$.rad.del('/api', { func: '/admin/ubot/<?php echo $ubot->getId() ?>' }, function(data) {
+		$.rad.del('/admin/ubot/<?php echo $ubot->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this ubot script', 'You have deleted this ubot script.');
 			$('#ubot_search_form').trigger('submit');
 		});

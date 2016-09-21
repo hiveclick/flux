@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Push offer to server</h4>
 </div>
-<form class="form-horizontal" id="offer_server_form" name="offer_server_form" method="POST" action="/api" autocomplete="off">
-	<input type="hidden" name="func" value="/Offer/PushToServer" />
+<form class="form-horizontal" id="offer_server_form" name="offer_server_form" method="POST" action="/Offer/PushToServer" autocomplete="off">
 	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>" />
 	<input type="hidden" id="force_overwrite" name="force_overwrite" value="0" />
 	<div class="modal-body">

@@ -2,8 +2,7 @@
 	/* @var $offer \Flux\Offer */
 	$offer = $this->getContext()->getRequest()->getAttribute('offer', array());
 ?>
-<form id="offer-lead-form" method="GET" action="/api">
-	<input type="hidden" name="func" value="/lead/lead-search" />
+<form id="offer-lead-form" method="GET" action="/lead/lead-search">
 	<input type="hidden" name="format" value="json" />
 	<input type="hidden" id="page" name="page" value="1" />
 	<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

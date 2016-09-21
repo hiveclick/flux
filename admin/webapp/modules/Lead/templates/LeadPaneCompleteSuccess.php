@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Complete Lead</h4>
 </div>
-<form class="form-horizontal" id="lead_complete_form" name="lead_complete_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/lead/lead-complete" />
+<form class="form-horizontal" id="lead_complete_form" name="lead_complete_form" method="POST" action="/lead/lead-complete" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 	<div class="modal-body">
 		Use this form attempt to complete this lead using lookups

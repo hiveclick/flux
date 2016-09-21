@@ -20,8 +20,7 @@
 	<div class="panel panel-info">
 		<div id='lead-header' class='grid-header panel-heading clearfix'>Report Filters</div>
 		<div class="panel-body">
-			<form id="lead_payout_report_search_form" method="GET" class="" action="/api">
-				<input type="hidden" name="func" value="/report/lead-payout-report">
+			<form id="lead_payout_report_search_form" method="GET" class="" action="/report/lead-payout-report">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

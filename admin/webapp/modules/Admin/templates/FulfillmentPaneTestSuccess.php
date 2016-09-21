@@ -8,9 +8,8 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Test Fulfillment</h4>
 </div>
-<form id="fulfillment_test_form" name="fulfillment_test_form" method="POST" action="/api" autocomplete="off" role="form">
+<form id="fulfillment_test_form" name="fulfillment_test_form" method="POST" action="/admin/fulfillment-test" autocomplete="off" role="form">
 	<input type="hidden" name="fulfillment" value="<?php echo $fulfillment->getId() ?>" />
-	<input type="hidden" name="func" value="/admin/fulfillment-test" />
 	<div class="modal-body">
 		<div class="help-block">Enter a lead id to test this fulfillment and see what would be submitted</div>
 		<div class="form-group">

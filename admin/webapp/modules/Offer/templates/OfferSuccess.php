@@ -224,7 +224,7 @@
 $(document).ready(function() {
 	// delete the client information
 	$('#confirm_delete').click(function() {
-		$.rad.del('/api', {func: '/offer/offer/<?php echo $offer->getId() ?>' }, function() {
+		$.rad.del('/offer/offer/<?php echo $offer->getId() ?>', { }, function() {
 			window.location = '/offer/offer-search';
 		});
 	});
@@ -248,7 +248,7 @@ $(document).ready(function() {
 
 	$('#pages').delegate('.offer_page_item', 'remove', function(event, obj) {
 		if (obj._id) {
-			$.rad.del('/api', { func: '/offer/offer-page/' + obj._id }, function(data) {
+			$.rad.del('/offer/offer-page/' + obj._id, { }, function(data) {
 				$(this).fadeOut(function() {
 					$.rad.notify('Offer Page Deleted', 'The offer page has been deleted from the system');
 				});

@@ -11,8 +11,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Edit <?php echo $offer->getName() ?> Offer</h4>
 </div>
-<form action="/api" id="offer_form" method="PUT">
-	<input type="hidden" name="func" value="/offer/offer" />
+<form action="/offer/offer" id="offer_form" method="PUT">
 	<input type="hidden" name="_id" value="<?php echo $offer->getId() ?>" />
 	<div class="modal-body">
 		<!-- Nav tabs -->

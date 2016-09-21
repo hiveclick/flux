@@ -85,8 +85,9 @@ class UbotQueue extends Base\UbotQueue
 					/* @var $ubot_item \Flux\UbotQueue */
 					$ubot_item = new \Flux\UbotQueue();
 					$ubot_item->setComment(\Flux\Comment::getRandomComment());
-					$ubot_item->setName('Sally Beaumont');
-					$ubot_item->setEmail('sally@hotmail.com');
+					$rando = \Flux\Rando::getRandom();
+					$ubot_item->setName($rando->getName());
+					$ubot_item->setEmail($rando->getEmail());
 					$ubot_item->setLink($this->getLink());
 					$ubot_item->setUrl($url);
 					$ubot_item->setKeyword($keyword);

@@ -32,8 +32,7 @@
 	<div class="clearfix"></div>
 	<hr />
 </div>
-<form class="form-horizontal" id="offer_page_flow_form" name="offer_page_flow_form" method="PUT" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/offer/offer-page-flow" />
+<form class="form-horizontal" id="offer_page_flow_form" name="offer_page_flow_form" method="PUT" action="/offer/offer-page-flow" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $offer_page->getId() ?>" />
 	<div id="path_offers">
 		

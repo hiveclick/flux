@@ -14,8 +14,7 @@
 	<tbody>
 	</tbody>
 </table>
-<form id="offer_asset_search_form" method="GET" action="/api">
-	<input type="hidden" name="func" value="/offer/offer-asset">
+<form id="offer_asset_search_form" method="GET" action="/offer/offer-asset">
 	<input type="hidden" name="offer_id" value="<?php echo $offer->getId() ?>">
 </form>
 <script>
@@ -26,7 +25,7 @@ $(document).ready(function() {
 		serverSide: true,
 		pageLength: 15,
 		ajax: $.fn.dataTable.pageCache({
-			url: '/api',
+			url: '/offer/offer-asset',
 			data: $('#offer_asset_search_form').serializeObject()
 		}),
 		searching: false,

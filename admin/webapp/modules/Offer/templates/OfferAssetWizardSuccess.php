@@ -474,7 +474,7 @@ $(document).ready(function() {
 	
 	$('#btn_delete').click(function() {
 		if (confirm('Are you sure you want to remove this asset from this offer?')) {
-			$.rad.del('/api', { func: '/offer/offer-asset/<?php echo $offer_asset->getId() ?>', '_id': '<?php echo $offer_asset->getId() ?>' }, function(data) {
+			$.rad.del('/offer/offer-asset/<?php echo $offer_asset->getId() ?>', { '_id': '<?php echo $offer_asset->getId() ?>' }, function(data) {
 				$.rad.notify('Asset Deleted', 'This asset has been removed from the system.');
 				location.replace('/offer/offer?_id=<?php echo $offer_asset->getOfferId() ?>#tab-assets');
 			});

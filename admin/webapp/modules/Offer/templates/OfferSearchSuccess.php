@@ -22,8 +22,7 @@
 	<div class="help-block">These are all the offers in the system.  Choose one to change settings on it and view reports for it</div>
 	<div class="panel panel-primary">
 		<div id='offer-header' class='grid-header panel-heading clearfix'>
-			<form id="offer_search_form" method="GET" class="form-inline" action="/api">
-				<input type="hidden" name="func" value="/offer/offer">
+			<form id="offer_search_form" method="GET" class="form-inline" action="/offer/offer">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

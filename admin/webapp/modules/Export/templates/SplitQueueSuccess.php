@@ -281,7 +281,7 @@
 $(document).ready(function() {
 	$('#btn_delete,#btn_delete_sm').click(function() {
 		if (confirm('Are you sure you want to delete this lead and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/export/split-queue/<?php echo $split_queue->getId() ?>' }, function(data) {
+			$.rad.del('/export/split-queue/<?php echo $split_queue->getId() ?>', { }, function(data) {
 				$.rad.notify('Lead Removed', 'This lead has been removed from the system.');
 				location.href = '/export/split-queue-search';
 			});
@@ -300,7 +300,7 @@ $(document).ready(function() {
 });
 
 function loadAttempts() {
-	$.rad.get('/api', { func: '/export/split-queue', _id: '<?php echo $split_queue->getId() ?>' }, function(data) {
+	$.rad.get('/export/split-queue', { _id: '<?php echo $split_queue->getId() ?>' }, function(data) {
 		$('#attempt_tbody').html('');
 		$.each(data.record.attempts, function(i, item) {
 			var tr = $('<tr />');

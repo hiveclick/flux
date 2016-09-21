@@ -16,8 +16,7 @@
 	<div class="help-block">These are all the ad campaigns synced from Google AdWords</div>
 	<div class="panel panel-primary">
 		<div id='adcampaign-header' class='grid-header panel-heading clearfix'>
-			<form id="adcampaign_search_form" class="form-inline" method="GET" action="/api">
-				<input type="hidden" name="func" value="/adwords/ad-campaign">
+			<form id="adcampaign_search_form" class="form-inline" method="GET" action="/adwords/ad-campaign">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

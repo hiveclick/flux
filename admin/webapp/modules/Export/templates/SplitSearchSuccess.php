@@ -19,8 +19,7 @@
 	<div class="help-block">Splits are used to automate lead fulfillment</div>
 	<div class="panel panel-primary">
 		<div id='split-header' class='grid-header panel-heading clearfix'>
-			<form id="split_search_form" method="GET" class="form-inline" action="/api">
-				<input type="hidden" name="func" value="/export/split">
+			<form id="split_search_form" method="GET" class="form-inline" action="/export/split">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

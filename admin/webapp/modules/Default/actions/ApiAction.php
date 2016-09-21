@@ -25,6 +25,8 @@ class ApiAction extends BasicAction
 	 */
 	public function execute ()
 	{
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Request to old /api");
+		\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: " . "Request originated from " . $_SERVER['HTTP_REFERER']);
 		try {
 			/* @var $ajax_form \Mojavi\Util\Ajax */
 			$ajax_form = new Ajax();

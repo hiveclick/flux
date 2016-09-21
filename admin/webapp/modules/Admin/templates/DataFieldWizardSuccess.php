@@ -7,8 +7,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($data_field->getId()) ? 'Edit' : 'Add' ?> Data Field</h4>
 </div>
-<form id="data_field_form_<?php echo $data_field->getId() ?>" method="POST" action="/api" role="form">
-	<input type="hidden" name="func" value="/admin/data-field" />
+<form id="data_field_form_<?php echo $data_field->getId() ?>" method="POST" action="/admin/data-field" role="form">
 	<?php if (\MongoId::isValid($data_field->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $data_field->getId() ?>" />
 	<?php } ?>
@@ -333,8 +332,7 @@ $(document).ready(function() {
 	$('#btn_validate').click(function() {
 		$('#validation_result_<?php echo $data_field->getId() ?>').removeClass('alert-danger').removeClass('alert-success').html('').hide();
 		var params = $('#data_field_form_<?php echo $data_field->getId() ?>').serialize();
-		params += "&func=/admin/data-field-validate";
-		$.rad.post('/api', params, function(data) {
+		$.rad.post('/admin/data-field-validate', params, function(data) {
 			if (data.record.validation_result == '') {
 				$.rad.notify('Function validated', 'Validation was successful for this function');
 				$('#validation_result_<?php echo $data_field->getId() ?>').addClass('alert-success').html('Validation successful').show();
@@ -546,7 +544,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($data_field->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this data field from the system?')) {
-		$.rad.del('/api', { func: '/admin/data-field/<?php echo $data_field->getId() ?>' }, function(data) {
+		$.rad.del('/admin/data-field/<?php echo $data_field->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this data field', 'You have deleted this data field.  You will need to refresh this page to see your changes.');
 			$('#datafield_search_form').trigger('submit');
 		});

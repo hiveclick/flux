@@ -24,8 +24,7 @@
 	<!-- Page Content -->
 	<div class="help-block">Use this form to add a new offer to the system assigned to an advertiser</div>
 	<br/>
-	<form class="form-horizontal" id="offer_form" name="offer_form" method="POST" action="/api" autocomplete="off">
-		<input type="hidden" name="func" value="/offer/offer" />
+	<form class="form-horizontal" id="offer_form" name="offer_form" method="POST" action="/offer/offer" autocomplete="off">
 		<input type="hidden" name="status" value="<?php echo \Flux\Offer::OFFER_STATUS_ACTIVE ?>" />
 	
 		<div class="form-group">

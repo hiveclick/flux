@@ -9,8 +9,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title"><?php echo \MongoId::isValid($fulfillment->getId()) ? 'Edit' : 'Add' ?> Fulfillment Handler</h4>
 </div>
-<form class="" id="fulfillment_form_<?php echo $fulfillment->getId() ?>" method="<?php echo \MongoId::isValid($fulfillment->getId()) ? 'PUT' : 'POST' ?>" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/admin/fulfillment" />
+<form class="" id="fulfillment_form_<?php echo $fulfillment->getId() ?>" method="<?php echo \MongoId::isValid($fulfillment->getId()) ? 'PUT' : 'POST' ?>" action="/admin/fulfillment" autocomplete="off" role="form">
 	<input type="hidden" name="status" value="<?php echo \Flux\Fulfillment::FULFILLMENT_STATUS_ACTIVE ?>" />
 	<?php if (\MongoId::isValid($fulfillment->getId())) { ?>
 		<input type="hidden" name="_id" value="<?php echo $fulfillment->getId() ?>" />
@@ -348,7 +347,7 @@ $(document).ready(function() {
 		// Refresh the mailchimp lists based on the api key
 		$mc_api_key = $('#mailchimp_api_key').val();
 		$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-		$.get('/api', { func: '/lists/list', apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
+		$.get('/lists/list', { apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
 			$select = $('#mailchimp_list').selectize()[0].selectize;
 			$select.clearOptions();
 			data.data.forEach(function(item) {
@@ -465,7 +464,7 @@ $(document).ready(function() {
 	});
 
 	$('#parse_url').click(function() {
-		$.rad.get('/api', { func: '/admin/build-post-url', 'post_url': $('#post_url').val() }, function(data) {
+		$.rad.get('/admin/build-post-url', { 'post_url': $('#post_url').val() }, function(data) {
 			if (data.record) {
 				$('#post_url').val(data.record.post_url);
 			}
@@ -509,7 +508,7 @@ $(document).ready(function() {
 
 	$('#test_ftp').click(function() {
 		if (confirm('This will test the connection to the FTP server and verify that the username and password is correct.')) {
-			$.rad.get('/api', { func: '/export/test-ftp', ftp_hostname: $('#ftp_hostname').val(), ftp_port: $('#ftp_port').val(), ftp_username: $('#ftp_username').val(), ftp_password: $('#ftp_password').val(), ftp_folder: $('#ftp_folder').val() }, function(data) {
+			$.rad.get('/export/test-ftp', { ftp_hostname: $('#ftp_hostname').val(), ftp_port: $('#ftp_port').val(), ftp_username: $('#ftp_username').val(), ftp_password: $('#ftp_password').val(), ftp_folder: $('#ftp_folder').val() }, function(data) {
 				if (data.record) {
 					$.rad.notify('FTP Connection Successful', 'We were able to connect to the FTP server and verify that it is correct.');
 				}
@@ -521,7 +520,7 @@ $(document).ready(function() {
 <?php if (\MongoId::isValid($fulfillment->getId())) { ?>
 function confirmDelete() {
 	if (confirm('Are you sure you want to delete this user from the system?')) {
-		$.rad.del('/api', { func: '/admin/fulfillment/<?php echo $fulfillment->getId() ?>' }, function(data) {
+		$.rad.del('/admin/fulfillment/<?php echo $fulfillment->getId() ?>', { }, function(data) {
 			$.rad.notify('You have deleted this fulfillment', 'You have deleted this fulfillment.  You will need to refresh this page to see your changes.');
 			$('#fulfillment_search_form').trigger('submit');
 		});

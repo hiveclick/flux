@@ -19,8 +19,7 @@
 	<div class="help-block">Verticals allow you to categorize and sort offers</div>
 	<div class="panel panel-primary">
 		<div id='vertical-header' class='grid-header panel-heading clearfix'>
-			<form id="vertical_search_form" method="GET" action="/api">
-				<input type="hidden" name="func" value="/admin/vertical">
+			<form id="vertical_search_form" method="GET" action="/admin/vertical">
 				<input type="hidden" name="format" value="json" />
 				<input type="hidden" id="page" name="page" value="1" />
 				<input type="hidden" id="items_per_page" name="items_per_page" value="500" />

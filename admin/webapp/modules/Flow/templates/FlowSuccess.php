@@ -110,7 +110,7 @@ $(document).ready(function() {
 
 	$('#btn_delete').click(function() {
 		if (confirm('Are you sure you want to delete this flow and completely remove it from the system?')) {
-			$.rad.del('/api', { func: '/flow/flow/<?php echo $flow->getId() ?>' }, function(data) {
+			$.rad.del('/flow/flow/<?php echo $flow->getId() ?>', { }, function(data) {
 				$.rad.notify('Flow Removed', 'This flow has been removed from the system.');
 			});
 		}

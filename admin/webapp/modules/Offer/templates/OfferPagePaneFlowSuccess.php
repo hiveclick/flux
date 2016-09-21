@@ -6,8 +6,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Offer Page Flow</h4>
 </div>
-<form id="offer_page_flow_form" name="offer_page_flow_form" method="PUT" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/offer/offer-page-flow" />
+<form id="offer_page_flow_form" name="offer_page_flow_form" method="PUT" action="/offer/offer-page-flow" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $offer_page->getId() ?>" />
 	
 	<div class="modal-body">

@@ -12,8 +12,7 @@
 	<li class="active">Offer Events</li>
 </ol>
 <div class="help-block">Manage what happens when an event is fired on this offer</div>
-<form class="form-horizontal" id="offer_events_form" name="offer_events_form" method="PUT" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/offer/offer-event" />
+<form class="form-horizontal" id="offer_events_form" name="offer_events_form" method="PUT" action="/offer/offer-event" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $offer->getId() ?>" />
 	<div id="event_groups">
 		<?php

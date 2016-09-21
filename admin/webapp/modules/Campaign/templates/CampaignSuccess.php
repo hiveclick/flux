@@ -97,9 +97,8 @@
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="flow">
 				<div class="help-block">When traffic comes through this campaign, it will use the following rules to determine where it is sent.  If no rules can be found, the default landing page will be used.</div>
-				<form method="PUT" action="/api" id="campaign_flow_rules_<?php echo $campaign->getId() ?>">
+				<form method="PUT" action="/campaign/campaign-flow-rules" id="campaign_flow_rules_<?php echo $campaign->getId() ?>">
 					<input type="hidden" name="_id" value="<?php echo $campaign->getId() ?>" />
-					<input type="hidden" name="func" value="/campaign/campaign-flow-rules" />
 					<input type="hidden" name="flow_rules" value="" />
 					
 					<div id="flow-rules"></div>
@@ -230,7 +229,7 @@
 $(document).ready(function() {	
 	// delete the client information
 	$('#confirm_delete').click(function() {
-		$.rad.del('/api', {func: '/campaign/campaign/<?php echo $campaign->getId() ?>' }, function() {
+		$.rad.del('/campaign/campaign/<?php echo $campaign->getId() ?>', { }, function() {
 			window.location = '/campaign/campaign-search';
 		});
 	});

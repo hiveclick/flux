@@ -26,8 +26,7 @@ $server_monitor = $this->getContext()->getRequest()->getAttribute('server_monito
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane fade in active" id="settings">
-					<form id="system_values_form"  method="POST" action="/api">
-						<input type="hidden" name="func" value="/admin/preferences">
+					<form id="system_values_form"  method="POST" action="/admin/preferences">
 						<h3 class="sub-header">Email Notifications</h3>
 						<div class="form-group">
 							<div class="help-block">Emails sent when there are <b class="text-danger">issues or bugs</b> found in the site</div>
@@ -217,7 +216,7 @@ $(document).ready(function() {
 	$('#update_btn').click(function() {
 		$('#update_btn').addClass('hidden');
 		$('#update_progress_div').removeClass('hidden');
-		$.rad.get('/api', { func: '/admin/update-start' }, function(data) {
+		$.rad.get('/admin/update-start', { }, function(data) {
 			checkProgress();
 		});
 	});
@@ -297,7 +296,7 @@ function initialize() {
 }
 
 function checkProgress() {
-	$.rad.get('/api', {func: '/admin/update-progress' }, function(data) {
+	$.rad.get('/admin/update-progress', { }, function(data) {
 		if (data.record) {
 			$('.progress-bar', '#update_progress_div').css('width', (data.record.percent_complete) + '%');
 			$('#update_progress_status', '#update_progress_div').html(data.record.update_message);
@@ -322,7 +321,7 @@ function checkForUpdates() {
 	$('#update_current_version_div').addClass('hidden');
 	$('.progress-bar', '#update_progress_div').css('width', '0%');
 	$('#update_progress_status', '#update_progress_div').html('');
-	$.rad.get('/api', { func: '/admin/update-check' }, function(data) {
+	$.rad.get('/admin/update-check', { }, function(data) {
 		if (data.record) {
 			if (data.record.update_available) {
 				$('.media-heading', '#update_div').html(data.record.newest_package.name + ' (' + data.record.newest_package.version + '.' + data.record.newest_package.release + ')');

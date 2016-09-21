@@ -8,8 +8,7 @@
 	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 	<h4 class="modal-title">Add/Modify Data</h4>
 </div>
-<form class="form-horizontal" id="lead_data_field_form" name="lead_data_field_form" method="POST" action="/api" autocomplete="off" role="form">
-	<input type="hidden" name="func" value="/lead/lead-data-field" />
+<form class="form-horizontal" id="lead_data_field_form" name="lead_data_field_form" method="POST" action="/lead/lead-data-field" autocomplete="off" role="form">
 	<input type="hidden" name="_id" value="<?php echo $lead->getId() ?>" />
 	<div class="modal-body">
 		Use this form to add or modify data fields on this lead.  Simply click the button to add a data field and set its value.
@@ -231,7 +230,7 @@ $(document).ready(function() {
 	*/
 
 	$('.btn-geo-lookup').on('click', function() {
-		$.rad.get('/api', { func: '/lead/lead-geo-lookup', 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
+		$.rad.get('/lead/lead-geo-lookup', { 'lead_id': '<?php echo $lead->getId() ?>' }, function(data) {
 			if (data.record) {
 				console.log(data.record);
 				// Add the City dropdown		
