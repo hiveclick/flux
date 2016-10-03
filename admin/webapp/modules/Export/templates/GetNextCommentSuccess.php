@@ -44,6 +44,10 @@
 					<label for="comment">Comment <span class="small text-muted">(comment)<span>: </label>
 					<textarea name="comment" id="comment" class="form-control"><?php echo $ubot_queue->getFormattedComment() ?></textarea>
 				</div>
+				<div class="form-group">
+					<label for="comment">Link Name <span class="small text-muted">(linkname)<span>: </label>
+					<textarea name="linkname" id="linkname" class="form-control"><?php echo $ubot_queue->getFormattedLink() ?></textarea>
+				</div>
 			</div>
 		</div>
 	</div>

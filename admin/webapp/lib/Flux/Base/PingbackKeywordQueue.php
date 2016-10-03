@@ -357,4 +357,14 @@ class PingbackKeywordQueue extends MongoForm {
 		$this->error_message = $error_message;
 		$this->addModifiedColumn("error_message");
 	}
+
+	/**
+	 * Ensures that the mongo indexes are set (should be called once)
+	 * @return boolean
+	 */
+	public static function ensureIndexes() {
+		$model = new self();
+		$model->getCollection()->ensureIndex(array('expire_at' => 1), array('expireAfterSeconds' => 0));
+		return true;
+	}
 }

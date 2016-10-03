@@ -26,64 +26,58 @@ class PingomaticAction extends BasicConsoleAction
 	{
 		try {
 			// Compile the number of clicks per offer
-			StringTools::consoleWrite('Getting Pingomatic URLs', null, StringTools::CONSOLE_COLOR_GREEN, true);
+			StringTools::consoleWrite('Finding Pingomatic Script', null, StringTools::CONSOLE_COLOR_GREEN, true);
+			$pingbot = new \Flux\Ubot();
+			$pingbot = $pingbot->query(array('type' => \Flux\Ubot::TYPE_PINGOMATIC), false);
+			if (is_object($pingbot) && \MongoId::isValid($pingbot->getId())) {
+				StringTools::consoleWrite('  - Pingomatic Script', $pingbot->getName(), StringTools::CONSOLE_COLOR_GREEN, true);
+			} else {
+				throw new \Exception('No Pingomatic Script could be found in the list of uBot Scripts');
+			}
+
+			StringTools::consoleWrite('Finding Random uBot Url', null, StringTools::CONSOLE_COLOR_GREEN, true);
 			$ubot = new \Flux\Ubot();
-			$ubot->setIgnorePagination(true);
-			$ubots = $ubot->queryAll();
+			$ubot = $ubot->findAndModify(array(
+					'type' => \Flux\Ubot::TYPE_COMMENT,
+					'last_ping_time' => array('$lt' => new \MongoDate(strtotime('now - 1 hour')))
+				),
+				array(
+					'$set' => array(
+						'last_ping_time' => new \MongoDate()
+					)
+				),
+				null,
+				array(
+					'new' => true,
+					'sort' => array('last_ping_time' => 1)
+				)
+			);
 
-			$pings = array();
-			/* @var $ubot \Flux\Ubot */
-			foreach ($ubots as $ubot) {
-				foreach ($ubot->getUrls() as $url) {
-					$pings[] = $url;
+			if (is_object($ubot) && \MongoId::isValid($ubot->getId())) {
+				StringTools::consoleWrite('  - uBot Script', $ubot->getName(), StringTools::CONSOLE_COLOR_GREEN, true);
+				$urls = $ubot->getUrls();
+				if (!is_array($urls)) {
+					throw new \Exception('Urls not present on uBot script ' . $ubot->getName());
 				}
+				shuffle($urls);
+				$url = array_shift($urls);
+
+				if (trim($url) == '') {
+					throw new \Exception('Url is blank on uBot script ' . $ubot->getName());
+				}
+				StringTools::consoleWrite('  - Processing Pingomatic URL', $url, StringTools::CONSOLE_COLOR_GREEN, true);
+				$ubot_queue = new \Flux\UbotQueue();
+				$ubot_queue->setUrl($url);
+				$ubot_queue->setKeyword('Pingomatic');
+				$ubot_queue->setName('Pingomatic');
+				$ubot_queue->setEmail('Pingomatic');
+				$ubot_queue->setUbot($pingbot->getId());
+				$ubot_queue->setLink($url);
+				$ubot_queue->insert();
+				StringTools::consoleWrite('Pingomatic Saved!', null, StringTools::CONSOLE_COLOR_GREEN, true);
+			} else {
+				throw new \Exception('No uBot scripts could be found, please wait 1 hour');
 			}
-
-			shuffle($pings);
-
-			StringTools::consoleWrite(' - Processing Pingomatic URLs', null, StringTools::CONSOLE_COLOR_GREEN, true);
-			$counter = 1;
-			foreach ($pings as $ping) {
-				StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', $ping, StringTools::CONSOLE_COLOR_GREEN, true);
-				$result = $this->sendPing($ping, '');
-				if (strpos($result, 'Ping sent') !== false) {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Success', StringTools::CONSOLE_COLOR_GREEN, true);
-					$throttle_time = 3;
-				} else if (strpos($result, 'Slow down cowboy') !== false) {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Throttling', StringTools::CONSOLE_COLOR_CYAN, true);
-					$throttle_time = rand(5,8);
-				} else if (strpos($result, 'No blog URL') !== false) {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Retrying with /', StringTools::CONSOLE_COLOR_PURPLE, true);
-					$result = $this->sendPing(($ping . '/'), '');
-					if (strpos($result, 'Ping sent') !== false) {
-						StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Success', StringTools::CONSOLE_COLOR_GREEN, true);
-						$throttle_time = 3;
-					} else if (strpos($result, 'Slow down cowboy') !== false) {
-						StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Throttling', StringTools::CONSOLE_COLOR_CYAN, true);
-						$throttle_time = rand(15,22);
-					} else {
-						StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Error', StringTools::CONSOLE_COLOR_RED, true);
-						echo $result . "\n";
-						$throttle_time = 3;
-					}
-				} else {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Pingomatic URL', 'Error', StringTools::CONSOLE_COLOR_RED, true);
-					echo $result . "\n";
-					$throttle_time = 3;
-				}
-
-				for ($i=$throttle_time;$i>1;$i--) {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Throttling pings', 'Waiting for ' . $i . ' minutes', StringTools::CONSOLE_COLOR_CYAN, true);
-					sleep(60);
-				}
-				for ($i=rand(10,60);$i>0;$i--) {
-					StringTools::consoleWrite('   [' . $counter . '/' . count($pings) . '] Throttling pings', 'Waiting for ' . $i . ' seconds', StringTools::CONSOLE_COLOR_CYAN);
-					sleep(1);
-				}
-				$counter++;
-			}
-			
-			// Also clear out old numbers
 		} catch (\Exception $e) {
 			echo StringTools::consoleColor($e->getMessage(), StringTools::CONSOLE_COLOR_RED) . "\n";
 		}

@@ -16,7 +16,7 @@ source $PWD/common.sh
 # The following line is used for the live system to run the threshold email cron
 COMMAND="$PHP_BIN $DOCROOT_DIR/daemon.php -m Cron -a Pingomatic"
 
-if [ "$2" == "--silent" ];then
+if [ "$1" == "--silent" ];then
 	DISABLE_LOGGING="0"
 else
 	DISABLE_LOGGING="1"

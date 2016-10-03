@@ -45,7 +45,15 @@ $(document).ready(function() {
 			return value;
 		}},
 		{id:'name', name:'name', field:'name', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
-			return '<a data-toggle="modal" data-target="#edit_ubot_modal" href="/admin/ubot-wizard?_id=' + dataContext._id + '">' + value + '</a>';
+			ret_val = '<div style="line-height:16pt;">';
+			ret_val += '<a data-toggle="modal" data-target="#edit_ubot_modal" href="/admin/ubot-wizard?_id=' + dataContext._id + '">' + value + '</a>';
+			if (dataContext.type == '<?php echo \Flux\Ubot::TYPE_COMMENT ?>') {
+				ret_val += '<div class="small text-muted">Comment Script</div>';
+			} else if (dataContext.type == '<?php echo \Flux\Ubot::TYPE_PINGOMATIC ?>') {
+				ret_val += '<div class="small text-muted">Pingomatic Script</div>';
+			}
+			ret_val += '</div>';
+			return ret_val;
 		}},
 		{id:'username', name:'username', field:'username', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			return value;
@@ -69,6 +77,8 @@ $(document).ready(function() {
 		{id:'type', name:'type', field:'type', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Ubot::TYPE_COMMENT ?>') {
 				return 'Comment Script';
+			} else if (value == '<?php echo \Flux\Ubot::TYPE_PINGOMATIC ?>') {
+				return 'Pingomatic Script';
 			}
 			return value;
 		}}

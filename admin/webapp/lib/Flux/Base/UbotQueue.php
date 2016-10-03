@@ -429,4 +429,14 @@ class UbotQueue extends MongoForm
 		$this->link = $link;
 		$this->addModifiedColumn("link");
 	}
+
+	/**
+	 * Ensures that the mongo indexes are set (should be called once)
+	 * @return boolean
+	 */
+	public static function ensureIndexes() {
+		$ubot_queue = new self();
+		$ubot_queue->getCollection()->ensureIndex(array('expire_at' => 1), array('expireAfterSeconds' => 0));
+		return true;
+	}
 }

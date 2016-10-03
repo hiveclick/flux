@@ -60,6 +60,14 @@ class UbotQueue extends Base\UbotQueue
 	}
 
 	/**
+	 * Returns the formatted comment
+	 * @return string
+	 */
+	function getFormattedLink() {
+		return '<a href="' . $this->getLink() . '">' . $this->getKeyword() . '</a>';
+	}
+
+	/**
 	 * Inserts items into the queue by building them from the link and keyword array
 	 * @return integer
 	 */
