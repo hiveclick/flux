@@ -14,6 +14,7 @@ var gulp = require('gulp'),
 gulp.task('scripts', function() {
 	gulp.src(mbf('**/*.js').concat([
 		'bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
+		'bower_components/jquery.timers/jquery.timers.min.js',
 		'src/js/pnotify/pnotify.custom.min.js',
 		'src/js/jquery.filedrop.js',
 		'src/js/rad/jquery.rad.js',
