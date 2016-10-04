@@ -190,17 +190,16 @@
 				
 				<!-- MAILCHIMP specific settings -->
 				<div id="mailchimp_settings" class="<?php echo $fulfillment->getExportClass()->getFulfillmentType() != \Flux\Export\ExportAbstract::FULFILLMENT_TYPE_MAILCHIMP ? 'hidden' : ''; ?>">
-					<div class="help-block">Enter your Mailchimp API key and the mailing list you want subscribers to be added to</div>					
+					<div class="help-block">Enter your Mailchimp API key and the mailing list you want subscribers to be added to</div>
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_api_key">Api Key</label>
 						<textarea name="mailchimp_api_key" id="mailchimp_api_key" class="form-control" rows="4" placeholder="enter your mailchimp api key..."></textarea><br />
+						<div class="help-block small">You can find the api key under Profile -&gt; Extras -&gt; API Keys within Mailchimp</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
-						<div class="row">
-							<div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
-							<div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
-						</div>
+						<textarea name="mailchimp_list" id="mailchimp_list" class="form-control" rows="4" placeholder="enter your mailchimp list..."></textarea>
+						<div class="help-block small">You can find the list id under the Settings for a List within Mailchimp</div>
 					</div>
 					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
 				</div>
@@ -341,21 +340,7 @@ $(document).ready(function() {
 		$('#edit_fulfillment_modal').modal('hide');
 	}, {keep_form:1});
 
-	$('#status,#export_type,#client_id,#scheduling_interval,#scheduling_days,#mailchimp_list').selectize();
-
-	$('#refresh_mc_lists').click(function() {
-		// Refresh the mailchimp lists based on the api key
-		$mc_api_key = $('#mailchimp_api_key').val();
-		$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-		$.get('/lists/list', { apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
-			$select = $('#mailchimp_list').selectize()[0].selectize;
-			$select.clearOptions();
-			data.data.forEach(function(item) {
-				$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
-			});
-			$select.refreshOptions();
-		}, 'json');
-	});
+	$('#status,#export_type,#client_id,#scheduling_interval,#scheduling_days').selectize();
 	
 	$('#email_address').selectize({
 		delimiter: ',',

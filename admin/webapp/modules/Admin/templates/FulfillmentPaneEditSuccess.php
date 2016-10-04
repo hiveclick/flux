@@ -197,13 +197,12 @@
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_api_key">Api Key</label>
 						<textarea name="mailchimp_api_key" id="mailchimp_api_key" class="form-control" rows="4" placeholder="enter your mailchimp api key..."><?php echo $fulfillment->getMailchimpApiKey() ?></textarea><br />
+						<div class="help-block small">You can find the api key under Profile -&gt; Extras -&gt; API Keys within Mailchimp</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label" for="mailchimp_list">Mailchimp Mailing List</label>
-						<div class="row">
-							<div class="col-md-10"><select name="mailchimp_list" id="mailchimp_list" placeholder="hit refresh to load the mailing lists..."></select></div>
-							<div class="col-md-2"><a id="refresh_mc_lists" href="#" class="btn btn-info">Reload Lists</a></div>
-						</div>
+						<textarea name="mailchimp_list" id="mailchimp_list" class="form-control" rows="4" placeholder="enter your mailchimp list..."><?php echo $fulfillment->getMailchimpList() ?></textarea>
+						<div class="help-block small">You can find the list id under List -&gt; Settings within Mailchimp</div>
 					</div>
 					<div class="help-block">You need to add new mappings for <i>email</i>, <i>firstname</i>, <i>lastname</i>, <i>addr1</i>, <i>addr2</i>, <i>city</i>, <i>state</i>, <i>zip</i>, and <i>country</i>.  They should be mapped to the appropriate fields.</div>
 				</div>
@@ -253,7 +252,7 @@ $(document).ready(function() {
 		$.rad.notify('You have updated this fulfillment', 'You have updated this fulfillment.');
 	}, {keep_form: true});
 
-	$('#scheduling_interval,#scheduling_days,#status,#client_id,#mailchimp_list').selectize();
+	$('#scheduling_interval,#scheduling_days,#status,#client_id').selectize();
 
 	$('#export_class_name').selectize({
 		valueField: '_id',
@@ -297,11 +296,6 @@ $(document).ready(function() {
 				$('#post_url').val(data.record.post_url);
 			}
 		});
-	});
-
-	$('#refresh_mc_lists').click(function() {
-		// Refresh the mailchimp lists based on the api key
-		reloadMailchimpLists();
 	});
 
 	$('#export_class_name').change(function() {
@@ -357,31 +351,10 @@ $(document).ready(function() {
 		}
 	});
 
-	<?php if ($fulfillment->getMailchimpApiKey() != '') { ?>
-	reloadMailchimpLists();
-	<?php } ?>
-
 	$('#trigger_fulfillment_flag_1').bootstrapSwitch({
 		onText: 'Yes',
 		offText: 'No'
 	});
 });
-
-function reloadMailchimpLists() {
-	$mc_api_key = $('#mailchimp_api_key').val();
-	$region = $mc_api_key.substring($mc_api_key.indexOf("-")+1);
-	$.get('/lists/list', { apikey: $mc_api_key, '_api_url': 'https://' + $region + '.api.mailchimp.com/2.0/' }, function(data) {
-		$select = $('#mailchimp_list').selectize()[0].selectize;
-		$select.clearOptions();
-		data.data.forEach(function(item) {
-			$select.addOption({text: item.name + ' (' + item.default_from_name + ')', value: item.id});
-			if (item.id == '<?php echo $fulfillment->getMailchimpList() ?>') {
-				$select.addItem(item.id);
-			}
-		});
-		$select.refreshOptions();
-		$select.refreshItems();
-	}, 'json');
-}
 //-->
 </script>
