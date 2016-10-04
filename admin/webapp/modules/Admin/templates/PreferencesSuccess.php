@@ -304,9 +304,9 @@ function checkProgress() {
 				// We are all done updating, so stop checking
 				$('.progress-bar', '#update_progress_div').css('width', '100%');
 				$('#update_progress_status', '#update_progress_div').html('Completing update');
-				$(document).one(2000, function () { checkForUpdates(); });
+				$(document).oneTime(2000, function () { checkForUpdates(); });
 			} else {
-				$(document).one(2000, function () { checkProgress(); });
+				$(document).oneTime(2000, function () { checkProgress(); });
 			}		
 		}
 		
