@@ -8,8 +8,6 @@
 declare(ticks=1);
 
 use Mojavi\Action\BasicConsoleAction;
-use Mojavi\Form\DaemonForm;
-use Flux\Daemon;
 use Mojavi\Util\StringTools;
 use Mojavi\View\View;
 
@@ -44,15 +42,15 @@ class DaemonAction extends BasicConsoleAction
 				$threads = $daemon->getThreads();
 				switch($method) {
 					case 'start':
-						$daemon_form = new \Mojavi\Form\DaemonForm($daemon);
+						$daemon_form = new \Flux\Util\Daemon($daemon);
 						$daemon_form->start();
 						break;
 					case 'stop':
-						$daemon_form = new Mojavi\Form\DaemonForm($daemon);
+						$daemon_form = new \Flux\Util\Daemon($daemon);
 						$daemon_form->stop();
 						break;
 					case 'restart':
-						$daemon_form = new Mojavi\Form\DaemonForm($daemon);
+						$daemon_form = new \Flux\Util\Daemon($daemon);
 						$daemon_form->restart();
 						break;
 					case 'runOne':
@@ -66,7 +64,7 @@ class DaemonAction extends BasicConsoleAction
 						$single->runOne();
 						break;
 					case 'status':
-						$daemon_form = new Mojavi\Form\DaemonForm($daemon);
+						$daemon_form = new \Flux\Util\Daemon($daemon);
 						$daemon_form->status();
 						break;
 					default:
