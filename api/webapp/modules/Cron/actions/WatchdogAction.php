@@ -43,7 +43,7 @@ class WatchdogAction extends BasicConsoleAction {
 				// Only start daemons that have threads > 0
 				if ($daemon->getThreads() > 0) {
 					\Mojavi\Util\StringTools::consoleWrite(' - ' . $daemon->getName(), 'Checking', \Mojavi\Util\StringTools::CONSOLE_COLOR_YELLOW);
-					$daemon_form = new \Mojavi\Form\DaemonForm($daemon);
+					$daemon_form = new \Flux\Util\Daemon($daemon);
 					$is_running = $daemon_form->status(false);
 					if (!$is_running) {
 						\Mojavi\Util\StringTools::consoleWrite(' - ' . $daemon->getName(), 'Starting', \Mojavi\Util\StringTools::CONSOLE_COLOR_RED);

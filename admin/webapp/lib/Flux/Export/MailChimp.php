@@ -171,8 +171,14 @@ class MailChimp extends GenericPost {
 			$lead_split_attempt->setIsError(false);
 			$this->recordLeadPayout($lead_split_attempt, $response);
 		} else if (isset($response_obj['detail'])) {
-			$lead_split_attempt->setIsError(true);
-			$lead_split_attempt->setErrorMessage($response_obj['detail']);
+			if (strpos($response_obj['detail'], 'already a list member') !== false) {
+				$lead_split_attempt->setIsError(false);
+				$lead_split_attempt->setIsDuplicate(true);
+				$lead_split_attempt->setErrorMessage('ALREADY FULFILLED');
+			} else {
+				$lead_split_attempt->setIsError(true);
+				$lead_split_attempt->setErrorMessage($response_obj['detail']);
+			}
 		} else {
 			$lead_split_attempt->setIsError(true);
 		}

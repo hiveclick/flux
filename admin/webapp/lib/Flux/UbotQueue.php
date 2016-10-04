@@ -101,7 +101,7 @@ class UbotQueue extends Base\UbotQueue
 					$ubot_item->setKeyword($keyword);
 					$ubot_item->setUbot($ubot->getId());
 					$ubot_item->setCreatedAt(new \MongoDate());
-					$ubot_item->setExpireAt(new \MongoDate(strtotime("now + 1 day")));
+					$ubot_item->setExpireAt(new \MongoDate(strtotime("now + 1 year")));
 					$ubot_item->insert();
 					$rows_affected++;
 				}

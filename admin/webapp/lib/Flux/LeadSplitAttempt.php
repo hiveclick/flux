@@ -8,6 +8,27 @@ class LeadSplitAttempt extends Base\LeadSplitAttempt {
 	private $test;
 	private $override_fulfillment;
 	private $start_time;
+	private $is_duplicate;
+
+	/**
+	 * @return mixed
+	 */
+	public function getIsDuplicate()
+	{
+		if (is_null($this->is_duplicate)) {
+			$this->is_duplicate = false;
+		}
+		return $this->is_duplicate;
+	}
+
+	/**
+	 * @param mixed $is_duplicate
+	 */
+	public function setIsDuplicate($is_duplicate)
+	{
+		$this->is_duplicate = (boolean)$is_duplicate;
+		$this->addModifiedColumn("is_duplicate");
+	}
 
 	/**
 	 * @return mixed

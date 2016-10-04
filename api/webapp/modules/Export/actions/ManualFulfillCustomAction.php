@@ -91,8 +91,23 @@ class ManualFulfillCustomAction extends BasicRestAction
 						$lead_split->setDebug($result->getRequest());
 						$lead_split->setLastAttemptTime(new \MongoDate());
 						$lead_split->setIsProcessing(false);
-						
-						if ($result->getIsError()) {
+
+						if ($result->getIsDuplicate()) {
+							$lead_split->setIsError(true);
+							$lead_split->setErrorMessage($result->getResponse());
+							$lead_split->setIsFulfilled(true);
+							$lead_split->setDisposition(\Flux\LeadSplit::DISPOSITION_ALREADY_FULFILLED);
+
+							/* @var $report_lead \Flux\ReportLead */
+							$report_lead = new \Flux\ReportLead();
+							$report_lead->setLead($lead_split->getLead()->getLead()->getId());
+							$report_lead->setClient($fulfillment->getClient()->getId());
+							$report_lead->setDisposition(\Flux\ReportLead::LEAD_DISPOSITION_DUPLICATE);
+							$report_lead->setRevenue(0.00);
+							$report_lead->setPayout(0.00);
+							$report_lead->setReportDate(new \MongoDate());
+							$report_lead->insert();
+						} else if ($result->getIsError()) {
 							$lead_split->setIsError(true);
 							$lead_split->setErrorMessage($result->getResponse());
 							$lead_split->setIsFulfilled(false);
