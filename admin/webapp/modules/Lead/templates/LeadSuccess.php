@@ -683,7 +683,7 @@ $(document).ready(function() {
 	<?php } ?>
 
 	<?php if (isset($_REQUEST['tab'])) { ?>
-		$('.nav-tabs a[href=#<?php echo $_REQUEST['tab'] ?>]').tab('show');
+		$('.nav-tabs a[href="#<?php echo $_REQUEST['tab'] ?>"]').tab('show');
 	<?php } ?>
 });
 
