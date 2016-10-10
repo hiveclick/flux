@@ -69,6 +69,8 @@ class Campaign extends MongoForm {
 			foreach ($this->getFlowRules() as $flow_rule) {
 				$total_clicks += $flow_rule->getDailyClickCount();
 			}
+			// Set the default redirect link
+			$redirect_url = $this->getRedirectLink();
 			// Iterate through the rules and find the one that we want to use
 			foreach ($this->getFlowRules() as $key => $flow_rule) {
 				\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName());
@@ -92,15 +94,25 @@ class Campaign extends MongoForm {
 						'flow_rules.' . $key . '.daily_click_count' => 1
 					)	
 				));
-				
-				return $flow_rule->getLandingPage() . '?_id=#_id#&s4=' . $flow_rule->getS4() . '&s5=' . $flow_rule->getS5();
+
+				$redirect_url = $flow_rule->getLandingPage();
 			}
-			
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Matched, using default landing page, FORWARDING TO " . $this->getRedirectLink());
-			return $this->getRedirectLink() . '?_id=#_id#&s4=' . $this->getS4() . '&s5=' . $this->getS5();
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Rules Matched, using landing page, FORWARDING TO " . $redirect_url);
 		} else {
-			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Defined, using default landing page, FORWARDING TO " . $this->getRedirectLink());
-			return $this->getRedirectLink() . '?_id=#_id#&s4=' . $this->getS4() . '&s5=' . $this->getS5();
+			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Defined, using default landing page, FORWARDING TO " . $redirect_url);
+			$redirect_url = $this->getRedirectLink();
+		}
+
+		if (strpos($redirect_url, "?") === false) {
+			return $redirect_url . '?_id=#_id#&s4=' . $flow_rule->getS4() . '&s5=' . $flow_rule->getS5();
+		} else {
+			if (strpos($redirect_url, "&s4=") === false) {
+				$redirect_url .= ('&s4=' . $flow_rule->getS4());
+			}
+			if (strpos($redirect_url, "&s5=") === false) {
+				$redirect_url .= ('&s5=' . $flow_rule->getS5());
+			}
+			return $redirect_url;
 		}
 	}
 	

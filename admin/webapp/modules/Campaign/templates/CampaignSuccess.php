@@ -23,7 +23,7 @@
 			<div class="text-muted"><?php echo $campaign->getDescription() ?></div>
 			<div class="">Owned by <a href="/offer/offer?_id=<?php echo $campaign->getOffer()->getOfferId() ?>"><?php echo $campaign->getOffer()->getOfferName() ?></a></div>
 			<div class="">Pays $<?php echo number_format($campaign->getPayout(), 2, null, ',') ?></div><br />
-			<div class=""><i><?php echo $campaign->getRedirectLink() ?>?_id=#_id#&s4=<?php echo $campaign->getS4() ?>&s5=<?php echo $campaign->getS5() ?></i></div> 
+			<div class=""><i><?php echo $campaign->getRedirectLink() ?></i></div>
 			<br /><br />
 			<div class="">
 				<a class="btn btn-sm btn-info" data-toggle="modal" data-target="#edit_modal" href="/campaign/campaign-pane-edit?_id=<?php echo $campaign->getId() ?>"><span class="fa fa-pencil"></span> edit campaign</a>
