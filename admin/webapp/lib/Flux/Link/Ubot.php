@@ -27,7 +27,7 @@ class Ubot extends BasicLink
 			$this->setName($this->getUbot()->getName());
 		}
 		if (\MongoId::isValid($this->getId()) && $this->getFilename() == '') {
-			$this->setFilename($this->getUbot()->getFilename());
+			$this->setFilename($this->getUbot()->getScriptFilename());
 		}
 	}
 
