@@ -26,6 +26,7 @@ class Ubot extends MongoForm
 	protected $username;
 	protected $password;
 	protected $login_url;
+	protected $use_hma;
 	protected $active;
 	protected $type;
 	protected $script_filename;
@@ -140,6 +141,26 @@ class Ubot extends MongoForm
 	{
 		$this->password = $password;
 		$this->addModifiedColumn("password");
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUseHma()
+	{
+		if (is_null($this->use_hma)) {
+			$this->use_hma = false;
+		}
+		return $this->use_hma;
+	}
+
+	/**
+	 * @param mixed $use_hma
+	 */
+	public function setUseHma($use_hma)
+	{
+		$this->use_hma = (boolean)$use_hma;
+		$this->addModifiedColumn("use_hma");
 	}
 
 	/**

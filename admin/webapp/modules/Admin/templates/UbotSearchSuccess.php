@@ -74,6 +74,13 @@ $(document).ready(function() {
 				return '<span class="text-muted">No</span>';
 			}
 		}},
+		{id:'use_hma', name:'hma proxy', field:'use_hma', def_value: ' ', sortable:true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
+			if (value) {
+				return '<span class="text-success">Yes</span>';
+			} else {
+				return '<span class="text-muted">No</span>';
+			}
+		}},
 		{id:'type', name:'type', field:'type', def_value: ' ', sortable:true, hidden: true, cssClass: 'text-center', type: 'string', formatter: function(row, cell, value, columnDef, dataContext) {
 			if (value == '<?php echo \Flux\Ubot::TYPE_COMMENT ?>') {
 				return 'Comment Script';

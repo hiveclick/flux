@@ -14,6 +14,7 @@ namespace Flux\Link;
 
 class Ubot extends BasicLink
 {
+	protected $filename;
 
 	private $ubot;
 
@@ -25,6 +26,29 @@ class Ubot extends BasicLink
 		if (\MongoId::isValid($this->getId()) && $this->getName() == '') {
 			$this->setName($this->getUbot()->getName());
 		}
+		if (\MongoId::isValid($this->getId()) && $this->getFilename() == '') {
+			$this->setFilename($this->getUbot()->getFilename());
+		}
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFilename()
+	{
+		if (is_null($this->filename)) {
+			$this->filename = "";
+		}
+		return $this->filename;
+	}
+
+	/**
+	 * @param mixed $filename
+	 */
+	public function setFilename($filename)
+	{
+		$this->filename = $filename;
+		$this->addModifiedColumn("filename");
 	}
 
 	/**

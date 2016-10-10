@@ -32,6 +32,10 @@ class GetNextCommentAction extends BasicAction
 		$criteria = array();
 		$criteria['is_processed'] = false;
 
+		if (isset($_REQUEST['script'])) {
+			$criteria['ubot.filename'] = trim($_REQUEST['script']);
+		}
+
 		$ubot_queue = $ubot_queue->findAndModify($criteria, array('$set' => array('is_processed' => true, 'process_time' => new \MongoDate())), null, array('new' => true), true);
 		
 		$this->getContext()->getRequest()->setAttribute("ubot_queue", $ubot_queue);

@@ -45,8 +45,12 @@
 					<textarea name="comment" id="comment" class="form-control"><?php echo $ubot_queue->getFormattedComment() ?></textarea>
 				</div>
 				<div class="form-group">
-					<label for="comment">Link Name <span class="small text-muted">(linkname)<span>: </label>
+					<label for="linkname">Link Name <span class="small text-muted">(linkname)<span>: </label>
 					<textarea name="linkname" id="linkname" class="form-control"><?php echo $ubot_queue->getFormattedLink() ?></textarea>
+				</div>
+				<div class="form-group">
+					<label for="use_hma">Use HMA <span class="small text-muted">(use_hma)<span>: </label>
+					<textarea name="use_hma" id="use_hma" class="form-control"><?php echo $ubot_queue->getUbot()->getUbot()->getUseHma() ? "1" : "0" ?></textarea>
 				</div>
 			</div>
 		</div>

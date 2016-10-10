@@ -50,6 +50,18 @@
 						</div>
 					</div>
 				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-9">
+							<label class="control-label" for="active_1">Use HMA Proxy</label>
+							<i class="help-block">Set whether this script should use HMA Proxy to hide it's location</i>
+						</div>
+						<div class="col-xs-3 text-right">
+							<input type="hidden" name="use_hma" id="use_hma_0" value="0" />
+							<input type="checkbox" name="use_hma" id="use_hma_1" value="1" <?php echo $ubot->getUseHma() ? 'checked' : '' ?> />
+						</div>
+					</div>
+				</div>
 				<hr />
 				<div class="form-group">
 					<label class="control-label" for="rss_url">RSS Url <span class="text-muted">(Optional)</span></label>

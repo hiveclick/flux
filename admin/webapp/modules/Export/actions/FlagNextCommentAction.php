@@ -47,6 +47,11 @@ class FlagNextCommentAction extends BasicAction
 				$ubot_queue->setErrorMessage($input_form->getErrorMessage());
 				$ubot_queue->setIsError((trim($input_form->getErrorMessage()) != ''));
 				$ubot_queue->setNextAttemptAt(new \MongoDate(strtotime('now + 1 day')));
+				if ($ubot_queue->getIsError()) {
+					$ubot_queue->setExpireAt(new \MongoDate(strtotime('now + 1 day')));
+				} else {
+					$ubot_queue->setExpireAt(new \MongoDate());
+				}
 				$ubot_queue->setIsProcessed(true);
 				$ubot_queue->update();
 			}
