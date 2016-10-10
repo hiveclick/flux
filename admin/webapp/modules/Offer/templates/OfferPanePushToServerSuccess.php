@@ -17,7 +17,7 @@
 		<div class="row form-group">
 			<label class="col-sm-2 control-label" for="server_id">Server</label>
 			<div class="col-sm-10">
-				<select name="server_id" id="server_id">
+				<select name="_id" id="_id">
 				<?php foreach ($servers as $server) { ?>
 					<option value="<?php echo $server->getId() ?>"><?php echo $server->getHostname() ?></option>
 				<?php } ?>

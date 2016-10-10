@@ -50,7 +50,7 @@ class PushToServerAction extends BasicRestAction
 
 		if (\MongoId::isValid($offer->getId())) {
 			$server = new Flux\Server();
-			$server->populate($_REQUEST);
+			$server->populate($input_form->getId());
 			$server->query();
 			$server->setDocrootDir($input_form->getDocrootDir());
 			$server->setForceOverwrite($input_form->getForceOverwrite());
@@ -74,10 +74,10 @@ class PushToServerAction extends BasicRestAction
 					$server->generateVirtualhost($offer);
 				}
 			} else {
-				throw new Exception('Cannot find server using id: ' . $input_form->getServerId());
+				throw new Exception('Cannot find server using id: ' . $server->getId());
 			}
 		} else {
-			throw new Exception('Cannot find offer using id: ' . $input_form->getId());
+			throw new Exception('Cannot find offer using id: ' . $offer->getId());
 		}
 		$ajax_form->setRecord($input_form);
 		return $ajax_form;
