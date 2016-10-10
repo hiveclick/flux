@@ -63,14 +63,15 @@ class Campaign extends MongoForm {
 	 * @return string
 	 */
 	function getRedirectUrl() {
+		// Set the default redirect link
+		$redirect_url = $this->getRedirectLink();
+
 		if (count($this->getFlowRules()) > 0) {
 			// Figure out what url to use based on the rules
 			$total_clicks = 0;
 			foreach ($this->getFlowRules() as $flow_rule) {
 				$total_clicks += $flow_rule->getDailyClickCount();
 			}
-			// Set the default redirect link
-			$redirect_url = $this->getRedirectLink();
 			// Iterate through the rules and find the one that we want to use
 			foreach ($this->getFlowRules() as $key => $flow_rule) {
 				\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Checking rule #" . $key . ": " . $flow_rule->getName());
@@ -96,24 +97,25 @@ class Campaign extends MongoForm {
 				));
 
 				$redirect_url = $flow_rule->getLandingPage();
+				if (strpos($redirect_url, "?") === false) {
+					return $redirect_url . '?_id=#_id#&s4=' . $flow_rule->getS4() . '&s5=' . $flow_rule->getS5();
+				} else {
+					if (strpos($redirect_url, "?") !== false) {
+						if (strpos($redirect_url, "&s4=") === false) {
+							$redirect_url .= ('&s4=' . $flow_rule->getS4());
+						}
+						if (strpos($redirect_url, "&s5=") === false) {
+							$redirect_url .= ('&s5=' . $flow_rule->getS5());
+						}
+					}
+				}
 			}
 			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: Rules Matched, using landing page, FORWARDING TO " . $redirect_url);
 		} else {
 			\Mojavi\Logging\LoggerManager::error(__METHOD__ . " :: No Rules Defined, using default landing page, FORWARDING TO " . $redirect_url);
-			$redirect_url = $this->getRedirectLink();
 		}
 
-		if (strpos($redirect_url, "?") === false) {
-			return $redirect_url . '?_id=#_id#&s4=' . $flow_rule->getS4() . '&s5=' . $flow_rule->getS5();
-		} else {
-			if (strpos($redirect_url, "&s4=") === false) {
-				$redirect_url .= ('&s4=' . $flow_rule->getS4());
-			}
-			if (strpos($redirect_url, "&s5=") === false) {
-				$redirect_url .= ('&s5=' . $flow_rule->getS5());
-			}
-			return $redirect_url;
-		}
+		return $redirect_url;
 	}
 	
 	/**
