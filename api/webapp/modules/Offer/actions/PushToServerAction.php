@@ -50,7 +50,7 @@ class PushToServerAction extends BasicRestAction
 
 		if (\MongoId::isValid($offer->getId())) {
 			$server = new Flux\Server();
-			$server->populate($input_form->getId());
+			$server->setId($input_form->getId());
 			$server->query();
 			$server->setDocrootDir($input_form->getDocrootDir());
 			$server->setForceOverwrite($input_form->getForceOverwrite());

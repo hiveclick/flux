@@ -105,9 +105,10 @@ try {
 		throw new \Exception("Please configure your lib/config.ini with FE_LIB_DIR before running this path");
 	}
 	require_once(FE_LIB_DIR . '/../config.php');
+	error_log("Requiring autoloader " . FE_LIB_DIR . '/vendor/autoload.php');
 	require_once(FE_LIB_DIR . '/vendor/autoload.php');
 	require_once(FE_LIB_DIR . '/vendor/hiveclick/mojavi/src/Mojavi/mojavi.php');
-	session_start();
+	@session_start();
 
 	// initialize a dummy controller that we will use to access the context
 	\Mojavi\Controller\Controller::newInstance('\Mojavi\Controller\BasicConsoleController');

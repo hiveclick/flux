@@ -24,9 +24,15 @@
 			</div>
 		</div>
 		<div role="tabpanel" class="tab-pane fade in" id="tracking_pixel">
+			<h4>Image Pixel</h4>
 			<div class="help-block">Use this tracking pixel on remote thank you pages to track clicks or conversions on this offer using the campaign below.</div>
 			<div class="form-group">
 				<textarea id="example_pixel" rows="5" name="example_pixel" class="form-control"></textarea>
+			</div>
+			<h4>iFrame Pixel</h4>
+			<div class="help-block">Use this tracking pixel on remote thank you pages to track clicks or conversions on this offer using the campaign below.  The iFrame pixel can be used to embed Google Analytics pixels, Bing Conversion pixels, or other Advertiser pixels placed on the campaign edit screen.</div>
+			<div class="form-group">
+				<textarea id="example_pixel_iframe" rows="5" name="example_pixel_iframe" class="form-control"></textarea>
 			</div>
 		</div>
 		<div role="tabpanel" class="tab-pane fade in" id="analytic_pixel">
@@ -233,9 +239,11 @@ function buildPostingUrl() {
 	var entire_post_url = '<?php echo (defined("MO_API_URL") ? MO_API_URL : "") . '/rt/post-lead?'; ?>';
 	var entire_url = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/r?'; ?>';
 	var entire_pixel = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/p?'; ?>';
+	var entire_pixel_iframe = '<?php echo (defined("MO_REALTIME_URL") ? MO_REALTIME_URL : "") . '/t?'; ?>';
 	$('[name=hostnpost_url]').val(entire_post_url + query_string);
 	$('[name=example_url]').val(entire_url + query_string);
 	$('[name=example_pixel]').val('<img src="' + entire_pixel + query_string_pixel + '" border="0" />');
+	$('[name=example_pixel_iframe]').val('<iframe src="' + entire_pixel_iframe + query_string_pixel + '"></iframe>');
 }
 //-->
 </script>
